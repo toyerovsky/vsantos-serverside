@@ -39,8 +39,10 @@ namespace Serverside.Admin.Enums
         Administrator,
         Administrator2,
         Adminadministrator3,
+        Adminadministrator4,
         Zarzad,
         Zarzad2,
+        Zarzad3,
     }
 
     public enum ReportType

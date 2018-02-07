@@ -22,7 +22,7 @@ namespace Serverside.CharacterCreator
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(CharacterCreatorScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(CharacterCreatorScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         #region Subskrypcja zdarzenia, i dopasowanie zmienianego obiektu
@@ -158,11 +158,11 @@ namespace Serverside.CharacterCreator
 
             var dbModel = sender.GetAccountEntity().CharacterEntity.DbModel;
 
-            sender.TriggerEvent("OnPlayerCreateCharacter", ConstantClothes.Mens, ConstantClothes.Womans,
-                dbModel.Gender ? ConstantClothes.MensHairId : ConstantClothes.WomansHairId, dbModel.Gender ? ConstantClothes.MenFeet : ConstantClothes.WomanFeets,
-                dbModel.Gender ? ConstantClothes.MenLegs : ConstantClothes.WomanLegs, dbModel.Gender ? ConstantClothes.MenLegs : ConstantClothes.WomanLegs,
-                dbModel.Gender ? ConstantClothes.MenHats : ConstantClothes.WomanHats, dbModel.Gender ? ConstantClothes.MenGlasses : ConstantClothes.WomanGlasses,
-                dbModel.Gender ? ConstantClothes.MenEars : ConstantClothes.WomanEars, dbModel.Gender ? ConstantClothes.MenAccesories : ConstantClothes.WomanAccesories,
+            sender.TriggerEvent("OnPlayerCreateCharacter", Clothes.Mens, Clothes.Womans,
+                dbModel.Gender ? Clothes.MensHairId : Clothes.WomansHairId, dbModel.Gender ? Clothes.MenFeet : Clothes.WomanFeets,
+                dbModel.Gender ? Clothes.MenLegs : Clothes.WomanLegs, dbModel.Gender ? Clothes.MenLegs : Clothes.WomanLegs,
+                dbModel.Gender ? Clothes.MenHats : Clothes.WomanHats, dbModel.Gender ? Clothes.MenGlasses : Clothes.WomanGlasses,
+                dbModel.Gender ? Clothes.MenEars : Clothes.WomanEars, dbModel.Gender ? Clothes.MenAccesories : Clothes.WomanAccesories,
                 $"{dbModel.Name} {dbModel.Surname}");
 
 

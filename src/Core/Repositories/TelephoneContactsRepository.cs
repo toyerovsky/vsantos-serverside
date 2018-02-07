@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ */
+
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Serverside.Core.Database;
@@ -15,18 +21,15 @@ namespace Serverside.Core.Repositories
 
         public bool Contains(TelephoneContactModel model)
         {
-            return Context.TelephoneContacts.Contains(model);
+            return Context.TelephoneContacts.Any(telephoneContact => telephoneContact.Id == model.Id);
         }
 
-        public void Update(TelephoneContactModel model)
-        {
-            Context.Entry(model).State = EntityState.Modified;
-        }
+        public void Update(TelephoneContactModel model) => Context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var account = Context.TelephoneContacts.Find(id);
-            Context.TelephoneContacts.Remove(account);
+            var contact = Context.TelephoneContacts.Find(id);
+            Context.TelephoneContacts.Remove(contact);
         }
 
         public TelephoneContactModel Get(long id) => GetAll().Single(b => b.Id == id);

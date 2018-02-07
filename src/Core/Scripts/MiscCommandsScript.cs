@@ -23,7 +23,7 @@ namespace Serverside.Core.Scripts
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(MiscCommandsScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(MiscCommandsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         [Command("id", "~y~UŻYJ ~w~ /id [nazwa]", GreedyArg = true)]

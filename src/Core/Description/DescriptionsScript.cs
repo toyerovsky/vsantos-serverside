@@ -24,7 +24,7 @@ namespace Serverside.Core.Description
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"{nameof(DescriptionsScript)} {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"{nameof(DescriptionsScript)} {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)

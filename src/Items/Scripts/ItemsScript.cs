@@ -32,7 +32,7 @@ namespace Serverside.Items.Scripts
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(ItemsScript)}] {Constant.ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(ItemsScript)}] {Constant.Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private Item CreateItem(ItemModel itemModel)

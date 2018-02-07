@@ -5,15 +5,19 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
 using Serverside.Constant;
+using Serverside.Constant.RemoteEvents;
 using Serverside.Core.Database;
+using Serverside.Core.Database.Forum;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
+using Serverside.Core.Repositories;
 using Serverside.Core.Scripts;
 using Serverside.Entities;
 using Serverside.Entities.Core;
@@ -41,7 +45,7 @@ namespace Serverside.Core.Login
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(LoginScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(LoginScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private void Event_OnClientEventTrigger(Client player, string eventName, params object[] args)
@@ -66,57 +70,63 @@ namespace Serverside.Core.Login
             sender.TriggerEvent("ShowCharacterSelectMenu", json);
         }
 
-        public static void LoginToAccount(Client sender, string email, string password)
+        private void LoginToAccount(Client sender, string email, string password)
         {
-            Tuple<long, string, short, string> userData = ForumDatabaseHelper.CheckPasswordMatch(email, password);
-            if (userData.Item1 == -1)
+            if (ForumDatabaseHelper.CheckPasswordMatch(email, password, out var forumLoginData))
             {
-                //args[0] wiadomosc
-                //args[1] czas wyswietlania w ms
-                sender.TriggerEvent("ShowNotification", "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje", 3000);
+                using (AccountsRepository repository = new AccountsRepository())
+                {
+                    AccountModel accountModel = new AccountModel
+                    {
+                        UserId = forumLoginData.Id,
+                        Name = forumLoginData.UserName,
+                        ForumGroup = forumLoginData.GroupId,
+                        OtherForumGroups = forumLoginData.OtherGroups,
+                        Email = email,
+                        SocialClub = sender.SocialClubName,
+                        Ip = sender.Address,
+                        Serial = sender.Serial,
+                        LastLogin = DateTime.Now,
+                        Online = true,
+                        Characters = new List<CharacterModel>(),
+                        Penalties = new List<PenaltyModel>(),
+                    };
+
+                    AccountEntity accountEntity;
+
+                    if (repository.Contains(accountModel))
+                    {
+                        if (Enum.TryParse(typeof(ServerRank), ((ForumGroup)forumLoginData.GroupId).ToString(),
+                            out var rank))
+                            accountModel.ServerRank = (ServerRank)rank;
+                        else
+                            accountModel.ServerRank = ServerRank.Uzytkownik;
+
+                        repository.Insert(accountModel);
+                        repository.Save();
+
+                        accountEntity = new AccountEntity(accountModel, sender);
+                    }
+                    else
+                    {
+                        //Sprawdzenie czy ktoś już jest zalogowany z tego konta.
+                        AccountEntity account = EntityManager.Get(accountModel.Id);
+                        if (account != null)
+                        {
+                            //FixMe dać wiadomość jako warning
+                            ChatScript.SendMessageToPlayer(sender,
+                                $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.", ChatMessageType.ServerInfo);
+                            
+                            account.Kick(null, "Próba zalogowania na zalogowane konto.");
+                        }
+                        accountEntity = new AccountEntity(repository.Get(accountModel.Id), sender);
+                    }
+                    accountEntity.Login();
+                }
             }
             else
             {
-                AccountModel accountModel = new AccountModel
-                {
-                    UserId = userData.Item1,
-                    Name = userData.Item2,
-                    ForumGroup = userData.Item3,
-                    OtherForumGroups = userData.Item4,
-                    Email = email,
-                    SocialClub = sender.SocialClubName,
-                    Ip = sender.Address,
-                    Serial = sender.Serial
-                };
-
-                //Sprawdzenie czy konto z danym userid istnieje jak nie dodanie konta do bazy danych i załadowanie go do core.
-                //Dodanie grupy serwerowej do konta //toyer
-
-                //FixMe
-                //if (!AccountEntity.DoesAccountExist(userData.Item1))
-                //{
-                //    if (Enum.GetNames(typeof(ServerRank)).Any(e => e == ((ForumGroup)userData.Item3).ToString()))
-                //        accountModel.ServerRank = (ServerRank)Enum.Parse(typeof(ServerRank), ((ForumGroup)userData.Item3).ToString());
-                //    else
-                //        accountModel.ServerRank = ServerRank.Uzytkownik;
-
-                //    AccountEntity.RegisterAccount(sender, accountModel);
-                //}
-                //else
-                //{
-                //    //Sprawdzenie czy ktoś już jest zalogowany z tego konta.
-                //    AccountEntity account = EntityManager.GetAccount(userData.Item1);
-                //    if (account != null)
-                //    {
-                //        if (account.DbModel.Online)
-                //        {
-                //            NAPI.Player.KickPlayer(account.Client);
-                //            ChatScript.SendMessageToPlayer(sender,
-                //                $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.", ChatMessageType.ServerInfo);
-                //        }
-                //    }
-                //    AccountEntity.LoadAccount(sender, userData.Item1);
-                //}
+                sender.TriggerEvent("ShowNotification", "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje", 3000);
             }
         }
 
@@ -128,25 +138,14 @@ namespace Serverside.Core.Login
             player.TriggerEvent("ShowLoginMenu");
         }
 
-        public static void LogOut(AccountEntity account)
+        #region RemoteEvents
+
+        [RemoteEvent(RemoteEvents.PlayerLoginRequested)]
+        public void OnLoginRequested(Client sender, params object[] args)
         {
-            account.DbModel.Online = false;
-            if (account.CharacterEntity != null)
-                account.CharacterEntity.DbModel.Online = false;
-            account.Save();
-            account.Client.ResetData("RP_ACCOUNT");
-            EntityManager.RemoveAccount(account.AccountId);
+
         }
 
-        public static void LogOut(Client player)
-        {
-            AccountEntity account = player.GetAccountEntity();
-            account.DbModel.Online = false;
-            if (account.CharacterEntity != null)
-                account.CharacterEntity.DbModel.Online = false;
-            account.Save();
-            player.ResetData("RP_ACCOUNT");
-            EntityManager.RemoveAccount(account.AccountId);
-        }
+        #endregion
     }
 }

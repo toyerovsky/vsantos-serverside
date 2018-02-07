@@ -21,15 +21,15 @@ namespace Serverside.Core.Repositories
 
         public bool Contains(GroupModel model)
         {
-            return Context.Groups.Contains(model);
+            return Context.Groups.Any(groupModel => groupModel.Id == model.Id);
         }
 
         public void Update(GroupModel model) => Context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var account = Context.Groups.Find(id);
-            Context.Groups.Remove(account);
+            var group = Context.Groups.Find(id);
+            Context.Groups.Remove(group);
         }
 
         public GroupModel Get(long id) => GetAll().Single(g => g.Id == id);

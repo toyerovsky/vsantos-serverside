@@ -30,7 +30,7 @@ namespace Serverside.Bank
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(BankScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(BankScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
 
             foreach (var atm in XmlHelper.GetXmlObjects<AtmModel>($@"{ServerInfo.XmlDirectory}Atms\"))
             {

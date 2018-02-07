@@ -27,7 +27,7 @@ namespace Serverside.CrimeBot
 
         public void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(CrimeBotScript)}] {Constant.ConstantMessages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(CrimeBotScript)}] {Constant.Messages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
         }
 
         [Command("dodajbotp")]

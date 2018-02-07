@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ */
+
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Serverside.Core.Database;
@@ -15,7 +21,7 @@ namespace Serverside.Core.Repositories
 
         public bool Contains(GroupWarehouseOrderModel model)
         {
-            return Context.GroupWarehouseOrders.Contains(model);
+            return Context.GroupWarehouseOrders.Any(groupWarehouseOrder => groupWarehouseOrder.Id == model.Id);
         }
 
         public void Update(GroupWarehouseOrderModel model)
@@ -25,8 +31,8 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var account = Context.GroupWarehouseOrders.Find(id);
-            Context.GroupWarehouseOrders.Remove(account);
+            var order = Context.GroupWarehouseOrders.Find(id);
+            Context.GroupWarehouseOrders.Remove(order);
         }
 
         public GroupWarehouseOrderModel Get(long id) => GetAll().Single(b => b.Id == id);

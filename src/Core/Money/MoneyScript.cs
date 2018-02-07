@@ -21,7 +21,7 @@ namespace Serverside.Core.Money
 
         private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"{nameof(MoneyScript)} {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"{nameof(MoneyScript)} {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         [Command("plac", "~y~UŻYJ: ~w~ /plac [id] [kwota]", Alias = "pay")]

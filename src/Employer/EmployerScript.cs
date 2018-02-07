@@ -26,7 +26,7 @@ namespace Serverside.Employer
 
         public void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(EmployerScript)}] {Constant.ConstantMessages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(EmployerScript)}] {Constant.Messages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
         }
 
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)

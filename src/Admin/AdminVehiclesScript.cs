@@ -23,7 +23,7 @@ namespace Serverside.Admin
 
         private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(AdminVehiclesScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(AdminVehiclesScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         [Command("kolor", "~y~ UŻYJ ~w~ /kolor [hexPodstawowy] [hexDodatkowy]")]

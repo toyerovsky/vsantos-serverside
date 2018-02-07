@@ -1,3 +1,4 @@
 ﻿{
-  "connectionString": ""
+  "gameConnectionString": "Server=localhost;Database=vsantos-srv;Uid=srv;Pwd=x9R6qyr-qW\\C*4Z!@fdyE-A[NbY.4>gRtn:#m$e?;",
+  "forumConnectionString": "server=v-santos.pl;uid=srv;pwd=WL8oTnufAAEFgoIt;database=vsantos;"
 }

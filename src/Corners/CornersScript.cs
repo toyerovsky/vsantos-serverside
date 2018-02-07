@@ -27,7 +27,7 @@ namespace Serverside.Corners
 
         public void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(CornersScript)}] {Constant.ConstantMessages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(CornersScript)}] {Constant.Messages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
             foreach (var corner in XmlHelper.GetXmlObjects<CornerModel>(Constant.ServerInfo.XmlDirectory + @"Corners\"))
             {
                 Corners.Add(new Corner(Event, corner));

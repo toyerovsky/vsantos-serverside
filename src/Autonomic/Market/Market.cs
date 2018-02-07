@@ -27,7 +27,7 @@ namespace Serverside.Autonomic.Market
             MarketData = data;
 
             var botInfo =
-                Constant.ConstantItems.ConstantNames.OrderBy(x => new Random().Next(Constant.ConstantItems.ConstantNames
+                Constant.Items.ConstantNames.OrderBy(x => new Random().Next(Constant.Items.ConstantNames
                     .Count)).ElementAt(0);
 
             MarketNpc = new Bot(events, botInfo.Key, botInfo.Value, new FullPosition(MarketData.Center, new Vector3(1f, 1f, 1f)));

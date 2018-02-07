@@ -28,7 +28,7 @@ namespace Serverside.Core.Scripts
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(ChatScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(ChatScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         public static event SaidEventHandler OnPlayerSaid;
@@ -107,7 +107,7 @@ namespace Serverside.Core.Scripts
                 return;
             }
 
-            Client getter = EntityManager.GetAccount(id).Client;
+            Client getter = EntityManager.GetAccountByServerId(id).Client;
             if (getter == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -193,13 +193,6 @@ namespace Serverside.Core.Scripts
             }
         }
 
-        /// <summary>
-        /// Przy czacie grupowym podajemy kolor grupy
-        /// </summary>
-        /// <param Name="player"></param>
-        /// <param Name="message"></param>
-        /// <param Name="chatMessageType"></param>
-        /// <param Name="color"></param>
         public static void SendMessageToNearbyPlayers(Client player, string message, ChatMessageType chatMessageType, string color = "")
         {
             message = PrepareMessage(player.Name, message, chatMessageType, out string messageColor);
@@ -236,9 +229,7 @@ namespace Serverside.Core.Scripts
             color = string.Empty;
 
             if (char.IsLower(message.First()))
-            {
                 message = $"{char.ToUpper(message[0])}{message.Substring(1)}";
-            }
 
             switch (chatMessageType)
             {
@@ -285,9 +276,7 @@ namespace Serverside.Core.Scripts
             }
 
             if (message.Last() != '.' && message.Last() != '!' && message.Last() != '?')
-            {
-                message = $"{message}.";
-            }
+                message += '.';
 
             return message;
         }

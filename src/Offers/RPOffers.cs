@@ -28,7 +28,7 @@ namespace Serverside.Offers
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(OffersScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(OffersScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private void API_OnClientEventTrigger(Client sender, string eventName, object[] arguments)

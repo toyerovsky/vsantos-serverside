@@ -20,7 +20,7 @@ namespace Serverside.Core.Database
         public RoleplayContext CreateDbContext(string[] args)
         {
             var options = new DbContextOptionsBuilder<RoleplayContext>();
-            options.UseMySQL(new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("ConnectionString")));
+            options.UseMySQL(new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString")));
             return new RoleplayContext(options.Options);
         }
     }

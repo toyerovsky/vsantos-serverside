@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Serverside.Constant
 {
-    public static class ConstantMessages
+    public static class Messages
     {
         public const string ResourceStartMessage = "Skrypt został uruchomiony pomyślnie.";
 

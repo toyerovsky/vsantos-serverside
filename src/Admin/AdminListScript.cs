@@ -31,7 +31,7 @@ namespace Serverside.Admin
 
         private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(AdminListScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(AdminListScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private void OnClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)

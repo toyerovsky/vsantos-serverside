@@ -28,7 +28,7 @@ namespace Serverside.Groups
 
         private void OnResourceStartHandler()
         {
-            Tools.ConsoleOutput($"[{nameof(GroupsScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(GroupsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         #region PLAYER COMMANDS

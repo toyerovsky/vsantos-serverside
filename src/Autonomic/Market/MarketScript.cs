@@ -94,7 +94,7 @@ namespace Serverside.Autonomic.Market
         {
             //TODO: Wczytywanie wszystkich IPL sklepów
 
-            Tools.ConsoleOutput($"[{nameof(MarketScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(MarketScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
             XmlHelper.GetXmlObjects<Models.Market>($@"{ServerInfo.XmlDirectory}\Markets\")
                 .ForEach(market => Markets.Add(new Market(Event, market)));
         }

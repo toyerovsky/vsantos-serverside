@@ -27,7 +27,7 @@ namespace Serverside.Core.Bus
 
         private void Event_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(BusScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(BusScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
             foreach (var stop in XmlHelper.GetXmlObjects<BusStopModel>(Constant.ServerInfo.XmlDirectory + @"BusStops\"))
             {
                 _busStops.Add(new BusStopEntity(Event, stop));

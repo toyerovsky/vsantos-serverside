@@ -87,7 +87,7 @@ namespace Serverside.Corners
             //TransactionLevel == 2 Podana cena była za wysoka i bot wynegocjował zgodnie z tym co może dać, czeka aż gracz powie tak lub poda cenę
 
             //Jeśli gracz powie że nie ma
-            if ((!BotHandle.HasData("TransactionLevel") || BotHandle.GetData("TransactionLevel") == 2) && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && ConstantMessages.NoMessagesList.Any(e.Message.Contains))
+            if ((!BotHandle.HasData("TransactionLevel") || BotHandle.GetData("TransactionLevel") == 2) && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && Messages.NoMessagesList.Any(e.Message.Contains))
             {
                 GoAllPoints(true);
             }
@@ -97,7 +97,7 @@ namespace Serverside.Corners
                 Seller.Client.Notify("Aby podać cenę kupującemu NPC musisz używać liczb np. 70.");
             }
             //Jeśli gracz powie tak
-            else if (!BotHandle.HasData("TransactionLevel") && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && ConstantMessages.YesMessagesList.Any(e.Message.Contains))
+            else if (!BotHandle.HasData("TransactionLevel") && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && Messages.YesMessagesList.Any(e.Message.Contains))
             {
                 BotHandle.SetData("TransactionLevel", 1);
                 SendMessageToNerbyPlayers("Ile za to cudo?", ChatMessageType.Normal);
@@ -124,7 +124,7 @@ namespace Serverside.Corners
                 GoAllPoints(true);
             }
             //Po negocjacji
-            else if (BotHandle.HasData("TransactionLevel") && BotHandle.GetData("TransactionLevel") == 2 && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && (ConstantMessages.YesMessagesList.Any(e.Message.Contains) || e.Message.Contains(MoneyCount.ToString(CultureInfo.InvariantCulture)) || LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals)))
+            else if (BotHandle.HasData("TransactionLevel") && BotHandle.GetData("TransactionLevel") == 2 && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && (Messages.YesMessagesList.Any(e.Message.Contains) || e.Message.Contains(MoneyCount.ToString(CultureInfo.InvariantCulture)) || LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals)))
             {
                 //Jeśli gracz zgodzi się na cenę bota
                 //Sprawdzamy czy gracz posiada dany narkotyk

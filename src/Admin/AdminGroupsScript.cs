@@ -22,7 +22,7 @@ namespace Serverside.Admin
     {
         public AdminGroupsScript()
         {
-            Tools.ConsoleOutput($"[{nameof(AdminGroupsScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(AdminGroupsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         [Command("stworzgrupe", GreedyArg = true)]

@@ -20,7 +20,7 @@ namespace Serverside.Admin
     {
         public AdminCoreScript()
         {
-            Tools.ConsoleOutput($"[{nameof(AdminCoreScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(AdminCoreScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         [Command("ustawrange", "~y~ UŻYJ ~w~ /ustawrange [id] [nazwa]")]
@@ -140,13 +140,13 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.");
                 return;
             }
-            var controller = EntityManager.GetAccountByServerId(id);
-            if (controller == null)
+            var accountEntity = EntityManager.GetAccountByServerId(id);
+            if (accountEntity == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
                 return;
             }
-            NAPI.Player.KickPlayer(controller.Client, reason);
+            accountEntity.Kick(sender.GetAccountEntity(), reason);
         }
 
         [Command("fly")]

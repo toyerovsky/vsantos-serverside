@@ -53,7 +53,7 @@ namespace Serverside.Jobs
 
         private void API_OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(JobsScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(JobsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
             Garbages = XmlHelper.GetXmlObjects<GarbageModel>($"{ServerInfo.XmlDirectory}JobGarbages\\");
 
             foreach (var garbage in Garbages)

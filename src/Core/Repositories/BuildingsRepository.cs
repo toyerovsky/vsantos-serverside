@@ -21,18 +21,15 @@ namespace Serverside.Core.Repositories
 
         public bool Contains(BuildingModel model)
         {
-            return Context.Buildings.Contains(model);
+            return Context.Buildings.Any(building => building.Id == model.Id);
         }
 
-        public void Update(BuildingModel model)
-        {
-            Context.Entry(model).State = EntityState.Modified;
-        }
+        public void Update(BuildingModel model) => Context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var account = Context.Buildings.Find(id);
-            Context.Buildings.Remove(account);
+            var building = Context.Buildings.Find(id);
+            Context.Buildings.Remove(building);
         }
 
         public BuildingModel Get(long id) => GetAll().Single(b => b.Id == id);

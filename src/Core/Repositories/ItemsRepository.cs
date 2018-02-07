@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ */
+
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Serverside.Core.Database;
@@ -15,15 +21,15 @@ namespace Serverside.Core.Repositories
 
         public bool Contains(ItemModel model)
         {
-            return Context.Items.Contains(model);
+            return Context.Items.Any(item => item.Id == model.Id);
         }
 
         public void Update(ItemModel model) => Context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var account = Context.Items.Find(id);
-            Context.Items.Remove(account);
+            var item = Context.Items.Find(id);
+            Context.Items.Remove(item);
         }
 
         public ItemModel Get(long id) => GetAll().Single(i => i.Id == id);

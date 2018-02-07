@@ -30,7 +30,7 @@ namespace Serverside.Autonomic.Carshop
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(CarshopScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(CarshopScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
 
             Vehicles =
                 XmlHelper.GetXmlObjects<CarshopVehicleModel>(

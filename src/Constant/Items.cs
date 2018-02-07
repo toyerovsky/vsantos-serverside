@@ -14,7 +14,7 @@ using Serverside.Items;
 
 namespace Serverside.Constant
 {
-    public static class ConstantItems
+    public static class Items
     {
         /// <summary>
         /// Klucz to słownik, wartosc to animacja

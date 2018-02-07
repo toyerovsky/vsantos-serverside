@@ -73,7 +73,7 @@ namespace Serverside.Entities.Core
             Events = events;
 
             Random random = new Random();
-            var randomIndex = random.Next(ConstantItems.ServerSpawnPositions.Count);
+            var randomIndex = random.Next(Constant.Items.ServerSpawnPositions.Count);
 
             DbModel = new CharacterModel();
             accountEntity.CharacterEntity = this;
@@ -86,9 +86,9 @@ namespace Serverside.Entities.Core
             DbModel.Model = model;
             DbModel.HitPoints = 100;
             DbModel.IsAlive = true;
-            DbModel.LastPositionX = ConstantItems.ServerSpawnPositions[randomIndex].X;
-            DbModel.LastPositionY = ConstantItems.ServerSpawnPositions[randomIndex].Y;
-            DbModel.LastPositionZ = ConstantItems.ServerSpawnPositions[randomIndex].Z;
+            DbModel.LastPositionX = Constant.Items.ServerSpawnPositions[randomIndex].X;
+            DbModel.LastPositionY = Constant.Items.ServerSpawnPositions[randomIndex].Y;
+            DbModel.LastPositionZ = Constant.Items.ServerSpawnPositions[randomIndex].Z;
             DbModel.LastPositionRotX = 0f;
             DbModel.LastPositionRotY = 0f;
             DbModel.LastPositionRotZ = 0f;

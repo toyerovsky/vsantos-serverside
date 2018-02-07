@@ -29,7 +29,7 @@ namespace Serverside.Buildings
 
         private void API_OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(BuildingScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(BuildingScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
@@ -56,9 +56,9 @@ namespace Serverside.Buildings
                          * args[3] bool spawnPossible
                          */
 
-                        if (ConstantItems.DefaultInteriors.All(i => i.Name != (string)arguments[2]) || !sender.HasData("AdminDoorPosition")) return;
+                        if (Constant.Items.DefaultInteriors.All(i => i.Name != (string)arguments[2]) || !sender.HasData("AdminDoorPosition")) return;
 
-                        var internalPosition = ConstantItems.DefaultInteriors.First(i => i.Name == (string)arguments[2]).InternalPosition;
+                        var internalPosition = Constant.Items.DefaultInteriors.First(i => i.Name == (string)arguments[2]).InternalPosition;
                         Vector3 externalPosition = sender.GetData("AdminDoorPosition");
 
                         var building = BuildingEntity.Create(Event, sender.GetAccountEntity().DbModel, (string)arguments[0], Convert.ToDecimal(arguments[1]), internalPosition, externalPosition, (bool)arguments[3]);
@@ -242,7 +242,7 @@ namespace Serverside.Buildings
                     }
 
                     o.SetData("AdminDoorPosition", o.Position);
-                    sender.TriggerEvent("ShowAdminBuildingMenu", JsonConvert.SerializeObject(ConstantItems.DefaultInteriors));
+                    sender.TriggerEvent("ShowAdminBuildingMenu", JsonConvert.SerializeObject(Constant.Items.DefaultInteriors));
                     sender.Notify("Dodawanie budynku zakończyło się ~h~~g~pomyślnie.");
                     Event.OnChatMessage -= Handler;
                 }

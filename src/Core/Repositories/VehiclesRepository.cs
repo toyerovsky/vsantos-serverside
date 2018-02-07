@@ -18,17 +18,18 @@ namespace Serverside.Core.Repositories
         private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
 
         public void Insert(VehicleModel model) => Context.Vehicles.Add(model);
+
         public bool Contains(VehicleModel model)
         {
-            return Context.Vehicles.Contains(model);
+            return Context.Vehicles.Any(vehicle => vehicle.Id == model.Id);
         }
 
         public void Update(VehicleModel model) => Context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var account = Context.Vehicles.Find(id);
-            Context.Vehicles.Remove(account);
+            var vehicle = Context.Vehicles.Find(id);
+            Context.Vehicles.Remove(vehicle);
         }
 
         public VehicleModel Get(long id) => Context.Vehicles.Find(id);

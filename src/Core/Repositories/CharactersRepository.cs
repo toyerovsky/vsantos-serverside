@@ -21,15 +21,15 @@ namespace Serverside.Core.Repositories
 
         public bool Contains(CharacterModel model)
         {
-            return Context.Characters.Contains(model);
+            return Context.Characters.Any(character => character.Id == model.Id);
         }
 
         public void Update(CharacterModel model) => Context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var account = Context.Accounts.Find(id);
-            Context.Accounts.Remove(account);
+            var character = Context.Characters.Find(id);
+            Context.Characters.Remove(character);
         }
 
         public CharacterModel Get(long id) => GetAll().Single(c => c.Id == id);

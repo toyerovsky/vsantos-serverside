@@ -5,15 +5,13 @@
  */
 
 using System;
-using System.Linq;
 using GTANetworkAPI;
-using Microsoft.EntityFrameworkCore;
 using Serverside.Core.Database.Models;
+using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Entities.EventArgs;
 using Serverside.Entities.Interfaces;
-using Serverside.Items;
 
 namespace Serverside.Entities.Core
 {
@@ -43,8 +41,11 @@ namespace Serverside.Entities.Core
         {
             DbModel = data;
             Client = client;
+        }
 
-            client.SetData("RP_ACCOUNT", this);
+        public void Login()
+        {
+            Client.SetData("RP_ACCOUNT", this);
 
             DbModel.LastLogin = DateTime.Now;
             DbModel.Online = true;
@@ -53,7 +54,7 @@ namespace Serverside.Entities.Core
 
             string[] ip = DbModel.Ip.Split('.');
             string safeIp = $"{ip[0]}.{ip[1]}.***.***";
-            client.Notify($"Witaj, ~g~~h~{DbModel.Name} zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin} z adresu IP: {safeIp}");
+            Client.Notify($"Witaj, ~g~~h~{DbModel.Name} zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin} z adresu IP: {safeIp}");
 
             using (CharactersRepository repository = new CharactersRepository())
             {
@@ -73,46 +74,77 @@ namespace Serverside.Entities.Core
                 }
                 repository.Save();
             }
-            
-            EntityManager.AddAccount(AccountId, this);
-            AccountLoggedIn?.Invoke(client, this);
+
+            EntityManager.Add(this);
+            AccountLoggedIn?.Invoke(Client, this);
         }
 
-        public static AccountEntity GetAccountControllerFromName(string formatname)
+        public void Kick(AccountEntity creator, string reason)
         {
-            Client client = EntityManager.GetAccounts().First(x => x.Value.CharacterEntity.FormatName.ToLower().Contains(formatname.ToLower())).Value.Client;
-            return client?.GetAccountEntity();
-        }
-
-        public static void LoadAccount(Client sender, long userId)
-        {
-            using (AccountsRepository repository = new AccountsRepository())
-                new AccountEntity(repository.GetAll().FirstOrDefault(x => x.UserId == userId), sender);
-        }
-
-        public static void RegisterAccount(Client sender, AccountModel accountModel)
-        {
-            using (AccountsRepository repository = new AccountsRepository())
+            using (PenaltiesRepository repository = new PenaltiesRepository())
             {
-                repository.Insert(accountModel);
-                repository.Save();
+                PenaltyModel model = new PenaltyModel()
+                {
+                    Creator = creator.DbModel,
+                    Account = DbModel,
+                    Date = DateTime.Now,
+                    PenaltyType = PenaltyType.Kick,
+                    Reason = reason
+                };
 
-                new AccountEntity(accountModel, sender);
+                repository.Insert(model);
+                repository.Save();
             }
+
+            NAPI.Player.KickPlayer(Client, reason);
+            Dispose();
+        }
+
+        public void Ban(AccountEntity creator, string reason, DateTime expiryDate)
+        {
+            using (PenaltiesRepository repository = new PenaltiesRepository())
+            {
+                PenaltyModel model = new PenaltyModel()
+                {
+                    Creator = creator.DbModel,
+                    Account = DbModel,
+                    Date = DateTime.Now,
+                    PenaltyType = PenaltyType.Ban,
+                    Reason = reason,
+                    ExpiryDate = expiryDate
+                };
+
+                repository.Insert(model);
+                repository.Save();
+            }
+
+            NAPI.Player.BanPlayer(Client, reason);
+            Dispose();
         }
 
         public void Save()
         {
-            //tutaj wywołać metody synchronizacji danych z innych controllerów np character.
-            //CharacterEntity?.Save(resourceStop);
+            using (AccountsRepository accountsRepository = new AccountsRepository())
+            {
+                accountsRepository.Update(DbModel);
+                accountsRepository.Save();
+            }
 
-            //ContextFactory.Instance.Accounts.Attach(DbModel);
-            //ContextFactory.Instance.Entry(DbModel).State = EntityState.Modified;
-            //ContextFactory.Instance.SaveChanges();
-        }
+            //tutaj wywołać metody synchronizacji danych z innych controllerów np character.
+                //CharacterEntity?.Save(resourceStop);
+
+                //ContextFactory.Instance.Accounts.Attach(DbModel);
+                //ContextFactory.Instance.Entry(DbModel).State = EntityState.Modified;
+                //ContextFactory.Instance.SaveChanges();
+            }
 
         public void Dispose()
         {
+            EntityManager.Remove(this);
+
+            DbModel.Online = false;
+            Save();
+
             CharacterEntity?.Dispose();
         }
     }

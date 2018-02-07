@@ -62,7 +62,7 @@ namespace Serverside.Jobs.Courier.CourierWarehouse
 
         private void Event_OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(CourierWarehouseScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(CourierWarehouseScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         [Command("dodajmagazyn", "~y~ UŻYJ ~w~ /dodajmagazyn [nazwa]")]

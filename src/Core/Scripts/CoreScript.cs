@@ -29,7 +29,7 @@ namespace Serverside.Core.Scripts
         private void Event_OnResourceStart()
         {
             EntityManager.LoadEntities(Event);
-            Tools.ConsoleOutput($"[{nameof(CoreScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(CoreScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private float _currentRotation = 0;
@@ -111,8 +111,7 @@ namespace Serverside.Core.Scripts
         {
             Tools.ConsoleOutput($"PlayerDisconnected: {player.SocialClubName}", ConsoleColor.Blue);
             AccountEntity account = player.GetAccountEntity();
-            if (account == null) return;
-            LoginScript.LogOut(account);
+            account?.Dispose();
         }
 
         private void Client_OnPlayerDimensionChanged(object player, DimensionChangeEventArgs e)

@@ -104,7 +104,7 @@ namespace Serverside.Core.Scripts
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(BwScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(BwScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private int GetTimeToRespawn(uint reason)

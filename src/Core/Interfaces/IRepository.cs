@@ -4,7 +4,6 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-
 using System;
 using System.Collections.Generic;
 

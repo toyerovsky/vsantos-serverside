@@ -62,7 +62,7 @@ namespace Serverside.CrimeBot
             {
                 if (i == 0) continue;
 
-                var info = ConstantItems.GetCrimeBotItemName(properties[i - 2].Name);
+                var info = Constant.Items.GetCrimeBotItemName(properties[i - 2].Name);
                 Items.Add(new CrimeBotItem(info.Item1, ((decimal?)properties[i - 2].GetValue(DbModel)).Value, ((int?)properties[i - 1].GetValue(DbModel)).Value, ((int?)properties[i].GetValue(DbModel)).Value, info.Item2, properties[i - 1].Name));
 
             }
@@ -126,7 +126,7 @@ namespace Serverside.CrimeBot
 
                         if (i.Type == ItemType.Weapon)
                         {
-                            var data = ConstantItems.GetWeaponData(i.Name);
+                            var data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
                             item.Creator = null;
@@ -137,7 +137,7 @@ namespace Serverside.CrimeBot
                         }
                         else if (i.Type == ItemType.WeaponClip)
                         {
-                            var data = ConstantItems.GetWeaponData(i.Name);
+                            var data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
                             item.Creator = null;

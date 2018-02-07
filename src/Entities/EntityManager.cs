@@ -30,17 +30,20 @@ namespace Serverside.Entities
 
         #region ACCOUNT METHODS
 
-        public static void AddAccount(long accountId, AccountEntity accountEntity)
+        public static void Add(AccountEntity accountEntity)
         {
-            if (Accounts.ContainsKey(accountId))
+            if (Accounts.ContainsKey(accountEntity.AccountId))
+            {
+                Tools.ConsoleOutput("[Error] Nastąpiła interferencja zalogowanych użytkowników.", ConsoleColor.Red);
                 return;
+            }   
 
-            Accounts.Add(accountId, accountEntity);
+            Accounts.Add(accountEntity.AccountId, accountEntity);
         }
 
-        public static void RemoveAccount(long accountId) => Accounts.Remove(accountId);
+        public static void Remove(AccountEntity accountEntity) => Accounts.Remove(accountEntity.AccountId);
 
-        public static AccountEntity GetAccount(long accountId) => accountId > -1 ? Accounts[accountId] : null;
+        public static AccountEntity Get(long accountId) => accountId > -1 ? Accounts[accountId] : null;
 
         public static AccountEntity GetAccountByServerId(int id) => id > -1 ? Accounts.Values.ElementAtOrDefault(id) : null;
 
@@ -55,7 +58,7 @@ namespace Serverside.Entities
         {
             if (!Accounts.ContainsValue(account))
             {
-                Tools.ConsoleOutput("[Error] Próbowano uzyskać ID dla gracza który nie jest zalogowany!", ConsoleColor.DarkMagenta);
+                Tools.ConsoleOutput("[Error] Próbowano uzyskać ID dla gracza który nie jest zalogowany.", ConsoleColor.Red);
                 return -1;
             }
             return Accounts.Values.ToList().IndexOf(account);

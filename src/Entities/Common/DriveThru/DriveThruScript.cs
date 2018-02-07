@@ -64,7 +64,7 @@ namespace Serverside.Entities.Common.DriveThru
 
         private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(DriveThruScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(DriveThruScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
 
             foreach (var driveThru in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
             {

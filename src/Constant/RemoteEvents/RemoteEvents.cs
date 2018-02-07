@@ -4,13 +4,11 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Core.Enums
+namespace Serverside.Constant.RemoteEvents
 {
-    public enum PenaltyType
+    public class RemoteEvents
     {
-        Warn,
-        AdminJail,
-        Ban,
-        Kick
+        public const string PlayerLoginRequested = "playerLoginRequested";
+        public const string PlayerLoginPassed = "playerLoginPassed";
     }
 }

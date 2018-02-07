@@ -41,7 +41,7 @@ namespace Serverside.Core.Animations
 
         private void OnResourceStartHandler()
         {
-            Tools.ConsoleOutput($"[{nameof(AnimationsScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(AnimationsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         #region Komendy administracji
@@ -50,7 +50,7 @@ namespace Serverside.Core.Animations
         {
             //Wyświetlamy menu w którym administrator może grupować animacje
             //Przesyłamy dostępne animacje
-            player.TriggerEvent("ShowAdminAnimMenu", ConstantItems.Animations.Select(anim => $"{anim.Key},{anim.Value}").ToList());
+            player.TriggerEvent("ShowAdminAnimMenu", Constant.Items.Animations.Select(anim => $"{anim.Key},{anim.Value}").ToList());
         }
         #endregion
 

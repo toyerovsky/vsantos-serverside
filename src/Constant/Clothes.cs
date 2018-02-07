@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Serverside.Constant
 {
-    public class ConstantClothes
+    public class Clothes
     {
         public static readonly List<string> Mens = new List<string>
         {

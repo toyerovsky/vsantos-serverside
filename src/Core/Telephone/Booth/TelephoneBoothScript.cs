@@ -31,7 +31,7 @@ namespace Serverside.Core.Telephone.Booth
 
         private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"{nameof(TelephoneBoothScript)} {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"{nameof(TelephoneBoothScript)} {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
             foreach (var booth in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Constant.ServerInfo.XmlDirectory + @"Booths\"))
             {
                 //W konstruktorze spawnujemy budkę telefoniczną do gry

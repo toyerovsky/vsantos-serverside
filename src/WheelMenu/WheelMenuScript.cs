@@ -26,7 +26,7 @@ namespace Serverside.WheelMenu
 
         private void Event_OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(WheelMenuScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(WheelMenuScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)

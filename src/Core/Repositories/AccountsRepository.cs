@@ -21,7 +21,7 @@ namespace Serverside.Core.Repositories
 
         public bool Contains(AccountModel model)
         {
-            return Context.Accounts.Contains(model);
+            return Context.Accounts.Any(account => account.UserId == model.UserId);
         }
 
         public void Update(AccountModel model) => Context.Entry(model).State = EntityState.Modified;

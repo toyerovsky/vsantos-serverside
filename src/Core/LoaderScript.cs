@@ -19,7 +19,7 @@ namespace Serverside.Core
 
         private void Event_OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(LoaderScript)}] {ConstantMessages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
+            Tools.ConsoleOutput($"[{nameof(LoaderScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
     }
 }
