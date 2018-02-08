@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "vsantos": {
+      "commandName": "Executable",
+      "executablePath": "C:\\srv\\server.exe",
+      "workingDirectory": "C:\\srv\\"
+    }
+  }
+}

@@ -19,7 +19,7 @@ namespace Serverside.CrimeBot.Models
         
         public CrimeBotItem(string name, decimal cost, int count, int defaultCount, ItemType type, string databaseField)
         {
-            name = name;
+            Name = name;
             Cost = cost;
             Count = count;
             DefaultCount = defaultCount;

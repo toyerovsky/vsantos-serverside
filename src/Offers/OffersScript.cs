@@ -26,12 +26,12 @@ namespace Serverside.Offers
             Event.OnResourceStart += API_onResourceStart;
         }
 
-        private void API_onResourceStart()
+        public void API_onResourceStart()
         {
             Tools.ConsoleOutput($"[{nameof(OffersScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
-        private void API_OnClientEventTrigger(Client sender, string eventName, object[] arguments)
+        public void API_OnClientEventTrigger(Client sender, string eventName, object[] arguments)
         {
             if (eventName == "OnPlayerCancelOffer")
             {

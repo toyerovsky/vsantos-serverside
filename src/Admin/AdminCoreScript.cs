@@ -71,7 +71,6 @@ namespace Serverside.Admin
 
         }
 
-
         [Command("tp", "~y~ UŻYJ ~w~ /tp [id]")]
         public void TeleportToPlayer(Client sender, int id)
         {

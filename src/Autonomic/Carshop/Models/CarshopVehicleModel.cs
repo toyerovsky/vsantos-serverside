@@ -25,7 +25,7 @@ namespace Serverside.Autonomic.Carshop.Models
 
         public CarshopVehicleModel(string name, VehicleHash hash, VehicleClass category, decimal cost, List<CarshopType> types)
         {
-            name = name;
+            Name = name;
             Hash = hash;
             Category = category;
             Cost = cost;
