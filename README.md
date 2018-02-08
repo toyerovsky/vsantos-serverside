@@ -16,3 +16,6 @@
 
 ## Running the project
 Go to the repo directory and double click on .csproj file
+
+## Tips
+1. Create shortcuts to repo folder, and server folder on desktop for faster navigation
