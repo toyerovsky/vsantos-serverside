@@ -7,18 +7,30 @@
 using System;
 using GTANetworkAPI;
 using Serverside.Entities.Common.DriveThru.Models;
+using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Common.DriveThru
 {
-    public class DriveThru : IDisposable
+    public class DriveThru : IGameEntity
     {
-        public DriveThruModel Data { get; set; }
-        public Marker DriveThruMarker { get; set; }
-        public ColShape DriveThruColshape { get; set; }
+        public DriveThruModel Data { get; }
+
+        private Marker DriveThruMarker { get; set; }
+        private ColShape DriveThruColshape { get; set; }
 
         public DriveThru(DriveThruModel data)
         {
             Data = data;
+        }
+
+        public void Dispose()
+        {
+            NAPI.ColShape.DeleteColShape(DriveThruColshape);
+            NAPI.Entity.DeleteEntity(DriveThruMarker);
+        }
+
+        public void Spawn()
+        {
             DriveThruMarker = NAPI.Marker.CreateMarker(1, Data.Position, new Vector3(), new Vector3(1f, 1f, 1f),
                 1f, new Color(255, 106, 148, 40));
 
@@ -39,12 +51,6 @@ namespace Serverside.Entities.Common.DriveThru
                 NAPI.Player.GetPlayerFromHandle(entity).TriggerEvent("DisposeDriveThruMenu");
 
             };
-        }
-
-        public void Dispose()
-        {
-            NAPI.ColShape.DeleteColShape(DriveThruColshape);
-            NAPI.Entity.DeleteEntity(DriveThruMarker);
         }
     }
 

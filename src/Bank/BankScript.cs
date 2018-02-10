@@ -4,7 +4,6 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
@@ -19,19 +18,17 @@ using Serverside.Core.Serialization.Xml;
 
 namespace Serverside.Bank
 {
-    public sealed class BankScript : Script
+    public class BankScript : Script
     {
         private List<Atm> Atms { get; set; } = new List<Atm>();
 
         public BankScript()
         {
-            Event.OnResourceStart += API_onResourceStart;
+            Event.OnResourceStart += OnResourceStart;
         }
 
-        private void API_onResourceStart()
+        private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(BankScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-
             foreach (var atm in XmlHelper.GetXmlObjects<AtmModel>($@"{ServerInfo.XmlDirectory}Atms\"))
             {
                 Atms.Add(new Atm(atm));
@@ -136,5 +133,6 @@ namespace Serverside.Bank
             }
         }
         #endregion
+
     }
 }

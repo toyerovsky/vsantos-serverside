@@ -11,8 +11,6 @@ using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
 using Serverside.Admin.Structs;
-using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Entities.Core;
@@ -23,17 +21,7 @@ namespace Serverside.Admin
     {
         private List<AccountEntity> AdminsOnDuty { get; set; } = new List<AccountEntity>();
         private List<ReportData> CurrentReports { get; set; } = new List<ReportData>();
-
-        public AdminListScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
-        private void OnResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(AdminListScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
+        
         private void OnClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
         {
             /* Arguments
@@ -56,9 +44,7 @@ namespace Serverside.Admin
                 CurrentReports.Add(data);
             }
         }
-
-
-
+        
         [Command("a")]
         public void ShowAdministratorsList(Client sender)
         {

@@ -4,13 +4,11 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Linq;
 using GTANetworkInternals;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
@@ -26,7 +24,7 @@ namespace Serverside.Items
         public int PossibleContactsToSave { get; }
         public int PossibleMessagesToSave { get; }
         public int Number { get; }
-        public CellphoneVisibleType Visible { get; }
+        public CellphoneVisibleType VisibleType { get; }
 
         public TelephoneCall CurrentCall { get; set; }
 
@@ -46,7 +44,7 @@ namespace Serverside.Items
             PossibleContactsToSave = itemModel.FirstParameter.Value;
             PossibleMessagesToSave = itemModel.SecondParameter.Value;
             Number = itemModel.ThirdParameter.Value;
-            Visible = (CellphoneVisibleType)itemModel.FourthParameter.Value;
+            VisibleType = (CellphoneVisibleType)itemModel.FourthParameter.Value;
 
             using (TelephoneMessagesRepository repository = new TelephoneMessagesRepository())
             {
@@ -64,7 +62,8 @@ namespace Serverside.Items
         {
             if (!DbModel.CurrentlyInUse)
             {
-                if (!DbModel.ThirdParameter.HasValue) Tools.ConsoleOutput("[Error] Do numeru został przypisany null.", ConsoleColor.Red);
+                if (!DbModel.ThirdParameter.HasValue)
+                    Colorful.Console.WriteLine($"[ERROR] Do numeru telefonu o ID {DbModel.Id} został przypisany null.", Color.DarkRed);
                 else
                 {
                     ChatScript.SendMessageToNearbyPlayers(player.Client, $"włącza {DbModel.Name}", ChatMessageType.ServerMe);

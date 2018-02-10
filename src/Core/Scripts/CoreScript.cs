@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
-using Serverside.Constant;
 using Serverside.Core.Database;
 using Serverside.Core.Extensions;
 using Serverside.Core.Login;
@@ -29,7 +28,6 @@ namespace Serverside.Core.Scripts
         private void Event_OnResourceStart()
         {
             EntityManager.LoadEntities(Event);
-            Tools.ConsoleOutput($"[{nameof(CoreScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private float _currentRotation = 0;
@@ -103,13 +101,11 @@ namespace Serverside.Core.Scripts
 
         private void API_onPlayerFinishedDownload(Client player)
         {
-            Tools.ConsoleOutput($"PlayerFinishedDownload: {player.SocialClubName}", ConsoleColor.Blue);
             LoginScript.LoginMenu(player);
         }
 
         private void API_OnPlayerDisconnectedHandler(Client player, string reason)
         {
-            Tools.ConsoleOutput($"PlayerDisconnected: {player.SocialClubName}", ConsoleColor.Blue);
             AccountEntity account = player.GetAccountEntity();
             account?.Dispose();
         }

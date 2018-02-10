@@ -7,18 +7,16 @@
 using System;
 using System.Timers;
 using GTANetworkAPI;
-using Serverside.Constant;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 
 namespace Serverside.Core.Scripts
 {
-    public sealed class BwScript : Script
+    public class BwScript : Script
     {
         public BwScript()
         {
-            Event.OnResourceStart += API_onResourceStart;
             Event.OnPlayerDeath += Event_OnPlayerDeath;
         }
 
@@ -100,11 +98,6 @@ namespace Serverside.Core.Scripts
                 }
                 player.CharacterEntity.Save();
             };
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(BwScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private int GetTimeToRespawn(uint reason)

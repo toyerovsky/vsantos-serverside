@@ -4,8 +4,8 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core;
@@ -16,7 +16,7 @@ using Serverside.Corners.Models;
 
 namespace Serverside.Corners
 {
-    public sealed class CornersScript : Script
+    public class CornersScript : Script
     {
         private List<Corner> Corners { get; set; } = new List<Corner>();
 
@@ -25,10 +25,9 @@ namespace Serverside.Corners
             Event.OnResourceStart += OnResourceStart;
         }
 
-        public void OnResourceStart()
+        private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(CornersScript)}] {Constant.Messages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
-            foreach (var corner in XmlHelper.GetXmlObjects<CornerModel>(Constant.ServerInfo.XmlDirectory + @"Corners\"))
+            foreach (var corner in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Corners")))
             {
                 Corners.Add(new Corner(Event, corner));
             }

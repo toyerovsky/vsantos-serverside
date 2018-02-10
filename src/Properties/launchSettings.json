@@ -2,8 +2,8 @@
   "profiles": {
     "vsantos": {
       "commandName": "Executable",
-      "executablePath": "C:\\srv\\server.exe",
-      "workingDirectory": "C:\\srv\\"
+      "executablePath": "C:\\RAGEMP\\server-files\\server.exe",
+      "workingDirectory": "C:\\RAGEMP\\server-files"
     }
   }
 }

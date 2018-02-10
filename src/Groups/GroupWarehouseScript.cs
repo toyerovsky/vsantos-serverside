@@ -11,7 +11,6 @@ using Serverside.Core.Extensions;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Repositories;
 using Serverside.Groups.Enums;
@@ -129,8 +128,6 @@ namespace Serverside.Groups
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput("[RPGroupWarehouse] Uruchomione pomyślnie.", ConsoleColor.DarkMagenta);
-
             //foreach (var order in ContextFactory.Instance.GroupWarehouseOrders)
             //{
             //    CurrentOrders.Add(order);

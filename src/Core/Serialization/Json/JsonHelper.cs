@@ -4,11 +4,10 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using GTANetworkAPI;
 using Newtonsoft.Json;
 
 namespace Serverside.Core.Serialization.Json
@@ -20,7 +19,7 @@ namespace Serverside.Core.Serialization.Json
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Tools.ConsoleOutput($"[JsonHelper] Utworzono ścieżkę {path}", ConsoleColor.Green);
+                Colorful.Console.WriteLine($"[INFO][{nameof(JsonHelper)}] Utworzono ścieżkę {path}", Color.CornflowerBlue);
             }
 
             return Directory.GetFiles(path).Select(JsonConvert.DeserializeObject<T>).ToList();
@@ -30,14 +29,14 @@ namespace Serverside.Core.Serialization.Json
         {
             if (path.Last() != '\\')
             {
-                Tools.ConsoleOutput($"[JsonHelper] Podano nieprawidłową ścieżkę {path}", ConsoleColor.Red);
+                Colorful.Console.WriteLine($"[ERROR][{nameof(JsonHelper)}] Podano nieprawidłową ścieżkę {path}", Color.DarkRed);
                 return;
             }
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Tools.ConsoleOutput($"[JsonHelper] Utworzono ścieżkę {path}", ConsoleColor.Green);
+                Colorful.Console.WriteLine($"[INFO][{nameof(JsonHelper)}] Utworzono ścieżkę {path}", Color.CornflowerBlue);
             }
 
             if (fileName == string.Empty)

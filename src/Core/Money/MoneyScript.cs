@@ -4,26 +4,13 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using GTANetworkAPI;
-using Serverside.Constant;
 using Serverside.Core.Extensions;
-using Serverside.Entities;
 
 namespace Serverside.Core.Money
 {
     sealed class MoneyScript : Script
     {
-        public MoneyScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
-        private void OnResourceStart()
-        {
-            Tools.ConsoleOutput($"{nameof(MoneyScript)} {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         [Command("plac", "~y~UŻYJ: ~w~ /plac [id] [kwota]", Alias = "pay")]
         public void TransferWalletMoney(Client sender, int id, decimal safeMoneyCount)
         {

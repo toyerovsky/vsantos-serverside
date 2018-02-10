@@ -42,8 +42,6 @@ namespace Serverside.Core.Repositories
                     .ThenInclude(character => character.AccountModel)
                 .Include(vehicle => vehicle.Group)
                 .Include(vehicle => vehicle.ItemsInVehicle)
-                    .ThenInclude(item => item.Creator)
-                .Include(vehicle => vehicle.Tunings)
                     .ThenInclude(item => item.Creator).ToList();
         }
 

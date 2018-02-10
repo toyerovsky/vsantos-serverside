@@ -6,22 +6,23 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Autonomic.Market.Models;
 using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
 using Serverside.Items;
+using Color = System.Drawing.Color;
 
 namespace Serverside.Autonomic.Market
 {
-    public sealed class MarketScript : Script
+    public class MarketScript : Script
     {
-        public static List<Market> Markets { get; set; } = new List<Market>();
+        private static List<Market> Markets { get; set; } = new List<Market>();
 
         public MarketScript()
         {
@@ -94,9 +95,12 @@ namespace Serverside.Autonomic.Market
         {
             //TODO: Wczytywanie wszystkich IPL sklepów
 
-            Tools.ConsoleOutput($"[{nameof(MarketScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-            XmlHelper.GetXmlObjects<Models.Market>($@"{ServerInfo.XmlDirectory}\Markets\")
-                .ForEach(market => Markets.Add(new Market(Event, market)));
+            Colorful.Console.WriteLine(($"[{nameof(MarketScript)}] {Messages.ResourceStartMessage}", Color.DarkRed));
+
+            foreach (var market in XmlHelper.GetXmlObjects<Models.Market>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
+            {
+                Markets.Add(new Market(Event, market));
+            }
         }
 
         [Command("dodajprzedmiotsklep")]

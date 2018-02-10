@@ -11,7 +11,6 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
 using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
@@ -64,8 +63,6 @@ namespace Serverside.Entities.Common.DriveThru
 
         private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(DriveThruScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-
             foreach (var driveThru in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
             {
                 DriveThrus.Add(new DriveThru(driveThru));

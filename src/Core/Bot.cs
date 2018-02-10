@@ -48,8 +48,6 @@ namespace Serverside.Core
         {
             BotHandle = NAPI.Ped.CreatePed(PedHash, SpawnPosition.Position, 1f);
             NAPI.Entity.SetEntityRotation(BotHandle, SpawnPosition.Rotation);
-            //NAPI.setEntityInvincible(BotHandle, true);
-            //BotHandle.freezePosition = false;
             NameLabel = NAPI.TextLabel.CreateTextLabel(Name, new Vector3(SpawnPosition.Position.X, SpawnPosition.Position.Y, SpawnPosition.Position.Z + 1), 10f, 0.7f, 1, new Color(255, 255, 255), false, BotHandle.Dimension);
             NameLabel.AttachTo(BotHandle, "SKEL_Head", new Vector3(0f, 0f, 1f), BotHandle.Rotation);
         }

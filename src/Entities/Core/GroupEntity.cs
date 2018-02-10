@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Microsoft.EntityFrameworkCore;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;

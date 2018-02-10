@@ -1,8 +1,8 @@
 ﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
- */
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+*/
 
 using System;
 using System.IO;
@@ -22,16 +22,20 @@ namespace Serverside.Core.ServerInfo
 
         public ServerInfo()
         {
-            if (!File.Exists($"{Constant.ServerInfo.XmlDirectory}ServerInfo\\ServerInfo.xml"))
-                XmlHelper.AddXmlObject(new ServerInfoModel(), $"{Constant.ServerInfo.XmlDirectory}ServerInfo\\", "ServerInfo");
+            var directory = Path.Combine(Constant.ServerInfo.XmlDirectory, "ServerInfo\\");
 
-            Model = XmlHelper.GetXmlObjects<ServerInfoModel>(
-                $"{Constant.ServerInfo.XmlDirectory}ServerInfo\\").First();
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            if (!File.Exists(Path.Combine(directory, "ServerInfo.xml")))
+                XmlHelper.AddXmlObject(new ServerInfoModel(), directory, "ServerInfo");
+
+            Model = XmlHelper.GetXmlObjects<ServerInfoModel>(directory).First();
         }
 
         public void Save()
         {
-            
+
         }
     }
 }

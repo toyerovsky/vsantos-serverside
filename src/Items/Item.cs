@@ -4,16 +4,9 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
-using GTANetworkAPI;
 using GTANetworkInternals;
-using Microsoft.EntityFrameworkCore;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
-using Serverside.Core.Scripts;
 using Serverside.Entities.Core;
 
 namespace Serverside.Items

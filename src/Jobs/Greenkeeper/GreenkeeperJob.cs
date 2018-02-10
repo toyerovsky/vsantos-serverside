@@ -5,7 +5,6 @@
  */
 
 using System.Collections.Generic;
-using GTANetworkAPI;
 using GTANetworkInternals;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Serialization.Json;

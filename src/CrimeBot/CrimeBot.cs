@@ -11,9 +11,7 @@ using System.Reflection;
 using System.Timers;
 using GTANetworkAPI;
 using GTANetworkInternals;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Serverside.Constant;
 using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
@@ -158,8 +156,7 @@ namespace Serverside.CrimeBot
                         {
                             return;
                         }
-
-                        //Ja sobie zdaję sprawę że to karygodne
+                        
                         var field = typeof(CrimeBotModel).GetProperties().Single(f => f.Name == i.DatabaseField);
                         field.SetValue(DbModel, (int)field.GetValue(DbModel) - i.Count);
 

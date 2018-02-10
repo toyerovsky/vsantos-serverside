@@ -15,6 +15,8 @@ namespace Serverside.Items
 {
     internal class Dice : Item
     {
+        private Random _random = new Random();
+        
         /// <summary>
         /// Pierwszy parametr to liczba oczek na kostce
         /// </summary>
@@ -22,11 +24,12 @@ namespace Serverside.Items
         /// <param name="itemModel"></param>
         public Dice(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
 
+
         public override void UseItem(AccountEntity player)
         {
             if (DbModel.FirstParameter != null)
                 ChatScript.SendMessageToNearbyPlayers(player.Client,
-                    $"wyrzucił {new Random().Next(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
+                    $"wyrzucił {_random.Next(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
                     ChatMessageType.ServerMe);
         }
 

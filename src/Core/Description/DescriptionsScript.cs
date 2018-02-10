@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Constant;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 
@@ -17,16 +16,6 @@ namespace Serverside.Core.Description
 {
     public class DescriptionsScript : Script
     {
-        public DescriptionsScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"{nameof(DescriptionsScript)} {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         { 
             if (eventName == "OnPlayerAddDescription")

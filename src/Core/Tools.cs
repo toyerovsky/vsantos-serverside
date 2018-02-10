@@ -6,7 +6,6 @@
 
 using System;
 using System.Linq;
-using GTANetworkAPI;
 using Serverside.Core.Database;
 using Serverside.Core.Enums;
 
@@ -29,13 +28,6 @@ namespace Serverside.Core
                     ++last; while (Enum.GetValues(typeof(Dimension)).Cast<uint>().Any(x => x == last));
                 return last;
             }
-        }
-
-        public static void ConsoleOutput(string message, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            NAPI.Util.ConsoleOutput(message);
-            Console.ResetColor();
         }
     }
 }

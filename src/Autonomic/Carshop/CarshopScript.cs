@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
@@ -18,7 +19,7 @@ using Serverside.Entities.Game;
 
 namespace Serverside.Autonomic.Carshop
 {
-    public sealed class CarshopScript : Script
+    public class CarshopScript : Script
     {
         public static List<CarshopVehicleModel> Vehicles { get; set; } = new List<CarshopVehicleModel>();
         public static List<Carshop> Carshops { get; set; } = new List<Carshop>();
@@ -30,11 +31,10 @@ namespace Serverside.Autonomic.Carshop
 
         private void API_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(CarshopScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-
             Vehicles =
                 XmlHelper.GetXmlObjects<CarshopVehicleModel>(
-                    $@"{ServerInfo.XmlDirectory}CarshopVehicles\");
+                    Path.Combine(ServerInfo.XmlDirectory, "CarshopVehicles"));
+
             Vehicles.AddRange(new List<CarshopVehicleModel>
             {
                 //Używane 
@@ -187,7 +187,7 @@ namespace Serverside.Autonomic.Carshop
                 }
             }
         }
-        
+
         [Command("usunsalon", "~y~ UŻYJ ~w~ /usunsalon")]
         public void DeleteCarshop(Client sender)
         {

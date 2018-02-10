@@ -6,8 +6,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
 
 namespace Serverside.Core.Database
 {
@@ -20,7 +18,8 @@ namespace Serverside.Core.Database
         public RoleplayContext CreateDbContext(string[] args)
         {
             var options = new DbContextOptionsBuilder<RoleplayContext>();
-            options.UseMySQL(new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString")));
+            options.UseMySql(/*Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString")*/"server=localhost;database=vsantossrv;Uid=root;Pwd=Dupa1234@;SslMode=none");
+            
             return new RoleplayContext(options.Options);
         }
     }

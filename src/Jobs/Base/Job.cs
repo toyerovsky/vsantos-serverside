@@ -5,7 +5,6 @@
  */
 
 using System.Collections.Generic;
-using GTANetworkAPI;
 using GTANetworkInternals;
 
 namespace Serverside.Jobs.Base

@@ -4,10 +4,8 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Constant;
 using Serverside.Core.Animations.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
@@ -16,11 +14,6 @@ namespace Serverside.Core.Animations
 {
     public class AnimationsScript : Script
     {
-        public AnimationsScript()
-        {
-            Event.OnResourceStart += OnResourceStartHandler;
-        }
-
         private void OnClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
         {
             //args[0] Polska nazwa animacji
@@ -37,11 +30,6 @@ namespace Serverside.Core.Animations
 
                 sender.Notify("Animacja została dodana pomyślnie.");
             }
-        }
-
-        private void OnResourceStartHandler()
-        {
-            Tools.ConsoleOutput($"[{nameof(AnimationsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         #region Komendy administracji

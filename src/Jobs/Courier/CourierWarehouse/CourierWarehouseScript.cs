@@ -4,14 +4,12 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
 using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
 using Serverside.Entities;
@@ -23,11 +21,6 @@ namespace Serverside.Jobs.Courier.CourierWarehouse
     public class CourierWarehouseScript : Script
     {
         public List<CourierWarehouse> Warehouses { get; set; } = new List<CourierWarehouse>();
-
-        public CourierWarehouseScript()
-        {
-            Event.OnResourceStart += Event_OnResourceStart;
-        }
 
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
@@ -58,11 +51,6 @@ namespace Serverside.Jobs.Courier.CourierWarehouse
                 };
 
             }
-        }
-
-        private void Event_OnResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(CourierWarehouseScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         [Command("dodajmagazyn", "~y~ UŻYJ ~w~ /dodajmagazyn [nazwa]")]

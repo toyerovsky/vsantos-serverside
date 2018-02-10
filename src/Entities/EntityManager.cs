@@ -4,19 +4,21 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using GTANetworkInternals;
-using Serverside.Core;
 using Serverside.Entities.Core;
 using Serverside.Entities.Game;
+using Color = System.Drawing.Color;
 
 namespace Serverside.Entities
 {
     public static class EntityManager
     {
+        /// <summary>
+        /// Klucz to id konta
+        /// </summary>
         private static readonly Dictionary<long, AccountEntity> Accounts = new Dictionary<long, AccountEntity>();
         private static readonly List<VehicleEntity> Vehicles = new List<VehicleEntity>();
         private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
@@ -34,7 +36,7 @@ namespace Serverside.Entities
         {
             if (Accounts.ContainsKey(accountEntity.AccountId))
             {
-                Tools.ConsoleOutput("[Error] Nastąpiła interferencja zalogowanych użytkowników.", ConsoleColor.Red);
+                Colorful.Console.WriteLine($"[Error][{nameof(EntityManager)}] Nastąpiła interferencja zalogowanych użytkowników.", Color.DarkRed);
                 return;
             }   
 
@@ -58,7 +60,7 @@ namespace Serverside.Entities
         {
             if (!Accounts.ContainsValue(account))
             {
-                Tools.ConsoleOutput("[Error] Próbowano uzyskać ID dla gracza który nie jest zalogowany.", ConsoleColor.Red);
+                Colorful.Console.Write($"[Error][{nameof(EntityManager)}] Próbowano uzyskać ID dla gracza który nie jest zalogowany.", Color.DarkRed);
                 return -1;
             }
             return Accounts.Values.ToList().IndexOf(account);

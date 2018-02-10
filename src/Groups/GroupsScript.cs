@@ -9,7 +9,6 @@ using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Constant;
 using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
@@ -21,16 +20,6 @@ namespace Serverside.Groups
 {
     public class GroupsScript : Script
     {
-        public GroupsScript()
-        {
-            Event.OnResourceStart += OnResourceStartHandler;
-        }
-
-        private void OnResourceStartHandler()
-        {
-            Tools.ConsoleOutput($"[{nameof(GroupsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         #region PLAYER COMMANDS
 
         [Command("prowadz", "~y~ UŻYJ ~w~ /pro(wadz) (id)", Alias = "pro")]

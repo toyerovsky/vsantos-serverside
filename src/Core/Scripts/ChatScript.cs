@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Constant;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
@@ -18,17 +17,11 @@ using Serverside.Groups.Enums;
 
 namespace Serverside.Core.Scripts
 {
-    public sealed class ChatScript : Script
+    public class ChatScript : Script
     {
         public ChatScript()
         {
-            Event.OnResourceStart += API_onResourceStart;
             Event.OnChatMessage += API_onChatMessageHandler;
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(ChatScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         public static event SaidEventHandler OnPlayerSaid;

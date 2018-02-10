@@ -10,19 +10,14 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
 using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
+using Color = System.Drawing.Color;
 
 namespace Serverside.Admin
 {
     public class AdminCoreScript : Script
     {
-        public AdminCoreScript()
-        {
-            Tools.ConsoleOutput($"[{nameof(AdminCoreScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         [Command("ustawrange", "~y~ UŻYJ ~w~ /ustawrange [id] [nazwa]")]
         public void SetRank(Client sender, int id, ServerRank rank)
         {
@@ -216,24 +211,24 @@ namespace Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
+                sender.Notify("Nie posiadasz uprawnień do zapisywania pozycji.");
                 return;
             }
 
-            string path = $@"{ServerInfo.WorkingDirectory}\Files\CustomPositions.txt";
+            string path = Path.Combine(ServerInfo.WorkingDirectory, @"Files\CustomPositions.txt");
 
-
-            if (!Directory.Exists($@"{ServerInfo.WorkingDirectory}\Files\"))
+            if (!Directory.Exists(Path.Combine(ServerInfo.WorkingDirectory, @"\Files\")))
             {
-                Directory.CreateDirectory($@"{ServerInfo.WorkingDirectory}\Files\");
+                Directory.CreateDirectory(Path.Combine(ServerInfo.WorkingDirectory, @"\Files\"));
 
-                Tools.ConsoleOutput($@"[File] Utworzono ścieżkę {ServerInfo.WorkingDirectory}\Files\", ConsoleColor.Blue);
+                Colorful.Console.WriteLine($@"[File] Utworzono ścieżkę {ServerInfo.WorkingDirectory}\Files\", Color.CornflowerBlue);
             }
 
             if (!File.Exists(path))
             {
                 File.Create(path);
 
-                Tools.ConsoleOutput($@"[File] Utworzono plik {path}", ConsoleColor.Blue);
+                Colorful.Console.WriteLine($@"[File] Utworzono plik {path}", Color.CornflowerBlue);
             }
 
             var data = File.ReadAllLines(path).ToList();

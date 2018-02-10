@@ -4,10 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using GTANetworkAPI;
-using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Exceptions;
@@ -16,15 +13,6 @@ namespace Serverside.Admin
 {
     public class AdminVehiclesScript : Script
     {
-        public AdminVehiclesScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
-        private void OnResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(AdminVehiclesScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
 
         [Command("kolor", "~y~ UŻYJ ~w~ /kolor [hexPodstawowy] [hexDodatkowy]")]
         public void ChangeVehicleColor(Client sender, string primaryHex, string secondaryHex, long vehicleId = -1)
@@ -49,8 +37,8 @@ namespace Serverside.Admin
             catch (ColorConvertException e)
             {
                 sender.Notify("Wprowadzony kolor jest nieprawidłowy.");
-                Tools.ConsoleOutput($"{nameof(AdminGroupsScript)}[Error] Nieprawidłowy kolor", ConsoleColor.Red);
-                Tools.ConsoleOutput(e.Message, ConsoleColor.Red);
+                Colorful.Console.WriteLine($"[Error]{nameof(AdminGroupsScript)} Nieprawidłowy kolor", System.Drawing.Color.DarkRed);
+                Colorful.Console.WriteLine(e.Message, System.Drawing.Color.DarkRed);
                 return;
             }
 

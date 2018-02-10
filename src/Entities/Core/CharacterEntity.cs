@@ -9,8 +9,6 @@ using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
 using GTANetworkInternals;
-using Microsoft.EntityFrameworkCore;
-using Serverside.Constant;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Description;
 using Serverside.Core.Extensions;

@@ -6,17 +6,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
-using Serverside.Constant;
 using Serverside.Core.Enums;
 using Serverside.Core.Telephone.Booth.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
 using Serverside.Core.Serialization.Xml;
 using Serverside.Entities;
-using NAPI = GTANetworkAPI.NAPI;
 
 namespace Serverside.Core.Telephone.Booth
 {
@@ -31,8 +30,7 @@ namespace Serverside.Core.Telephone.Booth
 
         private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"{nameof(TelephoneBoothScript)} {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-            foreach (var booth in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Constant.ServerInfo.XmlDirectory + @"Booths\"))
+            foreach (var booth in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Booths")))
             {
                 //W konstruktorze spawnujemy budkę telefoniczną do gry
                 Booths.Add(new TelephoneBooth(Event, booth));

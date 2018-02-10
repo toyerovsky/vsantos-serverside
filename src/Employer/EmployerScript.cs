@@ -15,18 +15,18 @@ namespace Serverside.Employer
     public class EmployerScript : Script
     {
         private FullPosition EmployerPosition => new FullPosition(new Vector3(1750f, -1580f, 113f), new Vector3(1f, 1f, 1f));
-        private EmployerBot Employer { get; }
+        private EmployerBot Employer { get; set; }
 
         public EmployerScript()
         {
             Event.OnResourceStart += OnResourceStart;
-            Employer = new EmployerBot(Event, "John Smith", PedHash.Business01AMM, EmployerPosition);
-            Employer.Intialize();
         }
 
-        public void OnResourceStart()
+        private void OnResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(EmployerScript)}] {Constant.Messages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
+            //FixMe na razie nie ma wsparcia dla przechodniów po stronie serwera
+            //Employer = new EmployerBot(Event, "John Smith", PedHash.Business01AMM, EmployerPosition);
+            //Employer.Intialize();
         }
 
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
@@ -54,7 +54,7 @@ namespace Serverside.Employer
                         sender.Notify("Podjąłeś się pracy: Złodziej. Udaj się do portu i wsiądź do jednej z ciężarówek.");
                         break;
                     case JobType.Courier:
-                        sender.Notify("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mAPIe ikoną TU WPISAC.");
+                        sender.Notify("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.");
                         break;
                 }
             }

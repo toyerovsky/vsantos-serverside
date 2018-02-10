@@ -20,16 +20,6 @@ namespace Serverside.CrimeBot
 {
     public class CrimeBotScript : Script
     {
-        public CrimeBotScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
-        public void OnResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(CrimeBotScript)}] {Constant.Messages.ResourceStartMessage}!", ConsoleColor.DarkMagenta);
-        }
-
         [Command("dodajbotp")]
         public void AddCrimeBot(Client sender, string name)
         {

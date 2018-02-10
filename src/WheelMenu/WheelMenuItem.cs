@@ -18,7 +18,7 @@ namespace Serverside.WheelMenu
 
         public WheelMenuItem(string name, Client sender, object target, Action<Client, object> wheelAction)
         {
-            name = name;
+            Name = name;
             Sender = sender;
             Target = target;
             WheelAction = wheelAction;

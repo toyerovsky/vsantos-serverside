@@ -10,42 +10,31 @@ using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
-using Serverside.Constant;
 using Serverside.Constant.RemoteEvents;
-using Serverside.Core.Database;
 using Serverside.Core.Database.Forum;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Core.Scripts;
 using Serverside.Entities;
 using Serverside.Entities.Core;
-using NAPI = GTANetworkAPI.NAPI;
 
 namespace Serverside.Core.Login
 {
-    public sealed class LoginScript : Script
+    public class LoginScript : Script
     {
         private static readonly ForumDatabaseHelper ForumDatabaseHelper = new ForumDatabaseHelper();
 
         public LoginScript()
         {
-            Event.OnResourceStart += API_onResourceStart;
             Event.OnPlayerConnect += Event_OnPlayerConnect;
             AccountEntity.AccountLoggedIn += RPLogin_OnPlayerLogin;
         }
-
 
         private void Event_OnPlayerConnect(Client player, CancelEventArgs cancel)
         {
             if (!player.IsCeFenabled)
                 cancel.Cancel = true;
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(LoginScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
         }
 
         private void Event_OnClientEventTrigger(Client player, string eventName, params object[] args)

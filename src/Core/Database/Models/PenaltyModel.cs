@@ -16,6 +16,7 @@ namespace Serverside.Core.Database.Models
         public long Id { get; set; }
 
         public virtual AccountModel Creator { get; set; }
+
         public virtual AccountModel Account { get; set; }
 
         public DateTime Date { get; set; }

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Constant;
 using Serverside.Core.Bus.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
@@ -27,7 +26,6 @@ namespace Serverside.Core.Bus
 
         private void Event_onResourceStart()
         {
-            Tools.ConsoleOutput($"[{nameof(BusScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
             foreach (var stop in XmlHelper.GetXmlObjects<BusStopModel>(Constant.ServerInfo.XmlDirectory + @"BusStops\"))
             {
                 _busStops.Add(new BusStopEntity(Event, stop));

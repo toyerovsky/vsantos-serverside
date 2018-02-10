@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using GTANetworkInternals;
 
 namespace Serverside.Core.Scripts
 {

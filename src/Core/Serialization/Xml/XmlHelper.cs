@@ -9,32 +9,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using GTANetworkAPI;
+using Color = System.Drawing.Color;
 
 namespace Serverside.Core.Serialization.Xml
 {
     public static class XmlHelper
     {
-        /// <summary>
-        /// Ścieżkę należy dostarczyć z \ na końcu
-        /// </summary>
-        /// <typeparam Name="T"></typeparam>
-        /// <param Name="xmlObject"></param>
-        /// <param Name="path"></param>
-        /// <param Name="fileName"></param>
         public static void AddXmlObject<T>(T xmlObject, string path, string fileName = "")
         {
             if (path.Last() != '\\')
             {
-                Tools.ConsoleOutput($"[Warning][{nameof(XmlHelper)}] Podano nieprawidłową ścieżkę: {path} " +
-                                         $"\nDodanie obiektu anulowane.", ConsoleColor.Yellow);
+                Colorful.Console.WriteLine(($"[Warning][{nameof(XmlHelper)}] Podano nieprawidłową ścieżkę: {path} " +
+                                         $"\nDodanie obiektu anulowane.", Color.Yellow));
                 return;
             }
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Tools.ConsoleOutput($"[Info][{nameof(XmlHelper)}] Utworzono ścieżkę: {path}", ConsoleColor.Blue);
+                Colorful.Console.WriteLine(($"[Info][{nameof(XmlHelper)}] Utworzono ścieżkę: {path}", Color.CornflowerBlue));
             }
 
             if (fileName == string.Empty)
@@ -58,24 +51,18 @@ namespace Serverside.Core.Serialization.Xml
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Tools.ConsoleOutput($"[Error][{nameof(XmlHelper)}] Serializacja nieudana. " +
-                                             $"\n Wyjątek: {ex.Message}", ConsoleColor.Red);
+                    Colorful.Console.WriteLine(($"[Error][{nameof(XmlHelper)}] Serializacja nieudana. " +
+                                             $"\n Wyjątek: {ex.Message}", Color.DarkRed));
                 }
             }
         }
 
-        /// <summary>
-        /// Ścieżkę należy dostarczyć z \ na końcu
-        /// </summary>
-        /// <typeparam Name="T"></typeparam>
-        /// <param Name="path"></param>
-        /// <returns></returns>
         public static List<T> GetXmlObjects<T>(string path)
         {
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Tools.ConsoleOutput($"[Info][{nameof(XmlHelper)}] Utworzono ścieżkę: {path}", ConsoleColor.Blue);
+                Colorful.Console.WriteLine($"[Info][{nameof(XmlHelper)}] Utworzono ścieżkę: {path}", Color.CornflowerBlue);
             }
 
             var readerSerializer = new XmlSerializer(typeof(T));
@@ -100,8 +87,8 @@ namespace Serverside.Core.Serialization.Xml
         {
             if (!File.Exists(filePath))
             {
-                Tools.ConsoleOutput($"[Warning][{nameof(XmlHelper)}] Próbowano usunąć plik który nie istnieje.\n " +
-                                         $"Ścieżka: {filePath}", ConsoleColor.Yellow);
+                Colorful.Console.WriteLine($"[Warning][{nameof(XmlHelper)}] Próbowano usunąć plik który nie istnieje.\n " +
+                                         $"Ścieżka: {filePath}", Color.Yellow);
                 return false;
             }
 

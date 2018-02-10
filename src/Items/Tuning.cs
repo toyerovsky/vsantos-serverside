@@ -12,9 +12,10 @@ namespace Serverside.Items
     internal class Tuning : Item
     {
         /// <summary>
-        /// 1 to typ tuningu, pozostałe parametry zależą od typu tuningu
-        /// dla 1 (speed) 2 parametr engineMultipilier, 3 torque
-        /// dla 2 (brakes) 2 parametr to moc hamowania
+        /// param 1 to typ tuningu, pozostałe parametry zależą od typu tuningu
+        /// param 2 dla 1 (speed) 2 parametr engineMultipilier, 3 torque
+        /// param 3 dla 2 (brakes) 2 parametr to moc hamowania
+        /// param 4 określa czy tuning jest zamontowany
         /// </summary>
         /// <param name="events"></param>
         /// <param name="itemModel"></param>

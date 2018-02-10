@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
@@ -23,18 +22,8 @@ using NAPI = GTANetworkAPI.NAPI;
 
 namespace Serverside.Items.Scripts
 {
-    sealed class ItemsScript : Script
+    public class ItemsScript : Script
     {
-        public ItemsScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(ItemsScript)}] {Constant.Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         private Item CreateItem(ItemModel itemModel)
         {
             var itemType = (ItemType)itemModel.ItemType;

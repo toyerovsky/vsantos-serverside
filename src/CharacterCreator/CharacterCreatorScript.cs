@@ -8,22 +8,12 @@ using System;
 using System.Globalization;
 using GTANetworkAPI;
 using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Extensions;
 
 namespace Serverside.CharacterCreator
 {
     public class CharacterCreatorScript : Script
     {
-        public CharacterCreatorScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(CharacterCreatorScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
 
         #region Subskrypcja zdarzenia, i dopasowanie zmienianego obiektu
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)

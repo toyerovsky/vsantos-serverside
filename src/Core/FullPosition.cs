@@ -20,7 +20,7 @@ namespace Serverside.Core
 
         public FullPosition(Vector3 position, Vector3 rotation, Vector3 direction = null)
         {
-            position = position;
+            Position = position;
             Rotation = rotation;
             Direction = direction;
         }

@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using GTANetworkAPI;
 
 namespace Serverside.Core.Database.Models
@@ -14,6 +15,7 @@ namespace Serverside.Core.Database.Models
     {
         [Key]
         public long Id { get; set; }
+
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
 
@@ -23,6 +25,7 @@ namespace Serverside.Core.Database.Models
         public int NumberPlateStyle { get; set; }
 
         public string Name { get; set; }
+
         [EnumDataType(typeof(VehicleHash))]
         public virtual VehicleHash VehicleHash { get; set; }
 
@@ -54,8 +57,7 @@ namespace Serverside.Core.Database.Models
         public string SecondaryColor { get; set; }
         public int WheelType { get; set; }
         public int WheelColor { get; set; }
-
-        public virtual ICollection<ItemModel> Tunings { get; set; }
+        
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
     }
 }

@@ -4,12 +4,9 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
 using Serverside.Entities;
@@ -17,18 +14,8 @@ using Serverside.Entities.Game;
 
 namespace Serverside.WheelMenu
 {
-    public sealed class WheelMenuScript : Script
+    public class WheelMenuScript : Script
     {
-        public WheelMenuScript()
-        {
-            Event.OnResourceStart += Event_OnResourceStart;
-        }
-
-        private void Event_OnResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(WheelMenuScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             if (eventName == "RequestWheelMenu")

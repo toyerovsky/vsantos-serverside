@@ -4,9 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using GTANetworkAPI;
 using GTANetworkInternals;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Jobs.Base;
 

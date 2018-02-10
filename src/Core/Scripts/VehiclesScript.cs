@@ -15,27 +15,12 @@ using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Entities.Core;
 using Serverside.Entities.Game;
+using Serverside.Items;
 
 namespace Serverside.Core.Scripts
 {
-    public sealed class VehiclesScript : Script
+    public class VehiclesScript : Script
     {
-        public VehiclesScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-            Event.OnPlayerExitVehicle += Event_OnPlayerExitVehicle;
-        }
-
-        private void Event_OnPlayerExitVehicle(Client client, Vehicle vehicle)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(VehiclesScript)}] Uruchomione pomyœlnie.", ConsoleColor.DarkMagenta);
-        }
-
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] args)
         {
             if (eventName == "OnPlayerSelectedVehicle")
@@ -137,14 +122,19 @@ namespace Serverside.Core.Scripts
                     VehicleEntity vehicleEntity = EntityManager.GetVehicle(player.Client.Vehicle);
                     if (vehicleEntity == null) return;
 
-                    string tuningJson = JsonConvert.SerializeObject(vehicleEntity.DbModel.Tunings.Select(i => new
-                    {
-                        i.Name
-                    }));
-                    string itemsInVehicleJson = JsonConvert.SerializeObject(vehicleEntity.DbModel.ItemsInVehicle.Select(i => new
-                    {
-                        i.Name
-                    }));
+                    string tuningJson = JsonConvert.SerializeObject(vehicleEntity.DbModel.ItemsInVehicle
+                        .Where(i => i.ItemType == ItemType.Tuning && i.FourthParameter.HasValue)
+                        .Select(i => new
+                        {
+                            i.Name
+                        }));
+
+                    string itemsInVehicleJson = JsonConvert.SerializeObject(vehicleEntity.DbModel.ItemsInVehicle
+                        .Select(i => new
+                        {
+                            i.Name
+                        }));
+
                     string playerGroups = JsonConvert.SerializeObject(EntityManager.GetPlayerGroups(sender.GetAccountEntity())
                         .Select(g => new
                         {
@@ -155,7 +145,8 @@ namespace Serverside.Core.Scripts
                 }
                 else
                 {
-                    string vehiclesJson = JsonConvert.SerializeObject(player.CharacterEntity.DbModel.Vehicles.Select(v => new
+                    string vehiclesJson = JsonConvert.SerializeObject(
+                        player.CharacterEntity.DbModel.Vehicles.Select(v => new
                     {
                         Id = v.Id,
                         Name = v.VehicleHash.ToString(),

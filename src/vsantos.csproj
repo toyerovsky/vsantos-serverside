@@ -3,11 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>Serverside</RootNamespace>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <OutputPath>C:\srv\bridge\resources\</OutputPath>
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>C:\RAGEMP\server-files\bridge\resources\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,20 +26,26 @@
     <PackageReference Include="BCrypt.Net-Core" Version="1.4.0" />
     <PackageReference Include="gtanetwork.api" Version="0.3.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.9-dmr" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.3" />
   </ItemGroup>
-
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Folder Include="Core\Money\Scripts\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsetting.json">
+    <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="meta.xml">

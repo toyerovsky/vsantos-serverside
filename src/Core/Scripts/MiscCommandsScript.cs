@@ -4,10 +4,8 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Constant;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
@@ -16,16 +14,6 @@ namespace Serverside.Core.Scripts
 {
     public class MiscCommandsScript : Script
     {
-        public MiscCommandsScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-        }
-
-        private void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(MiscCommandsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         [Command("id", "~y~UŻYJ ~w~ /id [nazwa]", GreedyArg = true)]
         public void ShowPlayersWithSimilarName(Client sender, string name)
         {

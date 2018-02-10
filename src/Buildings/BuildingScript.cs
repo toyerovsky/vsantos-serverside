@@ -10,8 +10,6 @@ using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
-using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
@@ -22,16 +20,6 @@ namespace Serverside.Buildings
 {
     public class BuildingScript : Script
     {
-        public BuildingScript()
-        {
-            Event.OnResourceStart += API_OnResourceStart;
-        }
-
-        private void API_OnResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(BuildingScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             switch (eventName)

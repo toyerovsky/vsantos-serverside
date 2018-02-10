@@ -4,28 +4,22 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
-using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Entities.Core;
+using Serverside.Exceptions;
 using Serverside.Groups.Enums;
+using Color = GTANetworkAPI.Color;
 
 namespace Serverside.Admin
 {
     public class AdminGroupsScript : Script
     {
-        public AdminGroupsScript()
-        {
-            Tools.ConsoleOutput($"[{nameof(AdminGroupsScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
-        [Command("stworzgrupe", GreedyArg = true)]
+        [Command("stworzgrupe")]
         public void CreateGroup(Client sender, int bossId, GroupType type, string name, string tag, string hexColor)
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster2)
@@ -34,23 +28,23 @@ namespace Serverside.Admin
                 return;
             }
 
+            name = name.Replace('_', ' ');
+
             Color color;
             try
             {
                 color = hexColor.ToColor();
             }
-            catch (Exception e)
+            catch (ColorConvertException)
             {
                 sender.Notify("Wprowadzony kolor jest nieprawidłowy.");
-                Tools.ConsoleOutput("[AdminGroupsScript] Nieprawidłowy kolor [RPAdminGroups]", ConsoleColor.Red);
-                Tools.ConsoleOutput(e.Message, ConsoleColor.Red);
                 return;
             }
 
             if (EntityManager.GetAccountByServerId(bossId) != null)
             {
                 var boss = EntityManager.GetAccountByServerId(bossId);
-                
+
                 if (boss.CharacterEntity.DbModel.Workers.Count < 3)
                 {
                     GroupEntity group = GroupEntity.Create(name, tag, type, color);

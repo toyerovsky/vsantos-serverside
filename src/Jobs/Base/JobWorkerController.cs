@@ -5,7 +5,6 @@
  */
 
 using System;
-using GTANetworkAPI;
 using GTANetworkInternals;
 using Serverside.Core.Extensions;
 using Serverside.Entities.Core;

@@ -4,13 +4,10 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Constant;
-using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Entities.Game;
@@ -21,16 +18,6 @@ namespace Serverside.Offers
 {
     public class OffersScript : Script
     {
-        public OffersScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-        }
-
-        public void API_onResourceStart()
-        {
-            Tools.ConsoleOutput($"[{nameof(OffersScript)}] {Messages.ResourceStartMessage}", ConsoleColor.DarkMagenta);
-        }
-
         public void API_OnClientEventTrigger(Client sender, string eventName, object[] arguments)
         {
             if (eventName == "OnPlayerCancelOffer")

@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
 using GTANetworkInternals;
-using Microsoft.EntityFrameworkCore;
 using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Description;
@@ -47,9 +46,9 @@ namespace Serverside.Entities.Game
             float engineMultipier = 0f;
             float torqueMultipier = 0f;
 
-            foreach (var tuning in DbModel.Tunings)
+            foreach (var tuning in DbModel.ItemsInVehicle)
             {
-                if (tuning.ItemType == ItemType.Tuning)
+                if (tuning.ItemType == ItemType.Tuning && tuning.FourthParameter.HasValue)
                 {
                     if (tuning.FirstParameter != null && (TuningType)tuning.FirstParameter == TuningType.Speed)
                     {
@@ -98,7 +97,7 @@ namespace Serverside.Entities.Game
                 SecondaryColor = secondaryColor.ToHex(),
                 EnginePowerMultiplier = enginePowerMultiplier,
                 EngineTorqueMultiplier = engineTorqueMultiplier,
-                Tunings = new List<ItemModel>(),
+                ItemsInVehicle = new List<ItemModel>(),
                 Milage = 0.0f,
             };
 

@@ -29,6 +29,13 @@ namespace Serverside.Core.Database
         public virtual DbSet<WorkerModel> Workers { get; set; }
         public virtual DbSet<GroupWarehouseItemModel> GroupWarehouseItems { get; set; }
         public virtual DbSet<GroupWarehouseOrderModel> GroupWarehouseOrders { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PenaltyModel>()
+                .HasOne(p => p.Account)
+                .WithMany(b => b.Penalties);
+        }
     }
 }
 

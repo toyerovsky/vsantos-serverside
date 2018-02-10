@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using Microsoft.EntityFrameworkCore;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
