@@ -6,7 +6,7 @@
 2. Git
 3. Basic C# and mysql knowlege
 4. vsantos-clientside package
-5. rage-mp with gta v installed (Server files must be located in C:\srv to prevent output directory mismatch)
+5. rage-mp with gta v installed (Server files must be located in "C:\\RAGEMP\\server-files" to prevent output directory mismatch)
 
 ## Installation
 1. cd / (to prevent acl related errors)
