@@ -14,6 +14,7 @@ using Serverside.Constant.RemoteEvents;
 using Serverside.Core.Database.Forum;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
+using Serverside.Core.Login.RemoteData;
 using Serverside.Core.Repositories;
 using Serverside.Core.Scripts;
 using Serverside.Entities;
@@ -27,24 +28,27 @@ namespace Serverside.Core.Login
 
         public LoginScript()
         {
+            Event.OnPlayerConnected += EventOnOnPlayerConnected;
             Event.OnPlayerConnect += Event_OnPlayerConnect;
             AccountEntity.AccountLoggedIn += RPLogin_OnPlayerLogin;
         }
 
-        private void Event_OnPlayerConnect(Client player, CancelEventArgs cancel)
+        private void EventOnOnPlayerConnected(Client client, CancelEventArgs cancelEventArgs)
         {
-            if (!player.IsCeFenabled)
+            client.Dimension = (uint)Dimension.Login;
+            client.FreezePosition = true;
+        }
+
+        private void Event_OnPlayerConnect(Client client, CancelEventArgs cancel)
+        {
+            if (!client.IsCeFenabled)
                 cancel.Cancel = true;
         }
 
         private void Event_OnClientEventTrigger(Client player, string eventName, params object[] args)
         {
-            if (eventName == "OnPlayerEnteredLoginData")
-            {
-                LoginToAccount(player, args[0].ToString(), args[1].ToString());
-            }
             //Przy używaniu tego musimy jako args[0] wysłać indeks na liście postaci
-            else if (eventName == "OnPlayerSelectedCharacter")
+            if (eventName == "OnPlayerSelectedCharacter")
             {
                 int characterId = Convert.ToInt32(args[0]);
                 //FixMe
@@ -54,9 +58,18 @@ namespace Serverside.Core.Login
 
         private void RPLogin_OnPlayerLogin(Client sender, AccountEntity account)
         {
-            var chs = account.DbModel.Characters.Where(c => c.IsAlive).Select(x => new { x.Name, x.Surname, x.Money, x.BankMoney }).ToList();
-            string json = JsonConvert.SerializeObject(chs);
-            sender.TriggerEvent("ShowCharacterSelectMenu", json);
+            var characters = account.DbModel.Characters
+                .Where(c => c.IsAlive)
+                .Select(x => new
+                {
+                    x.Name,
+                    x.Surname,
+                    x.Money,
+                    x.PlayedTime
+                }).ToList();
+
+            string json = JsonConvert.SerializeObject(characters);
+            sender.TriggerEvent(RemoteEvents.PlayerLoginPassed, json);
         }
 
         private void LoginToAccount(Client sender, string email, string password)
@@ -81,9 +94,7 @@ namespace Serverside.Core.Login
                         Penalties = new List<PenaltyModel>(),
                     };
 
-                    AccountEntity accountEntity;
-
-                    if (repository.Contains(accountModel))
+                    if (!repository.Contains(accountModel))
                     {
                         if (Enum.TryParse(typeof(ServerRank), ((ForumGroup)forumLoginData.GroupId).ToString(),
                             out var rank))
@@ -93,38 +104,31 @@ namespace Serverside.Core.Login
 
                         repository.Insert(accountModel);
                         repository.Save();
+                    }
 
-                        accountEntity = new AccountEntity(accountModel, sender);
-                    }
-                    else
+                    //Robimy tak, aby poznać Id konta
+                    accountModel = repository.GetByUserId(accountModel.UserId);
+
+                    //Sprawdzenie czy ktoś już jest zalogowany z tego konta.
+                    AccountEntity account = EntityManager.Get(accountModel.Id);
+                    if (account != null)
                     {
-                        //Sprawdzenie czy ktoś już jest zalogowany z tego konta.
-                        AccountEntity account = EntityManager.Get(accountModel.Id);
-                        if (account != null)
-                        {
-                            //FixMe dać wiadomość jako warning
-                            ChatScript.SendMessageToPlayer(sender,
-                                $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.", ChatMessageType.ServerInfo);
-                            
-                            account.Kick(null, "Próba zalogowania na zalogowane konto.");
-                        }
-                        accountEntity = new AccountEntity(repository.Get(accountModel.Id), sender);
+                        //FixMe dać wiadomość jako warning
+                        ChatScript.SendMessageToPlayer(sender,
+                            $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.", ChatMessageType.ServerInfo);
+
+                        account.Kick(null, "Próba zalogowania na zalogowane konto.");
                     }
+
+
+                    var accountEntity = new AccountEntity(accountModel, sender);
                     accountEntity.Login();
                 }
             }
             else
             {
-                sender.TriggerEvent("ShowNotification", "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje", 3000);
+                sender.SendNotification("Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
             }
-        }
-
-        public static void LoginMenu(Client player)
-        {
-            //Nie używać tego wymiaru, jest zajęty na logowanie
-            player.Dimension = (uint)Dimension.Login;
-            player.Position = new Vector3(-1666f, -1020f, 12f);
-            player.TriggerEvent("ShowLoginMenu");
         }
 
         #region RemoteEvents
@@ -132,7 +136,8 @@ namespace Serverside.Core.Login
         [RemoteEvent(RemoteEvents.PlayerLoginRequested)]
         public void OnLoginRequested(Client sender, params object[] args)
         {
-
+            LoginData loginData = JsonConvert.DeserializeObject<LoginData>(args[0].ToString());
+            LoginToAccount(sender, loginData.Email, loginData.Password);
         }
 
         #endregion

@@ -54,11 +54,12 @@ namespace Serverside.Entities.Core
 
             string[] ip = DbModel.Ip.Split('.');
             string safeIp = $"{ip[0]}.{ip[1]}.***.***";
-            Client.Notify($"Witaj, ~g~~h~{DbModel.Name} zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin} z adresu IP: {safeIp}");
+            Client.Notify($"Witaj, ~g~~h~{DbModel.Name} ~w~zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin.ToShortDateString()}");
+            Client.Notify($"Z adresu IP: {safeIp}");
 
             using (CharactersRepository repository = new CharactersRepository())
             {
-                if (DbModel.Characters == null || DbModel.Characters.Count == 0)
+                if (DbModel.Characters.Count == 0)
                 {
                     string[] email = DbModel.Email.Split('@');
 
@@ -67,9 +68,13 @@ namespace Serverside.Entities.Core
                         Name = email[0],
                         Surname = email[1],
                         Model = PedHash.FreemodeMale01,
-                        Freemode = true
+                        Freemode = true,
+                        IsAlive = true,
+                        CreateTime = DateTime.Now,
+                        AccountModel = DbModel,                    
                     };
 
+                    DbModel.Characters.Add(model);
                     repository.Insert(model);
                 }
                 repository.Save();
@@ -131,12 +136,12 @@ namespace Serverside.Entities.Core
             }
 
             //tutaj wywołać metody synchronizacji danych z innych controllerów np character.
-                //CharacterEntity?.Save(resourceStop);
+            //CharacterEntity?.Save(resourceStop);
 
-                //ContextFactory.Instance.Accounts.Attach(DbModel);
-                //ContextFactory.Instance.Entry(DbModel).State = EntityState.Modified;
-                //ContextFactory.Instance.SaveChanges();
-            }
+            //ContextFactory.Instance.Accounts.Attach(DbModel);
+            //ContextFactory.Instance.Entry(DbModel).State = EntityState.Modified;
+            //ContextFactory.Instance.SaveChanges();
+        }
 
         public void Dispose()
         {

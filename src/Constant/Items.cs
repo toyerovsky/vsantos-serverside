@@ -232,7 +232,7 @@ namespace Serverside.Constant
 
         public static List<Vector3> ServerSpawnPositions = new List<Vector3>()
         {
-            
+            new Vector3(1, 1, 1)
         };
     }
 }

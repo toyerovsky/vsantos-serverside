@@ -16,7 +16,6 @@ namespace Serverside.Core.Database.Forum
         public bool CheckPasswordMatch(string email, string password, out ForumLoginData forumLoginData)
         {
             forumLoginData = null;
-
             if (UserExists(email))
             {
                 using (MySqlConnection connection = new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("forumConnectionString")))

@@ -10,7 +10,7 @@ using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
 using Serverside.Entities;
-using Serverside.Entities.Game;
+using Serverside.Entities.Core;
 
 namespace Serverside.WheelMenu
 {

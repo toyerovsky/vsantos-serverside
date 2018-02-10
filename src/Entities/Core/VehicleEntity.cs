@@ -14,13 +14,12 @@ using Serverside.Core.Description;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Entities.Base;
-using Serverside.Entities.Core;
 using Serverside.Entities.Interfaces;
 using Serverside.Items;
 
-namespace Serverside.Entities.Game
+namespace Serverside.Entities.Core
 {
-    public class VehicleEntity : GameEntity, IDbEntity<VehicleModel>, IGameEntity, IOfferable
+    public class VehicleEntity : GameEntity, IDbEntity<VehicleModel>, IOfferable
     {
         public long VehicleId => DbModel.Id;
         public Vehicle GameVehicle { get; set; }

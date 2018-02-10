@@ -9,7 +9,6 @@ using System.Linq;
 using GTANetworkAPI;
 using GTANetworkInternals;
 using Serverside.Entities.Core;
-using Serverside.Entities.Game;
 using Color = System.Drawing.Color;
 
 namespace Serverside.Entities
@@ -45,7 +44,10 @@ namespace Serverside.Entities
 
         public static void Remove(AccountEntity accountEntity) => Accounts.Remove(accountEntity.AccountId);
 
-        public static AccountEntity Get(long accountId) => accountId > -1 ? Accounts[accountId] : null;
+        public static AccountEntity Get(long accountId)
+        {
+            return Accounts.TryGetValue(accountId, out AccountEntity value) ? value : null;
+        }
 
         public static AccountEntity GetAccountByServerId(int id) => id > -1 ? Accounts.Values.ElementAtOrDefault(id) : null;
 

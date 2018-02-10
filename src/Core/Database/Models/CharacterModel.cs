@@ -16,6 +16,7 @@ namespace Serverside.Core.Database.Models
     {
         [Key]
         public long Id { get; set; }
+        
         public AccountModel AccountModel { get; set; }
 
         public bool Online { get; set; }

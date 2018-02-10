@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 
 namespace Serverside.Constant
@@ -23,12 +24,12 @@ namespace Serverside.Constant
                 return Path.GetDirectoryName(path);
             }
         }
-        
+
         public static string XmlDirectory => Path.Combine(WorkingDirectory, "Xml");
 
         public static string JsonDirectory => Path.Combine(WorkingDirectory, "Json");
 
-        public static IConfigurationRoot Configuration { get; } = new ConfigurationBuilder()
+        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
             .SetBasePath(WorkingDirectory)
             .AddJsonFile("appsettings.json")
             .Build();

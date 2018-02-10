@@ -10,7 +10,7 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
-using Serverside.Entities.Game;
+using Serverside.Entities.Core;
 using Serverside.Groups.Base;
 using Serverside.Groups.Enums;
 

@@ -6,7 +6,7 @@
 
 namespace Serverside.Constant.RemoteEvents
 {
-    public class RemoteEvents
+    public static class RemoteEvents
     {
         public const string PlayerLoginRequested = "playerLoginRequested";
         public const string PlayerLoginPassed = "playerLoginPassed";

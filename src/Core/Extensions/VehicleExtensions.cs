@@ -5,7 +5,7 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Entities.Game;
+using Serverside.Entities.Core;
 
 namespace Serverside.Core.Extensions
 {

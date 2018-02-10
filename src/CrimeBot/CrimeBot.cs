@@ -19,7 +19,6 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.CrimeBot.Models;
 using Serverside.Entities.Core;
-using Serverside.Entities.Game;
 using Serverside.Groups.Base;
 using Serverside.Items;
 

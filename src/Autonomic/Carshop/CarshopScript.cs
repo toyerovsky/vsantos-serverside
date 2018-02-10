@@ -15,7 +15,7 @@ using Serverside.Constant;
 using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
-using Serverside.Entities.Game;
+using Serverside.Entities.Core;
 
 namespace Serverside.Autonomic.Carshop
 {

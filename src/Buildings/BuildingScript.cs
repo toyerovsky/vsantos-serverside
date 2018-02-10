@@ -14,7 +14,7 @@ using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Entities;
-using Serverside.Entities.Game;
+using Serverside.Entities.Core;
 
 namespace Serverside.Buildings
 {

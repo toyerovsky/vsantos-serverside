@@ -23,10 +23,18 @@ namespace Serverside.Core.Scripts
             Event.OnResourceStart += Event_OnResourceStart;
             Event.OnResourceStop += Event_OnResourceStop;
             Event.OnUpdate += Event_OnUpdate;
+            Event.OnPlayerDisconnected += OnOnPlayerDisconnected;
+        }
+
+        private void OnOnPlayerDisconnected(Client client, byte type, string reason)
+        {
+            AccountEntity account = client.GetAccountEntity();
+            account?.Dispose();
         }
 
         private void Event_OnResourceStart()
         {
+            NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
             EntityManager.LoadEntities(Event);
         }
 
@@ -97,24 +105,6 @@ namespace Serverside.Core.Scripts
                     ctx.SaveChanges();
             });
             dbStop.Wait();
-        }
-
-        private void API_onPlayerFinishedDownload(Client player)
-        {
-            LoginScript.LoginMenu(player);
-        }
-
-        private void API_OnPlayerDisconnectedHandler(Client player, string reason)
-        {
-            AccountEntity account = player.GetAccountEntity();
-            account?.Dispose();
-        }
-
-        private void Client_OnPlayerDimensionChanged(object player, DimensionChangeEventArgs e)
-        {
-            AccountEntity account = e.Player.GetAccountEntity();
-            account.CharacterEntity.DbModel.CurrentDimension = e.CurrentDimension;
-            account.CharacterEntity.Save();
         }
     }
 }

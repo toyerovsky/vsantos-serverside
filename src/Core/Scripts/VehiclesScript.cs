@@ -14,7 +14,6 @@ using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Entities.Core;
-using Serverside.Entities.Game;
 using Serverside.Items;
 
 namespace Serverside.Core.Scripts

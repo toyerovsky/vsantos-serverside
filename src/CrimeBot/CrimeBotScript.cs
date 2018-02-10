@@ -13,7 +13,7 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Core.Serialization.Xml;
 using Serverside.CrimeBot.Models;
-using Serverside.Entities.Game;
+using Serverside.Entities.Core;
 using Serverside.Groups.Base;
 
 namespace Serverside.CrimeBot

@@ -13,7 +13,6 @@ using Serverside.Core.Database.Models;
 using Serverside.Core.Description;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
-using Serverside.Entities.Game;
 using Serverside.Entities.Interfaces;
 using Serverside.Items;
 
@@ -64,42 +63,41 @@ namespace Serverside.Entities.Core
             if (DbModel.Freemode)
                 CharacterCreator = new CharacterCreator.CharacterCreator(this);
             Description = new Description(Events, AccountEntity);
+
+            OnPlayerDimensionChanged += OnOnPlayerDimensionChanged;
         }
 
-        public CharacterEntity(EventClass events, AccountEntity accountEntity, string name, string surname, PedHash model)
+        public static CharacterEntity Create(EventClass events, AccountEntity accountEntity, string name, string surname, PedHash model)
         {
-            Events = events;
-
             Random random = new Random();
             var randomIndex = random.Next(Constant.Items.ServerSpawnPositions.Count);
 
-            DbModel = new CharacterModel();
-            accountEntity.CharacterEntity = this;
-            DbModel.AccountModel = accountEntity.DbModel;
-            DbModel.Name = name;
-            DbModel.Surname = surname;
-            DbModel.Money = 10000;
-            DbModel.BankMoney = 1000000;
-            DbModel.CreateTime = DateTime.Now;
-            DbModel.Model = model;
-            DbModel.HitPoints = 100;
-            DbModel.IsAlive = true;
-            DbModel.LastPositionX = Constant.Items.ServerSpawnPositions[randomIndex].X;
-            DbModel.LastPositionY = Constant.Items.ServerSpawnPositions[randomIndex].Y;
-            DbModel.LastPositionZ = Constant.Items.ServerSpawnPositions[randomIndex].Z;
-            DbModel.LastPositionRotX = 0f;
-            DbModel.LastPositionRotY = 0f;
-            DbModel.LastPositionRotZ = 0f;
+            CharacterModel dbModel = new CharacterModel
+            {
+                AccountModel = accountEntity.DbModel,
+                Name = name,
+                Surname = surname,
+                Money = 10000,
+                BankMoney = 1000000,
+                CreateTime = DateTime.Now,
+                Model = model,
+                HitPoints = 100,
+                IsAlive = true,
+                LastPositionX = Constant.Items.ServerSpawnPositions[randomIndex].X,
+                LastPositionY = Constant.Items.ServerSpawnPositions[randomIndex].Y,
+                LastPositionZ = Constant.Items.ServerSpawnPositions[randomIndex].Z,
+                LastPositionRotX = 0f,
+                LastPositionRotY = 0f,
+                LastPositionRotZ = 0f
+            };
 
             using (CharactersRepository repository = new CharactersRepository())
             {
-                repository.Insert(DbModel);
+                repository.Insert(dbModel);
                 repository.Save();
             }
 
-            if (DbModel.Freemode)
-                CharacterCreator = new CharacterCreator.CharacterCreator(this);
-            Description = new Description(Events, accountEntity);
+            return new CharacterEntity(events, accountEntity, dbModel);
         }
 
         public void Save()
@@ -190,6 +188,13 @@ namespace Serverside.Entities.Core
         }
 
         #endregion
+
+        private void OnOnPlayerDimensionChanged(object sender, DimensionChangeEventArgs e)
+        {
+            AccountEntity account = e.Player.GetAccountEntity();
+            account.CharacterEntity.DbModel.CurrentDimension = e.CurrentDimension;
+            account.CharacterEntity.Save();
+        }
 
         public void Dispose()
         {

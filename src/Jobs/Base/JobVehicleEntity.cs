@@ -9,7 +9,7 @@ using GTANetworkInternals;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Interfaces;
-using Serverside.Entities.Game;
+using Serverside.Entities.Core;
 
 namespace Serverside.Jobs.Base
 {
