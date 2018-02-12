@@ -11,7 +11,7 @@ using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
 using Serverside.Corners.Models;
-using Serverside.Items;
+using Serverside.Entities.Core.Item;
 
 namespace Serverside.Corners
 {

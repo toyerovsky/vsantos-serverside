@@ -11,6 +11,7 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
 using Serverside.Entities;
 using Serverside.Entities.Core;
+using Serverside.Entities.Core.Vehicle;
 
 namespace Serverside.WheelMenu
 {
@@ -51,16 +52,16 @@ namespace Serverside.WheelMenu
             }
             else if (target is VehicleEntity vehicle)
             {
-                if (VehiclesScript.GetVehicleDoorCount((VehicleHash)vehicle.GameVehicle.Model) >= 4)
+                if (VehicleScript.GetVehicleDoorCount((VehicleHash)vehicle.GameVehicle.Model) >= 4)
                 {
-                    menuItems.Add(new WheelMenuItem("Maska", sender, target, (s, e) => VehiclesScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Hood)));
-                    menuItems.Add(new WheelMenuItem("Bagaznik", sender, target, (s, e) => VehiclesScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Trunk)));
+                    menuItems.Add(new WheelMenuItem("Maska", sender, target, (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Hood)));
+                    menuItems.Add(new WheelMenuItem("Bagaznik", sender, target, (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Trunk)));
                 }
                 if (vehicle.DbModel.Character == sender.GetAccountEntity().CharacterEntity.DbModel)
                 {
-                    menuItems.Add(new WheelMenuItem("Zamek", sender, null, (s, e) => VehiclesScript.ChangePlayerVehicleLockState(s)));
+                    menuItems.Add(new WheelMenuItem("Zamek", sender, null, (s, e) => VehicleScript.ChangePlayerVehicleLockState(s)));
                 }
-                menuItems.Add(new WheelMenuItem("Rejestracja", sender, target, (s, e) => VehiclesScript.ShowVehiclesInformation(s, ((VehicleEntity)e).DbModel, true)));
+                menuItems.Add(new WheelMenuItem("Rejestracja", sender, target, (s, e) => VehicleScript.ShowVehiclesInformation(s, ((VehicleEntity)e).DbModel, true)));
             }
             return menuItems;
         }

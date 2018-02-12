@@ -5,7 +5,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using Serverside.Items;
+using Serverside.Entities.Core.Item;
 
 namespace Serverside.Core.Database.Models
 {

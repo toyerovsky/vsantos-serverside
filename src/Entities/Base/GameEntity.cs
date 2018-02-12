@@ -4,6 +4,8 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
+using System.Drawing;
 using GTANetworkInternals;
 using Serverside.Entities.Interfaces;
 
@@ -20,6 +22,7 @@ namespace Serverside.Entities.Base
 
         public virtual void Spawn()
         {
+            Colorful.Console.WriteLine($"[{nameof(GameEntity)}] [{DateTime.Now.ToShortTimeString()}] Entity spawned.", Color.ForestGreen);
         }
 
         public abstract void Dispose();

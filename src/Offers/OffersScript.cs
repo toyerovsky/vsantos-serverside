@@ -11,6 +11,8 @@ using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Entities.Core;
+using Serverside.Entities.Core.Building;
+using Serverside.Entities.Core.Vehicle;
 using Serverside.Groups.Base;
 using Serverside.Groups.Enums;
 

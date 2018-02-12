@@ -16,13 +16,13 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Core.Serialization.Xml;
 using Serverside.Entities.Common.DriveThru.Models;
-using Serverside.Items;
+using Serverside.Entities.Core.Item;
 
 namespace Serverside.Entities.Common.DriveThru
 {
     public class DriveThruScript : Script
     {
-        private List<DriveThru> DriveThrus { get; set; } = new List<DriveThru>();
+        private List<DriveThruEntity> DriveThrus { get; set; } = new List<DriveThruEntity>();
 
         public DriveThruScript()
         {
@@ -65,7 +65,7 @@ namespace Serverside.Entities.Common.DriveThru
         {
             foreach (var driveThru in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
             {
-                DriveThrus.Add(new DriveThru(driveThru));
+                DriveThrus.Add(new DriveThruEntity(Event, driveThru));
             }
         }
 
@@ -91,7 +91,7 @@ namespace Serverside.Entities.Common.DriveThru
                 {
                     cancel.Cancel = true;
                     center = o.Position;
-                    var driveThru = new DriveThruModel    
+                    var driveThru = new DriveThruModel
                     {
                         Position = o.Position,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
@@ -99,8 +99,8 @@ namespace Serverside.Entities.Common.DriveThru
                     XmlHelper.AddXmlObject(driveThru, $"{ServerInfo.XmlDirectory}DriveThrus\\");
 
                     sender.Notify("Dodawanie DriveThru zakończyło się ~g~~h~pomyślnie.");
-                    DriveThrus.Add(new DriveThru(driveThru));
-                    
+                    DriveThrus.Add(new DriveThruEntity(Event, driveThru));
+
                     Event.OnChatMessage -= Handler;
                 }
             }

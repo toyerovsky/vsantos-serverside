@@ -8,20 +8,47 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using GTANetworkInternals;
+using Serverside.Entities.Common.Atm;
+using Serverside.Entities.Common.Booth;
+using Serverside.Entities.Common.BusStop;
+using Serverside.Entities.Common.Carshop;
+using Serverside.Entities.Common.DriveThru;
+using Serverside.Entities.Common.Market;
 using Serverside.Entities.Core;
+using Serverside.Entities.Core.Building;
+using Serverside.Entities.Core.Vehicle;
+using Serverside.Entities.Peds.CrimeBot;
+using Serverside.Entities.Peds.Employer;
 using Color = System.Drawing.Color;
 
 namespace Serverside.Entities
 {
     public static class EntityManager
     {
+
+        #region Core        
         /// <summary>
         /// Klucz to id konta
         /// </summary>
         private static readonly Dictionary<long, AccountEntity> Accounts = new Dictionary<long, AccountEntity>();
-        private static readonly List<VehicleEntity> Vehicles = new List<VehicleEntity>();
-        private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
+        private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
+        private static readonly List<VehicleEntity> Vehicles = new List<VehicleEntity>();
+        #endregion
+
+        #region Common
+        private static readonly List<AtmEntity> Atms = new List<AtmEntity>();
+        private static readonly List<BusStopEntity> BusStops = new List<BusStopEntity>();
+        private static readonly List<CarshopEntity> Carshops = new List<CarshopEntity>();
+        private static readonly List<DriveThruEntity> DriveThrus = new List<DriveThruEntity>();
+        private static readonly List<MarketEntity> Markets = new List<MarketEntity>();
+        private static readonly List<TelephoneBooth> TelephoneBooths = new List<TelephoneBooth>();
+        #endregion
+
+        #region Peds
+        private static readonly List<CrimePedEntity> CrimePeds = new List<CrimePedEntity>();
+        private static readonly List<EmployerPedEntity> Employers = new List<EmployerPedEntity>();
+        #endregion
 
         public static void LoadEntities(EventClass events)
         {
@@ -37,7 +64,7 @@ namespace Serverside.Entities
             {
                 Colorful.Console.WriteLine($"[Error][{nameof(EntityManager)}] Nastąpiła interferencja zalogowanych użytkowników.", Color.DarkRed);
                 return;
-            }   
+            }
 
             Accounts.Add(accountEntity.AccountId, accountEntity);
         }

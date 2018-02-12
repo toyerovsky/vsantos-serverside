@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Repositories;
-using Serverside.Items;
+using Serverside.Entities.Core.Item;
 
 namespace Serverside.Core.Telephone
 {
@@ -18,17 +18,19 @@ namespace Serverside.Core.Telephone
         {
             using (ItemsRepository repository = new ItemsRepository())
             {
-                var numbers = repository.GetAll().Where(i => i.ItemType == ItemType.Cellphone);
+                var numbers = repository.GetAll()
+                    .Where(i => i.ItemType == ItemType.Cellphone && i.ThirdParameter.HasValue)
+                    .Select(i => i.ThirdParameter.Value);
 
-                Random r = new Random();
-                int number = r.Next(100000);
+                Random random = new Random();
+                int freeTelephoneNumber = random.Next(100000);
 
-                var itemModels = numbers as ItemModel[] ?? numbers.ToArray();
-                while (itemModels.Any(t => t.ThirdParameter == number))
+                var numbersArray = numbers as int[] ?? numbers.ToArray();
+                while (numbersArray.Any(number => number == freeTelephoneNumber))
                 {
-                    number = r.Next(100000);
+                    freeTelephoneNumber = random.Next(100000);
                 }
-                return number;
+                return freeTelephoneNumber;
             }
         }
     }

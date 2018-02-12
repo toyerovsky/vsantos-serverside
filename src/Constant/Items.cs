@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Constant.Structs;
-using Serverside.Items;
+using Serverside.Entities.Core.Item;
 
 namespace Serverside.Constant
 {

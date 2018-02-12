@@ -10,6 +10,7 @@ using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Interfaces;
 using Serverside.Entities.Core;
+using Serverside.Entities.Core.Vehicle;
 
 namespace Serverside.Jobs.Base
 {

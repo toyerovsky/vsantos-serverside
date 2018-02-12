@@ -7,6 +7,7 @@
 using System.Linq;
 using Serverside.Core.Database.Models;
 using Serverside.Entities.Core;
+using Serverside.Entities.Peds.CrimeBot;
 
 namespace Serverside.Groups.Base
 {
@@ -15,7 +16,7 @@ namespace Serverside.Groups.Base
         /* OPCJONALNE PRAWA
          * 1 - wzywanie Crime Bota
          */
-        public CrimeBot.CrimeBot CrimeBot { get; set; }
+        public CrimePedEntity CrimePedEntity { get; set; }
 
         public CrimeGroup(GroupModel editor) : base(editor)
         {

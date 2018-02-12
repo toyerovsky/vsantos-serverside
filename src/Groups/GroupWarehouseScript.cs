@@ -13,9 +13,9 @@ using Newtonsoft.Json;
 using Serverside.Admin.Enums;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Repositories;
+using Serverside.Entities.Core.Item;
 using Serverside.Groups.Enums;
 using Serverside.Groups.Stucts;
-using Serverside.Items;
 
 namespace Serverside.Groups
 {

@@ -7,7 +7,7 @@
 using System;
 using GTANetworkAPI;
 using Serverside.Core.Interfaces;
-using Serverside.Items;
+using Serverside.Entities.Core.Item;
 
 namespace Serverside.Corners.Models
 {

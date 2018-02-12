@@ -8,7 +8,6 @@ using Serverside.Admin.Enums;
 using Serverside.Core.Database;
 using Serverside.Core.Enums;
 using Serverside.Groups.Enums;
-using Serverside.Items;
 using Serverside.Jobs.Enums;
 using System;
 

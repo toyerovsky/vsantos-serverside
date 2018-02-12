@@ -13,12 +13,14 @@ using Serverside.Core.Database.Models;
 using Serverside.Core.Description;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
+using Serverside.Entities.Base;
+using Serverside.Entities.Core.Building;
+using Serverside.Entities.Core.Item;
 using Serverside.Entities.Interfaces;
-using Serverside.Items;
 
 namespace Serverside.Entities.Core
 {
-    public class CharacterEntity : IDbEntity<CharacterModel>
+    public class CharacterEntity : GameEntity, IDbEntity<CharacterModel>
     {
         public CharacterModel DbModel { get; set; }
 
@@ -35,7 +37,7 @@ namespace Serverside.Entities.Core
         public event DimensionChangeEventHandler OnPlayerDimensionChanged;
         public static event CharacterLoginEventHandler CharacterLoggedIn;
 
-        public EventClass Events { get; set; }
+        public IInteractive CurrenInteractive { get; set; }
 
         public bool CanSendPrivateMessage { get; set; } = false;
         public bool CanCommand { get; set; } = false;
@@ -43,10 +45,8 @@ namespace Serverside.Entities.Core
         public bool CanNarrate { get; set; } = false;
         public bool CanPay { get; set; } = false;
 
-        public CharacterEntity(EventClass events, AccountEntity accountEntity, CharacterModel dbModel)
+        public CharacterEntity(EventClass events, AccountEntity accountEntity, CharacterModel dbModel) : base(events)
         {
-            Events = events;
-
             DbModel = dbModel;
             AccountEntity = accountEntity;
             AccountEntity.CharacterEntity = this;
@@ -196,7 +196,7 @@ namespace Serverside.Entities.Core
             account.CharacterEntity.Save();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Description?.Dispose();
         }

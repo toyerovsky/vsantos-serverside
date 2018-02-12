@@ -25,7 +25,7 @@ namespace Serverside.Corners
 
         private bool CornerBusy { get; set; }
         private AccountEntity Player { get; set; }
-        private CornerBot CurrentBot { get; set; }
+        private CornerPedEntity CurrentPedEntity { get; set; }
 
         public Corner(EventClass events, CornerModel corner)
             : base(events)
@@ -74,13 +74,13 @@ namespace Serverside.Corners
 
                 var random = _random.Next(Data.CornerBots.Count);
 
-                CurrentBot = new CornerBot(Events, Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
+                CurrentPedEntity = new CornerPedEntity(Events, Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
 
-                CurrentBot.Intialize();
-                CurrentBot.OnTransactionEnd += (o, eventArgs) =>
+                CurrentPedEntity.Spawn();
+                CurrentPedEntity.OnTransactionEnd += (o, eventArgs) =>
                 {
                     timer.Start();
-                    CurrentBot.Dispose();
+                    CurrentPedEntity.Dispose();
                 };
             };
 
@@ -94,10 +94,10 @@ namespace Serverside.Corners
                     CornerBusy = false;
                     Player.Client.StopAnimation();
 
-                    if (CurrentBot != null)
+                    if (CurrentPedEntity != null)
                     {
-                        CurrentBot.Dispose();
-                        CurrentBot = null;
+                        CurrentPedEntity.Dispose();
+                        CurrentPedEntity = null;
                     }
 
                     Player = null;
