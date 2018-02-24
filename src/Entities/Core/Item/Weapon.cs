@@ -4,6 +4,8 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
+using System.Linq;
 using GTANetworkAPI;
 using GTANetworkInternals;
 using Serverside.Core.Database.Models;
@@ -13,6 +15,9 @@ namespace Serverside.Entities.Core.Item
 {
     internal class Weapon : Item
     {
+        public WeaponHash WeaponHash => (WeaponHash)DbModel.FirstParameter.Value;
+        public int Ammo => DbModel.SecondParameter.Value;
+
         /// <summary>
         /// Pierwszy parametr to Hash broni, a drugi to ilość amunicji
         /// </summary>
@@ -20,34 +25,39 @@ namespace Serverside.Entities.Core.Item
 
         public override void UseItem(AccountEntity player)
         {
-            if (DbModel.SecondParameter <= 0)
+            if (Ammo <= 0)
             {
                 player.Client.Notify("Twoja broń nie ma amunicji.");
                 return;
             }
 
-            if (DbModel.CurrentlyInUse && DbModel.FirstParameter.HasValue)
+            if (player.CharacterEntity.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
-                DbModel.CurrentlyInUse = false;
-                DbModel.SecondParameter = NAPI.Player.GetPlayerWeaponAmmo(player.Client, (WeaponHash)DbModel.FirstParameter);
+                DbModel.SecondParameter = NAPI.Player.GetPlayerWeaponAmmo(player.Client, WeaponHash);
                 Save();
-                NAPI.Player.RemovePlayerWeapon(player.Client, (WeaponHash)DbModel.FirstParameter);
-                Events.OnPlayerDisconnected -= API_OnPlayerDisconnected;
+                NAPI.Player.RemovePlayerWeapon(player.Client, WeaponHash);
+
+                player.CharacterEntity.ItemsInUse.Remove(this);
+
+                Events.OnPlayerDisconnected -= OnPlayerDisconnected;
+                Events.OnPlayerWeaponSwitch -= OnPlayerWeaponSwitch;
             }
-            else if (!DbModel.CurrentlyInUse && DbModel.SecondParameter > 0)
+            else
             {
-                //NAPI.givePlayerWeapon(Client player, WeaponHash weaponHash, int ammo, bool equipNow, bool ammoLoaded);
-                if (DbModel.FirstParameter.HasValue)
-                    NAPI.Player.GivePlayerWeapon(player.Client, (WeaponHash)DbModel.FirstParameter, DbModel.SecondParameter.Value);
+                NAPI.Player.GivePlayerWeapon(player.Client, WeaponHash, Ammo);
+                player.CharacterEntity.ItemsInUse.Add(this);
 
-                DbModel.CurrentlyInUse = true;
-                Save();
-
-                Events.OnPlayerDisconnected += API_OnPlayerDisconnected;
+                Events.OnPlayerDisconnected += OnPlayerDisconnected;
+                Events.OnPlayerWeaponSwitch += OnPlayerWeaponSwitch;
             }
         }
 
-        private void API_OnPlayerDisconnected(Client sender, byte type, string reason)
+        private void OnPlayerWeaponSwitch(Client client, WeaponHash oldWeaponHash, WeaponHash newWeaponHash)
+        {
+
+        }
+
+        private void OnPlayerDisconnected(Client sender, byte type, string reason)
         {
             if (DbModel.ItemType == ItemType.Weapon)
             {
@@ -55,7 +65,7 @@ namespace Serverside.Entities.Core.Item
                     DbModel.SecondParameter = NAPI.Player.GetPlayerWeaponAmmo(sender, (WeaponHash)DbModel.FirstParameter);
                 Save();
             }
-            Events.OnPlayerDisconnected -= API_OnPlayerDisconnected;
+            Events.OnPlayerDisconnected -= OnPlayerDisconnected;
         }
     }
 }

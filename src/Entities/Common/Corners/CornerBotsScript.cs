@@ -17,10 +17,6 @@ namespace Serverside.Corners
 {
     public class CornerBotsScript : Script
     {
-        public CornerBotsScript()
-        { 
-        }
-
         private void ClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
         {
             if (eventName == "AddCornerBot")

@@ -5,10 +5,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
 using GTANetworkInternals;
+using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Description;
 using Serverside.Core.Extensions;
@@ -30,20 +32,21 @@ namespace Serverside.Entities.Core
         public CharacterCreator.CharacterCreator CharacterCreator { get; set; }
         public BuildingEntity CurrentBuilding { get; set; }
 
-        internal Cellphone CurrentCellphone { get; set; }
+        internal List<Item.Item> ItemsInUse { get; set; } = new List<Item.Item>();
+        internal Cellphone CurrentCellphone => ItemsInUse.Single(x => x is Cellphone) as Cellphone;
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
-        
+
         public event DimensionChangeEventHandler OnPlayerDimensionChanged;
         public static event CharacterLoginEventHandler CharacterLoggedIn;
 
-        public IInteractive CurrenInteractive { get; set; }
+        public IInteractive CurrentInteractive { get; set; }
 
-        public bool CanSendPrivateMessage { get; set; } = false;
-        public bool CanCommand { get; set; } = false;
-        public bool CanTalk { get; set; } = false;
-        public bool CanNarrate { get; set; } = false;
-        public bool CanPay { get; set; } = false;
+        public bool CanSendPrivateMessage { get; set; }
+        public bool CanCommand { get; set; }
+        public bool CanTalk { get; set; }
+        public bool CanNarrate { get; set; }
+        public bool CanPay { get; set; }
 
         public CharacterEntity(EventClass events, AccountEntity accountEntity, CharacterModel dbModel) : base(events)
         {
@@ -69,8 +72,7 @@ namespace Serverside.Entities.Core
 
         public static CharacterEntity Create(EventClass events, AccountEntity accountEntity, string name, string surname, PedHash model)
         {
-            Random random = new Random();
-            var randomIndex = random.Next(Constant.Items.ServerSpawnPositions.Count);
+            var randomIndex = Tools.RandomInt(Constant.Items.ServerSpawnPositions.Count);
 
             CharacterModel dbModel = new CharacterModel
             {
@@ -201,7 +203,7 @@ namespace Serverside.Entities.Core
             Description?.Dispose();
         }
 
-        public void Spawn()
+        public override void Spawn()
         {
             throw new NotImplementedException();
         }

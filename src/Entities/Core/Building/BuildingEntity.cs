@@ -41,7 +41,6 @@ namespace Serverside.Entities.Core.Building
 
         public void Save()
         {
-
         }
 
         public override void Spawn()

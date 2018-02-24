@@ -29,5 +29,10 @@ namespace Serverside.Core
                 return last;
             }
         }
+
+        private static Random _random = new Random();
+        public static int RandomInt() => _random.Next();
+        public static int RandomInt(int max) => _random.Next(max);
+        public static int RandomInt(int min, int max) => _random.Next(min, max);
     }
 }

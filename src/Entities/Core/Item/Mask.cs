@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.Linq;
 using GTANetworkInternals;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
@@ -23,15 +24,16 @@ namespace Serverside.Entities.Core.Item
         public override void UseItem(AccountEntity player)
         {
             var encryptedName = $"Nieznajomy {player.Client.Name.GetHashCode().ToString().Substring(1, 6)}";
-
-            if (DbModel.CurrentlyInUse)
+            
+            if (player.CharacterEntity.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
                 ChatScript.SendMessageToNearbyPlayers(player.Client, "zdejmuje kominiarkę", ChatMessageType.Me);
 
                 player.Client.Name = player.CharacterEntity.FormatName;
                 player.Client.ResetNametag();
 
-                DbModel.CurrentlyInUse = false;
+                player.CharacterEntity.ItemsInUse.Remove(this);
+
                 if (DbModel.FirstParameter.HasValue && DbModel.FirstParameter.Value == 0)
                 {
                     Delete();
@@ -39,14 +41,14 @@ namespace Serverside.Entities.Core.Item
                 }
                 Save();
             }
-            else
+            else if (player.CharacterEntity.ItemsInUse.All(item => !(item is Mask)))
             {
                 ChatScript.SendMessageToNearbyPlayers(player.Client, "zakłada kominiarkę", ChatMessageType.Me);
                 player.Client.Name = encryptedName;
                 player.Client.ResetNametag();
 
                 DbModel.FirstParameter -= 1;
-                DbModel.CurrentlyInUse = true;
+                player.CharacterEntity.ItemsInUse.Add(this);
 
                 Save();
             }

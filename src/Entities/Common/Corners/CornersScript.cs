@@ -18,7 +18,7 @@ namespace Serverside.Corners
 {
     public class CornersScript : Script
     {
-        private List<Corner> Corners { get; set; } = new List<Corner>();
+        private List<CornerEntity> Corners { get; set; } = new List<CornerEntity>();
 
         public CornersScript()
         {
@@ -29,7 +29,7 @@ namespace Serverside.Corners
         {
             foreach (var corner in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Corners")))
             {
-                Corners.Add(new Corner(Event, corner));
+                Corners.Add(new CornerEntity(Event, corner));
             }
         }
 
@@ -115,7 +115,7 @@ namespace Serverside.Corners
                     };
                     //Dodajemy nowy plik .xml
                     XmlHelper.AddXmlObject(corner, Constant.ServerInfo.XmlDirectory + @"Corners\");
-                    Corners.Add(new Corner(Event, corner));
+                    Corners.Add(new CornerEntity(Event, corner));
 
                     sender.Notify("Dodawanie rogu zakończyło się ~h~~g~pomyślnie.");
                     Event.OnChatMessage -= Handler;

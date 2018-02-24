@@ -42,11 +42,10 @@ namespace Serverside.Corners
         {
             get
             {
-                List<decimal> lowerMoneyCounts = new List<decimal>();
+                var lowerMoneyCounts = new List<decimal>();
                 for (int i = 0; i < MoneyCount; i++)
-                {
                     lowerMoneyCounts.Add(i);
-                }
+
                 return lowerMoneyCounts;
             }
         }
@@ -54,12 +53,11 @@ namespace Serverside.Corners
         {
             get
             {
-                List<decimal> m = new List<decimal>();
+                var mostlyGoodMoneyCounts = new List<decimal>();
                 for (int i = Convert.ToInt32(MoneyCount) + 1; i < MoneyCount + 21; i++)
-                {
-                    m.Add(i);
-                }
-                return m;
+                    mostlyGoodMoneyCounts.Add(i);
+
+                return mostlyGoodMoneyCounts;
             }
         }
 

@@ -32,8 +32,9 @@ namespace Serverside.Entities.Common.Market
         {
             base.Spawn();
 
+            Random random = new Random();
             var botInfo =
-                Constant.Items.ConstantNames.OrderBy(x => new Random().Next(Constant.Items.ConstantNames
+                Constant.Items.ConstantNames.OrderBy(x => random.Next(Constant.Items.ConstantNames
                     .Count)).ElementAt(0);
 
             MarketNpc = new PedEntity(Events, botInfo.Key, botInfo.Value, new FullPosition(Data.Center, new Vector3(1f, 1f, 1f)));

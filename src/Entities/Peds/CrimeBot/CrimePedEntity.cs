@@ -95,7 +95,8 @@ namespace Serverside.Entities.Peds.CrimeBot
             if (eventName == "OnCrimeBotBought")
             {
                 var items =
-                    JsonConvert.DeserializeObject<List<CrimeBotItem>>(arguments[0].ToString()).Where(item => item.Count > 0).ToList();
+                    JsonConvert.DeserializeObject<List<CrimeBotItem>>(arguments[0].ToString())
+                        .Where(item => item.Count > 0).ToList();
 
                 decimal sum = 0;
                 foreach (var item in items)
@@ -105,7 +106,8 @@ namespace Serverside.Entities.Peds.CrimeBot
 
                 if (!sender.HasMoney(sum))
                 {
-                    SendMessageToNerbyPlayers($"Co to jest? Brakuje ${sum - sender.GetAccountEntity().CharacterEntity.DbModel.Money}, forsa w gotówce", ChatMessageType.Normal);
+                    SendMessageToNerbyPlayers(
+                        $"Co to jest? Brakuje ${sum - sender.GetAccountEntity().CharacterEntity.DbModel.Money}, forsa w gotówce", ChatMessageType.Normal);
                     return;
                 }
 
@@ -114,7 +116,6 @@ namespace Serverside.Entities.Peds.CrimeBot
                 {
                     return;
                 }
-
 
                 using (ItemsRepository repository = new ItemsRepository())
                 {

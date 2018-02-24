@@ -32,6 +32,5 @@ namespace Serverside.Core.Database.Models
 
         [EnumDataType(typeof(ItemType))]
         public virtual ItemType ItemType { get; set; }
-        public bool CurrentlyInUse { get; set; }
     }
 }

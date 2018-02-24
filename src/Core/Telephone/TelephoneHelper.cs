@@ -22,14 +22,12 @@ namespace Serverside.Core.Telephone
                     .Where(i => i.ItemType == ItemType.Cellphone && i.ThirdParameter.HasValue)
                     .Select(i => i.ThirdParameter.Value);
 
-                Random random = new Random();
-                int freeTelephoneNumber = random.Next(100000);
+                int freeTelephoneNumber = Tools.RandomInt(100000);
 
                 var numbersArray = numbers as int[] ?? numbers.ToArray();
                 while (numbersArray.Any(number => number == freeTelephoneNumber))
-                {
-                    freeTelephoneNumber = random.Next(100000);
-                }
+                    freeTelephoneNumber = Tools.RandomInt(100000);
+                
                 return freeTelephoneNumber;
             }
         }

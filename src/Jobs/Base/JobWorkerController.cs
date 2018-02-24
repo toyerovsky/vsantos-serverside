@@ -33,7 +33,7 @@ namespace Serverside.Jobs.Base
                 if (value < 0)
                 {
                     Player.CharacterEntity.DbModel.MoneyJob = 0;
-                    Release();
+                    ReleaseWorker();
                 }
                 else
                 {
@@ -46,7 +46,7 @@ namespace Serverside.Jobs.Base
         /// <summary>
         /// Metoda do zwolnienia pracownika w razie nieprawidłowego postępowania
         /// </summary>
-        public virtual void Release()
+        public virtual void ReleaseWorker()
         {
             Player.Client.Notify("Nie wypracowałeś wystarczającej ilości gotówki na pokrycie szkód.");
             Player.Client.Notify("Zostałeś zwolniony. Zanim ponownie znajdziesz zatrudnienie minie trochę czasu.");

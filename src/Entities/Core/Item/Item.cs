@@ -37,7 +37,7 @@ namespace Serverside.Entities.Core.Item
             //TODO Pomysł, można tutaj dopisywać wszystkie logi używania przedmiotów
         }
 
-        protected void Save()
+        protected virtual void Save()
         {
             using (ItemsRepository repository = new ItemsRepository())
             {
@@ -46,7 +46,7 @@ namespace Serverside.Entities.Core.Item
             }
         }
 
-        protected void Delete()
+        protected virtual void Delete()
         {
             using (ItemsRepository repository = new ItemsRepository())
             {

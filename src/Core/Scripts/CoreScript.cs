@@ -85,21 +85,11 @@ namespace Serverside.Core.Scripts
                 {
                     //Zmiana postaci pola Online w postaci po wyłączeniu serwera dla graczy którzy byli online
                     account.Value.CharacterEntity.DbModel.Online = false;
-
-                    //Zmiana w przedmiocie pola CurrentlyInUse na false
-                    foreach (var item in account.Value.CharacterEntity.DbModel.Items.Where(
-                        i => i.CurrentlyInUse).ToList())
-                    {
-                        item.CurrentlyInUse = false;
-                    }
-
                     account.Value.DbModel.Online = false;
                 }
 
                 foreach (var vehicle in EntityManager.GetVehicles())
-                {
                     vehicle.Dispose();
-                }
 
                 using (var ctx = RolePlayContextFactory.NewContext())
                     ctx.SaveChanges();

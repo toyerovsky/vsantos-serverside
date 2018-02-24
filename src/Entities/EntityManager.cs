@@ -42,7 +42,7 @@ namespace Serverside.Entities
         private static readonly List<CarshopEntity> Carshops = new List<CarshopEntity>();
         private static readonly List<DriveThruEntity> DriveThrus = new List<DriveThruEntity>();
         private static readonly List<MarketEntity> Markets = new List<MarketEntity>();
-        private static readonly List<TelephoneBooth> TelephoneBooths = new List<TelephoneBooth>();
+        private static readonly List<TelephoneBoothEntity> TelephoneBooths = new List<TelephoneBoothEntity>();
         #endregion
 
         #region Peds
@@ -56,7 +56,7 @@ namespace Serverside.Entities
             BuildingEntity.LoadBuildings(events);
         }
 
-        #region ACCOUNT METHODS
+        #region Account
 
         public static void Add(AccountEntity accountEntity)
         {
@@ -93,6 +93,16 @@ namespace Serverside.Entities
                 return -1;
             }
             return Accounts.Values.ToList().IndexOf(account);
+        }
+
+        #endregion
+
+        #region Character
+
+        public static CharacterEntity GetCharacterByOnlineCellphoneNumber(int number)
+        {
+            return GetAccounts().Values
+                .Single(account => account.CharacterEntity?.CurrentCellphone.Number == number).CharacterEntity;
         }
 
         #endregion

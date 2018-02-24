@@ -14,7 +14,7 @@ using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Common.Booth
 {
-    public class TelephoneBooth : GameEntity, IInteractive
+    public class TelephoneBoothEntity : GameEntity, IInteractive
     {
         public TelephoneCall CurrentCall { get; set; }
         public Client CurrentClient { get; set; }
@@ -25,7 +25,7 @@ namespace Serverside.Entities.Common.Booth
 
         public bool IncomingCall = false;
 
-        public TelephoneBooth(EventClass events, TelephoneBoothModel data) : base(events)
+        public TelephoneBoothEntity(EventClass events, TelephoneBoothModel data) : base(events)
         {
             Data = data;
         }
@@ -60,7 +60,7 @@ namespace Serverside.Entities.Common.Booth
                 {
                     //Budka nie jest używana i nie dzwoni
                     CurrentClient = NAPI.Player.GetPlayerFromHandle(entity);
-                    CurrentClient.GetAccountEntity().CharacterEntity.CurrenInteractive = this;
+                    CurrentClient.GetAccountEntity().CharacterEntity.CurrentInteractive = this;
                     NAPI.ClientEvent.TriggerClientEvent(CurrentClient, "OnPlayerEnteredTelephonebooth");
                 }
             };
@@ -70,7 +70,7 @@ namespace Serverside.Entities.Common.Booth
                 if (CurrentCall != null && ReferenceEquals(entity, CurrentClient))
                 {
                     //Opuszczanie budki kiedy dzwoni
-                    CurrentClient.GetAccountEntity().CharacterEntity.CurrenInteractive = null;
+                    CurrentClient.GetAccountEntity().CharacterEntity.CurrentInteractive = null;
                     CurrentClient = null;
                     CurrentCall?.Dispose();
                 }
@@ -80,8 +80,8 @@ namespace Serverside.Entities.Common.Booth
         public override void Dispose()
         {
             var character = CurrentClient.GetAccountEntity().CharacterEntity;
-            if (ReferenceEquals(character.CurrenInteractive, this))
-                character.CurrenInteractive = null;
+            if (ReferenceEquals(character.CurrentInteractive, this))
+                character.CurrentInteractive = null;
             CurrentCall?.Dispose();
             NAPI.ColShape.DeleteColShape(ColShape);
             NAPI.Entity.DeleteEntity(Marker);

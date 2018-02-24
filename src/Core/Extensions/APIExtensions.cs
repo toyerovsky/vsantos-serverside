@@ -14,8 +14,6 @@ namespace Serverside.Core.Extensions
 {
     public static class ApiExtensions
     {
-        private static Random _random = new Random();
-
         public static List<Client> GetNearestPlayers(this Vector3 position) =>
             NAPI.Pools.GetAllPlayers().OrderBy(
                 n => n.Position.DistanceTo(position)).ToList();
@@ -53,7 +51,7 @@ namespace Serverside.Core.Extensions
         }
 
         public static Color GetRandomColor(this Color color) =>
-            new Color(_random.Next(256), _random.Next(256), _random.Next(256), _random.Next(256));
+            new Color(Tools.RandomInt(256), Tools.RandomInt(256), Tools.RandomInt(256), Tools.RandomInt(256));
 
         public static Color ToColor(this string hex)
         {
@@ -64,7 +62,8 @@ namespace Serverside.Core.Extensions
             if (hex.All(c => !char.IsDigit(c)))
                 throw new ColorConvertException("Podany kolor zawiera niedozwolone znaki.");
 
-            if (hex.Length != 6 || hex.Length != 8) return new Color(255, 0, 0);
+            if (hex.Length != 6 || hex.Length != 8)
+                return new Color(255, 0, 0);
 
             if (hex.Length == 6)
             {

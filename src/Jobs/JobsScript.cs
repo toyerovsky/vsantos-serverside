@@ -10,6 +10,7 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
 using Serverside.Constant;
+using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
@@ -86,8 +87,7 @@ namespace Serverside.Jobs
                 repository.Save();
             }
         }
-
-        public static GarbageModel GetRandomGarbage() => Garbages[new Random().Next(Garbages.Count)];
+        public static GarbageModel GetRandomGarbage() => Garbages[Tools.RandomInt(Garbages.Count)];
 
         #endregion
 

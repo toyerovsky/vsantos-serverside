@@ -22,7 +22,7 @@ namespace Serverside.Entities.Common.Booth
 {
     public class TelephoneBoothScript : Script
     {
-        private List<TelephoneBooth> Booths { get; set; } = new List<TelephoneBooth>();
+        private List<TelephoneBoothEntity> Booths { get; set; } = new List<TelephoneBoothEntity>();
 
         public TelephoneBoothScript()
         {
@@ -34,68 +34,71 @@ namespace Serverside.Entities.Common.Booth
             foreach (var booth in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Booths")))
             {
                 //W konstruktorze spawnujemy budkę telefoniczną do gry
-                Booths.Add(new TelephoneBooth(Event, booth));
+                Booths.Add(new TelephoneBoothEntity(Event, booth));
             }
         }
 
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] args)
         {
             //args[0] to numer na jaki dzwoni
-            if (eventName == "OnPlayerTelephoneBoothCall" && sender.HasData("Booth"))
+            if (eventName == "OnPlayerTelephoneBoothCall")
             {
-                TelephoneBooth booth = sender.GetData("Booth");
-                if (sender.HasMoney(booth.Data.Cost))
+                var characterEntity = sender.GetAccountEntity().CharacterEntity;
+                if (characterEntity.CurrentInteractive is TelephoneBoothEntity boothEntity)
                 {
-                    sender.RemoveMoney(booth.Data.Cost);
-                    ChatScript.SendMessageToNearbyPlayers(sender, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
-                    
-                    if (EntityManager.GetAccounts().Values.Any(t => t.CharacterEntity.CurrentCellphone.Number == Convert.ToInt32(args[0])))
+                    if (sender.HasMoney(boothEntity.Data.Cost))
                     {
-                        Client getterPlayer = EntityManager.GetAccounts().Values
-                            .Single(t => t.CharacterEntity.CurrentCellphone.Number ==
-                                      Convert.ToInt32(args[0])).Client;
+                        sender.RemoveMoney(boothEntity.Data.Cost);
+                        ChatScript.SendMessageToNearbyPlayers(sender, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
 
-                        if (getterPlayer.HasData("CellphoneTalking"))
+                        if (EntityManager.GetAccounts().Values.Any(t => t.CharacterEntity.CurrentCellphone.Number == Convert.ToInt32(args[0])))
                         {
-                            sender.SendChatMessage("~#ffdb00~",
-                                "Wybrany abonent prowadzi obecnie rozmowę, spróbuj później.");
-                            return;
+                            Client getterPlayer = EntityManager.GetAccounts().Values
+                                .Single(t => t.CharacterEntity.CurrentCellphone.Number ==
+                                          Convert.ToInt32(args[0])).Client;
+
+                            if (getterPlayer.HasData("CellphoneTalking"))
+                            {
+                                sender.SendChatMessage("~#ffdb00~",
+                                    "Wybrany abonent prowadzi obecnie rozmowę, spróbuj później.");
+                                return;
+                            }
+
+                            boothEntity.CurrentCall = new TelephoneCall(sender, getterPlayer, boothEntity.Data.Number);
+
+                            boothEntity.CurrentCall.Timer.Elapsed += (o, eventArgs) =>
+                            {
+                                sender.SendChatMessage("~#ffdb00~",
+                                    "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
+                                boothEntity.CurrentCall.Dispose();
+                                boothEntity.CurrentCall = null;
+                            };
                         }
-
-                        booth.CurrentCall = new TelephoneCall(sender, getterPlayer, booth.Data.Number);
-
-                        booth.CurrentCall.Timer.Elapsed += (o, eventArgs) =>
+                        else
                         {
                             sender.SendChatMessage("~#ffdb00~",
                                 "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
-                            booth.CurrentCall.Dispose();
-                            booth.CurrentCall = null;
-                        };
+                        }
                     }
                     else
                     {
-                        sender.SendChatMessage("~#ffdb00~",
-                            "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
+                        sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
                     }
-                }
-                else
-                {
-                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
                 }
             }
             else if (eventName == "OnPlayerTelephoneBoothEnd" && sender.HasData("Booth"))
             {
-                TelephoneBooth booth = sender.GetData("Booth");
+                TelephoneBoothEntity boothEntity = sender.GetData("Booth");
 
-                if (booth.CurrentCall != null && booth.CurrentCall.CurrentlyTalking)
+                if (boothEntity.CurrentCall != null && boothEntity.CurrentCall.CurrentlyTalking)
                 {
-                    booth.CurrentCall.Sender.SendChatMessage("~#ffdb00~",
+                    boothEntity.CurrentCall.Sender.SendChatMessage("~#ffdb00~",
                         "Rozmowa zakończona.");
-                    booth.CurrentCall.Getter.SendChatMessage("~#ffdb00~",
+                    boothEntity.CurrentCall.Getter.SendChatMessage("~#ffdb00~",
                         "Rozmowa zakończona.");
 
-                    booth.CurrentCall.Dispose();
-                    booth.CurrentCall = null;
+                    boothEntity.CurrentCall.Dispose();
+                    boothEntity.CurrentCall = null;
                 }
             }
         }
@@ -142,7 +145,7 @@ namespace Serverside.Entities.Common.Booth
                     };
 
                     XmlHelper.AddXmlObject(booth, Constant.ServerInfo.XmlDirectory + @"Booths\");
-                    Booths.Add(new TelephoneBooth(Event, booth));
+                    Booths.Add(new TelephoneBoothEntity(Event, booth));
                     sender.Notify("Dodawanie budki zakończyło się ~g~~h~pomyślnie.");
                     Event.OnChatMessage -= Handler;
                 }

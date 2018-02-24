@@ -6,6 +6,7 @@
 
 using System;
 using GTANetworkInternals;
+using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Scripts;
@@ -13,9 +14,7 @@ using Serverside.Core.Scripts;
 namespace Serverside.Entities.Core.Item
 {
     internal class Dice : Item
-    {
-        private Random _random = new Random();
-        
+    {   
         /// <summary>
         /// Pierwszy parametr to liczba oczek na kostce
         /// </summary>
@@ -23,12 +22,11 @@ namespace Serverside.Entities.Core.Item
         /// <param name="itemModel"></param>
         public Dice(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
 
-
         public override void UseItem(AccountEntity player)
         {
             if (DbModel.FirstParameter != null)
                 ChatScript.SendMessageToNearbyPlayers(player.Client,
-                    $"wyrzucił {_random.Next(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
+                    $"wyrzucił {Tools.RandomInt(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
                     ChatMessageType.ServerMe);
         }
 

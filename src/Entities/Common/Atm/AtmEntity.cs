@@ -41,19 +41,19 @@ namespace Serverside.Entities.Common.Atm
             {
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
+                    var accountEntity = entity.GetAccountEntity();
 
-                    if (player.CharacterEntity.DbModel.BankAccountNumber == null)
+                    if (accountEntity.CharacterEntity.DbModel.BankAccountNumber == null)
                     {
-                        player.Client.Notify("Nie posiadasz karty bankomatowej, udaj się do banku, aby założyć konto.");
+                        accountEntity.Client.Notify("Nie posiadasz karty bankomatowej, udaj się do banku, aby założyć konto.");
                         return;
                     }
 
-                    NAPI.ClientEvent.TriggerClientEvent(player.Client, "OnPlayerEnteredAtm", JsonConvert.SerializeObject(new
+                    NAPI.ClientEvent.TriggerClientEvent(accountEntity.Client, "OnPlayerEnteredAtm", JsonConvert.SerializeObject(new
                     {
-                        player.CharacterEntity.FormatName,
-                        BankMoney = player.CharacterEntity.DbModel.BankMoney.ToString(CultureInfo.CurrentCulture),
-                        BankAccountNumber = player.CharacterEntity.DbModel.BankAccountNumber.ToString()
+                        accountEntity.CharacterEntity.FormatName,
+                        BankMoney = accountEntity.CharacterEntity.DbModel.BankMoney.ToString(CultureInfo.CurrentCulture),
+                        BankAccountNumber = accountEntity.CharacterEntity.DbModel.BankAccountNumber.ToString()
                     }));
                 }
             };
@@ -62,8 +62,7 @@ namespace Serverside.Entities.Common.Atm
             {
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(entity);
-                    NAPI.ClientEvent.TriggerClientEvent(player, "OnPlayerExitAtm");
+                    entity.TriggerEvent("OnPlayerExitAtm");
                 }
             };
 

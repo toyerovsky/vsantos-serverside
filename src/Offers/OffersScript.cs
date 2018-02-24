@@ -77,7 +77,7 @@ namespace Serverside.Offers
 
                     var item = items[index];
 
-                    if (item.CurrentlyInUse)
+                    if (sender.GetAccountEntity().CharacterEntity.ItemsInUse.Any(i => i.Id == item.Id))
                     {
                         sender.Notify("Nie możesz używać przedmiotu podczas oferowania.");
                         return;

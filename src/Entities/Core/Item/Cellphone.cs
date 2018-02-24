@@ -20,10 +20,10 @@ namespace Serverside.Entities.Core.Item
 {
     internal class Cellphone : Item
     {
-        public int PossibleContactsToSave { get; }
-        public int PossibleMessagesToSave { get; }
-        public int Number { get; }
-        public CellphoneVisibleType VisibleType { get; }
+        public int PossibleContactsToSave => DbModel.FirstParameter.Value;
+        public int PossibleMessagesToSave => DbModel.SecondParameter.Value;
+        public int Number => DbModel.ThirdParameter.Value;
+        public CellphoneVisibleType VisibleType => (CellphoneVisibleType)DbModel.FourthParameter.Value;
 
         public TelephoneCall CurrentCall { get; set; }
 
@@ -40,18 +40,12 @@ namespace Serverside.Entities.Core.Item
         /// <param name="itemModel"></param>
         public Cellphone(EventClass events, ItemModel itemModel) : base(events, itemModel)
         {
-            PossibleContactsToSave = itemModel.FirstParameter.Value;
-            PossibleMessagesToSave = itemModel.SecondParameter.Value;
-            Number = itemModel.ThirdParameter.Value;
-            VisibleType = (CellphoneVisibleType)itemModel.FourthParameter.Value;
-
             using (TelephoneMessagesRepository repository = new TelephoneMessagesRepository())
-            {
                 Messages = new ObservableCollection<TelephoneMessageModel>(repository.GetAll().Where(m => m.Cellphone.Id == Id));
-            }
+
 
             using (TelephoneContactsRepository repository = new TelephoneContactsRepository())
-                Contacts = new ObservableCollection<TelephoneContactModel>(repository.GetAll().Where(m => m.Cellphone.Id == Id).ToList());
+                Contacts = new ObservableCollection<TelephoneContactModel>(repository.GetAll().Where(m => m.Cellphone.Id == Id));
 
             Messages.CollectionChanged += Messages_CollectionChanged;
             Contacts.CollectionChanged += Contacts_CollectionChanged;
@@ -59,30 +53,18 @@ namespace Serverside.Entities.Core.Item
 
         public override void UseItem(AccountEntity player)
         {
-            if (!DbModel.CurrentlyInUse)
+            if (player.CharacterEntity.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
-                if (!DbModel.ThirdParameter.HasValue)
-                    Colorful.Console.WriteLine($"[ERROR] Do numeru telefonu o ID {DbModel.Id} został przypisany null.", Color.DarkRed);
-                else
-                {
-                    ChatScript.SendMessageToNearbyPlayers(player.Client, $"włącza {DbModel.Name}", ChatMessageType.ServerMe);
-                    player.Client.SetSharedData("CellphoneID", (int)DbModel.Id);
-                    player.Client.Notify($"Telefon {DbModel.Name} został włączony naciśnij klawisz END, aby go używać.");
-                    DbModel.CurrentlyInUse = true;
-                    player.CharacterEntity.Save();
-
-                    player.CharacterEntity.CurrentCellphone = this;
-                }
-            }
-            else
-            {
+                player.CharacterEntity.ItemsInUse.Remove(this);
+                Save();
                 ChatScript.SendMessageToNearbyPlayers(player.Client, $"wyłącza {DbModel.Name}", ChatMessageType.ServerMe);
-
-                player.CharacterEntity.Save();
-                player.CharacterEntity.CurrentCellphone = null;
-                DbModel.CurrentlyInUse = false;
                 player.Client.Notify($"Telefon {DbModel.Name} został wyłączony.");
-
+            }
+            else if (player.CharacterEntity.ItemsInUse.All(item => !(item is Cellphone)))
+            {
+                player.CharacterEntity.ItemsInUse.Add(this);
+                ChatScript.SendMessageToNearbyPlayers(player.Client, $"włącza {DbModel.Name}", ChatMessageType.ServerMe);
+                player.Client.Notify($"Telefon {DbModel.Name} został włączony naciśnij klawisz END, aby go używać.");
             }
         }
 
