@@ -26,6 +26,8 @@ namespace Serverside.Entities.Core
         public Client Client { get; }
         public CharacterEntity CharacterEntity;
 
+        public Action<Client> HereHandler { get; set; }
+
         private int _serverId = -1;
         public int ServerId
         {
