@@ -22,7 +22,7 @@ namespace Serverside.Entities.Common.Carshop
         public ColShape ColShape { get; private set; }
         public Blip CarshopBlip { get; set; }
 
-        public CarshopEntity(EventClass events, CarshopModel data) : base(events)
+        public CarshopEntity(CarshopModel data)
         {
             Data = data;
         }

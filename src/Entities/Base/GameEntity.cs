@@ -13,13 +13,6 @@ namespace Serverside.Entities.Base
 {
     public abstract class GameEntity : IGameEntity
     {
-        protected EventClass Events { get; }
-
-        protected GameEntity(EventClass events)
-        {
-            Events = events;
-        }
-
         public virtual void Spawn()
         {
             Colorful.Console.WriteLine($"[{nameof(GameEntity)}] [{DateTime.Now.ToShortTimeString()}] Entity spawned.", Color.ForestGreen);

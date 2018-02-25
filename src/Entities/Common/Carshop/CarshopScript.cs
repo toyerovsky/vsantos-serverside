@@ -24,12 +24,8 @@ namespace Serverside.Entities.Common.Carshop
         public static List<CarshopVehicleModel> Vehicles { get; set; } = new List<CarshopVehicleModel>();
         public static List<CarshopEntity> Carshops { get; set; } = new List<CarshopEntity>();
 
-        public CarshopScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-        }
-
-        private void API_onResourceStart()
+        [ServerEvent(Event.ResourceStart)]
+        private void OnResourceStart()
         {
             Vehicles =
                 XmlHelper.GetXmlObjects<CarshopVehicleModel>(
@@ -109,7 +105,7 @@ namespace Serverside.Entities.Common.Carshop
                 {
                     sender.RemoveMoney(vehicle.Cost);
 
-                    VehicleEntity.Create(Event, new FullPosition(new Vector3(-50, -1680, 29.5), new Vector3(0, 0, 0)),
+                    VehicleEntity.Create(new FullPosition(new Vector3(-50, -1680, 29.5), new Vector3(0, 0, 0)),
                         vehicleHash, "", 0, null, new Color().GetRandomColor(), new Color().GetRandomColor(), 0f, 0f, sender.GetAccountEntity().CharacterEntity.DbModel);
                     sender.Notify($"Pojazd {vehicleHash.ToString()} zakupiony ~h~~g~pomyślnie.");
                 }
@@ -156,7 +152,9 @@ namespace Serverside.Entities.Common.Carshop
         [Command("dodajsalon", "~y~ UŻYJ ~w~ /dodajsalon [nazwa] [typ]")]
         public void AddCarshop(Client sender, string name, CarshopType type)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
+            var player = sender.GetAccountEntity();
+
+            if (player.DbModel.ServerRank < ServerRank.GameMaster)
             {
                 sender.Notify("Nie posiadasz uprawnień do tworzenia salonu samochodowego.");
                 return;
@@ -165,26 +163,20 @@ namespace Serverside.Entities.Common.Carshop
             sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string command, CancelEventArgs cancel)
+            player.HereHandler += client =>
             {
-                if (o == sender && command == "tu")
+                CarshopModel data = new CarshopModel
                 {
-                    CarshopModel data = new CarshopModel
-                    {
-                        CreatorForumName = o.GetAccountEntity().DbModel.Name,
-                        Position = o.Position,
-                        Type = type,
-                    };
-                    data.CreatorForumName = o.GetAccountEntity().DbModel.Name;
+                    CreatorForumName = client.GetAccountEntity().DbModel.Name,
+                    Position = client.Position,
+                    Type = type,
+                };
+                data.CreatorForumName = client.GetAccountEntity().DbModel.Name;
 
-                    XmlHelper.AddXmlObject(data, $@"{ServerInfo.XmlDirectory}Carshops\");
-                    Carshops.Add(new CarshopEntity(Event, data));
-                    sender.Notify("Dodawanie salonu zakończyło się ~h~~g~pomyślnie.");
-                    Event.OnChatMessage -= Handler;
-                }
-            }
+                XmlHelper.AddXmlObject(data, $@"{ServerInfo.XmlDirectory}Carshops\");
+                Carshops.Add(new CarshopEntity(data));
+                sender.Notify("Dodawanie salonu zakończyło się ~h~~g~pomyślnie.");
+            };
         }
 
         [Command("usunsalon", "~y~ UŻYJ ~w~ /usunsalon")]

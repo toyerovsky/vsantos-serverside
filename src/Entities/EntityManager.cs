@@ -50,10 +50,10 @@ namespace Serverside.Entities
         private static readonly List<EmployerPedEntity> Employers = new List<EmployerPedEntity>();
         #endregion
 
-        public static void LoadEntities(EventClass events)
+        public static void LoadEntities()
         {
             GroupEntity.LoadGroups();
-            BuildingEntity.LoadBuildings(events);
+            BuildingEntity.LoadBuildings();
         }
 
         #region Account

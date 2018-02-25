@@ -32,8 +32,7 @@ namespace Serverside.Entities.Core.Building
         public List<AccountEntity> PlayersInBuilding { get; set; } = new List<AccountEntity>();
         public bool DoorsLocked { get; set; } = true;
 
-        public BuildingEntity(EventClass events, BuildingModel dbModel)
-            : base(events)
+        public BuildingEntity(BuildingModel dbModel)
         {
             DbModel = dbModel;
             EntityManager.Add(this);
@@ -249,16 +248,16 @@ namespace Serverside.Entities.Core.Building
             };
         }
 
-        public static void LoadBuildings(EventClass events)
+        public static void LoadBuildings()
         {
             using (BuildingsRepository repository = new BuildingsRepository())
                 foreach (var building in repository.GetAll())
                 {
-                    new BuildingEntity(events, building);
+                    new BuildingEntity(building);
                 }
         }
 
-        public static BuildingEntity Create(EventClass events, AccountModel creator, string name, decimal cost, Vector3 internalPosition, Vector3 externalPosition, bool spawnPossible, CharacterModel characterModel = null, GroupModel groupModel = null)
+        public static BuildingEntity Create(AccountModel creator, string name, decimal cost, Vector3 internalPosition, Vector3 externalPosition, bool spawnPossible, CharacterModel characterModel = null, GroupModel groupModel = null)
         {
             BuildingModel buildingModel = new BuildingModel()
             {
@@ -289,7 +288,7 @@ namespace Serverside.Entities.Core.Building
                 repository.Insert(buildingModel);
                 repository.Save();
             }
-            return new BuildingEntity(events, buildingModel);
+            return new BuildingEntity(buildingModel);
         }
 
         #endregion

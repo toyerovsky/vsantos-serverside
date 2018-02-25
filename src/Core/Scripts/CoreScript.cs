@@ -18,12 +18,15 @@ namespace Serverside.Core.Scripts
 {
     public class CoreScript : Script
     {
-        public CoreScript()
+        [ServerEvent(Event.ChatMessage)]
+        public void OnChatMessage(Client sender, string message)
         {
-            Event.OnResourceStart += Event_OnResourceStart;
-            Event.OnResourceStop += Event_OnResourceStop;
-            Event.OnUpdate += Event_OnUpdate;
-            Event.OnPlayerDisconnected += OnOnPlayerDisconnected;
+            var account = sender.GetAccountEntity();
+            if (message == "tu" && account.HereHandler != null)
+            {
+                account.HereHandler.Invoke(sender);
+                account.HereHandler = null;
+            }
         }
 
         private void OnOnPlayerDisconnected(Client client, byte type, string reason)
@@ -35,10 +38,10 @@ namespace Serverside.Core.Scripts
         private void Event_OnResourceStart()
         {
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
-            EntityManager.LoadEntities(Event);
+            EntityManager.LoadEntities();
         }
 
-        private float _currentRotation = 0;
+        private float _currentRotation = 0f;
         private void Event_OnUpdate()
         {
             if (EntityManager.GetBuildings().Count == 0)
