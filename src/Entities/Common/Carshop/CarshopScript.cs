@@ -63,32 +63,36 @@ namespace Serverside.Entities.Common.Carshop
                 new CarshopVehicleModel("Zion", VehicleHash.Zion, VehicleClass.Coupe, new decimal(32000), new List<CarshopType>() {CarshopType.Sredni}),
 
                 //SUV
-                new CarshopVehicleModel("BeeJay XL", VehicleHash.BJXL, VehicleClass.SuVs, new decimal(16999), new List<CarshopType>() {CarshopType.Biedny, CarshopType.Sredni}),
-                new CarshopVehicleModel("Baller I", VehicleHash.Baller, VehicleClass.SuVs, new decimal(14999), new List<CarshopType>() {CarshopType.Biedny, CarshopType.Sredni}),
-                new CarshopVehicleModel("Baller II", VehicleHash.Baller2, VehicleClass.SuVs, new decimal(51000), new List<CarshopType>() {CarshopType.Sredni}),
-                new CarshopVehicleModel("Cavalcade I", VehicleHash.Cavalcade, VehicleClass.SuVs, new decimal(26000), new List<CarshopType>() {CarshopType.Biedny, CarshopType.Sredni}),
-                new CarshopVehicleModel("Cavalcade II", VehicleHash.Cavalcade2, VehicleClass.SuVs, new decimal(71000), new List<CarshopType>() {CarshopType.Sredni, CarshopType.Luksus}),
-                new CarshopVehicleModel("Dubsta", VehicleHash.Dubsta2, VehicleClass.SuVs, new decimal(56999), new List<CarshopType>() {CarshopType.Sredni}),
-                new CarshopVehicleModel("FQ2", VehicleHash.FQ2, VehicleClass.SuVs, new decimal(52000), new List<CarshopType>() {CarshopType.Sredni}),
-                new CarshopVehicleModel("Granger", VehicleHash.Granger, VehicleClass.SuVs, new decimal(61799), new List<CarshopType>() {CarshopType.Sredni}),
-                new CarshopVehicleModel("Gresley", VehicleHash.Gresley, VehicleClass.SuVs, new decimal(56999), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Habanero", VehicleHash.Gresley, VehicleClass.SuVs, new decimal(68799), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Huntley S", VehicleHash.Huntley, VehicleClass.SuVs, new decimal(72699), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Landstalker", VehicleHash.Landstalker, VehicleClass.SuVs, new decimal(41899), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Patriot", VehicleHash.Patriot, VehicleClass.SuVs, new decimal(78999), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Radius", VehicleHash.Radi, VehicleClass.SuVs, new decimal(36999), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Rocoto", VehicleHash.Rocoto, VehicleClass.SuVs, new decimal(98000), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Seminole", VehicleHash.Seminole, VehicleClass.SuVs, new decimal(64999), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("Serrano", VehicleHash.Serrano, VehicleClass.SuVs, new decimal(28999), new List<CarshopType>() { CarshopType.Sredni }),
-                new CarshopVehicleModel("XLS", VehicleHash.XLS, VehicleClass.SuVs, new decimal(54999), new List<CarshopType>() {CarshopType.Sredni}),
+                new CarshopVehicleModel("BeeJay XL", VehicleHash.BJXL, VehicleClass.Suv, new decimal(16999), new List<CarshopType>() {CarshopType.Biedny, CarshopType.Sredni}),
+                new CarshopVehicleModel("Baller I", VehicleHash.Baller, VehicleClass.Suv, new decimal(14999), new List<CarshopType>() {CarshopType.Biedny, CarshopType.Sredni}),
+                new CarshopVehicleModel("Baller II", VehicleHash.Baller2, VehicleClass.Suv, new decimal(51000), new List<CarshopType>() {CarshopType.Sredni}),
+                new CarshopVehicleModel("Cavalcade I", VehicleHash.Cavalcade, VehicleClass.Suv, new decimal(26000), new List<CarshopType>() {CarshopType.Biedny, CarshopType.Sredni}),
+                new CarshopVehicleModel("Cavalcade II", VehicleHash.Cavalcade2, VehicleClass.Suv, new decimal(71000), new List<CarshopType>() {CarshopType.Sredni, CarshopType.Luksus}),
+                new CarshopVehicleModel("Dubsta", VehicleHash.Dubsta2, VehicleClass.Suv, new decimal(56999), new List<CarshopType>() {CarshopType.Sredni}),
+                new CarshopVehicleModel("FQ2", VehicleHash.FQ2, VehicleClass.Suv, new decimal(52000), new List<CarshopType>() {CarshopType.Sredni}),
+                new CarshopVehicleModel("Granger", VehicleHash.Granger, VehicleClass.Suv, new decimal(61799), new List<CarshopType>() {CarshopType.Sredni}),
+                new CarshopVehicleModel("Gresley", VehicleHash.Gresley, VehicleClass.Suv, new decimal(56999), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Habanero", VehicleHash.Gresley, VehicleClass.Suv, new decimal(68799), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Huntley S", VehicleHash.Huntley, VehicleClass.Suv, new decimal(72699), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Landstalker", VehicleHash.Landstalker, VehicleClass.Suv, new decimal(41899), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Patriot", VehicleHash.Patriot, VehicleClass.Suv, new decimal(78999), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Radius", VehicleHash.Radi, VehicleClass.Suv, new decimal(36999), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Rocoto", VehicleHash.Rocoto, VehicleClass.Suv, new decimal(98000), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Seminole", VehicleHash.Seminole, VehicleClass.Suv, new decimal(64999), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("Serrano", VehicleHash.Serrano, VehicleClass.Suv, new decimal(28999), new List<CarshopType>() { CarshopType.Sredni }),
+                new CarshopVehicleModel("XLS", VehicleHash.XLS, VehicleClass.Suv, new decimal(54999), new List<CarshopType>() {CarshopType.Sredni}),
                     
                 //Sedany
             });
 
             //Tworzenie salonow dla każdego pliku XML
             XmlHelper.GetXmlObjects<CarshopModel>($@"{ServerInfo.XmlDirectory}Carshops\")
-                .ForEach(carshopModel => Carshops.Add(new CarshopEntity(Event, carshopModel)));
-
+                .ForEach(carshopModel =>
+                {
+                    var carshop = new CarshopEntity(carshopModel);
+                    carshop.Spawn();
+                    Carshops.Add(carshop);
+                });
         }
 
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)

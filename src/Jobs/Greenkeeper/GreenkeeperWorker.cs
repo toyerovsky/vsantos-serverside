@@ -20,15 +20,13 @@ namespace Serverside.Jobs.Greenkeeper
         private int MetersCounter { get; set; }
         private List<Vector3> VisitedPoints { get; set; } = new List<Vector3>();
 
-        public GreenkeeperWorker(EventClass events, AccountEntity player, JobVehicleEntity vehicle)
-            : base(events, player, vehicle)
+        public GreenkeeperWorker(AccountEntity player, JobVehicleEntity vehicle)
+            : base(player, vehicle)
         {
             player.Client.TriggerEvent("JobTextVisibility", true);
             Player = player;
             InProgress = true;
             JobVehicle = vehicle;
-
-            Events.OnUpdate += OnUpdateHandler;
         }
 
         private void OnUpdateHandler()
@@ -51,7 +49,7 @@ namespace Serverside.Jobs.Greenkeeper
         public override void Stop()
         {
             InProgress = false;
-            Events.OnUpdate -= OnUpdateHandler;
+            
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Serverside.Entities.Core.Item
         /// </summary>
         /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Food(EventClass events, ItemModel itemModel) : base(events, itemModel)
+        public Food(ItemModel itemModel) : base(itemModel)
         {
         }
 

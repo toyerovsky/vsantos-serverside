@@ -17,9 +17,8 @@ namespace Serverside.Entities.Core.Item
         /// param 3 dla 2 (brakes) 2 parametr to moc hamowania
         /// param 4 określa czy tuning jest zamontowany
         /// </summary>
-        /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Tuning(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public Tuning(ItemModel itemModel) : base(itemModel) { }
 
         public override string UseInfo
         {

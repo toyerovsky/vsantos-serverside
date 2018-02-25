@@ -8,15 +8,14 @@ using System;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Core.Extensions;
-using Serverside.Corners.Models;
 using Serverside.Entities.Base;
+using Serverside.Entities.Common.Corners.Models;
 using Serverside.Entities.Core;
 using Serverside.Entities.Interfaces;
 
-namespace Serverside.Corners
+namespace Serverside.Entities.Common.Corners
 {
     public class CornerEntity : GameEntity, IInteractive
     {
@@ -29,8 +28,7 @@ namespace Serverside.Corners
         private AccountEntity Player { get; set; }
         private CornerPedEntity CurrentPedEntity { get; set; }
 
-        public CornerEntity(EventClass events, CornerModel corner)
-            : base(events)
+        public CornerEntity(CornerModel corner)
         {
             Data = corner;
         }
@@ -78,7 +76,7 @@ namespace Serverside.Corners
 
                 var random = Tools.RandomInt(Data.CornerBots.Count);
 
-                CurrentPedEntity = new CornerPedEntity(Events, Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
+                CurrentPedEntity = new CornerPedEntity(Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
 
                 CurrentPedEntity.Spawn();
                 CurrentPedEntity.OnTransactionEnd += (o, eventArgs) =>

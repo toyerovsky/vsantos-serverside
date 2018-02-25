@@ -10,10 +10,10 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
-using Serverside.Corners.Models;
+using Serverside.Entities.Common.Corners.Models;
 using Serverside.Entities.Core.Item;
 
-namespace Serverside.Corners
+namespace Serverside.Entities.Common.Corners
 {
     public class CornerBotsScript : Script
     {

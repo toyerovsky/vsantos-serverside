@@ -20,9 +20,6 @@ namespace Serverside.Core.Scripts
 
         public ScoreBoardScript()
         {
-            Event.OnPlayerDisconnected += Event_OnPlayerDisconnected;
-            Event.OnPlayerConnected += Event_OnPlayerConnected;
-            Event.OnUpdate += API_onUpdate;
             CharacterEntity.CharacterLoggedIn += RPLogin_OnPlayerLogin;
         }
 
@@ -31,7 +28,7 @@ namespace Serverside.Core.Scripts
             NAPI.ClientEvent.TriggerClientEventForAll("playerlist_leave", player.SocialClubName);
         }
 
-        private void Event_OnPlayerConnected(Client player, CancelEventArgs cancel)
+        private void Event_OnPlayerConnected(Client player)
         {
             var list = new List<string>();
             foreach (var ply in EntityManager.GetAccounts())

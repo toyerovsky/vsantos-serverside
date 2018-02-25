@@ -12,7 +12,7 @@ namespace Serverside.Jobs.Courier
 {
     public class CourierWorker : JobWorkerController
     {
-        public CourierWorker(EventClass events, AccountEntity player, JobVehicleEntity jobVehicle) : base(events, player, jobVehicle)
+        public CourierWorker(AccountEntity player, JobVehicleEntity jobVehicle) : base(player, jobVehicle)
         {
         }
     }

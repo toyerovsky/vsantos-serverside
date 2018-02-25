@@ -23,11 +23,6 @@ namespace Serverside.Groups
     {
         public static List<WarehouseOrderInfo> CurrentOrders { get; set; } = new List<WarehouseOrderInfo>();
 
-        public GroupWarehouseScript()
-        {
-            Event.OnResourceStart += API_onResourceStart;
-        }
-
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             if (eventName == "OnPlayerAddWarehouseItem")

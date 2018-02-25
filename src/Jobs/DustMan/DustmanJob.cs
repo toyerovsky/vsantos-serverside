@@ -16,11 +16,11 @@ namespace Serverside.Jobs.DustMan
     {
         public List<DustmanVehicleEntity> Vehicles { get; set; } = new List<DustmanVehicleEntity>();
 
-        public DustmanJob(EventClass events, string name, decimal moneyLimit, string jsonDirectory) : base(events, name, moneyLimit, jsonDirectory)
+        public DustmanJob(string name, decimal moneyLimit, string jsonDirectory) : base(name, moneyLimit, jsonDirectory)
         {
             foreach (var vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
             {
-                Vehicles.Add(new DustmanVehicleEntity(Events, vehicleData));
+                Vehicles.Add(new DustmanVehicleEntity(vehicleData));
             }
         }
     }

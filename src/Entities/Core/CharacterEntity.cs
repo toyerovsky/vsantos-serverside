@@ -48,7 +48,7 @@ namespace Serverside.Entities.Core
         public bool CanNarrate { get; set; }
         public bool CanPay { get; set; }
 
-        public CharacterEntity(EventClass events, AccountEntity accountEntity, CharacterModel dbModel) : base(events)
+        public CharacterEntity(AccountEntity accountEntity, CharacterModel dbModel)
         {
             DbModel = dbModel;
             AccountEntity = accountEntity;
@@ -65,12 +65,12 @@ namespace Serverside.Entities.Core
 
             if (DbModel.Freemode)
                 CharacterCreator = new CharacterCreator.CharacterCreator(this);
-            Description = new Description(Events, AccountEntity);
+            Description = new Description(AccountEntity);
 
             OnPlayerDimensionChanged += OnOnPlayerDimensionChanged;
         }
 
-        public static CharacterEntity Create(EventClass events, AccountEntity accountEntity, string name, string surname, PedHash model)
+        public static CharacterEntity Create(AccountEntity accountEntity, string name, string surname, PedHash model)
         {
             var randomIndex = Tools.RandomInt(Constant.Items.ServerSpawnPositions.Count);
 
@@ -99,7 +99,7 @@ namespace Serverside.Entities.Core
                 repository.Save();
             }
 
-            return new CharacterEntity(events, accountEntity, dbModel);
+            return new CharacterEntity(accountEntity, dbModel);
         }
 
         public void Save()
@@ -121,7 +121,7 @@ namespace Serverside.Entities.Core
             }
         }
 
-        public static void SelectCharacter(EventClass events, Client player, int selectId)
+        public static void SelectCharacter(Client player, int selectId)
         {
             AccountEntity account = player.GetAccountEntity();
             if (account == null)
@@ -140,7 +140,7 @@ namespace Serverside.Entities.Core
                 using (CharactersRepository repository = new CharactersRepository())
                 {
                     CharacterModel characterData = repository.Get(characterId);
-                    CharacterEntity characterEntity = new CharacterEntity(events, account, characterData);
+                    CharacterEntity characterEntity = new CharacterEntity(account, characterData);
                     characterEntity.LoginCharacter(account);
                 }
             }

@@ -22,7 +22,7 @@ namespace Serverside.Core.Extensions
     {
         Compact = 0,
         Sedans = 1,
-        SuVs = 2,
+        Suv = 2,
         Coupe = 3,
         Muscle = 4,
         SportClassics = 5,

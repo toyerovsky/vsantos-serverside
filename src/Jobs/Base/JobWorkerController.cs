@@ -16,11 +16,8 @@ namespace Serverside.Jobs.Base
         public AccountEntity Player { get; set; }
         public JobVehicleEntity JobVehicle { get; set; }
 
-        protected EventClass Events { get; }
-
-        protected JobWorkerController(EventClass events, AccountEntity player, JobVehicleEntity jobVehicle)
+        protected JobWorkerController(AccountEntity player, JobVehicleEntity jobVehicle)
         {
-            Events = events;
             Player = player;
             JobVehicle = jobVehicle;
         }

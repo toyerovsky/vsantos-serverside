@@ -38,7 +38,7 @@ namespace Serverside.Entities.Peds.CrimeBot
         private VehicleEntity Vehicle { get; set; }
         private FullPosition VehiclePosition { get; }
 
-        public CrimePedEntity(AccountEntity player, CrimeGroup group, FullPosition vehiclePosition, EventClass events, string name, PedHash hash, FullPosition position) : base(events, name, hash, position)
+        public CrimePedEntity(AccountEntity player, CrimeGroup group, FullPosition vehiclePosition, string name, PedHash hash, FullPosition position) : base(name, hash, position)
         {
             Player = player;
             Group = group;
@@ -73,7 +73,7 @@ namespace Serverside.Entities.Peds.CrimeBot
         {
             base.Spawn();
 
-            Vehicle = VehicleEntity.Create(Events, VehiclePosition, DbModel.Vehicle, DbModel.Name, 0, DbModel.Creator, new Color(0, 0, 0), new Color(0, 0, 0));
+            Vehicle = VehicleEntity.Create(VehiclePosition, DbModel.Vehicle, DbModel.Name, 0, DbModel.Creator, new Color(0, 0, 0), new Color(0, 0, 0));
             Vehicle.GameVehicle.OpenDoor(5);
             BotHandle.PlayScenario("WORLD_HUMAN_SMOKING");
 

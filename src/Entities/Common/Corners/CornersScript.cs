@@ -11,25 +11,23 @@ using GTANetworkAPI;
 using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
-using Serverside.Corners.Helpers;
-using Serverside.Corners.Models;
+using Serverside.Entities.Common.Corners.Helpers;
+using Serverside.Entities.Common.Corners.Models;
 
-namespace Serverside.Corners
+namespace Serverside.Entities.Common.Corners
 {
     public class CornersScript : Script
     {
         private List<CornerEntity> Corners { get; set; } = new List<CornerEntity>();
 
-        public CornersScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
+        [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (var corner in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Corners")))
+            foreach (var data in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Corners")))
             {
-                Corners.Add(new CornerEntity(Event, corner));
+                var corner = new CornerEntity(data);
+                corner.Spawn();
+                Corners.Add(corner);
             }
         }
 
@@ -38,10 +36,9 @@ namespace Serverside.Corners
         public void AddCorner(Client sender, string ids)
         {
             var botIds = ids.Split(',').ToList();
-            List<int> correctBotIds;
 
             //Sprawdzamy czy gracz podał prawidłowe ID NPC
-            if (!CornerBotHelper.TryGetCornerBotIds(botIds, out correctBotIds))
+            if (!CornerBotHelper.TryGetCornerBotIds(botIds, out var correctBotIds))
             {
                 sender.Notify("Podano dane w nieprawidłowym formacie. Lub podany NPC nie istnieje.");
                 return;
@@ -53,13 +50,10 @@ namespace Serverside.Corners
             FullPosition position = null;
             List<FullPosition> botPositions = new List<FullPosition>();
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            void Handler(Client o, string message)
             {
                 if (position == null && o == sender && message == "tu")
                 {
-                    cancel.Cancel = true;
                     position = new FullPosition
                     {
                         Position = new Vector3
@@ -83,7 +77,6 @@ namespace Serverside.Corners
                 }
                 else if (position != null && o == sender && message == "/poz")
                 {
-                    cancel.Cancel = true;
                     botPositions.Add(new FullPosition
                     {
                         Position = new Vector3
@@ -106,7 +99,7 @@ namespace Serverside.Corners
                 }
                 else if (position != null && botPositions.Count != 0 && o == sender && message == "zakoncz")
                 {
-                    CornerModel corner = new CornerModel
+                    CornerModel data = new CornerModel
                     {
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                         Position = position,
@@ -114,11 +107,11 @@ namespace Serverside.Corners
                         BotPositions = botPositions
                     };
                     //Dodajemy nowy plik .xml
-                    XmlHelper.AddXmlObject(corner, Constant.ServerInfo.XmlDirectory + @"Corners\");
-                    Corners.Add(new CornerEntity(Event, corner));
+                    XmlHelper.AddXmlObject(data, Constant.ServerInfo.XmlDirectory + @"Corners\");
+                    var corner = new CornerEntity(data);
+                    Corners.Add(corner);
 
                     sender.Notify("Dodawanie rogu zakończyło się ~h~~g~pomyślnie.");
-                    Event.OnChatMessage -= Handler;
                 }
                 else if (botPositions.Count != 0 && position != null && o == sender && message == "usun")
                 {

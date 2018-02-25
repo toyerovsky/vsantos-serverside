@@ -14,8 +14,7 @@ namespace Serverside.Entities.Core.Item
         /// <summary>
         /// Pierwszy parametr to drugtype
         /// </summary>
-        /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Drug(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public Drug(ItemModel itemModel) : base(itemModel) { }
     }
 }

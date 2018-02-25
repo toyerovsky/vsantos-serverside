@@ -17,15 +17,13 @@ namespace Serverside.Entities.Core.Item
         public string Name { get; }
 
         protected ItemModel DbModel { get; }
-        protected EventClass Events { get; }
-
+        
         public virtual string ItemInfo => $"Ten przedmiot to: {DbModel.Name} o Id: {DbModel.Id}";
 
         public virtual string UseInfo { get; }
     
-        protected Item(EventClass events, ItemModel itemModel)
+        protected Item(ItemModel itemModel)
         {
-            Events = events;
             DbModel = itemModel;
 
             Id = DbModel.Id;

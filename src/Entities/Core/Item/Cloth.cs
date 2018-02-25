@@ -14,9 +14,8 @@ namespace Serverside.Entities.Core.Item
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Cloth(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public Cloth(ItemModel itemModel) : base(itemModel) { }
 
         public override void UseItem(AccountEntity player)
         {

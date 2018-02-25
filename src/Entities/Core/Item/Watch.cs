@@ -18,9 +18,8 @@ namespace Serverside.Entities.Core.Item
         /// <summary>
         /// Brak parametrów
         /// </summary>
-        /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Watch(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public Watch(ItemModel itemModel) : base(itemModel) { }
 
         public override void UseItem(AccountEntity player)
         {

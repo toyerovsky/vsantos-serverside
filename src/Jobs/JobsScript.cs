@@ -36,19 +36,16 @@ namespace Serverside.Jobs
         {
             string jsonDir = ServerInfo.JsonDirectory;
 
-            var dustmanJob = new DustmanJob(Event, "Śmieciarz", 500, $"{jsonDir}DustmanVehicles\\");
+            var dustmanJob = new DustmanJob("Śmieciarz", 500, $"{jsonDir}DustmanVehicles\\");
 
-            var greenkeeperJob = new GreenkeeperJob(Event, "Greenkeeper", 400, $"{jsonDir}GreenkeeperVehicles\\");
+            var greenkeeperJob = new GreenkeeperJob("Greenkeeper", 400, $"{jsonDir}GreenkeeperVehicles\\");
 
-            var courierJob = new CourierJob(Event, "Kurier", 500, $"{jsonDir}CourierVehicles\\");
+            var courierJob = new CourierJob("Kurier", 500, $"{jsonDir}CourierVehicles\\");
 
             Jobs = new List<Job>
             {
                 dustmanJob, greenkeeperJob, courierJob
             };
-
-            Event.OnResourceStart += API_OnResourceStart;
-            //NAPI.onUpdate += OnUpdate;   
         }
 
         private void API_OnResourceStart()
@@ -130,9 +127,8 @@ namespace Serverside.Jobs
             sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string command, CancelEventArgs cancel)
+            
+            void Handler(Client o, string command)
             {
                 if (o == sender && command == "tu")
                 {
@@ -147,7 +143,6 @@ namespace Serverside.Jobs
                     XmlHelper.AddXmlObject(garbage, $@"{ServerInfo.XmlDirectory}JobGarbages\");
                     Garbages.Add(garbage);
                     sender.Notify("Dodawanie śmietnika zakończyło się pomyślnie.");
-                    Event.OnChatMessage -= Handler;
                 }
             }
         }
@@ -163,9 +158,7 @@ namespace Serverside.Jobs
 
             sender.Notify("Wsiądź do pojazdu a następnie wpisz \"ok\".");
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string command, CancelEventArgs cancel)
+            void Handler(Client o, string command)
             {
                 if (o == sender && command == "ok")
                 {
@@ -180,7 +173,6 @@ namespace Serverside.Jobs
                     AddVehicleToJob(vehicle.DbModel, type);
 
                     o.Notify("Dodawanie auta do pracy zakończyło się ~h~ ~g~pomyślnie.");
-                    Event.OnChatMessage -= Handler;
                 }
             }
         }
@@ -189,25 +181,28 @@ namespace Serverside.Jobs
         {
             if (type == JobType.Dustman)
             {
-                var vehicle = new DustmanVehicleEntity(Event, data);
+                var vehicle = new DustmanVehicleEntity(data);
+                vehicle.Spawn();
                 var job = (DustmanJob)Jobs.First(
-                    x => x.GetType() == typeof(DustmanJob));
+                    x => x is DustmanJob);
                 job.Vehicles.Add(vehicle);
                 JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
             }
             else if (type == JobType.Greenkeeper)
             {
-                var vehicle = new GreenkeeperVehicle(Event, data);
+                var vehicle = new GreenkeeperVehicle(data);
+                vehicle.Spawn();
                 var job = (GreenkeeperJob)Jobs.First(
-                    x => x.GetType() == typeof(GreenkeeperJob));
+                    x => x is GreenkeeperJob);
                 job.Vehicles.Add(vehicle);
                 JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
             }
             else if (type == JobType.Courier)
             {
-                var vehicle = new CourierVehicle(Event, data);
+                var vehicle = new CourierVehicle(data);
+                vehicle.Spawn();
                 var job = (CourierJob)Jobs.First
-                    (x => x.GetType() == typeof(CourierJob));
+                    (x => x is CourierJob);
                 JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
             }
         }

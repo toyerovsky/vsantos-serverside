@@ -21,7 +21,7 @@ namespace Serverside.Entities.Core.Item
         /// <summary>
         /// Pierwszy parametr to Hash broni, a drugi to ilość amunicji
         /// </summary>
-        public Weapon(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public Weapon(ItemModel itemModel) : base(itemModel) { }
 
         public override void UseItem(AccountEntity player)
         {
@@ -38,17 +38,15 @@ namespace Serverside.Entities.Core.Item
                 NAPI.Player.RemovePlayerWeapon(player.Client, WeaponHash);
 
                 player.CharacterEntity.ItemsInUse.Remove(this);
-
-                Events.OnPlayerDisconnected -= OnPlayerDisconnected;
-                Events.OnPlayerWeaponSwitch -= OnPlayerWeaponSwitch;
+                
+                AccountEntity.AccountLoggedOut -= OnAccountLoggedOut;
             }
             else
             {
                 NAPI.Player.GivePlayerWeapon(player.Client, WeaponHash, Ammo);
                 player.CharacterEntity.ItemsInUse.Add(this);
 
-                Events.OnPlayerDisconnected += OnPlayerDisconnected;
-                Events.OnPlayerWeaponSwitch += OnPlayerWeaponSwitch;
+                AccountEntity.AccountLoggedOut += OnAccountLoggedOut;
             }
         }
 
@@ -57,7 +55,7 @@ namespace Serverside.Entities.Core.Item
 
         }
 
-        private void OnPlayerDisconnected(Client sender, byte type, string reason)
+        private void OnAccountLoggedOut(Client sender, AccountEntity account)
         {
             if (DbModel.ItemType == ItemType.Weapon)
             {
@@ -65,7 +63,7 @@ namespace Serverside.Entities.Core.Item
                     DbModel.SecondParameter = NAPI.Player.GetPlayerWeaponAmmo(sender, (WeaponHash)DbModel.FirstParameter);
                 Save();
             }
-            Events.OnPlayerDisconnected -= OnPlayerDisconnected;
+            AccountEntity.AccountLoggedOut -= OnAccountLoggedOut;
         }
     }
 }

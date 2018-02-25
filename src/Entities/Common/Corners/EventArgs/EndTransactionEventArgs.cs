@@ -4,7 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Corners.EventArgs
+namespace Serverside.Entities.Common.Corners.EventArgs
 {
     public class EndTransactionEventArgs : System.EventArgs
     {

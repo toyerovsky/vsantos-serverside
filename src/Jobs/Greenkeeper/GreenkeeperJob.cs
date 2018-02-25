@@ -16,12 +16,14 @@ namespace Serverside.Jobs.Greenkeeper
     {
         public List<GreenkeeperVehicle> Vehicles { get; set; } = new List<GreenkeeperVehicle>();
 
-        public GreenkeeperJob(EventClass events, string jobName, decimal moneyLimit, string jsonDirectory) :
-            base(events, jobName, moneyLimit, jsonDirectory)
+        public GreenkeeperJob(string jobName, decimal moneyLimit, string jsonDirectory) :
+            base(jobName, moneyLimit, jsonDirectory)
         {
-            foreach (var vehicleModel in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
+            foreach (var vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
             {
-                Vehicles.Add(new GreenkeeperVehicle(Events, vehicleModel));
+                var vehicle = new GreenkeeperVehicle(vehicleData);
+                vehicle.Spawn();
+                Vehicles.Add(vehicle);
             }
         }
     }

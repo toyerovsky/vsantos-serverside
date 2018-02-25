@@ -18,10 +18,9 @@ namespace Serverside.Jobs.DustMan
     {
         private DustmanWorker WorkerInVehicle { get; set; }
 
-        public DustmanVehicleEntity(EventClass events, VehicleModel model) : base(events, model)
+        public DustmanVehicleEntity(VehicleModel model) : base(model)
         {
-            Events.OnPlayerEnterVehicle += Events_OnPlayerEnterVehicle;
-            Events.OnVehicleDamage += Events_OnVehicleDamage;
+
         }
 
         private void Events_OnPlayerEnterVehicle(Client player, Vehicle vehicle, sbyte seatId)
@@ -34,7 +33,7 @@ namespace Serverside.Jobs.DustMan
 
             player.Notify("Pojazd do którego wsiadłeś zapewnił Ci pracodawca. Jesteś zobowiązany umową do pokrycia wszelkich strat.");
 
-            WorkerInVehicle = new DustmanWorker(Events, player.GetAccountEntity(), this);
+            WorkerInVehicle = new DustmanWorker(player.GetAccountEntity(), this);
             WorkerInVehicle.Start();
         }
 

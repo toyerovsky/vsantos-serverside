@@ -14,8 +14,6 @@ namespace Serverside.Entities.Base
 {
     public class PedEntity : IGameEntity
     {
-        public EventClass Events { get; set; }
-
         public string Name { get; set; }
         public PedHash PedHash { get; set; }
 
@@ -26,9 +24,8 @@ namespace Serverside.Entities.Base
         protected FullPosition SpawnPosition { get; set; }
         protected Ped BotHandle { get; set; }
 
-        public PedEntity(EventClass events, string name, PedHash pedHash, FullPosition spawnPosition)
+        public PedEntity(string name, PedHash pedHash, FullPosition spawnPosition)
         {
-            Events = events;
             Name = name;
             PedHash = pedHash;
             SpawnPosition = spawnPosition;

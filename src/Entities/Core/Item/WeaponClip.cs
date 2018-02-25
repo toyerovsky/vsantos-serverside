@@ -20,7 +20,7 @@ namespace Serverside.Entities.Core.Item
         /// </summary>
         /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public WeaponClip(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public WeaponClip(ItemModel itemModel) : base(itemModel) { }
 
         public override void UseItem(AccountEntity player)
         {

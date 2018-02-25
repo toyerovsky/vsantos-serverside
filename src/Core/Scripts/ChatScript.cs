@@ -19,18 +19,10 @@ namespace Serverside.Core.Scripts
 {
     public class ChatScript : Script
     {
-
-
-        public ChatScript()
-        {
-            Event.OnChatMessage += API_onChatMessageHandler;
-        }
-
         public static event SaidEventHandler OnPlayerSaid;
 
-        private void API_onChatMessageHandler(Client sender, string message, CancelEventArgs e)
+        private void API_onChatMessageHandler(Client sender, string message)
         {
-            e.Cancel = true;
             if (sender.GetAccountEntity() == null || !sender.GetAccountEntity().CharacterEntity.CanTalk) return;
 
             if (sender.GetAccountEntity().CharacterEntity.CurrentCellphone != null)

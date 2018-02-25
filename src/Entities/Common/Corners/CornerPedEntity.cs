@@ -10,18 +10,17 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Constant;
 using Serverside.Core;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
-using Serverside.Corners.EventArgs;
 using Serverside.Entities.Base;
+using Serverside.Entities.Common.Corners.EventArgs;
 using Serverside.Entities.Core;
 using Serverside.Entities.Core.Item;
 
-namespace Serverside.Corners
+namespace Serverside.Entities.Common.Corners
 {
     public class CornerPedEntity : PedEntity
     {
@@ -61,7 +60,7 @@ namespace Serverside.Corners
             }
         }
 
-        public CornerPedEntity(EventClass events, string name, PedHash pedHash, FullPosition spawnPosition, List<FullPosition> nextPositions, DrugType drugType, decimal moneyCount, string greeting, string goodFarewell, string badFarewell, AccountEntity seller, int botId) : base(events, name, pedHash, spawnPosition)
+        public CornerPedEntity(string name, PedHash pedHash, FullPosition spawnPosition, List<FullPosition> nextPositions, DrugType drugType, decimal moneyCount, string greeting, string goodFarewell, string badFarewell, AccountEntity seller, int botId) : base(name, pedHash, spawnPosition)
         {
             BotId = botId;
             NextPositions = nextPositions;

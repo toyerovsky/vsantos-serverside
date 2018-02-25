@@ -23,7 +23,7 @@ namespace Serverside.Entities.Common.Atm
         public AtmModel Data { get; set; }
         public Blip AtmBlip { get; set; }
 
-        public AtmEntity(EventClass events, AtmModel data) : base(events)
+        public AtmEntity(AtmModel data)
         {
             Data = data;
         }

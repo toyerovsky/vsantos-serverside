@@ -28,21 +28,13 @@ namespace Serverside.Core.Login
 
         public LoginScript()
         {
-            Event.OnPlayerConnected += EventOnOnPlayerConnected;
-            Event.OnPlayerConnect += Event_OnPlayerConnect;
             AccountEntity.AccountLoggedIn += RPLogin_OnPlayerLogin;
         }
 
-        private void EventOnOnPlayerConnected(Client client, CancelEventArgs cancelEventArgs)
+        private void EventOnOnPlayerConnected(Client client)
         {
             client.Dimension = (uint)Dimension.Login;
             client.FreezePosition = true;
-        }
-
-        private void Event_OnPlayerConnect(Client client, CancelEventArgs cancel)
-        {
-            if (!client.IsCeFenabled)
-                cancel.Cancel = true;
         }
 
         private void Event_OnClientEventTrigger(Client player, string eventName, params object[] args)

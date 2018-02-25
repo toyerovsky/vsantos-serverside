@@ -23,8 +23,7 @@ namespace Serverside.Entities.Common.BusStop
         public ColShape ColShape { get; private set; }
         public TextLabel NameLabel { get; set; }
 
-        public BusStopEntity(EventClass events, BusStopModel data)
-            : base(events)
+        public BusStopEntity(BusStopModel data)
         {
             Data = data;
         }

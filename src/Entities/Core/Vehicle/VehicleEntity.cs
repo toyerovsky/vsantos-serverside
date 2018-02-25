@@ -21,13 +21,11 @@ namespace Serverside.Entities.Core.Vehicle
 {
     public class VehicleEntity : GameEntity, IDbEntity<VehicleModel>, IOfferable
     {
-        public long VehicleId => DbModel.Id;
         public GTANetworkAPI.Vehicle GameVehicle { get; set; }
         public VehicleModel DbModel { get; set; }
         public Description Description;
 
-        public VehicleEntity(EventClass events, VehicleModel model)
-            : base(events)
+        public VehicleEntity(VehicleModel model)
         {
             DbModel = model;
             Initialize();
@@ -76,7 +74,7 @@ namespace Serverside.Entities.Core.Vehicle
             Save();
         }
 
-        public static VehicleEntity Create(EventClass events, FullPosition spawnPosition, VehicleHash hash, string numberplate, int numberplatestyle, AccountModel creator, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0f, float engineTorqueMultiplier = 0f, CharacterModel character = null, GroupModel groupModel = null)
+        public static VehicleEntity Create(FullPosition spawnPosition, VehicleHash hash, string numberplate, int numberplatestyle, AccountModel creator, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0f, float engineTorqueMultiplier = 0f, CharacterModel character = null, GroupModel groupModel = null)
         {
             VehicleModel vehicleModel = new VehicleModel
             {
@@ -115,7 +113,7 @@ namespace Serverside.Entities.Core.Vehicle
                 }
             }
 
-            return new VehicleEntity(events, vehicleModel)
+            return new VehicleEntity(vehicleModel)
             {
                 _nonDbVehicle = nonDbVehicle
             };
@@ -223,7 +221,7 @@ namespace Serverside.Entities.Core.Vehicle
                     return 70.0f;
                 case VehicleClass.Sedans:
                     return 80.0f;
-                case VehicleClass.SuVs:
+                case VehicleClass.Suv:
                     return 85.0f;
                 case VehicleClass.Coupe:
                     return 60.0f;

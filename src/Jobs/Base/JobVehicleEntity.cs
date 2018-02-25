@@ -16,7 +16,7 @@ namespace Serverside.Jobs.Base
 {
     public abstract class JobVehicleEntity : VehicleEntity, IXmlObject
     {
-        protected JobVehicleEntity(EventClass events, VehicleModel model) : base(events, model)
+        protected JobVehicleEntity(VehicleModel model) : base(model)
         {
         }
 

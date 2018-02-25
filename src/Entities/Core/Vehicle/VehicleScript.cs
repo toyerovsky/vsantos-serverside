@@ -42,7 +42,7 @@ namespace Serverside.Entities.Core.Vehicle
                     var vehicle = sender.GetAccountEntity().CharacterEntity.DbModel.Vehicles
                         .Single(v => v.Id == (long)sender.GetData("SelectedVehicleID"));
 
-                    vehicleEntity = new VehicleEntity(Event, vehicle);
+                    vehicleEntity = new VehicleEntity(vehicle);
 
                     sender.TriggerEvent("DrawVehicleComponents", vehicleEntity.GameVehicle.Position,
                         GetVehicleBlip((VehicleClass)vehicleEntity.GameVehicle.Class), 24);

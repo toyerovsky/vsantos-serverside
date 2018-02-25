@@ -18,11 +18,8 @@ namespace Serverside.Jobs.Greenkeeper
     {
         private GreenkeeperWorker WorkerInVehicle { get; set; }
 
-        public GreenkeeperVehicle(EventClass events, VehicleModel model) : base(events, model)
+        public GreenkeeperVehicle(VehicleModel model) : base(model)
         {
-            Events.OnPlayerEnterVehicle += Events_OnPlayerEnterVehicle;
-            Events.OnVehicleDamage += Events_OnVehicleDamage;
-            Events.OnPlayerExitVehicle += Events_OnPlayerExitVehicle;
         }
         
         private void Events_OnVehicleDamage(Vehicle entity, float lossFirst, float lossSecond)
@@ -41,7 +38,7 @@ namespace Serverside.Jobs.Greenkeeper
 
             player.Notify("Pojazd do którego wsiadłeś zapewnił Ci pracodawca. Jesteś zobowiązany umową do pokrycia wszelkich strat.");
 
-            WorkerInVehicle = new GreenkeeperWorker(Events, player.GetAccountEntity(), this);
+            WorkerInVehicle = new GreenkeeperWorker(player.GetAccountEntity(), this);
             WorkerInVehicle.Start();
         }
 

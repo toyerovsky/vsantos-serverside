@@ -14,7 +14,7 @@ namespace Serverside.Entities.Peds.Employer
 {
     public sealed class EmployerPedEntity : PedEntity
     {
-        public EmployerPedEntity(EventClass events, string name, PedHash pedHash, FullPosition position) : base(events, name, pedHash, position)
+        public EmployerPedEntity(string name, PedHash pedHash, FullPosition position) : base(name, pedHash, position)
         {
         }
 

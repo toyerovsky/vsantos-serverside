@@ -47,7 +47,7 @@ namespace Serverside.Entities.Core.Building
                         var internalPosition = Constant.Items.DefaultInteriors.First(i => i.Name == (string)arguments[2]).InternalPosition;
                         Vector3 externalPosition = sender.GetData("AdminDoorPosition");
 
-                        var building = BuildingEntity.Create(Event, sender.GetAccountEntity().DbModel, (string)arguments[0], Convert.ToDecimal(arguments[1]), internalPosition, externalPosition, (bool)arguments[3]);
+                        var building = BuildingEntity.Create(sender.GetAccountEntity().DbModel, (string)arguments[0], Convert.ToDecimal(arguments[1]), internalPosition, externalPosition, (bool)arguments[3]);
 
                         building.Save();
 
@@ -214,13 +214,10 @@ namespace Serverside.Entities.Core.Building
             sender.Notify("Ustaw się w pozycji markera, a następnie wpisz /tu.");
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            void Handler(Client o, string message)
             {
                 if (o == sender && message == "/tu")
                 {
-                    cancel.Cancel = true;
                     if (EntityManager.GetBuildings().Any(b => b.BuildingMarker.Position.DistanceTo(o.Position) < 5))
                     {
                         sender.Notify("W bliskim otoczeniu tego budynku znajduje się już inny budynek.");
@@ -230,7 +227,6 @@ namespace Serverside.Entities.Core.Building
                     o.SetData("AdminDoorPosition", o.Position);
                     sender.TriggerEvent("ShowAdminBuildingMenu", JsonConvert.SerializeObject(Constant.Items.DefaultInteriors));
                     sender.Notify("Dodawanie budynku zakończyło się ~h~~g~pomyślnie.");
-                    Event.OnChatMessage -= Handler;
                 }
             }
         }

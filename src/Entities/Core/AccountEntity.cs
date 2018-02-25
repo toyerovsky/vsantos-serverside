@@ -17,8 +17,11 @@ namespace Serverside.Entities.Core
 {
     public class AccountEntity : IDbEntity<AccountModel>, IDisposable
     {
+        public delegate void AccountLogOutEventHandler(Client sender, AccountEntity account);
+
         public static event AccountLoginEventHandler AccountLoggedIn;
         public static event EventHandler<ServerIdChangeEventArgs> ServerIdChanged;
+        public static event AccountLogOutEventHandler AccountLoggedOut;
 
         public long AccountId => DbModel.UserId;
         public AccountModel DbModel { get; set; }
@@ -153,6 +156,8 @@ namespace Serverside.Entities.Core
             Save();
 
             CharacterEntity?.Dispose();
+
+            AccountLoggedOut?.Invoke(Client, this);
         }
     }
 }

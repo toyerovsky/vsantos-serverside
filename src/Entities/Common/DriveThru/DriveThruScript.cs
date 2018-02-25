@@ -24,11 +24,6 @@ namespace Serverside.Entities.Common.DriveThru
     {
         private List<DriveThruEntity> DriveThrus { get; set; } = new List<DriveThruEntity>();
 
-        public DriveThruScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
         private void OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             if (eventName == "OnPlayerDriveThruBought")
@@ -61,11 +56,14 @@ namespace Serverside.Entities.Common.DriveThru
             }
         }
 
+        [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (var driveThru in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
+            foreach (var data in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
             {
-                DriveThrus.Add(new DriveThruEntity(Event, driveThru));
+                var driveThru = new DriveThruEntity(data);
+                driveThru.Spawn();
+                DriveThrus.Add(driveThru);
             }
         }
 
@@ -83,25 +81,22 @@ namespace Serverside.Entities.Common.DriveThru
 
             Vector3 center = null;
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            void Handler(Client o, string message)
             {
                 if (center == null && o == sender && message == "tu")
                 {
-                    cancel.Cancel = true;
                     center = o.Position;
-                    var driveThru = new DriveThruModel
+                    var data = new DriveThruModel
                     {
                         Position = o.Position,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                     };
-                    XmlHelper.AddXmlObject(driveThru, $"{ServerInfo.XmlDirectory}DriveThrus\\");
+                    XmlHelper.AddXmlObject(data, $"{ServerInfo.XmlDirectory}DriveThrus\\");
 
                     sender.Notify("Dodawanie DriveThru zakończyło się ~g~~h~pomyślnie.");
-                    DriveThrus.Add(new DriveThruEntity(Event, driveThru));
-
-                    Event.OnChatMessage -= Handler;
+                    var driveThru = new DriveThruEntity(data);
+                    driveThru.Spawn();
+                    DriveThrus.Add(driveThru);                    
                 }
             }
         }

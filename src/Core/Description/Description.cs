@@ -15,8 +15,7 @@ namespace Serverside.Core.Description
     {
         private TextLabel DescriptionLabel { get; }
 
-        public Description(EventClass events, AccountEntity player)
-            : base(events)
+        public Description(AccountEntity player)
         {
             DescriptionLabel = NAPI.TextLabel.CreateTextLabel("", player.Client.Position, 10f, 1f, 1, new Color(255, 255, 255), true,
                 player.Client.Dimension);

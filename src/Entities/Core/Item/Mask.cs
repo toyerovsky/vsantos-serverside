@@ -17,9 +17,8 @@ namespace Serverside.Entities.Core.Item
         /// <summary>
         /// Pierwszy parametr to liczba liczba użyć do zniszczenia
         /// </summary>
-        /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Mask(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public Mask(ItemModel itemModel) : base(itemModel) { }
 
         public override void UseItem(AccountEntity player)
         {

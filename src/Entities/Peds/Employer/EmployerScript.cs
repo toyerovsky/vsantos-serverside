@@ -17,12 +17,8 @@ namespace Serverside.Entities.Peds.Employer
         private FullPosition EmployerPosition => new FullPosition(new Vector3(1750f, -1580f, 113f), new Vector3(1f, 1f, 1f));
         private EmployerPedEntity Employer { get; set; }
 
-        public EmployerScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
-        private void OnResourceStart()
+        [ServerEvent(Event.ResourceStart)]
+        public void OnResourceStart()
         {
             //FixMe na razie nie ma wsparcia dla przechodniów po stronie serwera
             //Employer = new EmployerPedEntity(Event, "John Smith", PedHash.Business01AMM, EmployerPosition);

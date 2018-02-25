@@ -18,9 +18,8 @@ namespace Serverside.Entities.Core.Item
         /// <summary>
         /// Pierwszy parametr to liczba oczek na kostce
         /// </summary>
-        /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Dice(EventClass events, ItemModel itemModel) : base(events, itemModel) { }
+        public Dice(ItemModel itemModel) : base(itemModel) { }
 
         public override void UseItem(AccountEntity player)
         {

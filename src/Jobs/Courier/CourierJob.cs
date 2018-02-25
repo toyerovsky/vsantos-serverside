@@ -16,11 +16,13 @@ namespace Serverside.Jobs.Courier
     {
         public List<CourierVehicle> Vehicles { get; set; } = new List<CourierVehicle>();
 
-        public CourierJob(EventClass events, string jobName, decimal moneyLimit, string jsonDirectory) : base(events, jobName, moneyLimit, jsonDirectory)
+        public CourierJob(string jobName, decimal moneyLimit, string jsonDirectory) : base(jobName, moneyLimit, jsonDirectory)
         {
             foreach (var vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
             {
-                Vehicles.Add(new CourierVehicle(Events, vehicleData));
+                var courierVehicle = new CourierVehicle(vehicleData);
+                courierVehicle.Spawn();
+                Vehicles.Add(courierVehicle);
             }
         }
     }

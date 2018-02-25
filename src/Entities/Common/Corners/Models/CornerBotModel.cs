@@ -9,7 +9,7 @@ using GTANetworkAPI;
 using Serverside.Core.Interfaces;
 using Serverside.Entities.Core.Item;
 
-namespace Serverside.Corners.Models
+namespace Serverside.Entities.Common.Corners.Models
 {
     [Serializable]
     public class CornerBotModel : IXmlObject

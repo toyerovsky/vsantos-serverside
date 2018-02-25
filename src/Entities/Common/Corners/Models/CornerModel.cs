@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Serverside.Core;
 using Serverside.Core.Interfaces;
 
-namespace Serverside.Corners.Models
+namespace Serverside.Entities.Common.Corners.Models
 {
     [Serializable]
     public class CornerModel : IXmlObject

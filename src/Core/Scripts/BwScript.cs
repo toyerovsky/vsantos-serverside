@@ -10,19 +10,14 @@ using GTANetworkAPI;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
+using Serverside.Entities.Core;
 
 namespace Serverside.Core.Scripts
 {
     public class BwScript : Script
     {
-        public BwScript()
+        public void Event_OnPlayerDeath(Client sender, Client killer, WeaponHash reason)
         {
-            Event.OnPlayerDeath += Event_OnPlayerDeath;
-        }
-
-        private void Event_OnPlayerDeath(Client sender, Client killer, uint reason, CancelEventArgs cancel)
-        {
-            cancel.Spawn = false;
 
             var player = sender.GetAccountEntity();
 
@@ -41,7 +36,7 @@ namespace Serverside.Core.Scripts
             Timer timer = new Timer(1000);
             timer.Start();
 
-            Event.OnPlayerDisconnected += (client, type, s) =>
+            AccountEntity.AccountLoggedOut += (client, account) =>
             {
                 if (sender == client)
                     timer.Dispose();
@@ -100,7 +95,7 @@ namespace Serverside.Core.Scripts
             };
         }
 
-        private int GetTimeToRespawn(uint reason)
+        private int GetTimeToRespawn(WeaponHash reason)
         {
             //TODO: Wyznaczyæ czasy odrodzenia w zale¿noœci od broni
             return 5;
@@ -111,19 +106,12 @@ namespace Serverside.Core.Scripts
         [Command("akceptujsmierc")]
         public void CharacterKill(Client sender)
         {
-            Event.OnChatMessage += Handler;
-            sender.TriggerEvent("SendNotification", "Raz uœmierconej postaci nie mo¿na odblokowaæ. Aby kontynuowaæ wpisz \"akceptujsmierc\"");
-
-            void Handler(Client o, string command, CancelEventArgs cancel)
+            if (sender.HasData("CharacterBW"))
             {
-                if (o == sender && command == "akceptujsmierc")
-                {
-                    cancel.Cancel = true;
-                    var player = sender.GetAccountEntity();
-                    player.CharacterEntity.DbModel.IsAlive = false;
-                    player.Save();
-                    sender.Kick("CK");
-                }
+                var player = sender.GetAccountEntity();
+                player.CharacterEntity.DbModel.IsAlive = false;
+                player.Save();
+                sender.Kick("CK");
             }
         }
 

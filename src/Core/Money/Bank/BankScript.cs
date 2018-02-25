@@ -21,16 +21,12 @@ namespace Serverside.Core.Money.Bank
     {
         private List<AtmEntity> Atms { get; set; } = new List<AtmEntity>();
 
-        public BankScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
         private void OnResourceStart()
         {
-            foreach (var atm in XmlHelper.GetXmlObjects<AtmModel>($@"{Constant.ServerInfo.XmlDirectory}Atms\"))
+            foreach (var data in XmlHelper.GetXmlObjects<AtmModel>($@"{Constant.ServerInfo.XmlDirectory}Atms\"))
             {
-                Atms.Add(new AtmEntity(Event, atm));
+                var atm = new AtmEntity(data);
+                Atms.Add(atm);
             }
         }
 
@@ -69,14 +65,12 @@ namespace Serverside.Core.Money.Bank
 
             sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
-            
-            Event.OnChatMessage += Handler;
 
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            void Handler(Client o, string message)
             {
                 if (o == sender && message == "tu")
                 {
-                    AtmModel atm = new AtmModel
+                    AtmModel data = new AtmModel
                     {
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                         Position = new FullPosition
@@ -96,10 +90,12 @@ namespace Serverside.Core.Money.Bank
                             }
                         }
                     };
-                    XmlHelper.AddXmlObject(atm, $@"{Constant.ServerInfo.XmlDirectory}Atms\");
-                    Atms.Add(new AtmEntity(Event, atm)); //Nowa instancja bankomatu spawnuje go w świecie gry
+                    XmlHelper.AddXmlObject(data, $@"{Constant.ServerInfo.XmlDirectory}Atms\");
+                    var atm = new AtmEntity(data);
+                    atm.Spawn();
+                    Atms.Add(atm);
                     sender.Notify("Dodawanie bankomatu zakończyło się ~h~~g~pomyślnie.");
-                    Event.OnChatMessage -= Handler;
+
                 }
             }
         }

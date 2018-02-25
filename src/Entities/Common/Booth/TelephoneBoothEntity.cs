@@ -25,7 +25,7 @@ namespace Serverside.Entities.Common.Booth
 
         public bool IncomingCall = false;
 
-        public TelephoneBoothEntity(EventClass events, TelephoneBoothModel data) : base(events)
+        public TelephoneBoothEntity(TelephoneBoothModel data)
         {
             Data = data;
         }

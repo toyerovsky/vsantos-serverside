@@ -171,7 +171,7 @@ namespace Serverside.Groups
                     sender.Notify(
                         $"Wszedłeś na służbę grupy: {group.GetColoredName()}");
 
-                    Event.OnPlayerDisconnected += (client, type, reason) =>
+                    AccountEntity.AccountLoggedOut += (client, account) =>
                     {
                         if (client == sender) dutyTimer.Dispose();
                     };

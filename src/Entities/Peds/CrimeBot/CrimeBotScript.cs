@@ -35,13 +35,10 @@ namespace Serverside.Entities.Peds.CrimeBot
             FullPosition botPosition = null;
             VehicleEntity botVehicle = null;
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            void Handler(Client o, string message)
             {
                 if (o == sender && message == "tu" && botPosition == null)
                 {
-                    cancel.Cancel = true;
                     botPosition = new FullPosition
                     {
                         Position = new Vector3
@@ -64,14 +61,13 @@ namespace Serverside.Entities.Peds.CrimeBot
                     NAPI.ClientEvent.TriggerClientEvent(sender, "DrawAddingCrimeBotComponents", new Vector3(botPosition.Position.X, botPosition.Position.Y, botPosition.Position.Z - 1));
                     sender.Notify("Ustaw pojazd w wybranej pozycji następnie wpisz \"tu\".");
 
-                    botVehicle = VehicleEntity.Create(Event, new FullPosition(new Vector3(sender.Position.X + 2, sender.Position.Y + 2, sender.Position.Z), sender.Rotation), VehicleHash.Sentinel, name, 0, sender.GetAccountEntity().DbModel, new Color(0, 0, 0), new Color(0, 0, 0));
+                    botVehicle = VehicleEntity.Create(new FullPosition(new Vector3(sender.Position.X + 2, sender.Position.Y + 2, sender.Position.Z), sender.Rotation), VehicleHash.Sentinel, name, 0, sender.GetAccountEntity().DbModel, new Color(0, 0, 0), new Color(0, 0, 0));
 
                     NAPI.Player.SetPlayerIntoVehicle(sender, botVehicle.GameVehicle, -1);
 
                 }
                 else if (o == sender && message == "tu" && botPosition != null && botVehicle != null)
                 {
-                    cancel.Cancel = true;
 
                     var botVehiclePosition = new FullPosition
                     {
@@ -105,7 +101,6 @@ namespace Serverside.Entities.Peds.CrimeBot
                     sender.Notify("Dodawanie pozycji bota zakończyło się ~h~~g~pomyślnie!");
                     NAPI.Player.WarpPlayerOutOfVehicle(sender);
                     botVehicle.Dispose();
-                    Event.OnChatMessage -= Handler;
                 }
             };
         }
@@ -159,7 +154,7 @@ namespace Serverside.Entities.Peds.CrimeBot
                         var crimeBotData = repository.Get(group.DbModel);
                         var position = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\")[Convert.ToInt32(arguments[0])];
 
-                        group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition, Event, crimeBotData.Name, crimeBotData.Model, position.BotPosition);
+                        group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition, crimeBotData.Name, crimeBotData.Model, position.BotPosition);
                         group.CrimePedEntity.Spawn();
                         sender.TriggerEvent("DrawCrimeBotComponents", position.BotPosition.Position, 500, 2);
                     }

@@ -13,15 +13,12 @@ namespace Serverside.Jobs.Base
     {
         public List<JobWorkerController> Workers { get; set; } = new List<JobWorkerController>();
 
-        public EventClass Events { get; set; }
-
         public string JobName { get; set; }
         public decimal MoneyLimit { get; set; }
         public string JsonDirectory { get; set; }
 
-        protected Job(EventClass events, string jobName, decimal moneyLimit, string xmlDirectory)
+        protected Job(string jobName, decimal moneyLimit, string xmlDirectory)
         {
-            Events = events;
             JobName = jobName;
             MoneyLimit = moneyLimit;
             JsonDirectory = xmlDirectory;

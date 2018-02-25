@@ -36,9 +36,8 @@ namespace Serverside.Entities.Core.Item
         /// 3 to numer telefonu
         /// 4 to wygląd
         /// </summary>
-        /// <param name="events"></param>
         /// <param name="itemModel"></param>
-        public Cellphone(EventClass events, ItemModel itemModel) : base(events, itemModel)
+        public Cellphone(ItemModel itemModel) : base(itemModel)
         {
             using (TelephoneMessagesRepository repository = new TelephoneMessagesRepository())
                 Messages = new ObservableCollection<TelephoneMessageModel>(repository.GetAll().Where(m => m.Cellphone.Id == Id));

@@ -45,7 +45,7 @@ namespace Serverside.Entities.Common.Carshop
                     JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Coupe && v.CarshopTypes.Contains(Data.Type)));
 
                 string suvsJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.SuVs && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Suv && v.CarshopTypes.Contains(Data.Type)));
 
                 string sedansJson =
                     JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Sedans && v.CarshopTypes.Contains(Data.Type)));

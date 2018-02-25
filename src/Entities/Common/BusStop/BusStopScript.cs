@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
+using Serverside.Admin.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization.Xml;
 using Serverside.Entities.Common.BusStop.Models;
@@ -19,16 +20,13 @@ namespace Serverside.Entities.Common.BusStop
     {
         private readonly List<BusStopEntity> _busStops = new List<BusStopEntity>();
 
-        public BusStopScript()
-        {
-            Event.OnResourceStart += Event_onResourceStart;
-        }
-
         private void Event_onResourceStart()
         {
-            foreach (var stop in XmlHelper.GetXmlObjects<BusStopModel>(Constant.ServerInfo.XmlDirectory + @"BusStops\"))
+            foreach (var data in XmlHelper.GetXmlObjects<BusStopModel>(Constant.ServerInfo.XmlDirectory + @"BusStops\"))
             {
-                _busStops.Add(new BusStopEntity(Event, stop));
+                var busStop = new BusStopEntity(data);
+                busStop.Spawn();
+                _busStops.Add(busStop);
             }
         }
 
@@ -69,38 +67,35 @@ namespace Serverside.Entities.Common.BusStop
         [Command("dodajbusbez", GreedyArg = true)]
         public void AddBusStop(Client sender, string name)
         {
-            //if (sender.GetAccountEntity().Model.ServerRank < ServerRank.GameMaster)
-            //{
-            //    sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
-            //    return;
-            //}
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
+            {
+                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
+                return;
+            }
 
             sender.Notify("Ustaw się na środku przystanku aby stworzyć sferyczną strefę o promieniu 5f.");
             sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz /tu.");
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
             Vector3 center = null;
-
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string command, CancelEventArgs cancel)
+            
+            void Handler(Client o, string command)
             {
                 if (center == null && o == sender && command == "/tu")
                 {
-                    cancel.Cancel = true;
                     center = o.Position;
-                    var busStop = new BusStopModel
+                    var data = new BusStopModel
                     {
                         Name = name,
                         Center = center,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                     };
-                    XmlHelper.AddXmlObject(busStop, Constant.ServerInfo.XmlDirectory + @"BusStops\", busStop.Name);
+                    XmlHelper.AddXmlObject(data, Constant.ServerInfo.XmlDirectory + @"BusStops\", data.Name);
 
                     sender.Notify("Dodawanie przystanku zakończyło się pomyślnie.");
-                    _busStops.Add(new BusStopEntity(Event, busStop));
-
-                    Event.OnChatMessage -= Handler;
+                    var busStop = new BusStopEntity(data);
+                    busStop.Spawn();
+                    _busStops.Add(busStop);
                 }
             }
         }

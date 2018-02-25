@@ -12,7 +12,7 @@ namespace Serverside.Jobs.Courier
 {
     public class CourierVehicle : JobVehicleEntity
     {
-        public CourierVehicle(EventClass events, VehicleModel model) : base(events, model)
+        public CourierVehicle(VehicleModel model) : base(model)
         {
         }
 

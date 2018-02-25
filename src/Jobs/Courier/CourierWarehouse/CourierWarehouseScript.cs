@@ -64,9 +64,7 @@ namespace Serverside.Jobs.Courier.CourierWarehouse
 
             sender.Notify("Ustaw się w wybranej pozycji a następnie wpisz \"tu\"");
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            void Handler(Client o, string message)
             {
                 if (o == sender && message == "tu")
                 {
@@ -80,7 +78,6 @@ namespace Serverside.Jobs.Courier.CourierWarehouse
 
                     Warehouses.Add(new CourierWarehouse(warehouse));
                     o.Notify("Dodawanie magazynu do pracy kuriera zakończyło się ~h~ ~g~pomyślnie.");
-                    Event.OnChatMessage -= Handler;
                 }
             }
         }

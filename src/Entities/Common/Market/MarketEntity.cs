@@ -23,7 +23,7 @@ namespace Serverside.Entities.Common.Market
         public PedEntity MarketNpc { get; set; }
         public Blip MarketBlip { get; set; }
 
-        public MarketEntity(EventClass events, Models.Market data) : base(events)
+        public MarketEntity(Models.Market data) : base()
         {
             Data = data;
         }
@@ -37,7 +37,7 @@ namespace Serverside.Entities.Common.Market
                 Constant.Items.ConstantNames.OrderBy(x => random.Next(Constant.Items.ConstantNames
                     .Count)).ElementAt(0);
 
-            MarketNpc = new PedEntity(Events, botInfo.Key, botInfo.Value, new FullPosition(Data.Center, new Vector3(1f, 1f, 1f)));
+            MarketNpc = new PedEntity(botInfo.Key, botInfo.Value, new FullPosition(Data.Center, new Vector3(1f, 1f, 1f)));
 
             ColShape = NAPI.ColShape.CreateCylinderColShape(Data.Center, Data.Radius, 5f);
 

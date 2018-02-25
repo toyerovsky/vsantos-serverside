@@ -24,17 +24,14 @@ namespace Serverside.Entities.Common.Booth
     {
         private List<TelephoneBoothEntity> Booths { get; set; } = new List<TelephoneBoothEntity>();
 
-        public TelephoneBoothScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
-
+        [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (var booth in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Booths")))
+            foreach (var data in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Booths")))
             {
-                //W konstruktorze spawnujemy budkę telefoniczną do gry
-                Booths.Add(new TelephoneBoothEntity(Event, booth));
+                var booth = new TelephoneBoothEntity(data);
+                booth.Spawn();
+                Booths.Add(booth);
             }
         }
 
@@ -115,13 +112,11 @@ namespace Serverside.Entities.Common.Booth
                 sender.Notify("Wprowadzono dane w nieprawidłowym formacie.");
             }
 
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            void Handler(Client o, string message)
             {
                 if (o == sender && message == "/tu")
                 {
-                    TelephoneBoothModel booth = new TelephoneBoothModel
+                    TelephoneBoothModel data = new TelephoneBoothModel
                     {
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                         Position = new FullPosition
@@ -144,10 +139,11 @@ namespace Serverside.Entities.Common.Booth
                         Number = int.Parse(number)
                     };
 
-                    XmlHelper.AddXmlObject(booth, Constant.ServerInfo.XmlDirectory + @"Booths\");
-                    Booths.Add(new TelephoneBoothEntity(Event, booth));
+                    XmlHelper.AddXmlObject(data, Constant.ServerInfo.XmlDirectory + @"Booths\");
+                    var booth = new TelephoneBoothEntity(data);
+                    booth.Spawn();
+                    Booths.Add(booth);
                     sender.Notify("Dodawanie budki zakończyło się ~g~~h~pomyślnie.");
-                    Event.OnChatMessage -= Handler;
                 }
             }
         }

@@ -25,10 +25,9 @@ namespace Serverside.Jobs.DustMan
 
         private ColShape CurrentGarbageColshape { get; set; }
 
-        public DustmanWorker(EventClass events, AccountEntity player, JobVehicleEntity vehicle)
-            : base(events, player, vehicle)
+        public DustmanWorker(AccountEntity player, JobVehicleEntity vehicle)
+            : base(player, vehicle)
         {
-            Events.OnUpdate += OnUpdate;
             Player = player;
             InProgress = true;
             NonVisitedPoints = JobsScript.Garbages;

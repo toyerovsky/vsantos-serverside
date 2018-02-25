@@ -23,10 +23,6 @@ namespace Serverside.Entities.Common.Market
     {
         private static List<MarketEntity> Markets { get; set; } = new List<MarketEntity>();
 
-        public MarketScript()
-        {
-            Event.OnResourceStart += OnResourceStart;
-        }
 
         private void OnClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
         {
@@ -94,9 +90,11 @@ namespace Serverside.Entities.Common.Market
         {
             //TODO: Wczytywanie wszystkich IPL sklepów
 
-            foreach (var market in XmlHelper.GetXmlObjects<Models.Market>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
+            foreach (var data in XmlHelper.GetXmlObjects<Models.Market>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
             {
-                Markets.Add(new MarketEntity(Event, market));
+                var market = new MarketEntity(data);
+                market.Spawn();
+                Markets.Add(market);
             }
         }
 
@@ -128,14 +126,11 @@ namespace Serverside.Entities.Common.Market
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
             Vector3 center = null;
-
-            Event.OnChatMessage += Handler;
-
-            void Handler(Client o, string message, CancelEventArgs cancel)
+            
+            void Handler(Client o, string message)
             {
                 if (center == null && o == sender && message == "/tu")
                 {
-                    cancel.Cancel = true;
                     center = o.Position;
                     sender.Notify("Przejdź do pozycji końca promienia zasięgu i wpisz \"tu.\"");
                 }
@@ -153,8 +148,7 @@ namespace Serverside.Entities.Common.Market
                             Radius = radius
                         };
                         XmlHelper.AddXmlObject(market, ServerInfo.XmlDirectory + @"Markets\", market.Name);
-                        Markets.Add(new MarketEntity(Event, market));
-                        Event.OnChatMessage -= Handler;
+                        Markets.Add(new MarketEntity(market));
                     }
                 }
             }

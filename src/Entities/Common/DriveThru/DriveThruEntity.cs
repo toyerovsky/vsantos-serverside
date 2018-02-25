@@ -20,7 +20,7 @@ namespace Serverside.Entities.Common.DriveThru
         public Marker DriveThruMarker { get; private set; }
         public ColShape ColShape { get; private set; }
 
-        public DriveThruEntity(EventClass events, DriveThruModel data) : base(events)
+        public DriveThruEntity(DriveThruModel data) : base()
         {
             Data = data;
         }

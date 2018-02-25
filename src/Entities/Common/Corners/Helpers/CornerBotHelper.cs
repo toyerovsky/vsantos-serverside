@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Serverside.Core.Serialization.Xml;
-using Serverside.Corners.Models;
+using Serverside.Entities.Common.Corners.Models;
 
-namespace Serverside.Corners.Helpers
+namespace Serverside.Entities.Common.Corners.Helpers
 {
     public class CornerBotHelper
     {
