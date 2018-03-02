@@ -13,6 +13,7 @@ namespace Serverside.Entities.Common.BusStop.Models
     [Serializable]
     public class BusStopModel : IXmlObject
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public Vector3 Center { get; set; }
         public string CreatorForumName { get; set; }

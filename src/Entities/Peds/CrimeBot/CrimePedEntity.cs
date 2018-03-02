@@ -17,12 +17,12 @@ using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
+using Serverside.Economy.Groups.Base;
 using Serverside.Entities.Base;
 using Serverside.Entities.Core;
 using Serverside.Entities.Core.Item;
 using Serverside.Entities.Core.Vehicle;
 using Serverside.Entities.Peds.CrimeBot.Models;
-using Serverside.Groups.Base;
 
 namespace Serverside.Entities.Peds.CrimeBot
 {
@@ -79,7 +79,7 @@ namespace Serverside.Entities.Peds.CrimeBot
 
             BotShape = NAPI.ColShape.CreateCylinderColShape(BotHandle.Position, 3f, 3f);
             BotShape.OnEntityEnterColShape += BotShape_OnEntityEnterColShape;
-            
+
             Timer timer = new Timer(1800000);
             timer.Start();
             timer.Elapsed += (o, e) =>
@@ -158,7 +158,7 @@ namespace Serverside.Entities.Peds.CrimeBot
                         {
                             return;
                         }
-                        
+
                         var field = typeof(CrimeBotModel).GetProperties().Single(f => f.Name == i.DatabaseField);
                         field.SetValue(DbModel, (int)field.GetValue(DbModel) - i.Count);
 
@@ -174,7 +174,7 @@ namespace Serverside.Entities.Peds.CrimeBot
                     repository.Update(DbModel);
                     repository.Save();
                 }
-                
+
                 EndTransaction();
                 Dispose(false);
             }

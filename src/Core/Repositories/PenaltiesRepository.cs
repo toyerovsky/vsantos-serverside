@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,34 +16,44 @@ namespace Serverside.Core.Repositories
 {
     public class PenaltiesRepository : IRepository<PenaltyModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(PenaltyModel model) => Context.Penaltlies.Add(model);
+        public PenaltiesRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public PenaltiesRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(PenaltyModel model) => _context.Penaltlies.Add(model);
 
         public bool Contains(PenaltyModel model)
         {
-            return Context.Penaltlies.Any(penatly => penatly.Id == model.Id);
+            return _context.Penaltlies.Any(penatly => penatly.Id == model.Id);
         }
 
-        public void Update(PenaltyModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(PenaltyModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var penatly = Context.Penaltlies.Find(id);
-            Context.Penaltlies.Remove(penatly);
+            var penatly = _context.Penaltlies.Find(id);
+            _context.Penaltlies.Remove(penatly);
         }
 
         public PenaltyModel Get(long id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<PenaltyModel> GetAll()
         {
-            return Context.Penaltlies
+            return _context.Penaltlies
                 .Include(penatly => penatly.Account)
                 .Include(penatly => penatly.Creator).ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

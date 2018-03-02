@@ -5,12 +5,11 @@
  */
 
 using System.Collections.Generic;
-using GTANetworkInternals;
 using Serverside.Core.Database.Models;
-using Serverside.Core.Serialization.Json;
-using Serverside.Jobs.Base;
+using Serverside.Core.Serialization;
+using Serverside.Economy.Jobs.Base;
 
-namespace Serverside.Jobs.Greenkeeper
+namespace Serverside.Economy.Jobs.Greenkeeper
 {
     public class GreenkeeperJob : Job
     {

@@ -9,14 +9,13 @@ using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
+using Serverside.Economy.Groups.Base;
+using Serverside.Economy.Groups.Enums;
 using Serverside.Entities;
-using Serverside.Entities.Core;
 using Serverside.Entities.Core.Building;
 using Serverside.Entities.Core.Vehicle;
-using Serverside.Groups.Base;
-using Serverside.Groups.Enums;
 
-namespace Serverside.Offers
+namespace Serverside.Economy.Offers
 {
     public class OffersScript : Script
     {
@@ -87,7 +86,7 @@ namespace Serverside.Offers
                 }
                 else if (type == OfferType.Vehicle)
                 {
-                    VehicleEntity vehicle = EntityManager.GetVehicle(sender.Vehicle);
+                    VehicleEntity vehicle = EntityHelper.GetVehicle(sender.Vehicle);
                     if (vehicle == null) return;
 
                     offer = new Offer(sender, getter, vehicle.DbModel, safeMoneyCount);

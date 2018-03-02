@@ -4,7 +4,6 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
@@ -14,16 +13,15 @@ using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
-using Serverside.Jobs.Greenkeeper;
-using Serverside.Core.Serialization.Json;
-using Serverside.Core.Serialization.Xml;
-using Serverside.Jobs.Base;
-using Serverside.Jobs.Courier;
-using Serverside.Jobs.DustMan;
-using Serverside.Jobs.DustMan.Models;
-using Serverside.Jobs.Enums;
+using Serverside.Core.Serialization;
+using Serverside.Economy.Jobs.Base;
+using Serverside.Economy.Jobs.Courier;
+using Serverside.Economy.Jobs.DustMan;
+using Serverside.Economy.Jobs.DustMan.Models;
+using Serverside.Economy.Jobs.Enums;
+using Serverside.Economy.Jobs.Greenkeeper;
 
-namespace Serverside.Jobs
+namespace Serverside.Economy.Jobs
 {
     public class JobsScript : Script
     {

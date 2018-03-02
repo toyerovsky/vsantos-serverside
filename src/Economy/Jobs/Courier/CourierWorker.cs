@@ -4,11 +4,10 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using GTANetworkInternals;
+using Serverside.Economy.Jobs.Base;
 using Serverside.Entities.Core;
-using Serverside.Jobs.Base;
 
-namespace Serverside.Jobs.Courier
+namespace Serverside.Economy.Jobs.Courier
 {
     public class CourierWorker : JobWorkerController
     {

@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Corners.Models;
 
 namespace Serverside.Entities.Common.Corners.Helpers

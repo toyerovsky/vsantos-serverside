@@ -8,7 +8,7 @@ using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 
-namespace Serverside.Offers
+namespace Serverside.Economy.Offers
 {
     public static class OfferActions
     {
@@ -27,6 +27,6 @@ namespace Serverside.Offers
         }
 
         public static void RepairVehicle(Client getter) =>
-            EntityManager.GetVehicle(getter.Vehicle)?.Repair();
+            EntityHelper.GetVehicle(getter.Vehicle)?.Repair();
     }
 }

@@ -6,7 +6,7 @@
 
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
-using Serverside.Core.Money;
+using Serverside.Economy.Money;
 using Serverside.Entities;
 using Serverside.Entities.Core;
 
@@ -43,7 +43,7 @@ namespace Serverside.Core.Extensions
             if (slot > 0 || slot <= 3)
             {
                 slot--;
-                var groups = EntityManager.GetPlayerGroups(client.GetAccountEntity());
+                var groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity());
                 group = slot < groups.Count ? groups[slot] : null;
             }
             return group != null;

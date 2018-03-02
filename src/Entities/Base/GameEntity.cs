@@ -6,7 +6,6 @@
 
 using System;
 using System.Drawing;
-using GTANetworkInternals;
 using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Base

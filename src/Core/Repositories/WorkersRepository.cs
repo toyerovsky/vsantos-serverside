@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,30 +16,40 @@ namespace Serverside.Core.Repositories
 {
     public class WorkersRepository : IRepository<WorkerModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(WorkerModel model) => Context.Workers.Add(model);
+        public WorkersRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public WorkersRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(WorkerModel model) => _context.Workers.Add(model);
 
         public bool Contains(WorkerModel model)
         {
-            return Context.Workers.Any(worker => worker.Id == model.Id);
+            return _context.Workers.Any(worker => worker.Id == model.Id);
         }
 
-        public void Update(WorkerModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(WorkerModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var worker = Context.Workers.Find(id);
-            Context.Workers.Remove(worker);
+            var worker = _context.Workers.Find(id);
+            _context.Workers.Remove(worker);
         }
 
         public WorkerModel Get(long id) => GetAll().Single(g => g.Id == id);
 
         public IEnumerable<WorkerModel> GetAll()
         {
-            return Context.Workers
+            return _context.Workers
                 .Include(worker => worker.Character)
-                    .ThenInclude(character => character.AccountModel)
+                    .ThenInclude(character => character.Account)
                 .Include(worker => worker.Group)
                     .ThenInclude(group => group.BossCharacter)
                 .Include(worker => worker.Group)
@@ -47,8 +58,8 @@ namespace Serverside.Core.Repositories
                 .ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

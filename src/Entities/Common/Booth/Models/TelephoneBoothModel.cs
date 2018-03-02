@@ -13,6 +13,7 @@ namespace Serverside.Entities.Common.Booth.Models
     [Serializable]
     public class TelephoneBoothModel : IXmlObject
     {
+        public int Id { get; set; }
         public int Number { get; set; }
         public decimal Cost { get; set; }
         public FullPosition Position { get; set; }

@@ -14,7 +14,7 @@ using Serverside.Core;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Core.Telephone;
 using Serverside.Entities.Common.Booth.Models;
 
@@ -48,9 +48,9 @@ namespace Serverside.Entities.Common.Booth
                         sender.RemoveMoney(boothEntity.Data.Cost);
                         ChatScript.SendMessageToNearbyPlayers(sender, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
 
-                        if (EntityManager.GetAccounts().Values.Any(t => t.CharacterEntity.CurrentCellphone.Number == Convert.ToInt32(args[0])))
+                        if (EntityHelper.GetAccounts().Values.Any(t => t.CharacterEntity.CurrentCellphone.Number == Convert.ToInt32(args[0])))
                         {
-                            Client getterPlayer = EntityManager.GetAccounts().Values
+                            Client getterPlayer = EntityHelper.GetAccounts().Values
                                 .Single(t => t.CharacterEntity.CurrentCellphone.Number ==
                                           Convert.ToInt32(args[0])).Client;
 

@@ -11,14 +11,15 @@ using System.Linq;
 using GTANetworkAPI;
 using GTANetworkInternals;
 using Serverside.Core;
+using Serverside.Core.CharacterCreator;
 using Serverside.Core.Database.Models;
-using Serverside.Core.Description;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Entities.Base;
 using Serverside.Entities.Core.Building;
 using Serverside.Entities.Core.Item;
 using Serverside.Entities.Interfaces;
+using Serverside.Entities.Misc.Description;
 
 namespace Serverside.Entities.Core
 {
@@ -29,7 +30,7 @@ namespace Serverside.Entities.Core
         public AccountEntity AccountEntity { get; private set; }
         public GroupEntity OnDutyGroup { get; set; }
         public Description Description { get; set; }
-        public CharacterCreator.CharacterCreator CharacterCreator { get; set; }
+        public CharacterCreator CharacterCreator { get; set; }
         public BuildingEntity CurrentBuilding { get; set; }
 
         internal List<Item.Item> ItemsInUse { get; set; } = new List<Item.Item>();
@@ -53,7 +54,7 @@ namespace Serverside.Entities.Core
             DbModel = dbModel;
             AccountEntity = accountEntity;
             AccountEntity.CharacterEntity = this;
-            DbModel.AccountModel = accountEntity.DbModel;
+            DbModel.Account = accountEntity.DbModel;
             DbModel.LastLoginTime = DateTime.Now;
             DbModel.Online = true;
 
@@ -64,7 +65,7 @@ namespace Serverside.Entities.Core
             }
 
             if (DbModel.Freemode)
-                CharacterCreator = new CharacterCreator.CharacterCreator(this);
+                CharacterCreator = new CharacterCreator(this);
             Description = new Description(AccountEntity);
 
             OnPlayerDimensionChanged += OnOnPlayerDimensionChanged;
@@ -76,7 +77,7 @@ namespace Serverside.Entities.Core
 
             CharacterModel dbModel = new CharacterModel
             {
-                AccountModel = accountEntity.DbModel,
+                Account = accountEntity.DbModel,
                 Name = name,
                 Surname = surname,
                 Money = 10000,
@@ -106,7 +107,7 @@ namespace Serverside.Entities.Core
         {
             if (AccountEntity != null)
             {
-                DbModel.CurrentDimension = AccountEntity.Client.Dimension;
+                DbModel.CurrentDimension = (int)AccountEntity.Client.Dimension;
                 DbModel.LastPositionX = AccountEntity.Client.Position.X;
                 DbModel.LastPositionY = AccountEntity.Client.Position.Y;
                 DbModel.LastPositionZ = AccountEntity.Client.Position.Z;
@@ -153,7 +154,7 @@ namespace Serverside.Entities.Core
 
             CharacterModel character = accountEntity.CharacterEntity.DbModel;
 
-            accountEntity.Client.Nametag = $"({EntityManager.CalculateServerId(accountEntity)}) {accountEntity.CharacterEntity.FormatName}";
+            accountEntity.Client.Nametag = $"({EntityHelper.CalculateServerId(accountEntity)}) {accountEntity.CharacterEntity.FormatName}";
 
             accountEntity.Client.Name = accountEntity.CharacterEntity.FormatName;
             accountEntity.Client.SetSkin(character.Model);
@@ -194,7 +195,7 @@ namespace Serverside.Entities.Core
         private void OnOnPlayerDimensionChanged(object sender, DimensionChangeEventArgs e)
         {
             AccountEntity account = e.Player.GetAccountEntity();
-            account.CharacterEntity.DbModel.CurrentDimension = e.CurrentDimension;
+            account.CharacterEntity.DbModel.CurrentDimension = (int)e.CurrentDimension;
             account.CharacterEntity.Save();
         }
 

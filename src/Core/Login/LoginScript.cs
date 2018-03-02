@@ -102,7 +102,7 @@ namespace Serverside.Core.Login
                     accountModel = repository.GetByUserId(accountModel.UserId);
 
                     //Sprawdzenie czy ktoś już jest zalogowany z tego konta.
-                    AccountEntity account = EntityManager.Get(accountModel.Id);
+                    AccountEntity account = EntityHelper.Get(accountModel.Id);
                     if (account != null)
                     {
                         //FixMe dać wiadomość jako warning
@@ -113,8 +113,8 @@ namespace Serverside.Core.Login
                     }
 
 
-                    var accountEntity = new AccountEntity(accountModel, sender);
-                    accountEntity.Login();
+                    account = new AccountEntity(accountModel, sender);
+                    account.Login();
                 }
             }
             else

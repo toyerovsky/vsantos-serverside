@@ -4,7 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Offers
+namespace Serverside.Economy.Offers
 {
     public enum OfferType
     {

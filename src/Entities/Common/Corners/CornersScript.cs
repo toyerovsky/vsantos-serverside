@@ -10,7 +10,7 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core;
 using Serverside.Core.Extensions;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Corners.Helpers;
 using Serverside.Entities.Common.Corners.Models;
 

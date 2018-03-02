@@ -6,6 +6,7 @@
 
 using System;
 using GTANetworkAPI;
+using Serverside.Core.Database;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
@@ -36,7 +37,7 @@ namespace Serverside.Entities.Core
         {
             get
             {
-                var id = EntityManager.CalculateServerId(this);
+                var id = EntityHelper.CalculateServerId(this);
                 ServerIdChanged?.Invoke(this, new ServerIdChangeEventArgs(_serverId, id));
                 return _serverId = id;
             }
@@ -62,7 +63,9 @@ namespace Serverside.Entities.Core
             Client.Notify($"Witaj, ~g~~h~{DbModel.Name} ~w~zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin.ToShortDateString()}");
             Client.Notify($"Z adresu IP: {safeIp}");
 
-            using (CharactersRepository repository = new CharactersRepository())
+            var ctx = RolePlayContextFactory.NewContext();
+            using (CharactersRepository charactersRepository = new CharactersRepository(ctx))
+            using (AccountsRepository accountsRepository = new AccountsRepository(ctx))
             {
                 if (DbModel.Characters.Count == 0)
                 {
@@ -76,16 +79,17 @@ namespace Serverside.Entities.Core
                         Freemode = true,
                         IsAlive = true,
                         CreateTime = DateTime.Now,
-                        AccountModel = DbModel,                    
+                        Account = accountsRepository.Get(DbModel.Id),
                     };
 
                     DbModel.Characters.Add(model);
-                    repository.Insert(model);
+                    charactersRepository.Insert(model);
                 }
-                repository.Save();
+
+                charactersRepository.Save();
             }
 
-            EntityManager.Add(this);
+            EntityHelper.Add(this);
             AccountLoggedIn?.Invoke(Client, this);
         }
 
@@ -150,7 +154,7 @@ namespace Serverside.Entities.Core
 
         public void Dispose()
         {
-            EntityManager.Remove(this);
+            EntityHelper.Remove(this);
 
             DbModel.Online = false;
             Save();

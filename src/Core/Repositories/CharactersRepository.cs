@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,28 +16,38 @@ namespace Serverside.Core.Repositories
 {
     public class CharactersRepository : IRepository<CharacterModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(CharacterModel model) => Context.Characters.Add(model);
+        public CharactersRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public CharactersRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(CharacterModel model) => _context.Characters.Add(model);
 
         public bool Contains(CharacterModel model)
         {
-            return Context.Characters.Any(character => character.Id == model.Id);
+            return _context.Characters.Any(character => character.Id == model.Id);
         }
 
-        public void Update(CharacterModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(CharacterModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var character = Context.Characters.Find(id);
-            Context.Characters.Remove(character);
+            var character = _context.Characters.Find(id);
+            _context.Characters.Remove(character);
         }
 
         public CharacterModel Get(long id) => GetAll().Single(c => c.Id == id);
 
         public IEnumerable<CharacterModel> GetAll()
         {
-            return Context.Characters
+            return _context.Characters
                 .Include(character => character.Buildings)
                     .ThenInclude(building => building.Items)
                 .Include(character => character.Buildings)
@@ -51,11 +62,12 @@ namespace Serverside.Core.Repositories
                         .ThenInclude(item => item.Creator)
                 .Include(character => character.Workers)
                     .ThenInclude(group => group.Group)
-                .Include(character => character.AccountModel).ToList();
+                .Include(character => character.Account).ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+
+        public void Dispose() => _context?.Dispose();
     }
 }

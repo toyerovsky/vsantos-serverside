@@ -4,7 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Jobs.Enums
+namespace Serverside.Economy.Jobs.Enums
 {
     public enum JobType
     {

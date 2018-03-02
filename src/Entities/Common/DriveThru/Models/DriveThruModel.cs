@@ -13,6 +13,7 @@ namespace Serverside.Entities.Common.DriveThru.Models
     [Serializable]
     public class DriveThruModel : IXmlObject
     {
+        public int Id { get; set; }
         public Vector3 Position { get; set; }
         public string FilePath { get; set; }
         public string CreatorForumName { get; set; }

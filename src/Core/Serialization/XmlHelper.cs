@@ -11,7 +11,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Color = System.Drawing.Color;
 
-namespace Serverside.Core.Serialization.Xml
+namespace Serverside.Core.Serialization
 {
     public static class XmlHelper
     {

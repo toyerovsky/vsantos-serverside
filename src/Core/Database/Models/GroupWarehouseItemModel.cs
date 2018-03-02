@@ -5,14 +5,13 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using Serverside.Groups.Enums;
+using Serverside.Economy.Groups.Enums;
 
 namespace Serverside.Core.Database.Models
 {
     //Tabela do trzymania przedmiotów bazowych w magazynie
     public class GroupWarehouseItemModel
     {
-        [Key]
         public long Id { get; set; }
         public decimal Cost { get; set; }
         public decimal? MinimalCost { get; set; }

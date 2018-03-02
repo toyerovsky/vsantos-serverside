@@ -36,7 +36,7 @@ namespace Serverside.Admin
                     Type = (ReportType)Enum.Parse(typeof(ReportType), arguments[0].ToString().Replace(' ', '_')),
                     Content = arguments[1].ToString(),
                     Accused = arguments[2].ToString() != ""
-                        ? EntityManager.GetAccountByServerId(Convert.ToInt32(arguments[2]))
+                        ? EntityHelper.GetAccountByServerId(Convert.ToInt32(arguments[2]))
                         : null,
                     Sender = sender.GetAccountEntity()
                 };

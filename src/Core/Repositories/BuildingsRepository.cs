@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,28 +16,38 @@ namespace Serverside.Core.Repositories
 {
     public class BuildingsRepository : IRepository<BuildingModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(BuildingModel model) => Context.Buildings.Add(model);
+        public BuildingsRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public BuildingsRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(BuildingModel model) => _context.Buildings.Add(model);
 
         public bool Contains(BuildingModel model)
         {
-            return Context.Buildings.Any(building => building.Id == model.Id);
+            return _context.Buildings.Any(building => building.Id == model.Id);
         }
 
-        public void Update(BuildingModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(BuildingModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var building = Context.Buildings.Find(id);
-            Context.Buildings.Remove(building);
+            var building = _context.Buildings.Find(id);
+            _context.Buildings.Remove(building);
         }
 
         public BuildingModel Get(long id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<BuildingModel> GetAll()
         {
-            return Context.Buildings
+            return _context.Buildings
                 .Include(building => building.Creator)
                 .Include(building => building.Character)
                 .Include(building => building.Group)
@@ -45,8 +56,8 @@ namespace Serverside.Core.Repositories
                 .ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

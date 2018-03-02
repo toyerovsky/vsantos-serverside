@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Exceptions;
+using Serverside.Core.Exceptions;
 
 namespace Serverside.Core.Extensions
 {

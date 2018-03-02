@@ -6,13 +6,12 @@
 
 using System;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
-using Serverside.Jobs.Base;
-using Serverside.Jobs.Enums;
+using Serverside.Economy.Jobs.Base;
+using Serverside.Economy.Jobs.Enums;
 
-namespace Serverside.Jobs.DustMan
+namespace Serverside.Economy.Jobs.DustMan
 {
     public class DustmanVehicleEntity : JobVehicleEntity
     {

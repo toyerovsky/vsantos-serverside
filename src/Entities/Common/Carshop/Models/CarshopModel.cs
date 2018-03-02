@@ -6,21 +6,15 @@
 
 using System;
 using GTANetworkAPI;
+using Serverside.Core.Enums;
 using Serverside.Core.Interfaces;
 
 namespace Serverside.Entities.Common.Carshop.Models
 {
-    public enum CarshopType
-    {
-        Biedny,
-        Sredni,
-        Luksus,
-        Empty
-    }
-
     [Serializable]
     public class CarshopModel : IXmlObject
     {
+        public int Id { get; set; }
         public Vector3 Position { get; set; }
         public CarshopType Type { get; set; }
         public string FilePath { get; set; }

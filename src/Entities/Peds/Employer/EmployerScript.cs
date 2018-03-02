@@ -8,7 +8,7 @@ using System;
 using GTANetworkAPI;
 using Serverside.Core;
 using Serverside.Core.Extensions;
-using Serverside.Jobs.Enums;
+using Serverside.Economy.Jobs.Enums;
 
 namespace Serverside.Entities.Peds.Employer
 {

@@ -5,9 +5,9 @@
  */
 
 using GTANetworkAPI;
+using Serverside.Core.Exceptions;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
-using Serverside.Exceptions;
 
 namespace Serverside.Admin
 {
@@ -25,7 +25,7 @@ namespace Serverside.Admin
 
             var vehicle = sender.IsInVehicle
                 ? sender.Vehicle.GetVehicleEntity()
-                : EntityManager.GetVehicle(vehicleId);
+                : EntityHelper.GetVehicle(vehicleId);
 
             Color primaryColor;
             Color secondaryColor;
@@ -56,7 +56,7 @@ namespace Serverside.Admin
 
             var vehicle = sender.IsInVehicle
                 ? sender.Vehicle.GetVehicleEntity()
-                : EntityManager.GetVehicle(vehicleId);
+                : EntityHelper.GetVehicle(vehicleId);
 
             vehicle?.Repair();
         }

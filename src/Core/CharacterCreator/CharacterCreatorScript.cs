@@ -10,7 +10,7 @@ using GTANetworkAPI;
 using Serverside.Constant;
 using Serverside.Core.Extensions;
 
-namespace Serverside.CharacterCreator
+namespace Serverside.Core.CharacterCreator
 {
     public class CharacterCreatorScript : Script
     {

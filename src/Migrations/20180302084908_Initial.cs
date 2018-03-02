@@ -1,4 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ */
+
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +20,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Email = table.Column<string>(maxLength: 50, nullable: true),
                     ForumGroup = table.Column<long>(nullable: false),
                     Ip = table.Column<string>(maxLength: 16, nullable: true),
@@ -36,15 +43,15 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AccessoryId = table.Column<byte>(nullable: true),
                     AccessoryTexture = table.Column<byte>(nullable: true),
-                    AccountModelId = table.Column<long>(nullable: true),
+                    AccountId = table.Column<long>(nullable: true),
                     BankAccountNumber = table.Column<int>(nullable: true),
                     BankMoney = table.Column<decimal>(nullable: false),
                     BornDate = table.Column<DateTime>(nullable: false),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    CurrentDimension = table.Column<uint>(nullable: false),
+                    CurrentDimension = table.Column<int>(nullable: false),
                     DivingEfficiency = table.Column<short>(nullable: false),
                     EarsId = table.Column<byte>(nullable: true),
                     EarsTexture = table.Column<byte>(nullable: true),
@@ -114,8 +121,8 @@ namespace Serverside.Migrations
                 {
                     table.PrimaryKey("PK_Characters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Characters_Accounts_AccountModelId",
-                        column: x => x.AccountModelId,
+                        name: "FK_Characters_Accounts_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -126,7 +133,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AccountId = table.Column<long>(nullable: true),
                     CreatorId = table.Column<long>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
@@ -156,7 +163,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CharacterId = table.Column<long>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true)
@@ -177,7 +184,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     BossCharacterId = table.Column<long>(nullable: true),
                     Color = table.Column<string>(nullable: true),
                     Dotation = table.Column<int>(nullable: false),
@@ -203,7 +210,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CharacterId = table.Column<long>(nullable: true),
                     Cost = table.Column<decimal>(nullable: true),
                     CreatorId = table.Column<long>(nullable: false),
@@ -252,7 +259,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AmphetamineCost = table.Column<decimal>(nullable: true),
                     AmphetamineCount = table.Column<int>(nullable: true),
                     AmphetamineDefaultCount = table.Column<int>(nullable: true),
@@ -410,7 +417,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     GetterId = table.Column<long>(nullable: true),
                     OrderItemsJson = table.Column<string>(nullable: true),
                     ShipmentLog = table.Column<string>(nullable: true)
@@ -431,7 +438,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CharacterId = table.Column<long>(nullable: true),
                     CreatorId = table.Column<long>(nullable: true),
                     Door1Damage = table.Column<bool>(nullable: false),
@@ -494,7 +501,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CharacterId = table.Column<long>(nullable: true),
                     ChatRight = table.Column<bool>(nullable: false),
                     DoorsRight = table.Column<bool>(nullable: false),
@@ -536,11 +543,10 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     BuildingId = table.Column<long>(nullable: true),
                     CharacterId = table.Column<long>(nullable: true),
                     CreatorId = table.Column<long>(nullable: true),
-                    CurrentlyInUse = table.Column<bool>(nullable: false),
                     FirstParameter = table.Column<int>(nullable: true),
                     FourthParameter = table.Column<int>(nullable: true),
                     GroupId = table.Column<long>(nullable: true),
@@ -592,7 +598,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Cost = table.Column<decimal>(nullable: false),
                     Count = table.Column<int>(nullable: false),
                     GroupType = table.Column<int>(nullable: false),
@@ -616,7 +622,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CellphoneId = table.Column<long>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Number = table.Column<int>(nullable: false)
@@ -637,7 +643,7 @@ namespace Serverside.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CellphoneId = table.Column<long>(nullable: true),
                     Content = table.Column<string>(maxLength: 256, nullable: true),
                     SenderNumber = table.Column<int>(nullable: false)
@@ -669,9 +675,9 @@ namespace Serverside.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Characters_AccountModelId",
+                name: "IX_Characters_AccountId",
                 table: "Characters",
-                column: "AccountModelId");
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CrimeBots_CreatorId",

@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,36 +16,46 @@ namespace Serverside.Core.Repositories
 {
     public class GroupWarehouseOrdersRepository : IRepository<GroupWarehouseOrderModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(GroupWarehouseOrderModel model) => Context.GroupWarehouseOrders.Add(model);
+        public GroupWarehouseOrdersRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public GroupWarehouseOrdersRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(GroupWarehouseOrderModel model) => _context.GroupWarehouseOrders.Add(model);
 
         public bool Contains(GroupWarehouseOrderModel model)
         {
-            return Context.GroupWarehouseOrders.Any(groupWarehouseOrder => groupWarehouseOrder.Id == model.Id);
+            return _context.GroupWarehouseOrders.Any(groupWarehouseOrder => groupWarehouseOrder.Id == model.Id);
         }
 
         public void Update(GroupWarehouseOrderModel model)
         {
-            Context.Entry(model).State = EntityState.Modified;
+            _context.Entry(model).State = EntityState.Modified;
         }
 
         public void Delete(long id)
         {
-            var order = Context.GroupWarehouseOrders.Find(id);
-            Context.GroupWarehouseOrders.Remove(order);
+            var order = _context.GroupWarehouseOrders.Find(id);
+            _context.GroupWarehouseOrders.Remove(order);
         }
 
         public GroupWarehouseOrderModel Get(long id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<GroupWarehouseOrderModel> GetAll()
         {
-            return Context.GroupWarehouseOrders.Include(
+            return _context.GroupWarehouseOrders.Include(
                 order => order.Getter).ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

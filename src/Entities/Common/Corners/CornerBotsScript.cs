@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Corners.Models;
 using Serverside.Entities.Core.Item;
 

@@ -13,7 +13,6 @@ namespace Serverside.Core.Database.Models
 {
     public class AccountModel
     {
-        [Key]
         public long Id { get; set; }
         [StringLength(50)]
         public string Name { get; set; }

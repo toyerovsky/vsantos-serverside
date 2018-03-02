@@ -12,7 +12,7 @@ using Serverside.Core.Interfaces;
 namespace Serverside.Entities.Common.Market.Models
 {
     [Serializable]
-    public class Market : IXmlObject
+    public class MarketModel : IXmlObject
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -39,25 +39,25 @@ namespace Serverside.Entities.Common.Carshop
 
                 var player = NAPI.Player.GetPlayerFromHandle(entity);
                 string compactsJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Compact && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Compact && v.CarshopTypes == Data.Type));
 
                 string coupesJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Coupe && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Coupe && v.CarshopTypes == Data.Type));
 
                 string suvsJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Suv && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Suv && v.CarshopTypes == Data.Type));
 
                 string sedansJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Sedans && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Sedans && v.CarshopTypes == Data.Type));
 
                 string sportsJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Sports && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Sports && v.CarshopTypes == Data.Type));
 
                 string motorcyclesJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Motorcycles && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Motorcycles && v.CarshopTypes == Data.Type));
 
                 string bicyclesJson =
-                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Cycle && v.CarshopTypes.Contains(Data.Type)));
+                    JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Cycle && v.CarshopTypes == Data.Type));
 
                 NAPI.ClientEvent.TriggerClientEvent(player, "OnPlayerEnteredCarshop", compactsJson, coupesJson, suvsJson, sedansJson, sportsJson, motorcyclesJson, bicyclesJson);
             };

@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,32 +16,42 @@ namespace Serverside.Core.Repositories
 {
     public class GroupWarehouseItemsRepository : IRepository<GroupWarehouseItemModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(GroupWarehouseItemModel model) => Context.GroupWarehouseItems.Add(model);
+        public GroupWarehouseItemsRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public GroupWarehouseItemsRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(GroupWarehouseItemModel model) => _context.GroupWarehouseItems.Add(model);
 
         public bool Contains(GroupWarehouseItemModel model)
         {
-            return Context.GroupWarehouseItems.Any(groupWarehouseItem => groupWarehouseItem.Id == model.Id);
+            return _context.GroupWarehouseItems.Any(groupWarehouseItem => groupWarehouseItem.Id == model.Id);
         }
 
-        public void Update(GroupWarehouseItemModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(GroupWarehouseItemModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var warehouseItem = Context.GroupWarehouseItems.Find(id);
-            Context.GroupWarehouseItems.Remove(warehouseItem);
+            var warehouseItem = _context.GroupWarehouseItems.Find(id);
+            _context.GroupWarehouseItems.Remove(warehouseItem);
         }
 
         public GroupWarehouseItemModel Get(long id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<GroupWarehouseItemModel> GetAll()
         {
-            return Context.GroupWarehouseItems.ToList();
+            return _context.GroupWarehouseItems.ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

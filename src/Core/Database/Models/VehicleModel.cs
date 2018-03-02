@@ -13,7 +13,6 @@ namespace Serverside.Core.Database.Models
 {
     public class VehicleModel
     {
-        [Key]
         public long Id { get; set; }
 
         public virtual CharacterModel Character { get; set; }

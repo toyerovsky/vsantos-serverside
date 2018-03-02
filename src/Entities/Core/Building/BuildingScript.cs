@@ -106,7 +106,7 @@ namespace Serverside.Entities.Core.Building
             //Dla administracji
             if (id != -1)
             {
-                var buildindController = EntityManager.GetBuilding(id);
+                var buildindController = EntityHelper.GetBuilding(id);
                 if (buildindController != null)
                 {
                     var adminInfo = new List<string>
@@ -187,9 +187,9 @@ namespace Serverside.Entities.Core.Building
                 return;
             }
 
-            if (id != -1 && EntityManager.GetBuilding(id) != null)
+            if (id != -1 && EntityHelper.GetBuilding(id) != null)
             {
-                var building = EntityManager.GetBuilding(id);
+                var building = EntityHelper.GetBuilding(id);
                 building.Dispose();
                 using (BuildingsRepository repository = new BuildingsRepository())
                 {
@@ -218,7 +218,7 @@ namespace Serverside.Entities.Core.Building
             {
                 if (o == sender && message == "/tu")
                 {
-                    if (EntityManager.GetBuildings().Any(b => b.BuildingMarker.Position.DistanceTo(o.Position) < 5))
+                    if (EntityHelper.GetBuildings().Any(b => b.BuildingMarker.Position.DistanceTo(o.Position) < 5))
                     {
                         sender.Notify("W bliskim otoczeniu tego budynku znajduje się już inny budynek.");
                         return;

@@ -14,6 +14,7 @@ namespace Serverside.Entities.Common.Corners.Models
     [Serializable]
     public class CornerModel : IXmlObject
     {
+        public int Id { get; set; }
         public List<CornerBotModel> CornerBots { get; set; }
         public FullPosition Position { get; set; }
         public List<FullPosition> BotPositions { get; set; }

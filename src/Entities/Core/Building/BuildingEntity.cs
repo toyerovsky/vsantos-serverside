@@ -35,7 +35,7 @@ namespace Serverside.Entities.Core.Building
         public BuildingEntity(BuildingModel dbModel)
         {
             DbModel = dbModel;
-            EntityManager.Add(this);
+            EntityHelper.Add(this);
         }
 
         public void Save()
@@ -46,13 +46,13 @@ namespace Serverside.Entities.Core.Building
         {
             InteriorDoorsColshape = NAPI.ColShape.CreateCylinderColShape(
                 new Vector3(DbModel.InternalPickupPositionX, DbModel.InternalPickupPositionY, DbModel.InternalPickupPositionZ), 1, 3);
-            InteriorDoorsColshape.Dimension = DbModel.InternalDimension;
+            InteriorDoorsColshape.Dimension = (uint)DbModel.InternalDimension;
 
             var externalPosition = new Vector3(DbModel.ExternalPickupPositionX,
                 DbModel.ExternalPickupPositionY, DbModel.ExternalPickupPositionZ);
 
             ExteriorDoorsColshape = NAPI.ColShape.CreateCylinderColShape(externalPosition, 1, 3);
-            ExteriorDoorsColshape.Dimension = DbModel.InternalDimension;
+            ExteriorDoorsColshape.Dimension = (uint)DbModel.InternalDimension;
 
             var color = DbModel.Cost.HasValue ? new Color(106, 154, 40, 255) : new Color(255, 255, 0, 255);
 

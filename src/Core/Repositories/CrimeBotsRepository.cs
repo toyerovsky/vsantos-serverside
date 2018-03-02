@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,21 +16,31 @@ namespace Serverside.Core.Repositories
 {
     public class CrimeBotsRepository : IRepository<CrimeBotModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(CrimeBotModel model) => Context.CrimeBots.Add(model);
+        public CrimeBotsRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public CrimeBotsRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(CrimeBotModel model) => _context.CrimeBots.Add(model);
 
         public bool Contains(CrimeBotModel model)
         {
-            return Context.CrimeBots.Any(crimeBot => crimeBot.Id == model.Id);
+            return _context.CrimeBots.Any(crimeBot => crimeBot.Id == model.Id);
         }
 
-        public void Update(CrimeBotModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(CrimeBotModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var crimeBot = Context.CrimeBots.Find(id);
-            Context.CrimeBots.Remove(crimeBot);
+            var crimeBot = _context.CrimeBots.Find(id);
+            _context.CrimeBots.Remove(crimeBot);
         }
 
         public CrimeBotModel Get(long id) => GetAll().Single(c => c.Id == id);
@@ -38,7 +49,7 @@ namespace Serverside.Core.Repositories
 
         public IEnumerable<CrimeBotModel> GetAll()
         {
-            return Context.CrimeBots.Include(cb => cb.Creator)
+            return _context.CrimeBots.Include(cb => cb.Creator)
                 .Include(crimeBot => crimeBot.GroupModel)
                     .ThenInclude(group => group.BossCharacter)
                 .Include(crimeBot => crimeBot.GroupModel)
@@ -46,8 +57,8 @@ namespace Serverside.Core.Repositories
                 .ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

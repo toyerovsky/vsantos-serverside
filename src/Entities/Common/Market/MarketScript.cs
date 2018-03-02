@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Serverside.Constant;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Market.Models;
 using Serverside.Entities.Core.Item;
 
@@ -90,7 +90,7 @@ namespace Serverside.Entities.Common.Market
         {
             //TODO: Wczytywanie wszystkich IPL sklepów
 
-            foreach (var data in XmlHelper.GetXmlObjects<Models.Market>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
+            foreach (var data in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
             {
                 var market = new MarketEntity(data);
                 market.Spawn();
@@ -102,7 +102,7 @@ namespace Serverside.Entities.Common.Market
         public void AddItemToShop(Client sender)
         {
             var values = Enum.GetNames(typeof(ItemType)).ToList();
-            var markets = XmlHelper.GetXmlObjects<Models.Market>($@"{ServerInfo.XmlDirectory}\Markets\").Select(x => new { x.Id, x.Name }).ToList();
+            var markets = XmlHelper.GetXmlObjects<MarketModel>($@"{ServerInfo.XmlDirectory}\Markets\").Select(x => new { x.Id, x.Name }).ToList();
             NAPI.ClientEvent.TriggerClientEvent(sender, "ShowAdminMarketItemMenu", values, markets);
         }
 
@@ -140,9 +140,9 @@ namespace Serverside.Entities.Common.Market
                     if (center != null && radius.Equals(float.MinValue) && o == sender && message == "tu")
                     {
                         radius = center.DistanceTo2D(o.Position);
-                        var market = new Models.Market
+                        var market = new MarketModel
                         {
-                            Id = XmlHelper.GetXmlObjects<Models.Market>(ServerInfo.XmlDirectory + @"Markets\").Count,
+                            Id = XmlHelper.GetXmlObjects<MarketModel>(ServerInfo.XmlDirectory + @"Markets\").Count,
                             Name = name,
                             Center = center,
                             Radius = radius

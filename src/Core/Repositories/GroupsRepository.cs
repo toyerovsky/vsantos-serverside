@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,40 +16,50 @@ namespace Serverside.Core.Repositories
 {
     public class GroupsRepository : IRepository<GroupModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(GroupModel model) => Context.Groups.Add(model);
+        public GroupsRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public GroupsRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(GroupModel model) => _context.Groups.Add(model);
 
         public bool Contains(GroupModel model)
         {
-            return Context.Groups.Any(groupModel => groupModel.Id == model.Id);
+            return _context.Groups.Any(groupModel => groupModel.Id == model.Id);
         }
 
-        public void Update(GroupModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(GroupModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var group = Context.Groups.Find(id);
-            Context.Groups.Remove(group);
+            var group = _context.Groups.Find(id);
+            _context.Groups.Remove(group);
         }
 
         public GroupModel Get(long id) => GetAll().Single(g => g.Id == id);
 
         public IEnumerable<GroupModel> GetAll()
         {
-            return Context.Groups
+            return _context.Groups
                 .Include(group => group.BossCharacter)
                 .Include(group => group.Workers)
                     .ThenInclude(worker => worker.Character)
                 .Include(group => group.Workers)
                     .ThenInclude(worker => worker.Character)
-                        .ThenInclude(character => character.AccountModel)
+                        .ThenInclude(character => character.Account)
                 .ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
 
     }
 }

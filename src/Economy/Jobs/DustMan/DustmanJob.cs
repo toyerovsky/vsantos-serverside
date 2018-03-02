@@ -5,12 +5,11 @@
  */
 
 using System.Collections.Generic;
-using GTANetworkInternals;
 using Serverside.Core.Database.Models;
-using Serverside.Core.Serialization.Json;
-using Serverside.Jobs.Base;
+using Serverside.Core.Serialization;
+using Serverside.Economy.Jobs.Base;
 
-namespace Serverside.Jobs.DustMan
+namespace Serverside.Economy.Jobs.DustMan
 {
     public class DustmanJob : Job
     {

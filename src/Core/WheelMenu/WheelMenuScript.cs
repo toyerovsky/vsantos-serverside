@@ -8,12 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
 using Serverside.Entities;
-using Serverside.Entities.Core;
 using Serverside.Entities.Core.Vehicle;
 
-namespace Serverside.WheelMenu
+namespace Serverside.Core.WheelMenu
 {
     public class WheelMenuScript : Script
     {
@@ -28,9 +26,9 @@ namespace Serverside.WheelMenu
                 {
 
                 }
-                else if (EntityManager.GetVehicle((NetHandle)arguments[0]) != null)
+                else if (EntityHelper.GetVehicle((NetHandle)arguments[0]) != null)
                 {
-                    WheelMenu wheel = new WheelMenu(PrepareDataSource(sender, EntityManager.GetVehicle((NetHandle)arguments[0])), sender);
+                    WheelMenu wheel = new WheelMenu(PrepareDataSource(sender, EntityHelper.GetVehicle((NetHandle)arguments[0])), sender);
                     sender.SetData("WheelMenu", wheel);
                 }
             }

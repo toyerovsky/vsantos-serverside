@@ -4,7 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Groups.Enums
+namespace Serverside.Economy.Groups.Enums
 {
     public enum GroupType
     {

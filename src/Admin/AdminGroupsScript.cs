@@ -8,11 +8,11 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
 using Serverside.Core.Database.Models;
+using Serverside.Core.Exceptions;
 using Serverside.Core.Extensions;
+using Serverside.Economy.Groups.Enums;
 using Serverside.Entities;
 using Serverside.Entities.Core;
-using Serverside.Exceptions;
-using Serverside.Groups.Enums;
 using Color = GTANetworkAPI.Color;
 
 namespace Serverside.Admin
@@ -41,9 +41,9 @@ namespace Serverside.Admin
                 return;
             }
 
-            if (EntityManager.GetAccountByServerId(bossId) != null)
+            if (EntityHelper.GetAccountByServerId(bossId) != null)
             {
-                var boss = EntityManager.GetAccountByServerId(bossId);
+                var boss = EntityHelper.GetAccountByServerId(bossId);
 
                 if (boss.CharacterEntity.DbModel.Workers.Count < 3)
                 {
@@ -86,11 +86,11 @@ namespace Serverside.Admin
                 return;
             }
 
-            if (EntityManager.GetGroup(groupId) != null)
+            if (EntityHelper.GetGroup(groupId) != null)
             {
                 var player = sender.GetAccountEntity();
 
-                GroupEntity group = EntityManager.GetGroup(groupId);
+                GroupEntity group = EntityHelper.GetGroup(groupId);
 
                 if (group.GetWorkers().Any(p => p.Character == player.CharacterEntity.DbModel))
                 {

@@ -12,7 +12,6 @@ namespace Serverside.Core.Database.Models
 {
     public class PenaltyModel
     {
-        [Key]
         public long Id { get; set; }
 
         public virtual AccountModel Creator { get; set; }

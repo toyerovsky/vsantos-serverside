@@ -10,7 +10,6 @@ namespace Serverside.Core.Database.Models
 {
     public class TelephoneContactModel
     {
-        [Key]
         public long Id { get; set; }
         public ItemModel Cellphone { get; set; }
         public string Name { get; set; }

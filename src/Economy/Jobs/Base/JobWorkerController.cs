@@ -5,11 +5,10 @@
  */
 
 using System;
-using GTANetworkInternals;
 using Serverside.Core.Extensions;
 using Serverside.Entities.Core;
 
-namespace Serverside.Jobs.Base
+namespace Serverside.Economy.Jobs.Base
 {
     public abstract class JobWorkerController
     {

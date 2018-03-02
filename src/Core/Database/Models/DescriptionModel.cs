@@ -10,7 +10,6 @@ namespace Serverside.Core.Database.Models
 {
     public class DescriptionModel
     {
-        [Key]
         public long Id { get; set; }
         public CharacterModel Character { get; set; }
         public string Title { get; set; }

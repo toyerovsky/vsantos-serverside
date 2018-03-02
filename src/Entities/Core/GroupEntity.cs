@@ -11,9 +11,9 @@ using GTANetworkAPI;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
+using Serverside.Economy.Groups.Base;
+using Serverside.Economy.Groups.Enums;
 using Serverside.Entities.Interfaces;
-using Serverside.Groups.Base;
-using Serverside.Groups.Enums;
 
 namespace Serverside.Entities.Core
 {
@@ -28,7 +28,7 @@ namespace Serverside.Entities.Core
         protected GroupEntity(GroupModel dbModel)
         {
             DbModel = dbModel;
-            EntityManager.Add(this);
+            EntityHelper.Add(this);
         }
 
         /// <summary>

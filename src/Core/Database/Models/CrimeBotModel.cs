@@ -11,13 +11,10 @@ namespace Serverside.Core.Database.Models
 {
     public class CrimeBotModel
     {
-        [Key]
         public long Id { get; set; }
         public string Name { get; set; }
-
         public virtual AccountModel Creator { get; set; }
         public virtual GroupModel GroupModel { get; set; }
-
         [EnumDataType(typeof(VehicleHash))]
         public virtual VehicleHash Vehicle { get; set; }
         [EnumDataType(typeof(PedHash))]

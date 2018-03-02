@@ -11,7 +11,7 @@ using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
 using Serverside.Core.Extensions;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Entities.Common.BusStop.Models;
 
 namespace Serverside.Entities.Common.BusStop

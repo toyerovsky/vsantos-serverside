@@ -27,7 +27,7 @@ namespace Serverside.Entities.Core.Vehicle
             }
             else if (eventName == "OnPlayerSpawnVehicle")
             {
-                VehicleEntity vehicleEntity = EntityManager.GetVehicle(
+                VehicleEntity vehicleEntity = EntityHelper.GetVehicle(
                     (long)sender.GetData("SelectedVehicleID"));
 
                 if (vehicleEntity != null)
@@ -53,10 +53,10 @@ namespace Serverside.Entities.Core.Vehicle
             }
             else if (eventName == "OnPlayerParkVehicle")
             {
-                if (EntityManager.GetVehicle(sender.Vehicle) == null)
+                if (EntityHelper.GetVehicle(sender.Vehicle) == null)
                     return;
 
-                var controller = EntityManager.GetVehicle(sender.Vehicle);
+                var controller = EntityHelper.GetVehicle(sender.Vehicle);
                 controller.ChangeSpawnPosition();
                 sender.Notify($"Pojazd {controller.DbModel.Name} zosta³ zaparkowany.");
             }
@@ -70,7 +70,7 @@ namespace Serverside.Entities.Core.Vehicle
             }
             else if (eventName == "OnPlayerInformationsInVehicle")
             {
-                var vehicle = EntityManager.GetVehicle(sender.Vehicle);
+                var vehicle = EntityHelper.GetVehicle(sender.Vehicle);
                 if (vehicle == null) return;
 
                 float enginePower = (float)((vehicle.DbModel.EnginePowerMultiplier - 1.0) * 20.0 + 80);
@@ -96,7 +96,7 @@ namespace Serverside.Entities.Core.Vehicle
         {
             AccountEntity account = player.GetAccountEntity();
 
-            VehicleEntity vehicleEntity = EntityManager.GetVehicle(vehicle);
+            VehicleEntity vehicleEntity = EntityHelper.GetVehicle(vehicle);
             if (vehicleEntity != null)
             {
                 if (vehicleEntity.DbModel.Character == account.CharacterEntity.DbModel)
@@ -117,7 +117,7 @@ namespace Serverside.Entities.Core.Vehicle
             {
                 if (NAPI.Player.IsPlayerInAnyVehicle(sender))
                 {
-                    VehicleEntity vehicleEntity = EntityManager.GetVehicle(player.Client.Vehicle);
+                    VehicleEntity vehicleEntity = EntityHelper.GetVehicle(player.Client.Vehicle);
                     if (vehicleEntity == null) return;
 
                     string tuningJson = JsonConvert.SerializeObject(vehicleEntity.DbModel.ItemsInVehicle
@@ -133,7 +133,7 @@ namespace Serverside.Entities.Core.Vehicle
                             i.Name
                         }));
 
-                    string playerGroups = JsonConvert.SerializeObject(EntityManager.GetPlayerGroups(sender.GetAccountEntity())
+                    string playerGroups = JsonConvert.SerializeObject(EntityHelper.GetPlayerGroups(sender.GetAccountEntity())
                         .Select(g => new
                         {
                             g.DbModel.Name
@@ -196,7 +196,7 @@ namespace Serverside.Entities.Core.Vehicle
         {
             AccountEntity accountEntity = player.GetAccountEntity();
 
-            List<VehicleEntity> vehicles = EntityManager.GetVehicles()
+            List<VehicleEntity> vehicles = EntityHelper.GetVehicles()
                 .Where(v => v.DbModel.Id == accountEntity.CharacterEntity.DbModel.Id)
                 .Where(x => x.GameVehicle.Position.DistanceTo(player.Position) < 10).ToList();
 

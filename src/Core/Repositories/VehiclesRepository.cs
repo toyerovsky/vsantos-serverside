@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,38 +16,48 @@ namespace Serverside.Core.Repositories
 {
     public class VehiclesRepository : IRepository<VehicleModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(VehicleModel model) => Context.Vehicles.Add(model);
+        public VehiclesRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public VehiclesRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(VehicleModel model) => _context.Vehicles.Add(model);
 
         public bool Contains(VehicleModel model)
         {
-            return Context.Vehicles.Any(vehicle => vehicle.Id == model.Id);
+            return _context.Vehicles.Any(vehicle => vehicle.Id == model.Id);
         }
 
-        public void Update(VehicleModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(VehicleModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var vehicle = Context.Vehicles.Find(id);
-            Context.Vehicles.Remove(vehicle);
+            var vehicle = _context.Vehicles.Find(id);
+            _context.Vehicles.Remove(vehicle);
         }
 
-        public VehicleModel Get(long id) => Context.Vehicles.Find(id);
+        public VehicleModel Get(long id) => _context.Vehicles.Find(id);
 
         public IEnumerable<VehicleModel> GetAll()
         {
-            return Context.Vehicles
+            return _context.Vehicles
                 .Include(vehicle => vehicle.Creator)
                 .Include(vehicle => vehicle.Character)
-                    .ThenInclude(character => character.AccountModel)
+                    .ThenInclude(character => character.Account)
                 .Include(vehicle => vehicle.Group)
                 .Include(vehicle => vehicle.ItemsInVehicle)
                     .ThenInclude(item => item.Creator).ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

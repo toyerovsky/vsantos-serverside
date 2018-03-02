@@ -9,11 +9,11 @@ using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Core.Extensions;
-using Serverside.Groups;
-using Serverside.Jobs.Courier.CourierWarehouse.Models;
-using Serverside.Jobs.Enums;
+using Serverside.Economy.Groups;
+using Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
+using Serverside.Economy.Jobs.Enums;
 
-namespace Serverside.Jobs.Courier.CourierWarehouse
+namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
 {
     public class CourierWarehouse : IDisposable
     {

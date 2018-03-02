@@ -8,7 +8,7 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Animations.Models;
 using Serverside.Core.Extensions;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 
 namespace Serverside.Core.Animations
 {

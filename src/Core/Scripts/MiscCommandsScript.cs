@@ -17,13 +17,13 @@ namespace Serverside.Core.Scripts
         [Command("id", "~y~UŻYJ ~w~ /id [nazwa]", GreedyArg = true)]
         public void ShowPlayersWithSimilarName(Client sender, string name)
         {
-            if (!EntityManager.GetAccounts().Any(x => x.Value.CharacterEntity.FormatName.ToLower().StartsWith(name)))
+            if (!EntityHelper.GetAccounts().Any(x => x.Value.CharacterEntity.FormatName.ToLower().StartsWith(name)))
             {
                 sender.Notify("Nie znaleziono gracza o podanej nazwie.");
                 return;
             }
 
-            var accounts = EntityManager.GetAccounts()
+            var accounts = EntityHelper.GetAccounts()
                 .Where(x => x.Value.CharacterEntity.FormatName.ToLower().StartsWith(name));
 
             ChatScript.SendMessageToPlayer(sender, "Znalezieni gracze: ", ChatMessageType.ServerInfo);

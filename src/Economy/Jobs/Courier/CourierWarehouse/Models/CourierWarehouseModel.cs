@@ -8,7 +8,7 @@ using System;
 using GTANetworkAPI;
 using Serverside.Core.Interfaces;
 
-namespace Serverside.Jobs.Courier.CourierWarehouse.Models
+namespace Serverside.Economy.Jobs.Courier.CourierWarehouse.Models
 {
     [Serializable]
     public class CourierWarehouseModel : IXmlObject

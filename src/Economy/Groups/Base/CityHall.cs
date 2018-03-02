@@ -8,7 +8,7 @@ using System.Linq;
 using Serverside.Core.Database.Models;
 using Serverside.Entities.Core;
 
-namespace Serverside.Groups.Base
+namespace Serverside.Economy.Groups.Base
 {
     public class CityHall : GroupEntity
     {

@@ -7,17 +7,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Serverside.Core.Extensions;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
 using Serverside.Core.Database.Models;
+using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
+using Serverside.Economy.Groups.Enums;
+using Serverside.Economy.Groups.Stucts;
 using Serverside.Entities.Core.Item;
-using Serverside.Groups.Enums;
-using Serverside.Groups.Stucts;
 
-namespace Serverside.Groups
+namespace Serverside.Economy.Groups
 {
     public class GroupWarehouseScript : Script
     {

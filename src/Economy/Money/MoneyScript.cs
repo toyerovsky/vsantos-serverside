@@ -5,9 +5,10 @@
  */
 
 using GTANetworkAPI;
+using Serverside.Core;
 using Serverside.Core.Extensions;
 
-namespace Serverside.Core.Money
+namespace Serverside.Economy.Money
 {
     sealed class MoneyScript : Script
     {

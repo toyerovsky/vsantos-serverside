@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using GTANetworkAPI;
 using Serverside.Entities.Core;
 
-namespace Serverside.CharacterCreator
+namespace Serverside.Core.CharacterCreator
 {
     public class CharacterCreator
     {

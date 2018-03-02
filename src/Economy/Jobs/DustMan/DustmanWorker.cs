@@ -7,13 +7,12 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core.Extensions;
+using Serverside.Economy.Jobs.Base;
+using Serverside.Economy.Jobs.DustMan.Models;
 using Serverside.Entities.Core;
-using Serverside.Jobs.Base;
-using Serverside.Jobs.DustMan.Models;
 
-namespace Serverside.Jobs.DustMan
+namespace Serverside.Economy.Jobs.DustMan
 {
     public class DustmanWorker : JobWorkerController
     {

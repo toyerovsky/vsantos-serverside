@@ -8,28 +8,19 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
+using Serverside.Core;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
+using Serverside.Entities;
 using Serverside.Entities.Common.Atm;
 using Serverside.Entities.Common.Atm.Models;
 
-namespace Serverside.Core.Money.Bank
+namespace Serverside.Economy.Bank
 {
     public class BankScript : Script
     {
-        private List<AtmEntity> Atms { get; set; } = new List<AtmEntity>();
-
-        private void OnResourceStart()
-        {
-            foreach (var data in XmlHelper.GetXmlObjects<AtmModel>($@"{Constant.ServerInfo.XmlDirectory}Atms\"))
-            {
-                var atm = new AtmEntity(data);
-                Atms.Add(atm);
-            }
-        }
-
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             if (eventName == "OnPlayerAtmTake")
@@ -93,7 +84,7 @@ namespace Serverside.Core.Money.Bank
                     XmlHelper.AddXmlObject(data, $@"{Constant.ServerInfo.XmlDirectory}Atms\");
                     var atm = new AtmEntity(data);
                     atm.Spawn();
-                    Atms.Add(atm);
+                    EntityHelper.Add(atm);
                     sender.Notify("Dodawanie bankomatu zakończyło się ~h~~g~pomyślnie.");
 
                 }
@@ -109,17 +100,17 @@ namespace Serverside.Core.Money.Bank
                 return;
             }
 
-            if (Atms.Count == 0)
+            if (!EntityHelper.GetAtms().Any())
             {
                 sender.Notify("Nie znaleziono bankomatu który można usunąć.");
                 return;
             }
 
-            var atm = Atms.First(a => a.ColShape.IsPointWithin(sender.Position));
+            var atm = EntityHelper.GetAtms().First(a => a.ColShape.IsPointWithin(sender.Position));
             if (XmlHelper.TryDeleteXmlObject(atm.Data.FilePath))
             {
                 sender.Notify("Usuwanie bankomatu zakończyło się ~h~~g~pomyślnie.");
-                Atms.Remove(atm);
+                EntityHelper.Remove(atm);
                 atm.Dispose();
             }
             else

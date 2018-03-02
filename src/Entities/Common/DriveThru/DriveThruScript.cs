@@ -14,7 +14,7 @@ using Serverside.Constant;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Entities.Common.DriveThru.Models;
 using Serverside.Entities.Core.Item;
 

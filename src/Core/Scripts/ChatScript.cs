@@ -10,10 +10,10 @@ using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
+using Serverside.Economy.Groups.Base;
+using Serverside.Economy.Groups.Enums;
 using Serverside.Entities;
 using Serverside.Entities.Core;
-using Serverside.Groups.Base;
-using Serverside.Groups.Enums;
 
 namespace Serverside.Core.Scripts
 {
@@ -94,7 +94,7 @@ namespace Serverside.Core.Scripts
                 return;
             }
 
-            Client getter = EntityManager.GetAccountByServerId(id).Client;
+            Client getter = EntityHelper.GetAccountByServerId(id).Client;
             if (getter == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -127,7 +127,7 @@ namespace Serverside.Core.Scripts
                 if (group.CanPlayerWriteOnChat(sender.GetAccountEntity()))
                 {
                     var m = string.Join(" ", message);
-                    var clients = EntityManager.GetAccounts().Where(a => group.DbModel.Workers.Any(
+                    var clients = EntityHelper.GetAccounts().Where(a => group.DbModel.Workers.Any(
                         w => w.Character.Id.Equals(a.Value.CharacterEntity.DbModel.Id))).Select(
                         c => c.Value.Client).ToList();
                     SendMessageToSpecifiedPlayers(sender, clients, m, ChatMessageType.GroupOoc, $"~{group.DbModel.Color}~");

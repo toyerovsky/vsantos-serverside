@@ -10,8 +10,6 @@ namespace Serverside.Core.Database.Models
 {
     public class WorkerModel
     {
-        [Key]
-        //ID pracownika
         public long Id { get; set; }
 
         public virtual GroupModel Group { get; set; }

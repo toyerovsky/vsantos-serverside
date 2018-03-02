@@ -7,7 +7,7 @@
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
 
-namespace Serverside.Core.Money.Bank
+namespace Serverside.Economy.Bank
 {
     public static class BankHelper
     {

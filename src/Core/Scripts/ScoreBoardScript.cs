@@ -31,7 +31,7 @@ namespace Serverside.Core.Scripts
         private void Event_OnPlayerConnected(Client player)
         {
             var list = new List<string>();
-            foreach (var ply in EntityManager.GetAccounts())
+            foreach (var ply in EntityHelper.GetAccounts())
             {
                 var dic = new Dictionary<string, object>
                 {
@@ -56,7 +56,7 @@ namespace Serverside.Core.Scripts
             if (eventName == "playerlist_pings")
             {
                 var list = new List<string>();
-                foreach (var ply in EntityManager.GetAccounts())
+                foreach (var ply in EntityHelper.GetAccounts())
                 {
                     var dic = new Dictionary<string, object>
                     {

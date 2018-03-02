@@ -11,10 +11,10 @@ using Serverside.Admin.Enums;
 using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
+using Serverside.Economy.Groups.Base;
 using Serverside.Entities.Core.Vehicle;
 using Serverside.Entities.Peds.CrimeBot.Models;
-using Serverside.Groups.Base;
 
 namespace Serverside.Entities.Peds.CrimeBot
 {

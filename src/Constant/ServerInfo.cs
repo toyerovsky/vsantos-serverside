@@ -5,10 +5,13 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
+using Serverside.Core.Interfaces;
 
 namespace Serverside.Constant
 {
@@ -25,13 +28,26 @@ namespace Serverside.Constant
             }
         }
 
-        public static string XmlDirectory => Path.Combine(WorkingDirectory, "Xml");
+        public static string XmlDirectory => Path.Combine(WorkingDirectory, "\\Xml\\");
 
-        public static string JsonDirectory => Path.Combine(WorkingDirectory, "Json");
+        public static string JsonDirectory => Path.Combine(WorkingDirectory, "\\Json\\");
 
         public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
             .SetBasePath(WorkingDirectory)
             .AddJsonFile("appsettings.json")
             .Build();
+
+        public static IEnumerable<string> EntityDirectories
+        {
+            get
+            {
+                var directories = new List<string>();
+                foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(type => type.GetInterfaces().Contains(typeof(IXmlObject))))
+                {
+                    directories.Add(Path.Combine(XmlDirectory, $"{type.Name.Replace("Entity", "")}s\\"));
+                }
+                return directories;
+            }
+        }
     }
 }

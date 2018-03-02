@@ -10,7 +10,6 @@ namespace Serverside.Core.Database.Models
 {
     public class GroupWarehouseOrderModel
     {
-        [Key]
         public long Id { get; set; }
         public virtual GroupModel Getter { get; set; }
 

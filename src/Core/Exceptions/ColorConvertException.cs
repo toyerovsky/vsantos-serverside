@@ -7,7 +7,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Serverside.Exceptions
+namespace Serverside.Core.Exceptions
 {
     [Serializable]
     public class ColorConvertException : Exception

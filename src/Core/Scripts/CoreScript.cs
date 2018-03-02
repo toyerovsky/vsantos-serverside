@@ -9,8 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
 using Serverside.Core.Database;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Login;
+using Serverside.Core.Repositories;
 using Serverside.Entities;
 using Serverside.Entities.Core;
 
@@ -18,6 +20,7 @@ namespace Serverside.Core.Scripts
 {
     public class CoreScript : Script
     {
+
         [ServerEvent(Event.ChatMessage)]
         public void OnChatMessage(Client sender, string message)
         {
@@ -38,13 +41,12 @@ namespace Serverside.Core.Scripts
         private void Event_OnResourceStart()
         {
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
-            EntityManager.LoadEntities();
         }
 
         private float _currentRotation = 0f;
         private void Event_OnUpdate()
         {
-            if (EntityManager.GetBuildings().Count == 0)
+            if (EntityHelper.GetBuildings().Count == 0)
                 return;
             //Kręcące się markery od budynków
             if (Math.Abs(_currentRotation - 360f) < 0.4)
@@ -52,7 +54,7 @@ namespace Serverside.Core.Scripts
 
             _currentRotation += 0.4f;
 
-            foreach (var building in EntityManager.GetBuildings())
+            foreach (var building in EntityHelper.GetBuildings())
             {
                 building.BuildingMarker.Rotation =
                     new Vector3(building.BuildingMarker.Rotation.X, building.BuildingMarker.Rotation.Y, _currentRotation);
@@ -84,14 +86,14 @@ namespace Serverside.Core.Scripts
         {
             Task dbStop = Task.Run(() =>
             {
-                foreach (var account in EntityManager.GetAccounts().Where(x => x.Value?.CharacterEntity != null))
+                foreach (var account in EntityHelper.GetAccounts().Where(x => x.Value?.CharacterEntity != null))
                 {
                     //Zmiana postaci pola Online w postaci po wyłączeniu serwera dla graczy którzy byli online
                     account.Value.CharacterEntity.DbModel.Online = false;
                     account.Value.DbModel.Online = false;
                 }
 
-                foreach (var vehicle in EntityManager.GetVehicles())
+                foreach (var vehicle in EntityHelper.GetVehicles())
                     vehicle.Dispose();
 
                 using (var ctx = RolePlayContextFactory.NewContext())

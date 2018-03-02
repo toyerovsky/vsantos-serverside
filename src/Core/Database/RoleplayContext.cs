@@ -32,9 +32,15 @@ namespace Serverside.Core.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PenaltyModel>()
-                .HasOne(p => p.Account)
-                .WithMany(b => b.Penalties);
+            modelBuilder.Entity<PenaltyModel>(p =>
+            {
+                p.HasOne(a => a.Account)
+                    .WithMany(b => b.Penalties)
+                    .HasForeignKey("AccountId");
+
+                p.HasOne(a => a.Creator);
+            });
+
         }
     }
 }

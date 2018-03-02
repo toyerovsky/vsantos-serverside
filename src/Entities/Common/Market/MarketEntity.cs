@@ -10,20 +10,21 @@ using GTANetworkAPI;
 using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Entities.Base;
+using Serverside.Entities.Common.Market.Models;
 using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Common.Market
 {
     public class MarketEntity : GameEntity, IInteractive
     {
-        public Models.Market Data { get; }
+        public MarketModel Data { get; }
 
         public ColShape ColShape { get; private set; }
 
         public PedEntity MarketNpc { get; set; }
         public Blip MarketBlip { get; set; }
 
-        public MarketEntity(Models.Market data) : base()
+        public MarketEntity(MarketModel data) : base()
         {
             Data = data;
         }

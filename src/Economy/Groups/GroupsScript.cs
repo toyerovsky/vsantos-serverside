@@ -11,12 +11,12 @@ using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Core;
 using Serverside.Core.Extensions;
+using Serverside.Economy.Groups.Base;
+using Serverside.Economy.Groups.Enums;
 using Serverside.Entities;
 using Serverside.Entities.Core;
-using Serverside.Groups.Base;
-using Serverside.Groups.Enums;
 
-namespace Serverside.Groups
+namespace Serverside.Economy.Groups
 {
     public class GroupsScript : Script
     {
@@ -37,7 +37,7 @@ namespace Serverside.Groups
                 float distance;
                 if (id != -1)
                 {
-                    getter = EntityManager.GetAccountByServerId(id);
+                    getter = EntityHelper.GetAccountByServerId(id);
                     if (getter != null)
                     {
                         distance = getter.Client.Position.DistanceTo(sender.Position);
@@ -88,7 +88,7 @@ namespace Serverside.Groups
             float distance;
             if (id != -1)
             {
-                getter = EntityManager.GetAccountByServerId(id);
+                getter = EntityHelper.GetAccountByServerId(id);
                 if (getter != null)
                 {
                     distance = getter.Client.Position.DistanceTo2D(sender.Position);
@@ -250,7 +250,7 @@ namespace Serverside.Groups
         public void ShowGroupMenu(Client sender, short slot)
         {
             var player = sender.GetAccountEntity();
-            if (EntityManager.GetPlayerGroups(player).Count == 0)
+            if (EntityHelper.GetPlayerGroups(player).Count == 0)
             {
                 sender.Notify("Nie jesteś członkiem żadnej grupy.");
                 return;
@@ -273,11 +273,11 @@ namespace Serverside.Groups
                     //To jest raczej kosztowne, ale nie widzę innej opcji
                     PlayersOnLine = JsonConvert.SerializeObject(group.GetWorkers().Where(x => x.Character.Online).Select(w => new
                     {
-                        ServerId = EntityManager.GetAccountByCharacterId(w.Character.Id).ServerId,
+                        ServerId = EntityHelper.GetAccountByCharacterId(w.Character.Id).ServerId,
                         Name = $"{w.Character.Name} {w.Character.Surname}",
                         Salary = w.Salary,
                         DutyTime = w.DutyMinutes,
-                        OnDuty = group.PlayersOnDuty.Contains(EntityManager.GetAccountByCharacterId(w.Character.Id))
+                        OnDuty = group.PlayersOnDuty.Contains(EntityHelper.GetAccountByCharacterId(w.Character.Id))
                     }))
                 }), group.CanPlayerManageWorkers(player));
             }
@@ -294,7 +294,7 @@ namespace Serverside.Groups
             {
                 if (group.CanPlayerManageWorkers(sender.GetAccountEntity()))
                 {
-                    var getter = EntityManager.GetAccountByServerId(id);
+                    var getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)
                     {
                         sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -328,7 +328,7 @@ namespace Serverside.Groups
             {
                 if (group.CanPlayerManageWorkers(sender.GetAccountEntity()))
                 {
-                    var getter = EntityManager.GetAccountByServerId(id);
+                    var getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)
                     {
                         sender.Notify("Nie znaleziono gracza o podanym Id.");

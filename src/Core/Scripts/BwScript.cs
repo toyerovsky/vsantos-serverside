@@ -118,9 +118,9 @@ namespace Serverside.Core.Scripts
         [Command("bw", "~y~U¯YJ: ~w~ /bw [id]")]
         public void SetPlayerBw(Client sender, int id)
         {
-            if (EntityManager.GetAccountByServerId(id) != null)
+            if (EntityHelper.GetAccountByServerId(id) != null)
             {
-                Client getter = EntityManager.GetAccountByServerId(id).Client;
+                Client getter = EntityHelper.GetAccountByServerId(id).Client;
                 getter.TriggerEvent("ToggleHud", true);
                 getter.ResetData("CharacterBW");
             }

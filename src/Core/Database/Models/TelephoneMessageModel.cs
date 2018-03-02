@@ -10,7 +10,6 @@ namespace Serverside.Core.Database.Models
 {
     public class TelephoneMessageModel
     {
-        [Key]
         public long Id { get; set; }
         public virtual ItemModel Cellphone { get; set; }
         [MaxLength(256)]

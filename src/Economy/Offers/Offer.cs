@@ -13,7 +13,7 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Core.Scripts;
 
-namespace Serverside.Offers
+namespace Serverside.Economy.Offers
 {
     public class Offer : IDisposable
     {

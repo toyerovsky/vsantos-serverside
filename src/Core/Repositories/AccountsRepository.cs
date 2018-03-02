@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,21 +16,31 @@ namespace Serverside.Core.Repositories
 {
     public class AccountsRepository : IRepository<AccountModel>
     {
-        private RoleplayContext Context { get; } = RolePlayContextFactory.NewContext();
+        private readonly RoleplayContext _context;
 
-        public void Insert(AccountModel model) => Context.Accounts.Add(model);
+        public AccountsRepository(RoleplayContext context)
+        {
+            _context = context ?? throw new ArgumentException(nameof(_context));
+        }
+
+        public AccountsRepository()
+        {
+            _context = RolePlayContextFactory.NewContext();
+        }
+
+        public void Insert(AccountModel model) => _context.Accounts.Add(model);
 
         public bool Contains(AccountModel model)
         {
-            return Context.Accounts.Any(account => account.UserId == model.UserId);
+            return _context.Accounts.Any(account => account.UserId == model.UserId);
         }
 
-        public void Update(AccountModel model) => Context.Entry(model).State = EntityState.Modified;
+        public void Update(AccountModel model) => _context.Entry(model).State = EntityState.Modified;
 
         public void Delete(long id)
         {
-            var account = Context.Accounts.Find(id);
-            Context.Accounts.Remove(account);
+            var account = _context.Accounts.Find(id);
+            _context.Accounts.Remove(account);
         }
 
         public AccountModel Get(long id) => GetAll().Single(account => account.Id == id);
@@ -38,7 +49,7 @@ namespace Serverside.Core.Repositories
 
         public IEnumerable<AccountModel> GetAll()
         {
-            return Context.Accounts
+            return _context.Accounts
                 .Include(account => account.Characters)
                     .ThenInclude(character => character.Buildings)
                         .ThenInclude(building => building.Items)
@@ -68,8 +79,8 @@ namespace Serverside.Core.Repositories
                     .Include(account => account.Penalties).ToList();
         }
 
-        public void Save() => Context.SaveChanges();
+        public void Save() => _context.SaveChanges();
 
-        public void Dispose() => Context?.Dispose();
+        public void Dispose() => _context?.Dispose();
     }
 }

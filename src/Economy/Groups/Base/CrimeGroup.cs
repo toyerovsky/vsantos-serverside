@@ -9,7 +9,7 @@ using Serverside.Core.Database.Models;
 using Serverside.Entities.Core;
 using Serverside.Entities.Peds.CrimeBot;
 
-namespace Serverside.Groups.Base
+namespace Serverside.Economy.Groups.Base
 {
     public class CrimeGroup : GroupEntity
     {

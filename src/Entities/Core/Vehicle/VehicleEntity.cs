@@ -10,12 +10,12 @@ using GTANetworkAPI;
 using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Core.Database.Models;
-using Serverside.Core.Description;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Entities.Base;
 using Serverside.Entities.Core.Item;
 using Serverside.Entities.Interfaces;
+using Serverside.Entities.Misc.Description;
 
 namespace Serverside.Entities.Core.Vehicle
 {
@@ -70,7 +70,7 @@ namespace Serverside.Entities.Core.Vehicle
             NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuelConsumption", DbModel.FuelConsumption);
             NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_milage", DbModel.Milage);
             GameVehicle.SetData("VehicleEntity", this);
-            EntityManager.Add(this);
+            EntityHelper.Add(this);
             Save();
         }
 
@@ -273,7 +273,7 @@ namespace Serverside.Entities.Core.Vehicle
             DbModel.IsSpawned = false;
             if (!_nonDbVehicle) Save();
             NAPI.Entity.DeleteEntity(GameVehicle);
-            EntityManager.Remove(this);
+            EntityHelper.Remove(this);
         }
 
         private void Dispose(bool disposing)

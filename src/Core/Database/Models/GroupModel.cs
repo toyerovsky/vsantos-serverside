@@ -6,13 +6,12 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Serverside.Groups.Enums;
+using Serverside.Economy.Groups.Enums;
 
 namespace Serverside.Core.Database.Models
 {
     public class GroupModel
     {
-        [Key]
         public long Id { get; set; }
         public string Name { get; set; }
         public string Tag { get; set; }

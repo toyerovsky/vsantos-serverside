@@ -13,10 +13,10 @@ using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Core.Telephone;
+using Serverside.Economy.Groups.Base;
 using Serverside.Entities.Peds.CrimeBot.Models;
-using Serverside.Groups.Base;
 using NAPI = GTANetworkAPI.NAPI;
 
 namespace Serverside.Entities.Core.Item.Scripts
@@ -114,9 +114,9 @@ namespace Serverside.Entities.Core.Item.Scripts
                 //    "cellphone@first_person", "cellphone_call_listen_base");
 
                 var number = Convert.ToInt32(args[0]);
-                if (EntityManager.GetAccounts().Any(p => p.Value.CharacterEntity.CurrentCellphone.Number == number))
+                if (EntityHelper.GetAccounts().Any(p => p.Value.CharacterEntity.CurrentCellphone.Number == number))
                 {
-                    var getter = EntityManager.GetAccounts()
+                    var getter = EntityHelper.GetAccounts()
                         .Single(p => p.Value.CharacterEntity.CurrentCellphone.Number == number).Value;
 
                     if (getter.CharacterEntity.CurrentCellphone.CurrentCall != null)

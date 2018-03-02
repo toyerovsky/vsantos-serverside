@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 
-namespace Serverside.Core.Description
+namespace Serverside.Entities.Misc.Description
 {
     public class DescriptionsScript : Script
     {

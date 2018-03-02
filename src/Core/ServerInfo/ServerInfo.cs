@@ -1,13 +1,13 @@
 ﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and confidential
-* Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
-*/
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ */
 
 using System;
 using System.IO;
 using System.Linq;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
 using Serverside.Core.ServerInfo.Models;
 
 namespace Serverside.Core.ServerInfo

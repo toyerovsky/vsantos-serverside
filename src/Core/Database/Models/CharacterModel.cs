@@ -8,25 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using GTANetworkAPI;
-using Serverside.Jobs.Enums;
+using Serverside.Economy.Jobs.Enums;
 
 namespace Serverside.Core.Database.Models
 {
     public class CharacterModel
     {
-        [Key]
-        public long Id { get; set; }
-        
-        public AccountModel AccountModel { get; set; }
-
+        public long Id { get; set; }   
+        public virtual AccountModel Account { get; set; }
         public bool Online { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? LastLoginTime { get; set; }
         public DateTime? TodayPlayedTime { get; set; }
         public DateTime? PlayedTime { get; set; }
-
         public string Name { get; set; }
         public string Surname { get; set; }
+        
         [EnumDataType(typeof(PedHash))]
         public virtual PedHash Model { get; set; }
 
@@ -35,7 +32,6 @@ namespace Serverside.Core.Database.Models
         public virtual ICollection<BuildingModel> Buildings { get; set; }
         public virtual ICollection<DescriptionModel> Descriptions { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
-
         public decimal Money { get; set; }
         public int? BankAccountNumber { get; set; }
         public decimal BankMoney { get; set; }
@@ -58,7 +54,7 @@ namespace Serverside.Core.Database.Models
         public float LastPositionRotX { get; set; }
         public float LastPositionRotY { get; set; }
         public float LastPositionRotZ { get; set; }
-        public uint CurrentDimension { get; set; }
+        public int CurrentDimension { get; set; }
         public int MinutesToRespawn { get; set; }
         public bool? IsCreated { get; set; }
         public bool Freemode { get; set; }

@@ -8,7 +8,7 @@ using System.Globalization;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
 
-namespace Serverside.Core.Money
+namespace Serverside.Economy.Money
 {    
     public static class MoneyManager
     {

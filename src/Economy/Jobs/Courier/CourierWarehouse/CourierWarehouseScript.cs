@@ -11,12 +11,12 @@ using GTANetworkAPI;
 using Serverside.Admin.Enums;
 using Serverside.Constant;
 using Serverside.Core.Extensions;
-using Serverside.Core.Serialization.Xml;
+using Serverside.Core.Serialization;
+using Serverside.Economy.Groups;
+using Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
 using Serverside.Entities;
-using Serverside.Groups;
-using Serverside.Jobs.Courier.CourierWarehouse.Models;
 
-namespace Serverside.Jobs.Courier.CourierWarehouse
+namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
 {
     public class CourierWarehouseScript : Script
     {
@@ -33,7 +33,7 @@ namespace Serverside.Jobs.Courier.CourierWarehouse
                     return;
                 }
 
-                sender.Notify($"Podjąłeś się dostarczenia przesyłki do: {EntityManager.GetGroup(package.Data.Getter.Id).GetColoredName()}");
+                sender.Notify($"Podjąłeś się dostarczenia przesyłki do: {EntityHelper.GetGroup(package.Data.Getter.Id).GetColoredName()}");
                 package.CurrentCourier = sender.GetAccountEntity();
                 GroupWarehouseScript.CurrentOrders.Remove(package);
 

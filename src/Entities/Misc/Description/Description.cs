@@ -5,11 +5,10 @@
  */
 
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Entities.Base;
 using Serverside.Entities.Core;
 
-namespace Serverside.Core.Description
+namespace Serverside.Entities.Misc.Description
 {
     public class Description : GameEntity
     {

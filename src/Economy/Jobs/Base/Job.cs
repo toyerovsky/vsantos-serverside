@@ -5,9 +5,8 @@
  */
 
 using System.Collections.Generic;
-using GTANetworkInternals;
 
-namespace Serverside.Jobs.Base
+namespace Serverside.Economy.Jobs.Base
 {
     public abstract class Job
     {

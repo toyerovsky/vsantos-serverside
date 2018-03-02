@@ -6,7 +6,7 @@
 
 using Serverside.Core.Database.Models;
 
-namespace Serverside.Groups.Stucts
+namespace Serverside.Economy.Groups.Stucts
 {
     public struct WarehouseItemInfo
     {

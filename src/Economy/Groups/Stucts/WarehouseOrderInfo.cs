@@ -7,7 +7,7 @@
 using Serverside.Core.Database.Models;
 using Serverside.Entities.Core;
 
-namespace Serverside.Groups.Stucts
+namespace Serverside.Economy.Groups.Stucts
 {
     public struct WarehouseOrderInfo
     {

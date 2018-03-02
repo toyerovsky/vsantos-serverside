@@ -27,7 +27,7 @@ namespace Serverside.Admin
                 return;
             }
 
-            var controller = EntityManager.GetAccountByServerId(id);
+            var controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -74,7 +74,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do teleportu.");
                 return;
             }
-            var controller = EntityManager.GetAccountByServerId(id);
+            var controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -91,7 +91,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do obserwowania.");
                 return;
             }
-            var controller = EntityManager.GetAccountByServerId(id);
+            var controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -116,7 +116,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.");
                 return;
             }
-            var controller = EntityManager.GetAccountByServerId(id);
+            var controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -134,7 +134,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.");
                 return;
             }
-            var accountEntity = EntityManager.GetAccountByServerId(id);
+            var accountEntity = EntityHelper.GetAccountByServerId(id);
             if (accountEntity == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
