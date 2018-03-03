@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Core.CharacterCreator;
 using Serverside.Core.Database.Models;
@@ -73,7 +72,7 @@ namespace Serverside.Entities.Core
 
         public static CharacterEntity Create(AccountEntity accountEntity, string name, string surname, PedHash model)
         {
-            var randomIndex = Tools.RandomInt(Constant.Items.ServerSpawnPositions.Count);
+            var randomIndex = Tools.RandomRange(Constant.Items.ServerSpawnPositions.Count);
 
             CharacterModel dbModel = new CharacterModel
             {

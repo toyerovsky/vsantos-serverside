@@ -51,7 +51,7 @@ namespace Serverside.Core.Extensions
         }
 
         public static Color GetRandomColor(this Color color) =>
-            new Color(Tools.RandomInt(256), Tools.RandomInt(256), Tools.RandomInt(256), Tools.RandomInt(256));
+            new Color(Tools.RandomRange(256), Tools.RandomRange(256), Tools.RandomRange(256), Tools.RandomRange(256));
 
         public static Color ToColor(this string hex)
         {

@@ -6,7 +6,7 @@
 
 namespace Serverside.Core
 {
-    public static class Validator
+    public static class ValidationHelper
     {
         public static bool IsMoneyValid(decimal moneyToCheck) => moneyToCheck >= 0;
 

@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Core.Enums;
 using Serverside.Entities.Interfaces;

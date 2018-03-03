@@ -6,7 +6,6 @@
 
 using System.Linq;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Newtonsoft.Json;
 using Serverside.Core.Extensions;
 using Serverside.Entities.Base;

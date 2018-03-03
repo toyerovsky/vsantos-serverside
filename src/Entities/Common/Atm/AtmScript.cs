@@ -4,7 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
@@ -19,7 +19,7 @@ using Serverside.Entities.Common.Atm.Models;
 
 namespace Serverside.Economy.Bank
 {
-    public class BankScript : Script
+    public class AtmScript : Script
     {
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
@@ -50,7 +50,7 @@ namespace Serverside.Economy.Bank
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia grupy.");
+                sender.Notify("Nie posiadasz uprawnień do dodawania bankomatu.");
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace Serverside.Economy.Bank
                             }
                         }
                     };
-                    XmlHelper.AddXmlObject(data, $@"{Constant.ServerInfo.XmlDirectory}Atms\");
+                    XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(AtmModel)));
                     var atm = new AtmEntity(data);
                     atm.Spawn();
                     EntityHelper.Add(atm);

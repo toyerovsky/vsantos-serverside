@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core.Extensions;
 using Serverside.Core.Telephone;
 using Serverside.Entities.Base;

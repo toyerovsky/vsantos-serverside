@@ -4,11 +4,15 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.ComponentModel;
+
 namespace Serverside.Core.Enums
 {
     public enum ShowType
     {
+        [Description("dowod")]
         IdCard,
+        [Description("prawko")]
         DrivingLicense
     }
 }

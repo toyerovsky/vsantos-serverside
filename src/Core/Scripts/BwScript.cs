@@ -18,7 +18,6 @@ namespace Serverside.Core.Scripts
     {
         public void Event_OnPlayerDeath(Client sender, Client killer, WeaponHash reason)
         {
-
             var player = sender.GetAccountEntity();
 
             var playerCharacter = player.CharacterEntity.DbModel;

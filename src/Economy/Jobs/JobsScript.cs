@@ -82,7 +82,7 @@ namespace Serverside.Economy.Jobs
                 repository.Save();
             }
         }
-        public static GarbageModel GetRandomGarbage() => Garbages[Tools.RandomInt(Garbages.Count)];
+        public static GarbageModel GetRandomGarbage() => Garbages[Tools.RandomRange(Garbages.Count)];
 
         #endregion
 

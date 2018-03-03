@@ -4,9 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Entities.Base;
 using Serverside.Entities.Common.DriveThru.Models;
 using Serverside.Entities.Interfaces;

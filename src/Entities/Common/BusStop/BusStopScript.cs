@@ -5,7 +5,7 @@
  */
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
@@ -18,18 +18,6 @@ namespace Serverside.Entities.Common.BusStop
 {
     public class BusStopScript : Script
     {
-        private readonly List<BusStopEntity> _busStops = new List<BusStopEntity>();
-
-        private void Event_onResourceStart()
-        {
-            foreach (var data in XmlHelper.GetXmlObjects<BusStopModel>(Constant.ServerInfo.XmlDirectory + @"BusStops\"))
-            {
-                var busStop = new BusStopEntity(data);
-                busStop.Spawn();
-                _busStops.Add(busStop);
-            }
-        }
-
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
             //args[0] Czas
@@ -37,7 +25,7 @@ namespace Serverside.Entities.Common.BusStop
             //args[2] Indeks przystanku na jaki chce się udać
             if (eventName == "RequestBus")
             {
-                var busStop = _busStops[Convert.ToInt32(arguments[2])];
+                var busStop = EntityHelper.GetBusStops().ElementAt(Convert.ToInt32(arguments[2]));
 
                 BusStopEntity.StartTransport(sender, Convert.ToDecimal(arguments[1]), Convert.ToInt32(arguments[0]),
                     busStop.Data.Center, busStop.Data.Name);
@@ -48,13 +36,13 @@ namespace Serverside.Entities.Common.BusStop
         public void ShowBusMenu(Client sender)
         {
             //Jeśli gracz nie jest na przystanku to anulujemy proces
-            if (!sender.HasData("Bus") || _busStops.Count < 2)
+            if (!sender.HasData("Bus") || EntityHelper.GetBusStops().Count() < 2)
             {
                 sender.Notify("Liczba przystanków autobusowych musi być większa lub równa dwa.");
                 return;
             }
             //Wybieramy wszystkie przystanki oprócz tego w którym obecnie się znajduje
-            var json = JsonConvert.SerializeObject(_busStops.Select(x => new
+            var json = JsonConvert.SerializeObject(EntityHelper.GetBusStops().Select(x => new
             {
                 x.Data.Name,
                 Time = (int)(sender.Position.DistanceTo(x.Data.Center) / 2.5f),
@@ -64,7 +52,7 @@ namespace Serverside.Entities.Common.BusStop
             sender.TriggerEvent("ShowBusMenu", json);
         }
 
-        [Command("dodajbusbez", GreedyArg = true)]
+        [Command("dodajbus", "~y~UŻYJ ~w~ /dodajbus [nazwa]",  GreedyArg = true)]
         public void AddBusStop(Client sender, string name)
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
@@ -78,7 +66,7 @@ namespace Serverside.Entities.Common.BusStop
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
             Vector3 center = null;
-            
+
             void Handler(Client o, string command)
             {
                 if (center == null && o == sender && command == "/tu")
@@ -90,12 +78,12 @@ namespace Serverside.Entities.Common.BusStop
                         Center = center,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                     };
-                    XmlHelper.AddXmlObject(data, Constant.ServerInfo.XmlDirectory + @"BusStops\", data.Name);
+                    XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(BusStopModel), data.Name));
 
                     sender.Notify("Dodawanie przystanku zakończyło się pomyślnie.");
                     var busStop = new BusStopEntity(data);
                     busStop.Spawn();
-                    _busStops.Add(busStop);
+                    EntityHelper.Add(busStop);
                 }
             }
         }
@@ -103,22 +91,30 @@ namespace Serverside.Entities.Common.BusStop
         [Command("usunbus")]
         public void DeleteBusStop(Client sender)
         {
-            //if (sender.GetAccountEntity().Model.ServerRank < ServerRank.GameMaster)
-            //{
-            //    sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
-            //    return;
-            //}
-
-            if (_busStops.Count == 0)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie znaleziono przystanku autobusowego które można usunąć.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
                 return;
             }
-            var busStop = _busStops.OrderBy(a => a.Data.Center.DistanceTo(sender.Position)).First();
+
+            if (!EntityHelper.GetBusStops().Any())
+            {
+                sender.Notify("Nie znaleziono przystanku autobusowego który można usunąć.");
+                return;
+            }
+
+            var busStop = EntityHelper.GetBusStop(sender.Position, 5f);
+
+            if (busStop == null)
+            {
+                sender.Notify("Nie znaleziono przystanku autobusowego w Twoim otoczeniu.");
+                return;
+            }
+
             if (XmlHelper.TryDeleteXmlObject(busStop.Data.FilePath))
             {
                 sender.Notify("Usuwanie przystanku autobusowego zakończyło się ~g~pomyślnie.");
-                _busStops.Remove(busStop);
+                EntityHelper.Remove(busStop);
                 busStop.Dispose();
             }
             else

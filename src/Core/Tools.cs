@@ -31,8 +31,8 @@ namespace Serverside.Core
         }
 
         private static Random _random = new Random();
-        public static int RandomInt() => _random.Next();
-        public static int RandomInt(int max) => _random.Next(max);
-        public static int RandomInt(int min, int max) => _random.Next(min, max);
+        public static int RandomRange() => _random.Next();
+        public static int RandomRange(int max) => _random.Next(max);
+        public static int RandomRange(int min, int max) => _random.Next(min, max);
     }
 }

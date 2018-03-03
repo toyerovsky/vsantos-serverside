@@ -4,9 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Linq;
-using Serverside.Core.Database.Models;
 using Serverside.Core.Repositories;
 using Serverside.Entities.Core.Item;
 
@@ -22,11 +20,11 @@ namespace Serverside.Core.Telephone
                     .Where(i => i.ItemType == ItemType.Cellphone && i.ThirdParameter.HasValue)
                     .Select(i => i.ThirdParameter.Value);
 
-                int freeTelephoneNumber = Tools.RandomInt(100000);
+                int freeTelephoneNumber = Tools.RandomRange(100000);
 
                 var numbersArray = numbers as int[] ?? numbers.ToArray();
                 while (numbersArray.Any(number => number == freeTelephoneNumber))
-                    freeTelephoneNumber = Tools.RandomInt(100000);
+                    freeTelephoneNumber = Tools.RandomRange(100000);
                 
                 return freeTelephoneNumber;
             }

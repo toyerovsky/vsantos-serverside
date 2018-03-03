@@ -6,7 +6,6 @@
 
 using System.Timers;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;

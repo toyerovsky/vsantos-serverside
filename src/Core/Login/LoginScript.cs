@@ -112,7 +112,6 @@ namespace Serverside.Core.Login
                         account.Kick(null, "Próba zalogowania na zalogowane konto.");
                     }
 
-
                     account = new AccountEntity(accountModel, sender);
                     account.Login();
                 }

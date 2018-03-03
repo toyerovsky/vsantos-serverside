@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Timers;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Newtonsoft.Json;
 using Serverside.Core;
 using Serverside.Core.Database.Models;

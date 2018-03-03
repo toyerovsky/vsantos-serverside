@@ -5,7 +5,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -136,15 +135,9 @@ namespace Serverside.Entities.Common.Carshop
                 return;
             }
 
-            if (!Validator.IsMoneyValid(cost))
+            if (!ValidationHelper.IsMoneyValid(cost))
             {
                 sender.Notify("Wprowadzona kwota gotówki jest nieprawidłowa.");
-                return;
-            }
-
-            if (!Enum.GetNames(typeof(CarshopType)).Contains(type))
-            {
-                sender.Notify("Wprowadzony typ salonu jest nieprawidłowy.");
                 return;
             }
 
@@ -156,6 +149,11 @@ namespace Serverside.Entities.Common.Carshop
                     endType = item;
                 else if (item.GetDescription() == type2)
                     endType2 = item;
+                else
+                {
+                    sender.Notify("Wprowadzony typ salonu jest nieprawidłowy.");
+                    return;
+                }
             }
             
             if (endType2 != CarshopType.Empty) endType = endType | endType2;

@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core.Database.Models;
 
 namespace Serverside.Entities.Core.Item

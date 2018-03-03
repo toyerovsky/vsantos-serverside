@@ -5,7 +5,6 @@
  */
 
 using System.Linq;
-using GTANetworkInternals;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Scripts;

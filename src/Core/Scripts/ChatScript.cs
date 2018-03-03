@@ -39,7 +39,7 @@ namespace Serverside.Core.Scripts
         [Command("sprobuj", "~y~UŻYJ: ~w~ /sprobuj [treść]", GreedyArg = true)]
         public void Try(Client player, string message)
         {
-            SendMessageToNearbyPlayers(player, Tools.RandomInt(2) == 0 ? "zawiódł " : "odniósł sukces " + " próbując " + message, ChatMessageType.ServerMe);
+            SendMessageToNearbyPlayers(player, Tools.RandomRange(2) == 0 ? "zawiódł " : "odniósł sukces " + " próbując " + message, ChatMessageType.ServerMe);
 
             SaidEventHandler handler = OnPlayerSaid;
             SaidEventArgs eventArgs = new SaidEventArgs(player, message, ChatMessageType.ServerMe);
@@ -116,7 +116,7 @@ namespace Serverside.Core.Scripts
         {
             var slot = message.Split(' ')[0];
             short groupSlot = slot.All(char.IsDigit) ? Convert.ToInt16(slot) : (short)-1;
-            if (groupSlot != -1 && Validator.IsGroupSlotValid(groupSlot))
+            if (groupSlot != -1 && ValidationHelper.IsGroupSlotValid(groupSlot))
             {
                 sender.Notify("Podany slot grupy jest nieprawidłowy.");
                 return;

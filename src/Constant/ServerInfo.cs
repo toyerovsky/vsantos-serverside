@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Serverside.Core.Interfaces;
 
@@ -17,20 +16,19 @@ namespace Serverside.Constant
 {
     public static class ServerInfo
     {
-        public static string WorkingDirectory
+        private static string GetWorkingDirectory()
         {
-            get
-            {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string path = Uri.UnescapeDataString(uri.Path);
-                return Path.GetDirectoryName(path);
-            }
+            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            return Path.GetDirectoryName(path);
         }
 
-        public static string XmlDirectory => Path.Combine(WorkingDirectory, "\\Xml\\");
+        public static readonly string WorkingDirectory = GetWorkingDirectory();
 
-        public static string JsonDirectory => Path.Combine(WorkingDirectory, "\\Json\\");
+        public static string XmlDirectory => Path.Combine(WorkingDirectory, "Xml");
+
+        public static string JsonDirectory => Path.Combine(WorkingDirectory, "Json");
 
         public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
             .SetBasePath(WorkingDirectory)

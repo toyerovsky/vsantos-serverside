@@ -5,7 +5,6 @@
  */
 
 using System;
-using GTANetworkInternals;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;

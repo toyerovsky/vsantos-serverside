@@ -144,7 +144,7 @@ namespace Serverside.Economy.Groups
             }
             else
             {
-                if (!Validator.IsGroupSlotValid(slot))
+                if (!ValidationHelper.IsGroupSlotValid(slot))
                 {
                     sender.Notify("Podany slot grupy nie jest poprawny.");
                     return;
@@ -186,7 +186,7 @@ namespace Serverside.Economy.Groups
         [Command("gwyplac")]
         public void TakeMoneyFromGroup(Client sender, short slot, decimal safeMoneyCount)
         {
-            if (!Validator.IsMoneyValid(safeMoneyCount))
+            if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
             {
                 sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.");
             }
@@ -221,7 +221,7 @@ namespace Serverside.Economy.Groups
         [Command("gwplac")]
         public void PutMoneyIntoGroup(Client sender, short groupSlot, decimal safeMoneyCount)
         {
-            if (!Validator.IsMoneyValid(safeMoneyCount))
+            if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
             {
                 sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.");
             }
@@ -256,7 +256,7 @@ namespace Serverside.Economy.Groups
                 return;
             }
 
-            if (!Validator.IsGroupSlotValid(slot))
+            if (!ValidationHelper.IsGroupSlotValid(slot))
             {
                 sender.Notify("Podano dane w nieprawidłowym formacie.");
                 return;

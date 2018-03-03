@@ -4,8 +4,6 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
-using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
@@ -25,7 +23,7 @@ namespace Serverside.Entities.Core.Item
         {
             if (DbModel.FirstParameter != null)
                 ChatScript.SendMessageToNearbyPlayers(player.Client,
-                    $"wyrzucił {Tools.RandomInt(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
+                    $"wyrzucił {Tools.RandomRange(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
                     ChatMessageType.ServerMe);
         }
 

@@ -4,8 +4,6 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Serverside.Core.Database.Models
 {
     public class GroupWarehouseOrderModel

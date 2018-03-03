@@ -7,7 +7,6 @@
 using System;
 using System.Linq;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Entities.Base;
 using Serverside.Entities.Common.Market.Models;

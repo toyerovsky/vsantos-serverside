@@ -24,17 +24,6 @@ namespace Serverside.Entities.Common.Booth
     {
         private List<TelephoneBoothEntity> Booths { get; set; } = new List<TelephoneBoothEntity>();
 
-        [ServerEvent(Event.ResourceStart)]
-        private void OnResourceStart()
-        {
-            foreach (var data in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Booths")))
-            {
-                var booth = new TelephoneBoothEntity(data);
-                booth.Spawn();
-                Booths.Add(booth);
-            }
-        }
-
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] args)
         {
             //args[0] to numer na jaki dzwoni
@@ -107,7 +96,7 @@ namespace Serverside.Entities.Common.Booth
             sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu.\"");
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
-            if (!Validator.IsMoneyValid(cost) || !Validator.IsCellphoneNumberValid(number))
+            if (!ValidationHelper.IsMoneyValid(cost) || !ValidationHelper.IsCellphoneNumberValid(number))
             {
                 sender.Notify("Wprowadzono dane w nieprawidłowym formacie.");
             }
@@ -139,7 +128,7 @@ namespace Serverside.Entities.Common.Booth
                         Number = int.Parse(number)
                     };
 
-                    XmlHelper.AddXmlObject(data, Constant.ServerInfo.XmlDirectory + @"Booths\");
+                    XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(TelephoneBoothModel)));
                     var booth = new TelephoneBoothEntity(data);
                     booth.Spawn();
                     Booths.Add(booth);

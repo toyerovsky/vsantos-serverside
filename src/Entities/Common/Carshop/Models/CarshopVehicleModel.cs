@@ -5,7 +5,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using GTANetworkAPI;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;

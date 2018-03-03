@@ -33,8 +33,8 @@ namespace Serverside.Core.Scripts
             }
         }
 
-        [Command("pokaz", "~y~ UŻYJ ~w~ /pokaz [typ] [id]")]
-        public void Show(Client sender, ShowType type, int id)
+        [Command("pokaz", "~y~ UŻYJ ~w~ /pokaz [dowod/prawko] [id]")]
+        public void Show(Client sender, string type, int id)
         {
             if (NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender).All(x => x.GetAccountEntity().ServerId != id))
             {
@@ -46,12 +46,12 @@ namespace Serverside.Core.Scripts
             var getter = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender)
                 .Single(x => x.GetAccountEntity().ServerId == id);
 
-            if (type == ShowType.IdCard)
+            if (type.ToLower().Trim() == ShowType.IdCard.GetDescription())
             {
                 ChatScript.SendMessageToNearbyPlayers(player.Client, $"pokazuje dowód osobisty {getter.Name}", ChatMessageType.ServerMe);
                 getter.Notify($"Osoba {player.CharacterEntity.FormatName} pokazała Ci swój dowód osobisty.");
             }
-            else if (type == ShowType.DrivingLicense)
+            else if (type.ToLower().Trim() == ShowType.DrivingLicense.GetDescription())
             {
                 ChatScript.SendMessageToNearbyPlayers(player.Client, $"pokazuje prawo jazdy {getter.Name}", ChatMessageType.ServerMe);
                 getter.Notify($"Osoba {player.CharacterEntity.FormatName} pokazała Ci swoje prawo jazdy.");

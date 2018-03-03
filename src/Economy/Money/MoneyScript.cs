@@ -15,7 +15,7 @@ namespace Serverside.Economy.Money
         [Command("plac", "~y~UŻYJ: ~w~ /plac [id] [kwota]", Alias = "pay")]
         public void TransferWalletMoney(Client sender, int id, decimal safeMoneyCount)
         {
-            if (!Validator.IsMoneyValid(safeMoneyCount))
+            if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
             {
                 sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.");
             }

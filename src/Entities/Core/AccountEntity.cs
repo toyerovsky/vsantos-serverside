@@ -60,7 +60,7 @@ namespace Serverside.Entities.Core
 
             string[] ip = DbModel.Ip.Split('.');
             string safeIp = $"{ip[0]}.{ip[1]}.***.***";
-            Client.Notify($"Witaj, ~g~~h~{DbModel.Name} ~w~zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin.ToShortDateString()}");
+            Client.Notify($"Witaj, ~g~~h~{DbModel.Name} ~w~zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()}");
             Client.Notify($"Z adresu IP: {safeIp}");
 
             var ctx = RolePlayContextFactory.NewContext();

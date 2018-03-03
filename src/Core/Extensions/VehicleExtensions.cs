@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Entities.Core;
 using Serverside.Entities.Core.Vehicle;
 
 namespace Serverside.Core.Extensions

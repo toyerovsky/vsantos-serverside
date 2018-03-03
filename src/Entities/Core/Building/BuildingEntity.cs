@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
-using GTANetworkInternals;
 using Serverside.Core;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;

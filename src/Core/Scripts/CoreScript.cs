@@ -9,10 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
 using Serverside.Core.Database;
-using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
-using Serverside.Core.Login;
-using Serverside.Core.Repositories;
 using Serverside.Entities;
 using Serverside.Entities.Core;
 
@@ -32,18 +29,21 @@ namespace Serverside.Core.Scripts
             }
         }
 
+        [ServerEvent(Event.PlayerDisconnected)]
         private void OnOnPlayerDisconnected(Client client, byte type, string reason)
         {
             AccountEntity account = client.GetAccountEntity();
             account?.Dispose();
         }
 
-        private void Event_OnResourceStart()
+        [ServerEvent(Event.ResourceStart)]
+        public void Event_OnResourceStart()
         {
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
         }
 
         private float _currentRotation = 0f;
+        [ServerEvent(Event.Update)]
         private void Event_OnUpdate()
         {
             if (EntityHelper.GetBuildings().Count == 0)
@@ -81,6 +81,7 @@ namespace Serverside.Core.Scripts
                 }
             }
         }
+
 
         private void Event_OnResourceStop()
         {

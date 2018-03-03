@@ -67,14 +67,14 @@ namespace Serverside.Entities.Common.Corners
         private void StartProcess()
         {
             //Przychodzące boty
-            Timer timer = new Timer(Tools.RandomInt(90, 180) * 1000);
+            Timer timer = new Timer(Tools.RandomRange(90, 180) * 1000);
             timer.Start();
 
             timer.Elapsed += (sender, args) =>
             {
                 timer.Stop();
 
-                var random = Tools.RandomInt(Data.CornerBots.Count);
+                var random = Tools.RandomRange(Data.CornerBots.Count);
 
                 CurrentPedEntity = new CornerPedEntity(Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
 
