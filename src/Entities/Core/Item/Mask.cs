@@ -21,7 +21,7 @@ namespace Serverside.Entities.Core.Item
 
         public override void UseItem(AccountEntity player)
         {
-            var encryptedName = $"Nieznajomy {player.Client.Name.GetHashCode().ToString().Substring(1, 6)}";
+            string encryptedName = $"Nieznajomy {player.Client.Name.GetHashCode().ToString().Substring(1, 6)}";
             
             if (player.CharacterEntity.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {

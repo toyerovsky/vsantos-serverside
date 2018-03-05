@@ -39,8 +39,8 @@ namespace Serverside.Constant
         {
             get
             {
-                var directories = new List<string>();
-                foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(type => type.GetInterfaces().Contains(typeof(IXmlObject))))
+                List<string> directories = new List<string>();
+                foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(type => type.GetInterfaces().Contains(typeof(IXmlObject))))
                 {
                     directories.Add(Path.Combine(XmlDirectory, $"{type.Name.Replace("Entity", "")}s\\"));
                 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Repositories;
 using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Atm;
@@ -36,7 +37,7 @@ namespace Serverside.Entities
 {
     public static class EntityHelper
     {
-        static EntityHelper()
+        public static void LoadEntities()
         {
             LoadCommonEntities();
             LoadCoreEntities();
@@ -345,7 +346,7 @@ namespace Serverside.Entities
             GroupEntityFactory factory = new GroupEntityFactory();
             using (GroupsRepository repository = new GroupsRepository())
             {
-                foreach (var group in repository.GetAll())
+                foreach (GroupModel group in repository.GetAll())
                 {
                     factory.Create(group);
                 }

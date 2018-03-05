@@ -19,9 +19,9 @@ namespace Serverside.Entities.Common.Corners.Helpers
             correctBotIds = new List<int>();
             List<int> ids = XmlHelper.GetXmlObjects<CornerBotModel>(Constant.ServerInfo.XmlDirectory +
                                                               @"CornerBots\").Select(x => x.BotId).ToList();            
-            foreach (var id in botIds)
+            foreach (string id in botIds)
             {
-                var correctId = Convert.ToInt32(id);
+                int correctId = Convert.ToInt32(id);
                 if (!ids.Contains(correctId))
                 {
                     return false;

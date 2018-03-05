@@ -34,12 +34,12 @@ namespace Serverside.Core.Database.Forum
                         {
                             if (reader.Read())
                             {
-                                var id = reader.GetInt64(0);
-                                var name = reader.GetString(1);
-                                var hash = reader.GetString(2);
-                                var salt = reader.GetString(3);
-                                var groupid = reader.GetInt16(4);
-                                var otherGroups = reader.GetString(5);
+                                long id = reader.GetInt64(0);
+                                string name = reader.GetString(1);
+                                string hash = reader.GetString(2);
+                                string salt = reader.GetString(3);
+                                short groupid = reader.GetInt16(4);
+                                string otherGroups = reader.GetString(5);
 
                                 if (hash != "" && salt != "")
                                 {

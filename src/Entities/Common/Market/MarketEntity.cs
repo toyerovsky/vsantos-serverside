@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core;
@@ -33,7 +34,7 @@ namespace Serverside.Entities.Common.Market
             base.Spawn();
 
             Random random = new Random();
-            var botInfo =
+            KeyValuePair<string, PedHash> botInfo =
                 Constant.Items.ConstantNames.OrderBy(x => random.Next(Constant.Items.ConstantNames
                     .Count)).ElementAt(0);
 

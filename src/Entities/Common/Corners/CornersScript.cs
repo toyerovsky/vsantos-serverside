@@ -23,9 +23,9 @@ namespace Serverside.Entities.Common.Corners
         [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (var data in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Corners")))
+            foreach (CornerModel data in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Corners")))
             {
-                var corner = new CornerEntity(data);
+                CornerEntity corner = new CornerEntity(data);
                 corner.Spawn();
                 Corners.Add(corner);
             }
@@ -35,10 +35,10 @@ namespace Serverside.Entities.Common.Corners
         [Command("dodajrog", "~y~UŻYJ: ~w~ /dodajrog [id npc np: 1, 2, 8, 4, 5]", GreedyArg = true)]
         public void AddCorner(Client sender, string ids)
         {
-            var botIds = ids.Split(',').ToList();
+            List<string> botIds = ids.Split(',').ToList();
 
             //Sprawdzamy czy gracz podał prawidłowe ID NPC
-            if (!CornerBotHelper.TryGetCornerBotIds(botIds, out var correctBotIds))
+            if (!CornerBotHelper.TryGetCornerBotIds(botIds, out List<int> correctBotIds))
             {
                 sender.Notify("Podano dane w nieprawidłowym formacie. Lub podany NPC nie istnieje.");
                 return;
@@ -108,7 +108,7 @@ namespace Serverside.Entities.Common.Corners
                     };
                     //Dodajemy nowy plik .xml
                     XmlHelper.AddXmlObject(data, Constant.ServerInfo.XmlDirectory + @"Corners\");
-                    var corner = new CornerEntity(data);
+                    CornerEntity corner = new CornerEntity(data);
                     Corners.Add(corner);
 
                     sender.Notify("Dodawanie rogu zakończyło się ~h~~g~pomyślnie.");
@@ -130,7 +130,7 @@ namespace Serverside.Entities.Common.Corners
         [Command("usunrog")]
         public void DeleteCorner(Client sender)
         {
-            var corner = Corners.OrderBy(a => a.Data.Position.Position.DistanceTo(sender.Position)).First();
+            CornerEntity corner = Corners.OrderBy(a => a.Data.Position.Position.DistanceTo(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(corner.Data.FilePath))
             {
                 sender.Notify("Usuwanie rogu zakończyło się ~h~~g~pomyślnie.");

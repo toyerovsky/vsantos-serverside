@@ -20,6 +20,7 @@ using Serverside.Economy.Jobs.Dustman;
 using Serverside.Economy.Jobs.Dustman.Models;
 using Serverside.Economy.Jobs.Enums;
 using Serverside.Economy.Jobs.Greenkeeper;
+using Serverside.Entities.Core.Vehicle;
 
 namespace Serverside.Economy.Jobs
 {
@@ -34,11 +35,11 @@ namespace Serverside.Economy.Jobs
         {
             string jsonDir = ServerInfo.JsonDirectory;
 
-            var dustmanJob = new DustmanJob("Śmieciarz", 500, $"{jsonDir}DustmanVehicles\\");
+            DustmanJob dustmanJob = new DustmanJob("Śmieciarz", 500, $"{jsonDir}DustmanVehicles\\");
 
-            var greenkeeperJob = new GreenkeeperJob("Greenkeeper", 400, $"{jsonDir}GreenkeeperVehicles\\");
+            GreenkeeperJob greenkeeperJob = new GreenkeeperJob("Greenkeeper", 400, $"{jsonDir}GreenkeeperVehicles\\");
 
-            var courierJob = new CourierJob("Kurier", 500, $"{jsonDir}CourierVehicles\\");
+            CourierJob courierJob = new CourierJob("Kurier", 500, $"{jsonDir}CourierVehicles\\");
 
             Jobs = new List<Job>
             {
@@ -50,7 +51,7 @@ namespace Serverside.Economy.Jobs
         {
             Garbages = XmlHelper.GetXmlObjects<GarbageModel>($"{ServerInfo.XmlDirectory}JobGarbages\\");
 
-            foreach (var garbage in Garbages)
+            foreach (GarbageModel garbage in Garbages)
             {
                 if (garbage.GtaPropId != 0)
                     NAPI.Object.CreateObject(garbage.GtaPropId, garbage.Position, garbage.Rotation);
@@ -72,7 +73,7 @@ namespace Serverside.Economy.Jobs
         {
             using (CharactersRepository repository = new CharactersRepository())
             {
-                foreach (var character in repository.GetAll())
+                foreach (CharacterModel character in repository.GetAll())
                 {
                     if (character.JobLimit == 0)
                         continue;
@@ -167,7 +168,7 @@ namespace Serverside.Economy.Jobs
                         return;
                     }
 
-                    var vehicle = o.Vehicle.GetVehicleEntity();
+                    VehicleEntity vehicle = o.Vehicle.GetVehicleEntity();
                     AddVehicleToJob(vehicle.DbModel, type);
 
                     o.Notify("Dodawanie auta do pracy zakończyło się ~h~ ~g~pomyślnie.");
@@ -179,27 +180,27 @@ namespace Serverside.Economy.Jobs
         {
             if (type == JobType.Dustman)
             {
-                var vehicle = new DustmanVehicleEntity(data);
+                DustmanVehicleEntity vehicle = new DustmanVehicleEntity(data);
                 vehicle.Spawn();
-                var job = (DustmanJob)Jobs.First(
+                DustmanJob job = (DustmanJob)Jobs.First(
                     x => x is DustmanJob);
                 job.Vehicles.Add(vehicle);
                 JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
             }
             else if (type == JobType.Greenkeeper)
             {
-                var vehicle = new GreenkeeperVehicle(data);
+                GreenkeeperVehicle vehicle = new GreenkeeperVehicle(data);
                 vehicle.Spawn();
-                var job = (GreenkeeperJob)Jobs.First(
+                GreenkeeperJob job = (GreenkeeperJob)Jobs.First(
                     x => x is GreenkeeperJob);
                 job.Vehicles.Add(vehicle);
                 JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
             }
             else if (type == JobType.Courier)
             {
-                var vehicle = new CourierVehicle(data);
+                CourierVehicle vehicle = new CourierVehicle(data);
                 vehicle.Spawn();
-                var job = (CourierJob)Jobs.First
+                CourierJob job = (CourierJob)Jobs.First
                     (x => x is CourierJob);
                 JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
             }

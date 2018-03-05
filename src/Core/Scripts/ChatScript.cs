@@ -114,7 +114,7 @@ namespace Serverside.Core.Scripts
         [Command("go", "~y~UŻYJ: ~w~ /go [slot] [treść]", GreedyArg = true)]
         public void SendMessageOnGroupChat(Client sender, string message)
         {
-            var slot = message.Split(' ')[0];
+            string slot = message.Split(' ')[0];
             byte groupSlot = slot.All(char.IsDigit) ? Convert.ToByte(slot) : (byte)0;
             if (groupSlot != 0 && ValidationHelper.IsGroupSlotValid(groupSlot))
             {
@@ -126,8 +126,8 @@ namespace Serverside.Core.Scripts
             {
                 if (group.CanPlayerWriteOnChat(sender.GetAccountEntity()))
                 {
-                    var m = string.Join(" ", message);
-                    var clients = EntityHelper.GetAccounts().Where(a => group.DbModel.Workers.Any(
+                    string m = string.Join(" ", message);
+                    List<Client> clients = EntityHelper.GetAccounts().Where(a => group.DbModel.Workers.Any(
                         w => w.Character.Id.Equals(a.Value.CharacterEntity.DbModel.Id))).Select(
                         c => c.Value.Client).ToList();
                     SendMessageToSpecifiedPlayers(sender, clients, m, ChatMessageType.GroupOoc, $"~{group.DbModel.Color}~");
@@ -142,7 +142,7 @@ namespace Serverside.Core.Scripts
         [Command("m", "~y~ UŻYJ ~w~ /m [tekst]", GreedyArg = true)]
         public void SayThroughTheMegaphone(Client sender, string message)
         {
-            var group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
+            GroupEntity group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
             if (group == null) return;
             if (group.DbModel.GroupType != GroupType.Police || !((Police)group).CanPlayerUseMegaphone(sender.GetAccountEntity()))
             {
@@ -174,7 +174,7 @@ namespace Serverside.Core.Scripts
                 message = $"[{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}";
             }
 
-            foreach (var p in players)
+            foreach (Client p in players)
             {
                 p.SendChatMessage(messageColor, message);
             }

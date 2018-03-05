@@ -43,7 +43,7 @@ namespace Serverside.Admin
 
             if (EntityHelper.GetAccountByServerId(bossId) != null)
             {
-                var boss = EntityHelper.GetAccountByServerId(bossId);
+                AccountEntity boss = EntityHelper.GetAccountByServerId(bossId);
 
                 if (boss.CharacterEntity.DbModel.Workers.Count < 3)
                 {
@@ -88,7 +88,7 @@ namespace Serverside.Admin
 
             if (EntityHelper.GetGroup(groupId) != null)
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
 
                 GroupEntity group = EntityHelper.GetGroup(groupId);
 

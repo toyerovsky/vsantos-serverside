@@ -12,6 +12,7 @@ using Serverside.Core.Extensions;
 using Serverside.Economy.Groups;
 using Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
 using Serverside.Economy.Jobs.Enums;
+using Serverside.Entities.Core;
 
 namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
 {
@@ -36,7 +37,7 @@ namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
             {
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
+                    AccountEntity player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
                     if (player.CharacterEntity.DbModel.Job != JobType.Courier)
                     {
                         player.Client.Notify("Aby podjąć pracę kuriera udaj się do pracodawcy.");
@@ -62,7 +63,7 @@ namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
             {
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
+                    AccountEntity player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
                     if (player.CharacterEntity.DbModel.Job != JobType.Courier) return;
                     player.Client.TriggerEvent("DisposeCourierMenu");
                 }

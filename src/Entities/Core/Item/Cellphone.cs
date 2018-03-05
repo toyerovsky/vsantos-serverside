@@ -71,10 +71,10 @@ namespace Serverside.Entities.Core.Item
         {
             using (TelephoneMessagesRepository repository = new TelephoneMessagesRepository())
             {
-                foreach (var message in e.NewItems.Cast<TelephoneMessageModel>().Where(m => !e.OldItems.Contains(m)))
+                foreach (TelephoneMessageModel message in e.NewItems.Cast<TelephoneMessageModel>().Where(m => !e.OldItems.Contains(m)))
                     repository.Insert(message);
 
-                foreach (var message in e.OldItems.Cast<TelephoneMessageModel>().Where(m => !e.NewItems.Contains(m)))
+                foreach (TelephoneMessageModel message in e.OldItems.Cast<TelephoneMessageModel>().Where(m => !e.NewItems.Contains(m)))
                     repository.Delete(message.Id);
 
                 repository.Save();
@@ -85,10 +85,10 @@ namespace Serverside.Entities.Core.Item
         {
             using (TelephoneContactsRepository repository = new TelephoneContactsRepository())
             {
-                foreach (var contact in e.NewItems.Cast<TelephoneContactModel>().Where(m => !e.OldItems.Contains(m)))
+                foreach (TelephoneContactModel contact in e.NewItems.Cast<TelephoneContactModel>().Where(m => !e.OldItems.Contains(m)))
                     repository.Insert(contact);
 
-                foreach (var contact in e.OldItems.Cast<TelephoneContactModel>().Where(m => !e.NewItems.Contains(m)))
+                foreach (TelephoneContactModel contact in e.OldItems.Cast<TelephoneContactModel>().Where(m => !e.NewItems.Contains(m)))
                     repository.Delete(contact.Id);
 
                 repository.Save();

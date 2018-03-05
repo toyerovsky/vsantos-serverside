@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var warehouseItem = _context.GroupWarehouseItems.Find(id);
+            GroupWarehouseItemModel warehouseItem = _context.GroupWarehouseItems.Find(id);
             _context.GroupWarehouseItems.Remove(warehouseItem);
         }
 

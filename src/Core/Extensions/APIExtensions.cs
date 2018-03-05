@@ -37,7 +37,7 @@ namespace Serverside.Core.Extensions
 
         public static string ToRocstar(this Color color)
         {
-            foreach (var c in _rocstarColors)
+            foreach (KeyValuePair<string, string> c in _rocstarColors)
             {
                 //ConsoleOutput(c.Key.Substring(1, 2).ToString(), ConsoleColor.Red);
                 //ConsoleOutput((Convert.ToInt32(c.Key.Substring(1, 2)) < 20).ToString(), ConsoleColor.Green);

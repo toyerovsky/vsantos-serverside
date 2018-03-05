@@ -30,10 +30,10 @@ namespace Serverside.Core.Scripts
 
         private void Event_OnPlayerConnected(Client player)
         {
-            var list = new List<string>();
-            foreach (var ply in EntityHelper.GetAccounts())
+            List<string> list = new List<string>();
+            foreach (KeyValuePair<long, AccountEntity> ply in EntityHelper.GetAccounts())
             {
-                var dic = new Dictionary<string, object>
+                Dictionary<string, object> dic = new Dictionary<string, object>
                 {
                     {"socialClubName", ply.Value.Client.SocialClubName},
                     {"serverId", ply.Value.ServerId},
@@ -55,10 +55,10 @@ namespace Serverside.Core.Scripts
         {
             if (eventName == "playerlist_pings")
             {
-                var list = new List<string>();
-                foreach (var ply in EntityHelper.GetAccounts())
+                List<string> list = new List<string>();
+                foreach (KeyValuePair<long, AccountEntity> ply in EntityHelper.GetAccounts())
                 {
-                    var dic = new Dictionary<string, object>
+                    Dictionary<string, object> dic = new Dictionary<string, object>
                     {
                         {"socialClubName", ply.Value.Client.SocialClubName},
                         {"serverId", ply.Value.ServerId},
@@ -76,8 +76,8 @@ namespace Serverside.Core.Scripts
             {
                 _mLastTick = DateTime.Now;
 
-                var changedNames = new List<string>();
-                foreach (var player in NAPI.Pools.GetAllPlayers())
+                List<string> changedNames = new List<string>();
+                foreach (Client player in NAPI.Pools.GetAllPlayers())
                 {
                     string lastName = player.GetData("playerlist_lastname");
 
@@ -91,7 +91,7 @@ namespace Serverside.Core.Scripts
                     {
                         player.SetData("playerlist_lastname", player.Name);
 
-                        var dic = new Dictionary<string, object>
+                        Dictionary<string, object> dic = new Dictionary<string, object>
                         {
                             {"socialClubName", player.SocialClubName},
                             {"newName", player.Name}

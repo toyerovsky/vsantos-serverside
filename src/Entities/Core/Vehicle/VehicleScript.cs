@@ -39,7 +39,7 @@ namespace Serverside.Entities.Core.Vehicle
                 else
                 {
                     //SPAWN
-                    var vehicle = sender.GetAccountEntity().CharacterEntity.DbModel.Vehicles
+                    VehicleModel vehicle = sender.GetAccountEntity().CharacterEntity.DbModel.Vehicles
                         .Single(v => v.Id == (long)sender.GetData("SelectedVehicleID"));
 
                     vehicleEntity = new VehicleEntity(vehicle);
@@ -56,13 +56,13 @@ namespace Serverside.Entities.Core.Vehicle
                 if (EntityHelper.GetVehicle(sender.Vehicle) == null)
                     return;
 
-                var controller = EntityHelper.GetVehicle(sender.Vehicle);
+                VehicleEntity controller = EntityHelper.GetVehicle(sender.Vehicle);
                 controller.ChangeSpawnPosition();
                 sender.Notify($"Pojazd {controller.DbModel.Name} zosta³ zaparkowany.");
             }
             else if (eventName == "OnPlayerInformationsVehicle")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
 
                 if (player.CharacterEntity.DbModel.Vehicles.Any(v => v.Id == sender.GetData("SelectedVehicleID")))
                     ShowVehiclesInformation(sender, player.CharacterEntity.DbModel.Vehicles.Single(
@@ -70,7 +70,7 @@ namespace Serverside.Entities.Core.Vehicle
             }
             else if (eventName == "OnPlayerInformationsInVehicle")
             {
-                var vehicle = EntityHelper.GetVehicle(sender.Vehicle);
+                VehicleEntity vehicle = EntityHelper.GetVehicle(sender.Vehicle);
                 if (vehicle == null) return;
 
                 float enginePower = (float)((vehicle.DbModel.EnginePowerMultiplier - 1.0) * 20.0 + 80);

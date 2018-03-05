@@ -44,10 +44,10 @@ namespace Serverside.Entities.Core.Building
 
                         if (Constant.Items.DefaultInteriors.All(i => i.Name != (string)arguments[2]) || !sender.HasData("AdminDoorPosition")) return;
 
-                        var internalPosition = Constant.Items.DefaultInteriors.First(i => i.Name == (string)arguments[2]).InternalPosition;
+                        Vector3 internalPosition = Constant.Items.DefaultInteriors.First(i => i.Name == (string)arguments[2]).InternalPosition;
                         Vector3 externalPosition = sender.GetData("AdminDoorPosition");
 
-                        var building = BuildingEntity.Create(sender.GetAccountEntity().DbModel, (string)arguments[0], Convert.ToDecimal(arguments[1]), internalPosition, externalPosition, (bool)arguments[3]);
+                        BuildingEntity building = BuildingEntity.Create(sender.GetAccountEntity().DbModel, (string)arguments[0], Convert.ToDecimal(arguments[1]), internalPosition, externalPosition, (bool)arguments[3]);
 
                         building.Save();
 
@@ -106,10 +106,10 @@ namespace Serverside.Entities.Core.Building
             //Dla administracji
             if (id != -1)
             {
-                var buildindController = EntityHelper.GetBuilding(id);
+                BuildingEntity buildindController = EntityHelper.GetBuilding(id);
                 if (buildindController != null)
                 {
-                    var adminInfo = new List<string>
+                    List<string> adminInfo = new List<string>
                     {
                         buildindController.DbModel.Name,
                         buildindController.DbModel.Description,
@@ -139,7 +139,7 @@ namespace Serverside.Entities.Core.Building
                     return;
                 }
 
-                var info = new List<string>
+                List<string> info = new List<string>
                 {
                     building.DbModel.Name,
                     building.DbModel.Description,
@@ -177,7 +177,7 @@ namespace Serverside.Entities.Core.Building
 
             if (sender.HasData("CurrentDoors"))
             {
-                var building = (BuildingEntity)sender.GetData("CurrentDoors");
+                BuildingEntity building = (BuildingEntity)sender.GetData("CurrentDoors");
                 building.Dispose();
                 using (BuildingsRepository repository = new BuildingsRepository())
                 {
@@ -189,7 +189,7 @@ namespace Serverside.Entities.Core.Building
 
             if (id != -1 && EntityHelper.GetBuilding(id) != null)
             {
-                var building = EntityHelper.GetBuilding(id);
+                BuildingEntity building = EntityHelper.GetBuilding(id);
                 building.Dispose();
                 using (BuildingsRepository repository = new BuildingsRepository())
                 {

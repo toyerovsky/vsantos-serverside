@@ -13,11 +13,10 @@ using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
 using Serverside.Core.Serialization;
-using Serverside.Entities;
-using Serverside.Entities.Common.Atm;
+using Serverside.Economy.Bank;
 using Serverside.Entities.Common.Atm.Models;
 
-namespace Serverside.Economy.Bank
+namespace Serverside.Entities.Common.Atm
 {
     public class AtmScript : Script
     {
@@ -82,7 +81,7 @@ namespace Serverside.Economy.Bank
                         }
                     };
                     XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(AtmModel)));
-                    var atm = new AtmEntity(data);
+                    AtmEntity atm = new AtmEntity(data);
                     atm.Spawn();
                     EntityHelper.Add(atm);
                     sender.Notify("Dodawanie bankomatu zakończyło się ~h~~g~pomyślnie.");
@@ -106,7 +105,7 @@ namespace Serverside.Economy.Bank
                 return;
             }
 
-            var atm = EntityHelper.GetAtms().First(a => a.ColShape.IsPointWithin(sender.Position));
+            AtmEntity atm = EntityHelper.GetAtms().First(a => a.ColShape.IsPointWithin(sender.Position));
             if (XmlHelper.TryDeleteXmlObject(atm.Data.FilePath))
             {
                 sender.Notify("Usuwanie bankomatu zakończyło się ~h~~g~pomyślnie.");

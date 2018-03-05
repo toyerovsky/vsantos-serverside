@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var account = _context.Accounts.Find(id);
+            AccountModel account = _context.Accounts.Find(id);
             _context.Accounts.Remove(account);
         }
 

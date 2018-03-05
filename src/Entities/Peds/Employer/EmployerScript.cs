@@ -9,6 +9,7 @@ using GTANetworkAPI;
 using Serverside.Core;
 using Serverside.Core.Extensions;
 using Serverside.Economy.Jobs.Enums;
+using Serverside.Entities.Core;
 
 namespace Serverside.Entities.Peds.Employer
 {
@@ -34,7 +35,7 @@ namespace Serverside.Entities.Peds.Employer
             //3 Magazynier
             if (eventName == "OnPlayerSelectedJob")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
                 player.CharacterEntity.DbModel.Job = (JobType)Convert.ToInt32(arguments[0]);
                 player.Save();
 
@@ -56,7 +57,7 @@ namespace Serverside.Entities.Peds.Employer
             }
             else if (eventName == "OnPlayerTakeMoneyJob")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
                 if (player.CharacterEntity.DbModel.MoneyJob != null)
                 {
                     sender.AddMoney((decimal)player.CharacterEntity.DbModel.MoneyJob);

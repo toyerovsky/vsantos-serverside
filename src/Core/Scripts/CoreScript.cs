@@ -17,7 +17,6 @@ namespace Serverside.Core.Scripts
 {
     public class CoreScript : Script
     {
-
         [ServerEvent(Event.ChatMessage)]
         public void OnChatMessage(Client sender, string message)
         {
@@ -36,10 +35,14 @@ namespace Serverside.Core.Scripts
             account?.Dispose();
         }
 
+        /// <summary>
+        /// Server stuff initialization
+        /// </summary>
         [ServerEvent(Event.ResourceStart)]
         public void Event_OnResourceStart()
         {
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
+            EntityHelper.LoadEntities();
         }
 
         private float _currentRotation = 0f;

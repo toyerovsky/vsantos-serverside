@@ -7,6 +7,7 @@
 using System;
 using System.Timers;
 using GTANetworkAPI;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
@@ -18,9 +19,9 @@ namespace Serverside.Core.Scripts
     {
         public void Event_OnPlayerDeath(Client sender, Client killer, WeaponHash reason)
         {
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
 
-            var playerCharacter = player.CharacterEntity.DbModel;
+            CharacterModel playerCharacter = player.CharacterEntity.DbModel;
 
             DateTime reviveDate = DateTime.Now.AddMinutes(
                 playerCharacter.MinutesToRespawn > 0 ? playerCharacter.MinutesToRespawn : GetTimeToRespawn(reason));
@@ -107,7 +108,7 @@ namespace Serverside.Core.Scripts
         {
             if (sender.HasData("CharacterBW"))
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
                 player.CharacterEntity.DbModel.IsAlive = false;
                 player.Save();
                 sender.Kick("CK");

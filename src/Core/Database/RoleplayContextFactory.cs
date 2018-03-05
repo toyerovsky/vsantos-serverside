@@ -24,12 +24,12 @@ namespace Serverside.Core.Database
         {
             if (_firstAttempt)
             {
-                using (var testConnection = new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString")))
+                using (MySqlConnection testConnection = new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString")))
                 {
                     testConnection.Open();
-                    var query = "select 1";
+                    string query = "select 1";
 
-                    using (var command = new MySqlCommand(query, testConnection))
+                    using (MySqlCommand command = new MySqlCommand(query, testConnection))
                     {
                         try
                         {
@@ -48,7 +48,7 @@ namespace Serverside.Core.Database
                 _firstAttempt = false;
             }
 
-            var options = new DbContextOptionsBuilder<RoleplayContext>();
+            DbContextOptionsBuilder<RoleplayContext> options = new DbContextOptionsBuilder<RoleplayContext>();
             options.UseMySql(Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString"));
             
             return new RoleplayContext(options.Options);

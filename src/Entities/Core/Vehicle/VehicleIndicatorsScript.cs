@@ -18,7 +18,7 @@ namespace Serverside.Entities.Core.Vehicle
         {
             if (eventName == "toggle_indicator_left")
             {
-                var veh = NAPI.Player.GetPlayerVehicle(player);
+                GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
                 int indicator = 1;
                 Vector3 pos = NAPI.Entity.GetEntityPosition(player);
 
@@ -35,7 +35,7 @@ namespace Serverside.Entities.Core.Vehicle
             }
             else if (eventName == "toggle_indicator_right")
             {
-                var veh = NAPI.Player.GetPlayerVehicle(player);
+                GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
                 int indicator = 0;
                 Vector3 pos = NAPI.Entity.GetEntityPosition(player);
 

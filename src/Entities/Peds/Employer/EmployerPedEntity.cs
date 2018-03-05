@@ -26,7 +26,7 @@ namespace Serverside.Entities.Peds.Employer
             {
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
-                    var sender = NAPI.Player.GetPlayerFromHandle(entity);
+                    Client sender = NAPI.Player.GetPlayerFromHandle(entity);
                     NAPI.ClientEvent.TriggerClientEvent(sender, "OnPlayerEnteredEmployer", sender.GetAccountEntity().CharacterEntity.DbModel.MoneyJob.ToString());
                 }
             };
@@ -35,7 +35,7 @@ namespace Serverside.Entities.Peds.Employer
             {
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
-                    var sender = NAPI.Player.GetPlayerFromHandle(entity);
+                    Client sender = NAPI.Player.GetPlayerFromHandle(entity);
                     NAPI.ClientEvent.TriggerClientEvent(sender, "OnPlayerExitEmployer");
                 }
             };

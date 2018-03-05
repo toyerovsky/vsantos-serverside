@@ -430,7 +430,7 @@ namespace Serverside.Core.CharacterCreator
         {
             if (faceFeatures.Count <= 21)
             {
-                foreach (var item in faceFeatures)
+                foreach (KeyValuePair<byte, float> item in faceFeatures)
                 {
                     //_SET_PED_FACE_FEATURE(Ped ped, byte index, float scale)
                     NAPI.Native.SendNativeToPlayer(Client, Hash._SET_PED_FACE_FEATURE, Client.Handle, item.Key, item.Value);

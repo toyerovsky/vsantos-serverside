@@ -4,8 +4,10 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.Collections.Generic;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
+using Serverside.Core.Database.Models;
 using Serverside.Economy.Money;
 using Serverside.Entities;
 using Serverside.Entities.Core;
@@ -28,7 +30,7 @@ namespace Serverside.Core.Extensions
 
         public static Color GetRankColor(this Client client)
         {
-            var account = client.GetAccountEntity().DbModel;
+            AccountModel account = client.GetAccountEntity().DbModel;
             if ((ServerRank)account.ForumGroup >= ServerRank.Support && (ServerRank)account.ForumGroup <= ServerRank.Support6) return new Color(51, 143, 255);
             if ((ServerRank)account.ForumGroup >= ServerRank.GameMaster && (ServerRank)account.ForumGroup <= ServerRank.GameMaster5) return new Color(0, 109, 15);
             if ((ServerRank)account.ForumGroup >= ServerRank.Administrator && (ServerRank)account.ForumGroup <= ServerRank.Adminadministrator3) return new Color(117, 13, 18);
@@ -43,7 +45,7 @@ namespace Serverside.Core.Extensions
             if (slot > 0 || slot <= 3)
             {
                 slot--;
-                var groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity());
+                List<GroupEntity> groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity());
                 group = slot < groups.Count ? groups[slot] : null;
             }
             return group != null;

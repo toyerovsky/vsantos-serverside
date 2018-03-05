@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var character = _context.Characters.Find(id);
+            CharacterModel character = _context.Characters.Find(id);
             _context.Characters.Remove(character);
         }
 

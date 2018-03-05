@@ -17,7 +17,7 @@ namespace Serverside.Economy.Jobs.Dustman
 
         public DustmanJob(string name, decimal moneyLimit, string jsonDirectory) : base(name, moneyLimit, jsonDirectory)
         {
-            foreach (var vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
+            foreach (VehicleModel vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
             {
                 Vehicles.Add(new DustmanVehicleEntity(vehicleData));
             }

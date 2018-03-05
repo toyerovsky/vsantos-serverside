@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
@@ -12,6 +13,7 @@ using Serverside.Admin.Enums;
 using Serverside.Constant;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
+using Serverside.Entities.Core;
 using Color = System.Drawing.Color;
 
 namespace Serverside.Admin
@@ -27,7 +29,7 @@ namespace Serverside.Admin
                 return;
             }
 
-            var controller = EntityHelper.GetAccountByServerId(id);
+            AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -74,7 +76,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do teleportu.");
                 return;
             }
-            var controller = EntityHelper.GetAccountByServerId(id);
+            AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -91,7 +93,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do obserwowania.");
                 return;
             }
-            var controller = EntityHelper.GetAccountByServerId(id);
+            AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -116,7 +118,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.");
                 return;
             }
-            var controller = EntityHelper.GetAccountByServerId(id);
+            AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -134,7 +136,7 @@ namespace Serverside.Admin
                 sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.");
                 return;
             }
-            var accountEntity = EntityHelper.GetAccountByServerId(id);
+            AccountEntity accountEntity = EntityHelper.GetAccountByServerId(id);
             if (accountEntity == null)
             {
                 sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -231,7 +233,7 @@ namespace Serverside.Admin
                 Colorful.Console.WriteLine($@"[File] Utworzono plik {path}", Color.CornflowerBlue);
             }
 
-            var data = File.ReadAllLines(path).ToList();
+            List<string> data = File.ReadAllLines(path).ToList();
 
             data.Add($"[{DateTime.Now}] {name} Pos: {sender.Position} Rot: {sender.Rotation} Autor: {sender.GetAccountEntity().DbModel.Name}");
 

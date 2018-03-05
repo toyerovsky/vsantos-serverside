@@ -13,6 +13,7 @@ using Serverside.Constant;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization;
 using Serverside.Economy.Groups;
+using Serverside.Economy.Groups.Stucts;
 using Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
 using Serverside.Entities;
 
@@ -26,7 +27,7 @@ namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
         {
             if (eventName == "OnPlayerTakePackage")
             {
-                var package = GroupWarehouseScript.CurrentOrders.Single(x => x.Data.Id == (int)arguments[0]);
+                WarehouseOrderInfo package = GroupWarehouseScript.CurrentOrders.Single(x => x.Data.Id == (int)arguments[0]);
                 if (package.CurrentCourier != null)
                 {
                     sender.Notify("Ktoś obecnie dostarcza tę paczkę.");
@@ -68,7 +69,7 @@ namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
             {
                 if (o == sender && message == "tu")
                 {
-                    var warehouse = new CourierWarehouseModel()
+                    CourierWarehouseModel warehouse = new CourierWarehouseModel()
                     {
                         Name = name,
                         Position = o.Position,

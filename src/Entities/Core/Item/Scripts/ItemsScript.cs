@@ -36,7 +36,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             }
             else if (eventName == "UseItem")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
                 int index = Convert.ToInt32(sender.GetData("SelectedItem"));
 
                 ItemEntity item = _itemFactory.Create(player.CharacterEntity.DbModel.Items.ToList()[index]);
@@ -44,7 +44,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             }
             else if (eventName == "InformationsItem")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
 
                 int index = Convert.ToInt32(sender.GetData("SelectedItem"));
                 List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
@@ -55,7 +55,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             }
             else if (eventName == "UsingInformationsItem")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
 
                 int index = Convert.ToInt32(sender.GetData("SelectedItem"));
                 List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
@@ -66,14 +66,14 @@ namespace Serverside.Entities.Core.Item.Scripts
             }
             else if (eventName == "BackToItemList")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
                 string itemsJson = JsonConvert.SerializeObject(player.CharacterEntity.DbModel.Items.ToList());
                 sender.TriggerEvent("ShowItems", itemsJson);
             }
             //args[0] to numer na jaki dzwoni
             else if (eventName == "OnPlayerTelephoneCall")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
 
                 if (Convert.ToInt32(args[0]) == 555 && player.CharacterEntity.OnDutyGroup is CrimeGroup group)
                 {
@@ -94,10 +94,10 @@ namespace Serverside.Entities.Core.Item.Scripts
                 //NAPI.playPlayerAnimation(senderPlayer.Client, (int)(AnimationFlags.AllowPlayerControl | AnimationFlags.Loop),
                 //    "cellphone@first_person", "cellphone_call_listen_base");
 
-                var number = Convert.ToInt32(args[0]);
+                int number = Convert.ToInt32(args[0]);
                 if (EntityHelper.GetAccounts().Any(p => p.Value.CharacterEntity.CurrentCellphone.Number == number))
                 {
-                    var getter = EntityHelper.GetAccounts()
+                    AccountEntity getter = EntityHelper.GetAccounts()
                         .Single(p => p.Value.CharacterEntity.CurrentCellphone.Number == number).Value;
 
                     if (getter.CharacterEntity.CurrentCellphone.CurrentCall != null)
@@ -107,7 +107,7 @@ namespace Serverside.Entities.Core.Item.Scripts
                         return;
                     }
 
-                    var call = new TelephoneCall(sender, getter.Client);
+                    TelephoneCall call = new TelephoneCall(sender, getter.Client);
                     sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall = call;
 
                     call.Timer.Elapsed += (o, eventArgs) =>
@@ -125,7 +125,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             }
             else if (eventName == "OnPlayerTelephoneTurnoff")
             {
-                var call = sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall;
+                TelephoneCall call = sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall;
                 call?.Dispose();
 
                 //TODO: Wyłączanie telefonu
@@ -134,7 +134,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             //Rządanie otworzenia okienka telefonu
             else if (eventName == "OnPlayerPullCellphoneRequest")
             {
-                var cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
+                Cellphone cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
                 sender.TriggerEvent("OnPlayerPulledCellphone", cellphone.Name,
                     JsonConvert.SerializeObject(cellphone.Contacts),
                     JsonConvert.SerializeObject(cellphone.Messages));
@@ -142,7 +142,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             //Odebranie rozmowy
             else if (eventName == "OnPlayerCellphonePickUp")
             {
-                var cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
+                Cellphone cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
                 TelephoneCall telephoneCall = cellphone.CurrentCall;
 
                 if (telephoneCall.Getter.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall != null)
@@ -164,7 +164,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             }
             else if (eventName == "OnPlayerCellphoneEnd")
             {
-                var controller = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
+                Cellphone controller = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
 
                 if (controller?.CurrentCall != null)
                 {
@@ -179,7 +179,7 @@ namespace Serverside.Entities.Core.Item.Scripts
             //args[0] to numer kontaktu args[1] to nazwa 
             else if (eventName == "OnPlayerTelephoneContactAdded")
             {
-                var cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
+                Cellphone cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
                 if (cellphone == null)
                 {
                     sender.Notify("Musisz mieć włączony telefon.");

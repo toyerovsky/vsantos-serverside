@@ -97,7 +97,7 @@ namespace Serverside.Admin
                 return;
             }
 
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
 
             if (AdminsOnDuty.Any(a => a.AccountId == player.AccountId))
             {

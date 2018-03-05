@@ -1,8 +1,8 @@
-﻿using Serverside.Core.Database.Models;
+﻿using System;
+using Serverside.Core.Database.Models;
 using Serverside.Entities.Interfaces;
-using System;
 
-namespace Serverside.Entities.Core.Item.Scripts
+namespace Serverside.Entities.Core.Item
 {
     public class ItemEntityFactory : IEntityFactory<ItemEntity, ItemModel>
     {
@@ -23,7 +23,7 @@ namespace Serverside.Entities.Core.Item.Scripts
                 case ItemType.Tuning: return new Tuning(itemModel);
 
                 default:
-                    throw new NotSupportedException($"Podany typ przedmiotu {itemType} nie jest obsługiwany.");
+                    throw new NotSupportedException($"Podany typ przedmiotu {itemModel.ItemType} nie jest obsługiwany.");
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Serverside.Entities.Core.Vehicle
             float engineMultipier = 0f;
             float torqueMultipier = 0f;
 
-            foreach (var tuning in DbModel.ItemsInVehicle)
+            foreach (ItemModel tuning in DbModel.ItemsInVehicle)
             {
                 if (tuning.ItemType == ItemType.Tuning && tuning.FourthParameter.HasValue)
                 {

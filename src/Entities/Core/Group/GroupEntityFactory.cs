@@ -1,7 +1,8 @@
 ﻿using System;
 using Serverside.Core.Database.Models;
-using Serverside.Economy.Groups.Base;
+using Serverside.Entities.Interfaces;
 using Serverside.Economy.Groups.Enums;
+using Serverside.Economy.Groups.Base;
 
 namespace Serverside.Entities.Core.Group
 {
@@ -15,7 +16,7 @@ namespace Serverside.Entities.Core.Group
                 case GroupType.CityHall: return new CityHall(groupModel);
                 case GroupType.Police: return new Police(groupModel);
                 default:
-                    throw new NotSupportedException($"Not supported group type: {groupType}.");
+                    throw new NotSupportedException($"Not supported group type: {groupModel.GroupType}.");
             }
         }
     }

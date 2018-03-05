@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Serverside.Core.Extensions;
 using Serverside.Entities.Base;
 using Serverside.Entities.Common.Atm.Models;
+using Serverside.Entities.Core;
 using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Common.Atm
@@ -40,7 +41,7 @@ namespace Serverside.Entities.Common.Atm
             {
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
-                    var accountEntity = entity.GetAccountEntity();
+                    AccountEntity accountEntity = entity.GetAccountEntity();
 
                     if (accountEntity.CharacterEntity.DbModel.BankAccountNumber == null)
                     {

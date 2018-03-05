@@ -5,14 +5,17 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Admin.Enums;
 using Serverside.Core;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Core.Serialization;
 using Serverside.Economy.Groups.Base;
+using Serverside.Entities.Core;
 using Serverside.Entities.Core.Vehicle;
 using Serverside.Entities.Peds.CrimeBot.Models;
 
@@ -69,7 +72,7 @@ namespace Serverside.Entities.Peds.CrimeBot
                 else if (o == sender && message == "tu" && botPosition != null && botVehicle != null)
                 {
 
-                    var botVehiclePosition = new FullPosition
+                    FullPosition botVehiclePosition = new FullPosition
                     {
                         Position = new Vector3
                         {
@@ -109,7 +112,7 @@ namespace Serverside.Entities.Peds.CrimeBot
         public void DeleteCrimeBotPosition(Client sender, string name = "")
         {
             CrimeBotPosition position = null;
-            var positions = XmlHelper
+            List<CrimeBotPosition> positions = XmlHelper
                 .GetXmlObjects<CrimeBotPosition>($@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\");
 
             if (name != "")
@@ -139,7 +142,7 @@ namespace Serverside.Entities.Peds.CrimeBot
             //args[0] to index na liście pozycji
             if (eventName == "OnPlayerSelectedCrimeBotDiscrict")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
                 if (player.CharacterEntity.OnDutyGroup is CrimeGroup group)
                 {
                     if (group.CrimePedEntity != null)
@@ -151,8 +154,8 @@ namespace Serverside.Entities.Peds.CrimeBot
 
                     using (CrimeBotsRepository repository = new CrimeBotsRepository())
                     {
-                        var crimeBotData = repository.Get(group.DbModel);
-                        var position = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\")[Convert.ToInt32(arguments[0])];
+                        CrimeBotModel crimeBotData = repository.Get(group.DbModel);
+                        CrimeBotPosition position = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\")[Convert.ToInt32(arguments[0])];
 
                         group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition, crimeBotData.Name, crimeBotData.Model, position.BotPosition);
                         group.CrimePedEntity.Spawn();

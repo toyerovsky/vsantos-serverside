@@ -16,6 +16,7 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Core.Serialization;
 using Serverside.Entities.Common.DriveThru.Models;
+using Serverside.Entities.Core;
 using Serverside.Entities.Core.Item;
 
 namespace Serverside.Entities.Common.DriveThru
@@ -28,7 +29,7 @@ namespace Serverside.Entities.Common.DriveThru
         {
             if (eventName == "OnPlayerDriveThruBought")
             {
-                var money = Convert.ToDecimal(arguments[2]);
+                decimal money = Convert.ToDecimal(arguments[2]);
                 if (!sender.HasMoney(money))
                 {
                     sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
@@ -36,7 +37,7 @@ namespace Serverside.Entities.Common.DriveThru
                 }
                 sender.RemoveMoney(money);
 
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
 
                 ItemModel itemModel = new ItemModel
                 {
@@ -59,9 +60,9 @@ namespace Serverside.Entities.Common.DriveThru
         [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (var data in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
+            foreach (DriveThruModel data in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
             {
-                var driveThru = new DriveThruEntity(data);
+                DriveThruEntity driveThru = new DriveThruEntity(data);
                 driveThru.Spawn();
                 DriveThrus.Add(driveThru);
             }
@@ -86,7 +87,7 @@ namespace Serverside.Entities.Common.DriveThru
                 if (center == null && o == sender && message == "tu")
                 {
                     center = o.Position;
-                    var data = new DriveThruModel
+                    DriveThruModel data = new DriveThruModel
                     {
                         Position = o.Position,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
@@ -94,7 +95,7 @@ namespace Serverside.Entities.Common.DriveThru
                     XmlHelper.AddXmlObject(data, $"{ServerInfo.XmlDirectory}DriveThrus\\");
 
                     sender.Notify("Dodawanie DriveThru zakończyło się ~g~~h~pomyślnie.");
-                    var driveThru = new DriveThruEntity(data);
+                    DriveThruEntity driveThru = new DriveThruEntity(data);
                     driveThru.Spawn();
                     DriveThrus.Add(driveThru);                    
                 }
@@ -115,7 +116,7 @@ namespace Serverside.Entities.Common.DriveThru
                 sender.Notify("Nie znaleziono DriveThru które można usunąć.");
                 return;
             }
-            var driveThru = DriveThrus.OrderBy(d => d.Data.Position.DistanceTo2D(sender.Position)).First();
+            DriveThruEntity driveThru = DriveThrus.OrderBy(d => d.Data.Position.DistanceTo2D(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(driveThru.Data.FilePath))
             {
                 sender.Notify("Usuwanie DriveThru zakończyło się ~g~~h~pomyślnie.");

@@ -41,7 +41,7 @@ namespace Serverside.Entities.Common.Corners
         {
             get
             {
-                var lowerMoneyCounts = new List<decimal>();
+                List<decimal> lowerMoneyCounts = new List<decimal>();
                 for (int i = 0; i < MoneyCount; i++)
                     lowerMoneyCounts.Add(i);
 
@@ -52,7 +52,7 @@ namespace Serverside.Entities.Common.Corners
         {
             get
             {
-                var mostlyGoodMoneyCounts = new List<decimal>();
+                List<decimal> mostlyGoodMoneyCounts = new List<decimal>();
                 for (int i = Convert.ToInt32(MoneyCount) + 1; i < MoneyCount + 21; i++)
                     mostlyGoodMoneyCounts.Add(i);
 
@@ -176,7 +176,7 @@ namespace Serverside.Entities.Common.Corners
                 return;
             }
 
-            foreach (var pos in NextPositions)
+            foreach (FullPosition pos in NextPositions)
             {
                 GoToPoint(pos.Position);
                 while (true)

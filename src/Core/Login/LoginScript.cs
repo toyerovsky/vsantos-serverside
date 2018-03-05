@@ -66,7 +66,7 @@ namespace Serverside.Core.Login
 
         private void LoginToAccount(Client sender, string email, string password)
         {
-            if (ForumDatabaseHelper.CheckPasswordMatch(email, password, out var forumLoginData))
+            if (ForumDatabaseHelper.CheckPasswordMatch(email, password, out ForumLoginData forumLoginData))
             {
                 using (AccountsRepository repository = new AccountsRepository())
                 {
@@ -89,7 +89,7 @@ namespace Serverside.Core.Login
                     if (!repository.Contains(accountModel))
                     {
                         if (Enum.TryParse(typeof(ServerRank), ((ForumGroup)forumLoginData.GroupId).ToString(),
-                            out var rank))
+                            out object rank))
                             accountModel.ServerRank = (ServerRank)rank;
                         else
                             accountModel.ServerRank = ServerRank.Uzytkownik;

@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var group = _context.Groups.Find(id);
+            GroupModel group = _context.Groups.Find(id);
             _context.Groups.Remove(group);
         }
 

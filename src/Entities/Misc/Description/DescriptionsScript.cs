@@ -11,6 +11,7 @@ using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
+using Serverside.Entities.Core;
 
 namespace Serverside.Entities.Misc.Description
 {
@@ -20,7 +21,7 @@ namespace Serverside.Entities.Misc.Description
         { 
             if (eventName == "OnPlayerAddDescription")
             {
-                var player = sender.GetAccountEntity();
+                AccountEntity player = sender.GetAccountEntity();
 
                 if (player.CharacterEntity.DbModel.Descriptions.Count > 3)
                 {
@@ -51,9 +52,9 @@ namespace Serverside.Entities.Misc.Description
                 if (arguments[0] != null && arguments[1] != null && arguments[2] != null)
                 {
                     //arguments[0] index na liście, arguments[1] tytul, arguments[2] opis
-                    var player = sender.GetAccountEntity();
+                    AccountEntity player = sender.GetAccountEntity();
 
-                    var description = player.CharacterEntity.DbModel.Descriptions.ToList()[0];
+                    DescriptionModel description = player.CharacterEntity.DbModel.Descriptions.ToList()[0];
 
                     description.Title = arguments[1].ToString();
                     description.Content = arguments[2].ToString();
@@ -73,10 +74,10 @@ namespace Serverside.Entities.Misc.Description
             {
                 if (arguments[0] != null)
                 {
-                    var player = sender.GetAccountEntity();
+                    AccountEntity player = sender.GetAccountEntity();
                     List<DescriptionModel> descriptions = player.CharacterEntity.DbModel.Descriptions.ToList(); 
 
-                    var description = descriptions[Convert.ToInt32(arguments[0])];
+                    DescriptionModel description = descriptions[Convert.ToInt32(arguments[0])];
 
                     player.CharacterEntity.DbModel.Descriptions.Remove(description);
                     player.Save();
@@ -94,13 +95,13 @@ namespace Serverside.Entities.Misc.Description
                 //args[0] to string opisu
                 if (arguments[0].ToString() != "")
                 {
-                    var player = sender.GetAccountEntity().CharacterEntity;
+                    CharacterEntity player = sender.GetAccountEntity().CharacterEntity;
                     player.Description.Value = arguments[0].ToString();
                 }
             }
             else if (eventName == "OnPlayerResetDescription")
             {
-                var player = sender.GetAccountEntity().CharacterEntity;
+                CharacterEntity player = sender.GetAccountEntity().CharacterEntity;
                 player.Description.ResetCurrentDescription();
             }
         }
@@ -108,7 +109,7 @@ namespace Serverside.Entities.Misc.Description
         [Command("opis")]
         public void ShowDescriptionsList(Client sender)
         {
-            var player = sender.GetAccountEntity().CharacterEntity;
+            CharacterEntity player = sender.GetAccountEntity().CharacterEntity;
             string descriptionsClient = JsonConvert.SerializeObject(player.DbModel.Descriptions);
             sender.TriggerEvent("ShowDescriptionsCef", descriptionsClient);
         }

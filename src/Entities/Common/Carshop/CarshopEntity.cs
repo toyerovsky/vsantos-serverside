@@ -36,7 +36,7 @@ namespace Serverside.Entities.Common.Carshop
             {
                 if (NAPI.Entity.GetEntityType(entity) != EntityType.Player) return;
 
-                var player = NAPI.Player.GetPlayerFromHandle(entity);
+                Client player = NAPI.Player.GetPlayerFromHandle(entity);
                 string compactsJson =
                     JsonConvert.SerializeObject(CarshopScript.Vehicles.Where(v => v.Category == VehicleClass.Compact && v.CarshopTypes == Data.Type));
 

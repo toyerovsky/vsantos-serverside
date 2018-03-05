@@ -22,7 +22,7 @@ namespace Serverside.Core.ServerInfo
 
         public ServerInfo()
         {
-            var directory = Path.Combine(Constant.ServerInfo.XmlDirectory, "ServerInfo\\");
+            string directory = Path.Combine(Constant.ServerInfo.XmlDirectory, "ServerInfo\\");
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);

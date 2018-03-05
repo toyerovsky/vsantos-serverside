@@ -7,6 +7,7 @@
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
+using Serverside.Entities.Core;
 
 namespace Serverside.Economy.Offers
 {
@@ -14,14 +15,14 @@ namespace Serverside.Economy.Offers
     {
         public static void GiveIdCard(Client getter)
         {
-            var player = getter.GetAccountEntity();
+            AccountEntity player = getter.GetAccountEntity();
             player.CharacterEntity.DbModel.HasIdCard = true;
             player.CharacterEntity.Save();
         }
 
         public static void GiveDrivingLicense(Client getter)
         {
-            var player = getter.GetAccountEntity();
+            AccountEntity player = getter.GetAccountEntity();
             player.CharacterEntity.DbModel.HasDrivingLicense = true;
             player.CharacterEntity.Save();
         }

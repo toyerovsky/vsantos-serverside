@@ -8,10 +8,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Economy.Groups.Base;
 using Serverside.Economy.Groups.Enums;
 using Serverside.Entities;
+using Serverside.Entities.Core;
 using Serverside.Entities.Core.Building;
 using Serverside.Entities.Core.Vehicle;
 
@@ -65,7 +67,7 @@ namespace Serverside.Economy.Offers
                 Client getter = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender).Find(x => x.GetAccountEntity().ServerId == id);
                 if (type == OfferType.Item && index != -1)
                 {
-                    var items = sender.GetAccountEntity().CharacterEntity.DbModel.Items.ToList();
+                    List<ItemModel> items = sender.GetAccountEntity().CharacterEntity.DbModel.Items.ToList();
 
                     //Tutaj sprawdzamy czy gracz posiada taki numer na liście. Numerujemy od 0 więc items.Count - 1
                     if (index > items.Count - 1 || index < 0)
@@ -74,7 +76,7 @@ namespace Serverside.Economy.Offers
                         return;
                     }
 
-                    var item = items[index];
+                    ItemModel item = items[index];
 
                     if (sender.GetAccountEntity().CharacterEntity.ItemsInUse.Any(i => i.Id == item.Id))
                     {
@@ -122,7 +124,7 @@ namespace Serverside.Economy.Offers
                 //Tutaj są oferty wymagające uprawnień grupowych
                 else if (type == OfferType.IdCard)
                 {
-                    var group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
+                    GroupEntity group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
                     if (group == null) return;
                     if (group.DbModel.GroupType != GroupType.CityHall || !((CityHall)group).CanPlayerGiveIdCard(sender.GetAccountEntity()))
                     {
@@ -133,7 +135,7 @@ namespace Serverside.Economy.Offers
                 }
                 else if (type == OfferType.DrivingLicense)
                 {
-                    var group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
+                    GroupEntity group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
                     if (group == null) return;
                     if (group.DbModel.GroupType != GroupType.CityHall || !((CityHall)group).CanPlayerGiveDrivingLicense(sender.GetAccountEntity()))
                     {

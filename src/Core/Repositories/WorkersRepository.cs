@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var worker = _context.Workers.Find(id);
+            WorkerModel worker = _context.Workers.Find(id);
             _context.Workers.Remove(worker);
         }
 

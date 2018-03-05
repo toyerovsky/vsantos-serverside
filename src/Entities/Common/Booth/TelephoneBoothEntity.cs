@@ -9,6 +9,7 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Telephone;
 using Serverside.Entities.Base;
 using Serverside.Entities.Common.Booth.Models;
+using Serverside.Entities.Core;
 using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Common.Booth
@@ -78,7 +79,7 @@ namespace Serverside.Entities.Common.Booth
 
         public override void Dispose()
         {
-            var character = CurrentClient.GetAccountEntity().CharacterEntity;
+            CharacterEntity character = CurrentClient.GetAccountEntity().CharacterEntity;
             if (ReferenceEquals(character.CurrentInteractive, this))
                 character.CurrentInteractive = null;
             CurrentCall?.Dispose();

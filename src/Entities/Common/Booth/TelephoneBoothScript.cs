@@ -17,6 +17,7 @@ using Serverside.Core.Scripts;
 using Serverside.Core.Serialization;
 using Serverside.Core.Telephone;
 using Serverside.Entities.Common.Booth.Models;
+using Serverside.Entities.Core;
 
 namespace Serverside.Entities.Common.Booth
 {
@@ -29,7 +30,7 @@ namespace Serverside.Entities.Common.Booth
             //args[0] to numer na jaki dzwoni
             if (eventName == "OnPlayerTelephoneBoothCall")
             {
-                var characterEntity = sender.GetAccountEntity().CharacterEntity;
+                CharacterEntity characterEntity = sender.GetAccountEntity().CharacterEntity;
                 if (characterEntity.CurrentInteractive is TelephoneBoothEntity boothEntity)
                 {
                     if (sender.HasMoney(boothEntity.Data.Cost))
@@ -129,7 +130,7 @@ namespace Serverside.Entities.Common.Booth
                     };
 
                     XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(TelephoneBoothModel)));
-                    var booth = new TelephoneBoothEntity(data);
+                    TelephoneBoothEntity booth = new TelephoneBoothEntity(data);
                     booth.Spawn();
                     Booths.Add(booth);
                     sender.Notify("Dodawanie budki zakończyło się ~g~~h~pomyślnie.");
@@ -152,7 +153,7 @@ namespace Serverside.Entities.Common.Booth
                 return;
             }
 
-            var telephoneBooth = Booths.OrderBy(a => a.Data.Position.Position.DistanceTo(sender.Position)).First();
+            TelephoneBoothEntity telephoneBooth = Booths.OrderBy(a => a.Data.Position.Position.DistanceTo(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(telephoneBooth.Data.FilePath))
             {
                 sender.Notify("Usuwanie budki telefonicznej zakończyło się ~g~~h~pomyślnie.");

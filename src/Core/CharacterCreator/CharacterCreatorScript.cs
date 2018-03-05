@@ -8,6 +8,7 @@ using System;
 using System.Globalization;
 using GTANetworkAPI;
 using Serverside.Constant;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 
 namespace Serverside.Core.CharacterCreator
@@ -18,7 +19,7 @@ namespace Serverside.Core.CharacterCreator
         #region Subskrypcja zdarzenia, i dopasowanie zmienianego obiektu
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
-            var characterCreator = sender.GetAccountEntity().CharacterEntity.CharacterCreator;
+            CharacterCreator characterCreator = sender.GetAccountEntity().CharacterEntity.CharacterCreator;
             if (characterCreator == null) return;
 
             switch (eventName)
@@ -146,7 +147,7 @@ namespace Serverside.Core.CharacterCreator
         {
             NAPI.Player.SetPlayerSkin(sender, PedHash.FreemodeMale01);
 
-            var dbModel = sender.GetAccountEntity().CharacterEntity.DbModel;
+            CharacterModel dbModel = sender.GetAccountEntity().CharacterEntity.DbModel;
 
             sender.TriggerEvent("OnPlayerCreateCharacter", Clothes.Mens, Clothes.Womans,
                 dbModel.Gender ? Clothes.MensHairId : Clothes.WomansHairId, dbModel.Gender ? Clothes.MenFeet : Clothes.WomanFeets,

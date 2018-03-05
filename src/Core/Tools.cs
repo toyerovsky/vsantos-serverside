@@ -19,7 +19,7 @@ namespace Serverside.Core
         /// <returns></returns>
         public static uint GetNextFreeDimension()
         {
-            using (var ctx = RolePlayContextFactory.NewContext())
+            using (RoleplayContext ctx = RolePlayContextFactory.NewContext())
             {
                 //Do pierwszego budynku tak trzeba zrobić
                 if (!ctx.Buildings.Any()) return 1;

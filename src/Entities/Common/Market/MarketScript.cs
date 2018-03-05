@@ -15,6 +15,7 @@ using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Market.Models;
+using Serverside.Entities.Core;
 using Serverside.Entities.Core.Item;
 
 namespace Serverside.Entities.Common.Market
@@ -37,7 +38,7 @@ namespace Serverside.Entities.Common.Market
                  * args[5] SecondParameter
                  * args[6] ThirdParameter
                  */
-                var item = new MarketItem
+                MarketItem item = new MarketItem
                 {
                     Name = arguments[0].ToString(),
                     ItemType = (ItemType)Enum.Parse(typeof(ItemType), (string)arguments[1]),
@@ -47,10 +48,10 @@ namespace Serverside.Entities.Common.Market
                     ThirdParameter = (int)arguments[6]
                 };
 
-                var names = (List<string>)arguments[3];
-                foreach (var name in names)
+                List<string> names = (List<string>)arguments[3];
+                foreach (string name in names)
                 {
-                    var market = Markets.First(x => x.Data.Name == name);
+                    MarketEntity market = Markets.First(x => x.Data.Name == name);
                     if (market != null)
                     {
                         market.Data.Items.Add(item);
@@ -62,8 +63,8 @@ namespace Serverside.Entities.Common.Market
             {
                 //args[0] index
                 if (!sender.HasData("CurrentMarket")) return;
-                var market = (MarketEntity)sender.GetData("CurrentMarket");
-                var item = market.Data.Items[(int)arguments[0]];
+                MarketEntity market = (MarketEntity)sender.GetData("CurrentMarket");
+                MarketItem item = market.Data.Items[(int)arguments[0]];
                 if (!sender.HasMoney(item.Cost))
                 {
                     sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
@@ -71,7 +72,7 @@ namespace Serverside.Entities.Common.Market
                 }
                 sender.RemoveMoney(item.Cost);
 
-                var controller = sender.GetAccountEntity();
+                AccountEntity controller = sender.GetAccountEntity();
                 controller.CharacterEntity.DbModel.Items.Add(new ItemModel
                 {
                     Creator = null,
@@ -90,9 +91,9 @@ namespace Serverside.Entities.Common.Market
         {
             //TODO: Wczytywanie wszystkich IPL sklepów
 
-            foreach (var data in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
+            foreach (MarketModel data in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
             {
-                var market = new MarketEntity(data);
+                MarketEntity market = new MarketEntity(data);
                 market.Spawn();
                 Markets.Add(market);
             }
@@ -101,7 +102,7 @@ namespace Serverside.Entities.Common.Market
         [Command("dodajprzedmiotsklep")]
         public void AddItemToShop(Client sender)
         {
-            var values = Enum.GetNames(typeof(ItemType)).ToList();
+            List<string> values = Enum.GetNames(typeof(ItemType)).ToList();
             var markets = XmlHelper.GetXmlObjects<MarketModel>($@"{ServerInfo.XmlDirectory}\Markets\").Select(x => new { x.Id, x.Name }).ToList();
             NAPI.ClientEvent.TriggerClientEvent(sender, "ShowAdminMarketItemMenu", values, markets);
         }
@@ -114,7 +115,7 @@ namespace Serverside.Entities.Common.Market
                 sender.Notify("Nie znajdujesz się w sklepie");
                 return;
             }
-            var market = (MarketEntity)sender.GetData("CurrentMarket");
+            MarketEntity market = (MarketEntity)sender.GetData("CurrentMarket");
             if (market.Data.Items == null || market.Data.Items.Count == 0) return;
             sender.TriggerEvent("ShowMarketMenu", JsonConvert.SerializeObject(market.Data.Items));
         }
@@ -136,11 +137,11 @@ namespace Serverside.Entities.Common.Market
                 }
                 else
                 {
-                    var radius = float.MinValue;
+                    float radius = float.MinValue;
                     if (center != null && radius.Equals(float.MinValue) && o == sender && message == "tu")
                     {
                         radius = center.DistanceTo2D(o.Position);
-                        var market = new MarketModel
+                        MarketModel market = new MarketModel
                         {
                             Id = XmlHelper.GetXmlObjects<MarketModel>(ServerInfo.XmlDirectory + @"Markets\").Count,
                             Name = name,

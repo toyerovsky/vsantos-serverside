@@ -25,7 +25,7 @@ namespace Serverside.Entities.Common.BusStop
             //args[2] Indeks przystanku na jaki chce się udać
             if (eventName == "RequestBus")
             {
-                var busStop = EntityHelper.GetBusStops().ElementAt(Convert.ToInt32(arguments[2]));
+                BusStopEntity busStop = EntityHelper.GetBusStops().ElementAt(Convert.ToInt32(arguments[2]));
 
                 BusStopEntity.StartTransport(sender, Convert.ToDecimal(arguments[1]), Convert.ToInt32(arguments[0]),
                     busStop.Data.Center, busStop.Data.Name);
@@ -42,7 +42,7 @@ namespace Serverside.Entities.Common.BusStop
                 return;
             }
             //Wybieramy wszystkie przystanki oprócz tego w którym obecnie się znajduje
-            var json = JsonConvert.SerializeObject(EntityHelper.GetBusStops().Select(x => new
+            string json = JsonConvert.SerializeObject(EntityHelper.GetBusStops().Select(x => new
             {
                 x.Data.Name,
                 Time = (int)(sender.Position.DistanceTo(x.Data.Center) / 2.5f),
@@ -72,7 +72,7 @@ namespace Serverside.Entities.Common.BusStop
                 if (center == null && o == sender && command == "/tu")
                 {
                     center = o.Position;
-                    var data = new BusStopModel
+                    BusStopModel data = new BusStopModel
                     {
                         Name = name,
                         Center = center,
@@ -81,7 +81,7 @@ namespace Serverside.Entities.Common.BusStop
                     XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(BusStopModel), data.Name));
 
                     sender.Notify("Dodawanie przystanku zakończyło się pomyślnie.");
-                    var busStop = new BusStopEntity(data);
+                    BusStopEntity busStop = new BusStopEntity(data);
                     busStop.Spawn();
                     EntityHelper.Add(busStop);
                 }
@@ -103,7 +103,7 @@ namespace Serverside.Entities.Common.BusStop
                 return;
             }
 
-            var busStop = EntityHelper.GetBusStop(sender.Position, 5f);
+            BusStopEntity busStop = EntityHelper.GetBusStop(sender.Position, 5f);
 
             if (busStop == null)
             {

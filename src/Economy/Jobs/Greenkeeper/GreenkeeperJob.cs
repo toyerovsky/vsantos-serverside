@@ -18,9 +18,9 @@ namespace Serverside.Economy.Jobs.Greenkeeper
         public GreenkeeperJob(string jobName, decimal moneyLimit, string jsonDirectory) :
             base(jobName, moneyLimit, jsonDirectory)
         {
-            foreach (var vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
+            foreach (VehicleModel vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
             {
-                var vehicle = new GreenkeeperVehicle(vehicleData);
+                GreenkeeperVehicle vehicle = new GreenkeeperVehicle(vehicleData);
                 vehicle.Spawn();
                 Vehicles.Add(vehicle);
             }

@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var penatly = _context.Penaltlies.Find(id);
+            PenaltyModel penatly = _context.Penaltlies.Find(id);
             _context.Penaltlies.Remove(penatly);
         }
 

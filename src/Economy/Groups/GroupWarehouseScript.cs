@@ -15,6 +15,7 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Economy.Groups.Enums;
 using Serverside.Economy.Groups.Stucts;
+using Serverside.Entities.Core;
 using Serverside.Entities.Core.Item;
 
 namespace Serverside.Economy.Groups
@@ -42,7 +43,7 @@ namespace Serverside.Economy.Groups
                 if (Enum.TryParse(arguments[3].ToString(), out GroupType groupType) &&
                     Enum.TryParse(arguments[1].ToString(), out ItemType itemType))
                 {
-                    var groupWarehouseItem = new GroupWarehouseItemModel
+                    GroupWarehouseItemModel groupWarehouseItem = new GroupWarehouseItemModel
                     {
                         ItemModel = new ItemModel
                         {
@@ -82,17 +83,17 @@ namespace Serverside.Economy.Groups
                  * args[0] - List<WarehouseItemInfo> JSON
                  */
 
-                var player = sender.GetAccountEntity();
-                var group = player.CharacterEntity.OnDutyGroup;
+                AccountEntity player = sender.GetAccountEntity();
+                GroupEntity group = player.CharacterEntity.OnDutyGroup;
                 if (group != null)
                 {
-                    var items =
+                    List<WarehouseItemInfo> items =
                         JsonConvert.DeserializeObject<List<WarehouseItemInfo>>(arguments[0].ToString());
 
-                    var sum = items.Sum(x => x.ItemModelInfo.Cost * x.Count);
+                    decimal sum = items.Sum(x => x.ItemModelInfo.Cost * x.Count);
                     if (group.HasMoney(sum))
                     {
-                        var shipment = new GroupWarehouseOrderModel
+                        GroupWarehouseOrderModel shipment = new GroupWarehouseOrderModel
                         {
                             Getter = group.DbModel,
                             OrderItemsJson = JsonConvert.SerializeObject(items),

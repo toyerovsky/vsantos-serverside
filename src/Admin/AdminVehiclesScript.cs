@@ -8,6 +8,7 @@ using GTANetworkAPI;
 using Serverside.Core.Exceptions;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
+using Serverside.Entities.Core.Vehicle;
 
 namespace Serverside.Admin
 {
@@ -23,7 +24,7 @@ namespace Serverside.Admin
                 return;
             }
 
-            var vehicle = sender.IsInVehicle
+            VehicleEntity vehicle = sender.IsInVehicle
                 ? sender.Vehicle.GetVehicleEntity()
                 : EntityHelper.GetVehicle(vehicleId);
 
@@ -54,7 +55,7 @@ namespace Serverside.Admin
                 return;
             }
 
-            var vehicle = sender.IsInVehicle
+            VehicleEntity vehicle = sender.IsInVehicle
                 ? sender.Vehicle.GetVehicleEntity()
                 : EntityHelper.GetVehicle(vehicleId);
 

@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var contact = _context.TelephoneContacts.Find(id);
+            TelephoneContactModel contact = _context.TelephoneContacts.Find(id);
             _context.TelephoneContacts.Remove(contact);
         }
 

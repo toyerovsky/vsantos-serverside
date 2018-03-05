@@ -74,7 +74,7 @@ namespace Serverside.Entities.Common.Corners
             {
                 timer.Stop();
 
-                var random = Tools.RandomRange(Data.CornerBots.Count);
+                int random = Tools.RandomRange(Data.CornerBots.Count);
 
                 CurrentPedEntity = new CornerPedEntity(Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
 

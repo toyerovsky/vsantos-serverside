@@ -16,6 +16,7 @@ using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Carshop.Models;
+using Serverside.Entities.Core;
 using Serverside.Entities.Core.Vehicle;
 
 namespace Serverside.Entities.Common.Carshop
@@ -89,7 +90,7 @@ namespace Serverside.Entities.Common.Carshop
             XmlHelper.GetXmlObjects<CarshopModel>($@"{ServerInfo.XmlDirectory}Carshops\")
                 .ForEach(carshopModel =>
                 {
-                    var carshop = new CarshopEntity(carshopModel);
+                    CarshopEntity carshop = new CarshopEntity(carshopModel);
                     carshop.Spawn();
                     Carshops.Add(carshop);
                 });
@@ -170,7 +171,7 @@ namespace Serverside.Entities.Common.Carshop
         [Command("dodajsalon", "~y~ UŻYJ ~w~ /dodajsalon [nazwa] [typ]")]
         public void AddCarshop(Client sender, string name, CarshopType type)
         {
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
 
             if (player.DbModel.ServerRank < ServerRank.GameMaster)
             {
@@ -212,7 +213,7 @@ namespace Serverside.Entities.Common.Carshop
                 return;
             }
 
-            var carshop = Carshops.First(x => x.ColShape.IsPointWithin(sender.Position));
+            CarshopEntity carshop = Carshops.First(x => x.ColShape.IsPointWithin(sender.Position));
             if (XmlHelper.TryDeleteXmlObject(carshop.Data.FilePath))
             {
                 sender.Notify("Usuwanie salonu zakończyło się ~h~~g~pomyślnie");

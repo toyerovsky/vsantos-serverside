@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.Collections.Generic;
 using GTANetworkAPI;
 using Serverside.Core;
 using Serverside.Core.Enums;
@@ -51,7 +52,7 @@ namespace Serverside.Entities.Base
 
         protected void SendMessageToNerbyPlayers(string message, ChatMessageType chatMessageType)
         {
-            var players = NAPI.Player.GetPlayersInRadiusOfPosition((int)chatMessageType, BotHandle.Position);
+            List<Client> players = NAPI.Player.GetPlayersInRadiusOfPosition((int)chatMessageType, BotHandle.Position);
 
             string color = null;
 
@@ -86,7 +87,7 @@ namespace Serverside.Entities.Base
                 color = "~#847DB7~";
             }
 
-            foreach (var player in players)
+            foreach (Client player in players)
             {
                 NAPI.Chat.SendChatMessageToPlayer(player, color, message);
             }

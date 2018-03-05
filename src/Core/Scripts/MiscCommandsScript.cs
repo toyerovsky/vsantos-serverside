@@ -4,11 +4,13 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
+using Serverside.Entities.Core;
 
 namespace Serverside.Core.Scripts
 {
@@ -23,11 +25,11 @@ namespace Serverside.Core.Scripts
                 return;
             }
 
-            var accounts = EntityHelper.GetAccounts()
+            IEnumerable<KeyValuePair<long, AccountEntity>> accounts = EntityHelper.GetAccounts()
                 .Where(x => x.Value.CharacterEntity.FormatName.ToLower().StartsWith(name));
 
             ChatScript.SendMessageToPlayer(sender, "Znalezieni gracze: ", ChatMessageType.ServerInfo);
-            foreach (var account in accounts)
+            foreach (KeyValuePair<long, AccountEntity> account in accounts)
             {
                 ChatScript.SendMessageToPlayer(sender, $"({account.Value.ServerId}) {account.Value.CharacterEntity.FormatName}", ChatMessageType.ServerInfo);
             }
@@ -42,8 +44,8 @@ namespace Serverside.Core.Scripts
                 return;
             }
 
-            var player = sender.GetAccountEntity();
-            var getter = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender)
+            AccountEntity player = sender.GetAccountEntity();
+            Client getter = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender)
                 .Single(x => x.GetAccountEntity().ServerId == id);
 
             if (type.ToLower().Trim() == ShowType.IdCard.GetDescription())

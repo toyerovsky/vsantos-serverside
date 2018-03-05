@@ -47,13 +47,13 @@ namespace Serverside.Entities.Core.Building
                 new Vector3(DbModel.InternalPickupPositionX, DbModel.InternalPickupPositionY, DbModel.InternalPickupPositionZ), 1, 3);
             InteriorDoorsColshape.Dimension = (uint)DbModel.InternalDimension;
 
-            var externalPosition = new Vector3(DbModel.ExternalPickupPositionX,
+            Vector3 externalPosition = new Vector3(DbModel.ExternalPickupPositionX,
                 DbModel.ExternalPickupPositionY, DbModel.ExternalPickupPositionZ);
 
             ExteriorDoorsColshape = NAPI.ColShape.CreateCylinderColShape(externalPosition, 1, 3);
             ExteriorDoorsColshape.Dimension = (uint)DbModel.InternalDimension;
 
-            var color = DbModel.Cost.HasValue ? new Color(106, 154, 40, 255) : new Color(255, 255, 0, 255);
+            Color color = DbModel.Cost.HasValue ? new Color(106, 154, 40, 255) : new Color(255, 255, 0, 255);
 
             //Jeśli budynek jest na sprzedaż marker jest zielony jeśli nie żółty
             BuildingMarker = NAPI.Marker.CreateMarker(2, externalPosition, new Vector3(0f, 0f, 0f),
@@ -63,7 +63,7 @@ namespace Serverside.Entities.Core.Building
             {
                 if (NAPI.Entity.GetEntityType(e).Equals(EntityType.Player))
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(e);
+                    Client player = NAPI.Player.GetPlayerFromHandle(e);
                     //args[0] jako true określa że gracz jest na zewnątrz budynku
                     //args[1] to informacje o budynku
                     player.TriggerEvent("DrawBuildingComponents", false);
@@ -82,7 +82,7 @@ namespace Serverside.Entities.Core.Building
             {
                 if (NAPI.Entity.GetEntityType(e).Equals(EntityType.Player))
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(e);
+                    Client player = NAPI.Player.GetPlayerFromHandle(e);
                     player.TriggerEvent("DisposeBuildingComponents");
                     player.ResetData("CurrentDoors");
                     player.ResetSharedData("DoorsTarget");
@@ -94,7 +94,7 @@ namespace Serverside.Entities.Core.Building
                 //Jeśli podchodzi od zewnątrz rysujemy panel informacji
                 if (NAPI.Entity.GetEntityType(e).Equals(EntityType.Player))
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(e);
+                    Client player = NAPI.Player.GetPlayerFromHandle(e);
                     //args[0] jako true rysuje panel informacji
                     player.TriggerEvent("DrawBuildingComponents", true, new List<string>
                     {
@@ -113,7 +113,7 @@ namespace Serverside.Entities.Core.Building
             {
                 if (NAPI.Entity.GetEntityType(e).Equals(EntityType.Player))
                 {
-                    var player = NAPI.Player.GetPlayerFromHandle(e);
+                    Client player = NAPI.Player.GetPlayerFromHandle(e);
                     player.TriggerEvent("DisposeBuildingComponents");
                     player.ResetData("CurrentDoors");
                     player.ResetSharedData("DoorsTarget");
@@ -163,7 +163,7 @@ namespace Serverside.Entities.Core.Building
         public override void Dispose()
         {
             //Jeśli budynek zostanie zwolniony to teleportujemy graczy na zewnątrz
-            foreach (var p in PlayersInBuilding)
+            foreach (AccountEntity p in PlayersInBuilding)
             {
                 if (p.Client.HasData("CurrentDoors") && p.Client.GetData("CurrentDoors") == this)
                 {
@@ -229,7 +229,7 @@ namespace Serverside.Entities.Core.Building
         public static void Knock(Client player)
         {
             if (!player.HasData("CurrentDoors")) return;
-            var building = (BuildingEntity)player.GetData("CurrentDoors");
+            BuildingEntity building = (BuildingEntity)player.GetData("CurrentDoors");
             if (building._spamProtector) return;
 
             building._spamProtector = true;
@@ -250,7 +250,7 @@ namespace Serverside.Entities.Core.Building
         public static void LoadBuildings()
         {
             using (BuildingsRepository repository = new BuildingsRepository())
-                foreach (var building in repository.GetAll())
+                foreach (BuildingModel building in repository.GetAll())
                 {
                     new BuildingEntity(building);
                 }

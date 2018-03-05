@@ -41,7 +41,7 @@ namespace Serverside.Core.Serialization
 
             if (fileName == string.Empty)
             {
-                var collection = GetJsonObjects<T>(path);
+                List<T> collection = GetJsonObjects<T>(path);
                 int index = collection.Count;
 
                 do ++index;
@@ -50,7 +50,7 @@ namespace Serverside.Core.Serialization
                 fileName = index.ToString();
             }
 
-            var json = JsonConvert.SerializeObject(value);
+            string json = JsonConvert.SerializeObject(value);
 
             if (!File.Exists($"{path}{fileName}.json"))
                 File.Create($"{path}{fileName}.json");

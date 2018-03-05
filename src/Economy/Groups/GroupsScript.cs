@@ -10,6 +10,7 @@ using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Core;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Extensions;
 using Serverside.Economy.Groups.Base;
 using Serverside.Economy.Groups.Enums;
@@ -55,7 +56,7 @@ namespace Serverside.Economy.Groups
                 }
                 else
                 {
-                    var nearestPlayer = sender.Position.GetNearestPlayer();
+                    Client nearestPlayer = sender.Position.GetNearestPlayer();
                     if (nearestPlayer != null)
                     {
                         distance = nearestPlayer.Position.DistanceTo2D(sender.Position);
@@ -76,7 +77,7 @@ namespace Serverside.Economy.Groups
         [Command("kajdanki", "~y~ UŻYJ ~w~ /kaj(danki) (id)", Alias = "kaj")]
         public void CuffPlayer(Client sender, int id = -1)
         {
-            var group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
+            GroupEntity group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
             if (group == null) return;
             if (group.DbModel.GroupType != GroupType.Police || !((Police)group).CanPlayerDoPolice(sender.GetAccountEntity()))
             {
@@ -106,7 +107,7 @@ namespace Serverside.Economy.Groups
             }
             else
             {
-                var nearestPlayer = sender.Position.GetNearestPlayer();
+                Client nearestPlayer = sender.Position.GetNearestPlayer();
                 if (nearestPlayer != null)
                 {
                     distance = nearestPlayer.Position.DistanceTo2D(sender.Position);
@@ -127,7 +128,7 @@ namespace Serverside.Economy.Groups
         {
             Timer dutyTimer = new Timer(60000);
 
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
             if (player.CharacterEntity.OnDutyGroup != null)
             {
                 sender.Notify(
@@ -150,7 +151,7 @@ namespace Serverside.Economy.Groups
 
                 if (sender.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group))
                 {
-                    var worker =
+                    WorkerModel worker =
                         group.GetWorkers().Single(x => x.Character.Id == player.CharacterEntity.DbModel.Id);
 
                     dutyTimer.Start();
@@ -247,7 +248,7 @@ namespace Serverside.Economy.Groups
         [Command("g")]
         public void ShowGroupMenu(Client sender, byte slot)
         {
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
             if (EntityHelper.GetPlayerGroups(player).Count == 0)
             {
                 sender.Notify("Nie jesteś członkiem żadnej grupy.");
@@ -292,7 +293,7 @@ namespace Serverside.Economy.Groups
             {
                 if (group.CanPlayerManageWorkers(sender.GetAccountEntity()))
                 {
-                    var getter = EntityHelper.GetAccountByServerId(id);
+                    AccountEntity getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)
                     {
                         sender.Notify("Nie znaleziono gracza o podanym Id.");
@@ -326,7 +327,7 @@ namespace Serverside.Economy.Groups
             {
                 if (group.CanPlayerManageWorkers(sender.GetAccountEntity()))
                 {
-                    var getter = EntityHelper.GetAccountByServerId(id);
+                    AccountEntity getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)
                     {
                         sender.Notify("Nie znaleziono gracza o podanym Id.");

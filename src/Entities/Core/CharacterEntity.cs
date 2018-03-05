@@ -72,7 +72,7 @@ namespace Serverside.Entities.Core
 
         public static CharacterEntity Create(AccountEntity accountEntity, string name, string surname, PedHash model)
         {
-            var randomIndex = Tools.RandomRange(Constant.Items.ServerSpawnPositions.Count);
+            int randomIndex = Tools.RandomRange(Constant.Items.ServerSpawnPositions.Count);
 
             CharacterModel dbModel = new CharacterModel
             {

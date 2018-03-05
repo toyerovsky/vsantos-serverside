@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var vehicle = _context.Vehicles.Find(id);
+            VehicleModel vehicle = _context.Vehicles.Find(id);
             _context.Vehicles.Remove(vehicle);
         }
 

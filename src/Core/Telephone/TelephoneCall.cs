@@ -5,12 +5,15 @@
  */
 
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
+using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
 using Serverside.Core.Extensions;
 using Serverside.Core.Scripts;
+using Serverside.Entities.Core.Item;
 
 namespace Serverside.Core.Telephone
 {
@@ -67,9 +70,9 @@ namespace Serverside.Core.Telephone
             Getter.SetSharedData("CellphoneRinging", true);
             ChatScript.SendMessageToNearbyPlayers(Getter, $"dzwoni telefon {Getter.Name}", ChatMessageType.Do);
 
-            var senderCellphone = Sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
-            var getterCellphone = getter.GetAccountEntity().CharacterEntity.CurrentCellphone;
-            var contacts = getterCellphone.Contacts;
+            Cellphone senderCellphone = Sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
+            Cellphone getterCellphone = getter.GetAccountEntity().CharacterEntity.CurrentCellphone;
+            ObservableCollection<TelephoneContactModel> contacts = getterCellphone.Contacts;
 
             NAPI.Chat.SendChatMessageToPlayer(Getter, "~#ffdb00~", contacts.Any(c => c.Number == senderCellphone.Number) ? $"Połączenie przychodzące od: {contacts.First(c => c.Number == senderCellphone.Number).Name}, naciśnij klawisz END aby, akceptować połączenie."
                 : $"Połączenie przychodzące od: {senderCellphone.Number}, naciśnij klawisz END aby, akceptować połączenie.");
@@ -93,8 +96,8 @@ namespace Serverside.Core.Telephone
             Getter.SetSharedData("CellphoneRinging", true);
             ChatScript.SendMessageToNearbyPlayers(Getter, $"dzwoni telefon {Getter.Name}", ChatMessageType.Do);
 
-            var telephone = Getter.GetAccountEntity().CharacterEntity.CurrentCellphone;
-            var contacts = telephone.Contacts;
+            Cellphone telephone = Getter.GetAccountEntity().CharacterEntity.CurrentCellphone;
+            ObservableCollection<TelephoneContactModel> contacts = telephone.Contacts;
 
             NAPI.Chat.SendChatMessageToPlayer(Getter, "~#ffdb00~", contacts.Any(c => c.Number == number) ? $"Połączenie przychodzące od: {contacts.First(c => c.Number == number).Name}, naciśnij klawisz END aby, akceptować połączenie."
                 : $"Połączenie przychodzące od: {number}, naciśnij klawisz END aby, akceptować połączenie.");

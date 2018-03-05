@@ -39,7 +39,7 @@ namespace Serverside.Core.Repositories
 
         public void Delete(long id)
         {
-            var building = _context.Buildings.Find(id);
+            BuildingModel building = _context.Buildings.Find(id);
             _context.Buildings.Remove(building);
         }
 

@@ -45,7 +45,7 @@ namespace Serverside.Economy.Jobs.Dustman
 
         public override void Start()
         {
-            var v = NonVisitedPoints[new Random().Next(NonVisitedPoints.Count)];
+            GarbageModel v = NonVisitedPoints[new Random().Next(NonVisitedPoints.Count)];
             NonVisitedPoints.Remove(v);
 
             NAPI.ClientEvent.TriggerClientEvent(Player.Client, "DrawJobComponents", v, 318);
@@ -82,7 +82,7 @@ namespace Serverside.Economy.Jobs.Dustman
             }
             else if (!InProgress)
             {
-                var characterEntity = Player.CharacterEntity;
+                CharacterEntity characterEntity = Player.CharacterEntity;
                 for (int i = 0; i < Count; i++)
                 {
                     characterEntity.DbModel.MoneyJob += 25;
@@ -108,7 +108,7 @@ namespace Serverside.Economy.Jobs.Dustman
                 return;
             }
 
-            var v = NonVisitedPoints[new Random().Next(NonVisitedPoints.Count)];
+            GarbageModel v = NonVisitedPoints[new Random().Next(NonVisitedPoints.Count)];
             NonVisitedPoints.Remove(v);
 
             NAPI.ClientEvent.TriggerClientEvent(Player.Client, "DrawJobComponents", v, 318);

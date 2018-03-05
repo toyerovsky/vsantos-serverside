@@ -17,9 +17,9 @@ namespace Serverside.Economy.Jobs.Courier
 
         public CourierJob(string jobName, decimal moneyLimit, string jsonDirectory) : base(jobName, moneyLimit, jsonDirectory)
         {
-            foreach (var vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
+            foreach (VehicleModel vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
             {
-                var courierVehicle = new CourierVehicle(vehicleData);
+                CourierVehicle courierVehicle = new CourierVehicle(vehicleData);
                 courierVehicle.Spawn();
                 Vehicles.Add(courierVehicle);
             }

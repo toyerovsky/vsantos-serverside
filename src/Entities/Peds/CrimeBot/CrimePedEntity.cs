@@ -46,7 +46,7 @@ namespace Serverside.Entities.Peds.CrimeBot
             using (CrimeBotsRepository repository = new CrimeBotsRepository())
                 DbModel = repository.Get(group.DbModel);
 
-            var properties = new List<PropertyInfo> { null };
+            List<PropertyInfo> properties = new List<PropertyInfo> { null };
             properties.AddRange(typeof(CrimeBotModel).GetProperties()
                 .Where(f => f.GetValue(DbModel) != null && (f.PropertyType == typeof(int?) || f.PropertyType == typeof(decimal?))));
 
@@ -60,7 +60,7 @@ namespace Serverside.Entities.Peds.CrimeBot
             {
                 if (i == 0) continue;
 
-                var info = Constant.Items.GetCrimeBotItemName(properties[i - 2].Name);
+                Tuple<string, ItemType> info = Constant.Items.GetCrimeBotItemName(properties[i - 2].Name);
                 Items.Add(new CrimeBotItem(info.Item1, ((decimal?)properties[i - 2].GetValue(DbModel)).Value, ((int?)properties[i - 1].GetValue(DbModel)).Value, ((int?)properties[i].GetValue(DbModel)).Value, info.Item2, properties[i - 1].Name));
 
             }
@@ -93,12 +93,12 @@ namespace Serverside.Entities.Peds.CrimeBot
             //args 0 to string JSON z js który mówi co gracz kupił
             if (eventName == "OnCrimeBotBought")
             {
-                var items =
+                List<CrimeBotItem> items =
                     JsonConvert.DeserializeObject<List<CrimeBotItem>>(arguments[0].ToString())
                         .Where(item => item.Count > 0).ToList();
 
                 decimal sum = 0;
-                foreach (var item in items)
+                foreach (CrimeBotItem item in items)
                 {
                     if (item.Count != 0) sum += item.Cost * item.Count;
                 }
@@ -118,14 +118,14 @@ namespace Serverside.Entities.Peds.CrimeBot
 
                 using (ItemsRepository repository = new ItemsRepository())
                 {
-                    foreach (var i in items)
+                    foreach (CrimeBotItem i in items)
                     {
                         //TYPY: 0 broń, 1 amunicja, 2 narkotyki 
-                        var item = new ItemModel();
+                        ItemModel item = new ItemModel();
 
                         if (i.Type == ItemType.Weapon)
                         {
-                            var data = Constant.Items.GetWeaponData(i.Name);
+                            Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
                             item.Creator = null;
@@ -136,7 +136,7 @@ namespace Serverside.Entities.Peds.CrimeBot
                         }
                         else if (i.Type == ItemType.WeaponClip)
                         {
-                            var data = Constant.Items.GetWeaponData(i.Name);
+                            Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
                             item.Creator = null;
@@ -158,7 +158,7 @@ namespace Serverside.Entities.Peds.CrimeBot
                             return;
                         }
 
-                        var field = typeof(CrimeBotModel).GetProperties().Single(f => f.Name == i.DatabaseField);
+                        PropertyInfo field = typeof(CrimeBotModel).GetProperties().Single(f => f.Name == i.DatabaseField);
                         field.SetValue(DbModel, (int)field.GetValue(DbModel) - i.Count);
 
                         repository.Insert(item);

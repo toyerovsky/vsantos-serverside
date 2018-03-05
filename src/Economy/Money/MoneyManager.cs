@@ -7,6 +7,7 @@
 using System.Globalization;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
+using Serverside.Entities.Core;
 
 namespace Serverside.Economy.Money
 {    
@@ -28,14 +29,14 @@ namespace Serverside.Economy.Money
 
         public static bool HasMoney(Client sender, decimal count, bool bank = false)
         {
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
             if (bank) return player.CharacterEntity.DbModel.BankMoney >= count;
             return player.CharacterEntity.DbModel.Money >= count;
         }
 
         public static void AddMoney(Client sender, decimal count, bool bank = false)
         {
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
             if (bank)
             {
                 player.CharacterEntity.DbModel.BankMoney += count;
@@ -50,7 +51,7 @@ namespace Serverside.Economy.Money
 
         public static void RemoveMoney(Client sender, decimal count, bool bank = false)
         {
-            var player = sender.GetAccountEntity();
+            AccountEntity player = sender.GetAccountEntity();
             if (bank)
             {
                 player.CharacterEntity.DbModel.BankMoney -= count;

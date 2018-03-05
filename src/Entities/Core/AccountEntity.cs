@@ -99,7 +99,7 @@ namespace Serverside.Entities.Core
             {
                 PenaltyModel model = new PenaltyModel()
                 {
-                    Creator = creator.DbModel,
+                    Creator = creator?.DbModel,
                     Account = DbModel,
                     Date = DateTime.Now,
                     PenaltyType = PenaltyType.Kick,
