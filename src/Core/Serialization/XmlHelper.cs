@@ -32,7 +32,7 @@ namespace Serverside.Core.Serialization
 
             if (fileName == string.Empty)
             {
-                var collection = GetXmlObjects<T>(path);
+                List<T> collection = GetXmlObjects<T>(path);
                 int index = collection.Count;
 
                 do ++index;
@@ -46,7 +46,7 @@ namespace Serverside.Core.Serialization
             {
                 try
                 {
-                    var writerSerializer = new XmlSerializer(typeof(T));
+                    XmlSerializer writerSerializer = new XmlSerializer(typeof(T));
                     writerSerializer.Serialize(xmlStream, xmlObject);
                 }
                 catch (InvalidOperationException ex)
@@ -65,14 +65,14 @@ namespace Serverside.Core.Serialization
                 Colorful.Console.WriteLine($"[Info][{nameof(XmlHelper)}] Utworzono ścieżkę: {path}", Color.CornflowerBlue);
             }
 
-            var readerSerializer = new XmlSerializer(typeof(T));
-            var posDirs = Directory.GetFiles(path);
+            XmlSerializer readerSerializer = new XmlSerializer(typeof(T));
+            string[] posDirs = Directory.GetFiles(path);
 
-            var xmlPositions = new List<T>();
+            List<T> xmlPositions = new List<T>();
             //Dla kazdej sciezki dodaj odpowiadajacy jej .xml do listy
-            foreach (var item in posDirs)
+            foreach (string item in posDirs)
             {
-                var stream = new FileStream(item, FileMode.Open);
+                FileStream stream = new FileStream(item, FileMode.Open);
                 if (Path.GetExtension(item) == ".xml")
                 {
                     xmlPositions.Add((T)readerSerializer.Deserialize(stream));

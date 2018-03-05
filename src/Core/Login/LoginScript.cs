@@ -6,11 +6,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using Serverside.Admin.Enums;
 using Serverside.Constant.RemoteEvents;
+using Serverside.Core.Database;
 using Serverside.Core.Database.Forum;
 using Serverside.Core.Database.Models;
 using Serverside.Core.Enums;
@@ -54,11 +56,11 @@ namespace Serverside.Core.Login
                 .Where(c => c.IsAlive)
                 .Select(x => new
                 {
-                    x.Name,
-                    x.Surname,
-                    x.Money,
-                    x.PlayedTime
-                }).ToList();
+                    name = x.Name,
+                    surname = x.Surname,
+                    money = x.Money,
+                    playedTime = x.PlayedTime
+                });
 
             string json = JsonConvert.SerializeObject(characters);
             sender.TriggerEvent(RemoteEvents.PlayerLoginPassed, json);
@@ -68,7 +70,8 @@ namespace Serverside.Core.Login
         {
             if (ForumDatabaseHelper.CheckPasswordMatch(email, password, out ForumLoginData forumLoginData))
             {
-                using (AccountsRepository repository = new AccountsRepository())
+                using (RoleplayContext ctx = RolePlayContextFactory.NewContext())
+                using (AccountsRepository repository = new AccountsRepository(ctx))
                 {
                     AccountModel accountModel = new AccountModel
                     {
@@ -98,10 +101,10 @@ namespace Serverside.Core.Login
                         repository.Save();
                     }
 
-                    //Robimy tak, aby poznać Id konta
+                    //We do this to see account Id
                     accountModel = repository.GetByUserId(accountModel.UserId);
 
-                    //Sprawdzenie czy ktoś już jest zalogowany z tego konta.
+                    //Check if someone is logged on this account
                     AccountEntity account = EntityHelper.Get(accountModel.Id);
                     if (account != null)
                     {
@@ -110,6 +113,29 @@ namespace Serverside.Core.Login
                             $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.", ChatMessageType.ServerInfo);
 
                         account.Kick(null, "Próba zalogowania na zalogowane konto.");
+                    }
+
+                    //Seed the data
+                    if (accountModel.Characters.Count == 0)
+                    {
+                        using (CharactersRepository charactersRepository = new CharactersRepository(ctx))
+                        {
+                            string[] name = accountModel.Email.Split('@');
+                            CharacterModel model = new CharacterModel()
+                            {
+                                Name = name[0],
+                                Surname = name[1],
+                                Model = PedHash.FreemodeMale01,
+                                Freemode = true,
+                                IsAlive = true,
+                                CreateTime = DateTime.Now,
+                                Account = accountModel,
+                            };
+
+                            accountModel.Characters.Add(model);
+                            charactersRepository.Insert(model);
+                            charactersRepository.Save();
+                        }
                     }
 
                     account = new AccountEntity(accountModel, sender);

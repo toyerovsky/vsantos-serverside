@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
@@ -12,6 +13,8 @@ using Serverside.Core.Database;
 using Serverside.Core.Extensions;
 using Serverside.Entities;
 using Serverside.Entities.Core;
+using Serverside.Entities.Core.Building;
+using Serverside.Entities.Core.Vehicle;
 
 namespace Serverside.Core.Scripts
 {
@@ -20,7 +23,7 @@ namespace Serverside.Core.Scripts
         [ServerEvent(Event.ChatMessage)]
         public void OnChatMessage(Client sender, string message)
         {
-            var account = sender.GetAccountEntity();
+            AccountEntity account = sender.GetAccountEntity();
             if (message == "tu" && account.HereHandler != null)
             {
                 account.HereHandler.Invoke(sender);
@@ -57,7 +60,7 @@ namespace Serverside.Core.Scripts
 
             _currentRotation += 0.4f;
 
-            foreach (var building in EntityHelper.GetBuildings())
+            foreach (BuildingEntity building in EntityHelper.GetBuildings())
             {
                 building.BuildingMarker.Rotation =
                     new Vector3(building.BuildingMarker.Rotation.X, building.BuildingMarker.Rotation.Y, _currentRotation);
@@ -79,7 +82,7 @@ namespace Serverside.Core.Scripts
             {
                 if (sender.HasData("WaypointVectorHandler"))
                 {
-                    var waypointAction = (Action<Vector3>)sender.GetData("WaypointPositionHandler");
+                    Action<Vector3> waypointAction = (Action<Vector3>)sender.GetData("WaypointPositionHandler");
                     waypointAction.Invoke(new Vector3((float)arguments[0], (float)arguments[1], (float)arguments[2]));
                 }
             }
@@ -90,17 +93,17 @@ namespace Serverside.Core.Scripts
         {
             Task dbStop = Task.Run(() =>
             {
-                foreach (var account in EntityHelper.GetAccounts().Where(x => x.Value?.CharacterEntity != null))
+                foreach (KeyValuePair<long, AccountEntity> account in EntityHelper.GetAccounts().Where(x => x.Value?.CharacterEntity != null))
                 {
                     //Zmiana postaci pola Online w postaci po wyłączeniu serwera dla graczy którzy byli online
                     account.Value.CharacterEntity.DbModel.Online = false;
                     account.Value.DbModel.Online = false;
                 }
 
-                foreach (var vehicle in EntityHelper.GetVehicles())
+                foreach (VehicleEntity vehicle in EntityHelper.GetVehicles())
                     vehicle.Dispose();
 
-                using (var ctx = RolePlayContextFactory.NewContext())
+                using (RoleplayContext ctx = RolePlayContextFactory.NewContext())
                     ctx.SaveChanges();
             });
             dbStop.Wait();

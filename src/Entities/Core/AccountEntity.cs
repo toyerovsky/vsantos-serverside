@@ -37,7 +37,7 @@ namespace Serverside.Entities.Core
         {
             get
             {
-                var id = EntityHelper.CalculateServerId(this);
+                int id = EntityHelper.CalculateServerId(this);
                 ServerIdChanged?.Invoke(this, new ServerIdChangeEventArgs(_serverId, id));
                 return _serverId = id;
             }
@@ -56,38 +56,10 @@ namespace Serverside.Entities.Core
             DbModel.LastLogin = DateTime.Now;
             DbModel.Online = true;
 
-            //tutaj dajemy inne rzeczy które mają być inicjowane po zalogowaniu się na konto, np: wybór postaci.
-
             string[] ip = DbModel.Ip.Split('.');
             string safeIp = $"{ip[0]}.{ip[1]}.***.***";
             Client.Notify($"Witaj, ~g~~h~{DbModel.Name} ~w~zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()}");
             Client.Notify($"Z adresu IP: {safeIp}");
-
-            var ctx = RolePlayContextFactory.NewContext();
-            using (CharactersRepository charactersRepository = new CharactersRepository(ctx))
-            using (AccountsRepository accountsRepository = new AccountsRepository(ctx))
-            {
-                if (DbModel.Characters.Count == 0)
-                {
-                    string[] email = DbModel.Email.Split('@');
-
-                    CharacterModel model = new CharacterModel()
-                    {
-                        Name = email[0],
-                        Surname = email[1],
-                        Model = PedHash.FreemodeMale01,
-                        Freemode = true,
-                        IsAlive = true,
-                        CreateTime = DateTime.Now,
-                        Account =   accountsRepository.Get(DbModel.Id),
-                    };
-
-                    DbModel.Characters.Add(model);
-                    charactersRepository.Insert(model);
-                }
-
-                charactersRepository.Save();
-            }
 
             EntityHelper.Add(this);
             AccountLoggedIn?.Invoke(Client, this);
