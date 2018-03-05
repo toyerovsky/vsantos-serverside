@@ -13,6 +13,7 @@ using Serverside.Core.Extensions;
 using Serverside.Core.Repositories;
 using Serverside.Economy.Groups.Base;
 using Serverside.Economy.Groups.Enums;
+using Serverside.Entities.Core.Group;
 using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Core
@@ -71,7 +72,8 @@ namespace Serverside.Entities.Core
                 repository.Save();
             }
 
-            return Create(groupModel);
+            GroupEntityFactory factory = new GroupEntityFactory();
+            return factory.Create(groupModel);
         }
 
         public string GetColoredName() => $"{DbModel.Color.ToColor().ToRocstar()} ~h~ {DbModel.Name} ~w~";
@@ -160,28 +162,6 @@ namespace Serverside.Entities.Core
             {
                 repository.Update(DbModel);
                 repository.Save();
-            }
-        }
-
-        public static void LoadGroups()
-        {
-            using (GroupsRepository repository = new GroupsRepository())
-                foreach (var group in repository.GetAll())
-                {
-                    Create(group);
-                }
-        }
-
-        public static GroupEntity Create(GroupModel groupModel)
-        {
-            var groupType = groupModel.GroupType;
-            switch (groupType)
-            {
-                case GroupType.Crime: return new CrimeGroup(groupModel);
-                case GroupType.CityHall: return new CityHall(groupModel);
-                case GroupType.Police: return new Police(groupModel);
-                default:
-                    throw new NotSupportedException($"Nie rozpoznano typu grupy: {groupType}.");
             }
         }
 

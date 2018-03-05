@@ -11,7 +11,7 @@ using Serverside.Core.Scripts;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Food : Item
+    internal class Food : ItemEntity
     {
         /// <summary>
         /// Pierwszy parametr to ilość HP do przyznania

@@ -11,7 +11,7 @@ using Serverside.Core.Extensions;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Weapon : Item
+    internal class Weapon : ItemEntity
     {
         public WeaponHash WeaponHash => (WeaponHash)DbModel.FirstParameter.Value;
         public int Ammo => DbModel.SecondParameter.Value;

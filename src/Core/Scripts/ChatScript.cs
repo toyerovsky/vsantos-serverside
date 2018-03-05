@@ -115,8 +115,8 @@ namespace Serverside.Core.Scripts
         public void SendMessageOnGroupChat(Client sender, string message)
         {
             var slot = message.Split(' ')[0];
-            short groupSlot = slot.All(char.IsDigit) ? Convert.ToInt16(slot) : (short)-1;
-            if (groupSlot != -1 && ValidationHelper.IsGroupSlotValid(groupSlot))
+            byte groupSlot = slot.All(char.IsDigit) ? Convert.ToByte(slot) : (byte)0;
+            if (groupSlot != 0 && ValidationHelper.IsGroupSlotValid(groupSlot))
             {
                 sender.Notify("Podany slot grupy jest nieprawidłowy.");
                 return;

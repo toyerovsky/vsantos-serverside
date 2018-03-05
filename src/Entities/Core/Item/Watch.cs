@@ -12,7 +12,7 @@ using Serverside.Core.Scripts;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Watch : Item
+    internal class Watch : ItemEntity
     {
         /// <summary>
         /// Brak parametrów

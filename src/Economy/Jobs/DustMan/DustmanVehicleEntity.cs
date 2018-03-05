@@ -11,7 +11,7 @@ using Serverside.Core.Extensions;
 using Serverside.Economy.Jobs.Base;
 using Serverside.Economy.Jobs.Enums;
 
-namespace Serverside.Economy.Jobs.DustMan
+namespace Serverside.Economy.Jobs.Dustman
 {
     public class DustmanVehicleEntity : JobVehicleEntity
     {

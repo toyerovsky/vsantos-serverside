@@ -8,7 +8,7 @@ using Serverside.Core.Database.Models;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Transmitter : Item
+    internal class Transmitter : ItemEntity
     {
         /// <summary>
         /// 

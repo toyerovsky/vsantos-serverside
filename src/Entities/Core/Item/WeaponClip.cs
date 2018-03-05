@@ -9,7 +9,7 @@ using Serverside.Core.Database.Models;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class WeaponClip : Item
+    internal class WeaponClip : ItemEntity
     {
         public WeaponHash MatchWeaponHash => (WeaponHash)DbModel.FirstParameter.Value;
         public int Ammo => DbModel.SecondParameter.Value;

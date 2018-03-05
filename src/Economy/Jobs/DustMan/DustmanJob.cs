@@ -9,7 +9,7 @@ using Serverside.Core.Database.Models;
 using Serverside.Core.Serialization;
 using Serverside.Economy.Jobs.Base;
 
-namespace Serverside.Economy.Jobs.DustMan
+namespace Serverside.Economy.Jobs.Dustman
 {
     public class DustmanJob : Job
     {

@@ -8,7 +8,7 @@ using Serverside.Core.Database.Models;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Drug : Item
+    internal class Drug : ItemEntity
     {
         /// <summary>
         /// Pierwszy parametr to drugtype

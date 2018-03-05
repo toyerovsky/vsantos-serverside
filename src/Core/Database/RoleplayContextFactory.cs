@@ -15,7 +15,6 @@ namespace Serverside.Core.Database
 {
     public class RolePlayContextFactory : IDesignTimeDbContextFactory<RoleplayContext>
     {
-
         private static readonly RolePlayContextFactory Instance = new RolePlayContextFactory();
 
         public static RoleplayContext NewContext() => Instance.CreateDbContext(new string[] { });

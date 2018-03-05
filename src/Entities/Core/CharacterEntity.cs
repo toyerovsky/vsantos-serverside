@@ -32,7 +32,7 @@ namespace Serverside.Entities.Core
         public CharacterCreator CharacterCreator { get; set; }
         public BuildingEntity CurrentBuilding { get; set; }
 
-        internal List<Item.Item> ItemsInUse { get; set; } = new List<Item.Item>();
+        internal List<Item.ItemEntity> ItemsInUse { get; set; } = new List<Item.ItemEntity>();
         internal Cellphone CurrentCellphone => ItemsInUse.Single(x => x is Cellphone) as Cellphone;
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";

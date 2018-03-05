@@ -16,6 +16,7 @@ using Serverside.Core.Scripts;
 using Serverside.Core.Serialization;
 using Serverside.Core.Telephone;
 using Serverside.Economy.Groups.Base;
+using Serverside.Entities.Interfaces;
 using Serverside.Entities.Peds.CrimeBot.Models;
 using NAPI = GTANetworkAPI.NAPI;
 
@@ -23,27 +24,7 @@ namespace Serverside.Entities.Core.Item.Scripts
 {
     public class ItemsScript : Script
     {
-        private Item CreateItem(ItemModel itemModel)
-        {
-            var itemType = (ItemType)itemModel.ItemType;
-            switch (itemType)
-            {
-                case ItemType.Food: return new Food(itemModel);
-                case ItemType.Weapon: return new Weapon(itemModel);
-                case ItemType.WeaponClip: return new WeaponClip(itemModel);
-                case ItemType.Mask: return new Mask(itemModel);
-                case ItemType.Drug: return new Drug(itemModel);
-                case ItemType.Dice: return new Dice(itemModel);
-                case ItemType.Watch: return new Watch(itemModel);
-                case ItemType.Cloth: return new Cloth(itemModel);
-                case ItemType.Transmitter: return new Transmitter(itemModel);
-                case ItemType.Cellphone: return new Cellphone(itemModel);
-                case ItemType.Tuning: return new Tuning(itemModel);
-
-                default:
-                    throw new NotSupportedException($"Podany typ przedmiotu {itemType} nie jest obsługiwany.");
-            }
-        }
+        private ItemEntityFactory _itemFactory { get; } = new ItemEntityFactory();
 
         private void API_OnClientEventTrigger(Client sender, string eventName, params object[] args)
         {
@@ -58,7 +39,7 @@ namespace Serverside.Entities.Core.Item.Scripts
                 var player = sender.GetAccountEntity();
                 int index = Convert.ToInt32(sender.GetData("SelectedItem"));
 
-                Item item = CreateItem(player.CharacterEntity.DbModel.Items.ToList()[index]);
+                ItemEntity item = _itemFactory.Create(player.CharacterEntity.DbModel.Items.ToList()[index]);
                 item.UseItem(player);
             }
             else if (eventName == "InformationsItem")
@@ -68,7 +49,7 @@ namespace Serverside.Entities.Core.Item.Scripts
                 int index = Convert.ToInt32(sender.GetData("SelectedItem"));
                 List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
 
-                Item item = CreateItem(userItems[index]);
+                ItemEntity item = _itemFactory.Create(userItems[index]);
                 ChatScript.SendMessageToPlayer(sender, item.ItemInfo, ChatMessageType.ServerInfo);
 
             }
@@ -79,7 +60,7 @@ namespace Serverside.Entities.Core.Item.Scripts
                 int index = Convert.ToInt32(sender.GetData("SelectedItem"));
                 List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
 
-                Item item = CreateItem(userItems[index]);
+                ItemEntity item = _itemFactory.Create(userItems[index]);
                 ChatScript.SendMessageToPlayer(sender, item.UseInfo, ChatMessageType.ServerInfo);
 
             }

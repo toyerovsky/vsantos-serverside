@@ -9,10 +9,10 @@ using System.Collections.Generic;
 using GTANetworkAPI;
 using Serverside.Core.Extensions;
 using Serverside.Economy.Jobs.Base;
-using Serverside.Economy.Jobs.DustMan.Models;
+using Serverside.Economy.Jobs.Dustman.Models;
 using Serverside.Entities.Core;
 
-namespace Serverside.Economy.Jobs.DustMan
+namespace Serverside.Economy.Jobs.Dustman
 {
     public class DustmanWorker : JobWorkerController
     {

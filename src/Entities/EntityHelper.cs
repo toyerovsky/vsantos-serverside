@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
+using Serverside.Core.Repositories;
 using Serverside.Core.Serialization;
 using Serverside.Entities.Common.Atm;
 using Serverside.Entities.Common.Atm.Models;
@@ -25,6 +26,7 @@ using Serverside.Entities.Common.Market;
 using Serverside.Entities.Common.Market.Models;
 using Serverside.Entities.Core;
 using Serverside.Entities.Core.Building;
+using Serverside.Entities.Core.Group;
 using Serverside.Entities.Core.Vehicle;
 using Serverside.Entities.Peds.CrimeBot;
 using Serverside.Entities.Peds.Employer;
@@ -39,7 +41,6 @@ namespace Serverside.Entities
             LoadCommonEntities();
             LoadCoreEntities();
             LoadPeds();
-            GroupEntity.LoadGroups();
             BuildingEntity.LoadBuildings();
         }
 
@@ -340,7 +341,15 @@ namespace Serverside.Entities
 
         private static void LoadCoreEntities()
         {
-
+            //Group loading
+            GroupEntityFactory factory = new GroupEntityFactory();
+            using (GroupsRepository repository = new GroupsRepository())
+            {
+                foreach (var group in repository.GetAll())
+                {
+                    factory.Create(group);
+                }
+            }
         }
 
         private static void LoadCommonEntities()

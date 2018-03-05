@@ -79,7 +79,7 @@ namespace Serverside.Entities.Core
                         Freemode = true,
                         IsAlive = true,
                         CreateTime = DateTime.Now,
-                        Account = accountsRepository.Get(DbModel.Id),
+                        Account =   accountsRepository.Get(DbModel.Id),
                     };
 
                     DbModel.Characters.Add(model);

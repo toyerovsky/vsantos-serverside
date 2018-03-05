@@ -10,7 +10,7 @@ using Serverside.Entities.Interfaces;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal abstract class Item : IOfferable
+    public abstract class ItemEntity : IOfferable
     {
         public long Id { get; }
         public string Name { get; }
@@ -21,7 +21,7 @@ namespace Serverside.Entities.Core.Item
 
         public virtual string UseInfo { get; }
     
-        protected Item(ItemModel itemModel)
+        protected ItemEntity(ItemModel itemModel)
         {
             DbModel = itemModel;
 

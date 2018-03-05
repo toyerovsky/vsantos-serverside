@@ -16,8 +16,8 @@ using Serverside.Core.Repositories;
 using Serverside.Core.Serialization;
 using Serverside.Economy.Jobs.Base;
 using Serverside.Economy.Jobs.Courier;
-using Serverside.Economy.Jobs.DustMan;
-using Serverside.Economy.Jobs.DustMan.Models;
+using Serverside.Economy.Jobs.Dustman;
+using Serverside.Economy.Jobs.Dustman.Models;
 using Serverside.Economy.Jobs.Enums;
 using Serverside.Economy.Jobs.Greenkeeper;
 

@@ -20,7 +20,7 @@ namespace Serverside.Economy.Groups
 {
     public class GroupsScript : Script
     {
-        #region PLAYER COMMANDS
+        #region Player commands
 
         [Command("prowadz", "~y~ UŻYJ ~w~ /pro(wadz) (id)", Alias = "pro")]
         public void ForcePlayerToGo(Client sender, int id = -1)
@@ -122,10 +122,8 @@ namespace Serverside.Economy.Groups
             NAPI.Player.PlayPlayerAnimation(sender, (int)(AnimationFlags.Cancellable | AnimationFlags.AllowPlayerControl), "rcmme_amanda1", "arrest_ama");
         }
 
-
-
         [Command("gduty")]
-        public void EnterDuty(Client sender, short slot)
+        public void EnterDuty(Client sender, byte slot)
         {
             Timer dutyTimer = new Timer(60000);
 
@@ -138,7 +136,7 @@ namespace Serverside.Economy.Groups
                 player.CharacterEntity.OnDutyGroup.PlayersOnDuty.Remove(player);
                 player.CharacterEntity.OnDutyGroup = null;
                 sender.ResetNametagColor();
-                sender.Nametag = $"( {player.ServerId} ) {player.CharacterEntity.FormatName}";
+                sender.Nametag = $"[{player.ServerId}] {player.CharacterEntity.FormatName}";
                 dutyTimer.Stop();
                 dutyTimer.Dispose();
             }
@@ -247,7 +245,7 @@ namespace Serverside.Economy.Groups
         }
 
         [Command("g")]
-        public void ShowGroupMenu(Client sender, short slot)
+        public void ShowGroupMenu(Client sender, byte slot)
         {
             var player = sender.GetAccountEntity();
             if (EntityHelper.GetPlayerGroups(player).Count == 0)

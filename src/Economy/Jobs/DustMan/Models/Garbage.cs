@@ -8,7 +8,7 @@ using System;
 using GTANetworkAPI;
 using Serverside.Core.Interfaces;
 
-namespace Serverside.Economy.Jobs.DustMan.Models
+namespace Serverside.Economy.Jobs.Dustman.Models
 {
     [Serializable]
     public class GarbageModel : IXmlObject

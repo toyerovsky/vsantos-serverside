@@ -16,7 +16,7 @@ using Serverside.Core.Telephone;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Cellphone : Item
+    internal class Cellphone : ItemEntity
     {
         public int PossibleContactsToSave => DbModel.FirstParameter.Value;
         public int PossibleMessagesToSave => DbModel.SecondParameter.Value;

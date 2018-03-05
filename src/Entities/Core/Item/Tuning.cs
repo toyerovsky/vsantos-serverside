@@ -8,7 +8,7 @@ using Serverside.Core.Database.Models;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Tuning : Item
+    internal class Tuning : ItemEntity
     {
         /// <summary>
         /// param 1 to typ tuningu, pozostałe parametry zależą od typu tuningu

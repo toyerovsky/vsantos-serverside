@@ -11,7 +11,7 @@ using Serverside.Core.Scripts;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Mask : Item
+    internal class Mask : ItemEntity
     {
         /// <summary>
         /// Pierwszy parametr to liczba liczba użyć do zniszczenia

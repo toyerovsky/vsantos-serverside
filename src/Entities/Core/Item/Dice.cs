@@ -11,7 +11,7 @@ using Serverside.Core.Scripts;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Dice : Item
+    internal class Dice : ItemEntity
     {   
         /// <summary>
         /// Pierwszy parametr to liczba oczek na kostce

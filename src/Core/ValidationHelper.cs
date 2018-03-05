@@ -8,15 +8,16 @@ namespace Serverside.Core
 {
     public static class ValidationHelper
     {
-        public static bool IsMoneyValid(decimal moneyToCheck) => moneyToCheck >= 0;
+        public static bool IsMoneyValid(decimal moneyToCheck) => moneyToCheck >= 0m;
 
-        public static bool IsGroupSlotValid(string groupSlot) => short.TryParse(groupSlot, out short slot) && slot <= 3 && slot >= 1;
+        public static bool IsGroupSlotValid(string groupSlot) =>
+            byte.TryParse(groupSlot, out byte slot) && IsGroupSlotValid(slot);
        
         public static bool IsCellphoneNumberValid(string number)
         {
             return int.TryParse(number, out int converted) && converted.ToString().Length > 0 && converted.ToString().Length <= 6;
         }
 
-        public static bool IsGroupSlotValid(short slot) => slot <= 3 && slot >= 0;
+        public static bool IsGroupSlotValid(byte slot) => slot <= 3 && slot >= 1;
     }
 }

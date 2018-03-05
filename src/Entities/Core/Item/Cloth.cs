@@ -8,7 +8,7 @@ using Serverside.Core.Database.Models;
 
 namespace Serverside.Entities.Core.Item
 {
-    internal class Cloth : Item
+    internal class Cloth : ItemEntity
     {
         /// <summary>
         /// 
