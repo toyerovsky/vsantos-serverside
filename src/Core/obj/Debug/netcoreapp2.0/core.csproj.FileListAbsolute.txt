@@ -1,7 +1,0 @@
-C:\Users\Przemek\source\repos\vsantos-serverside\src\core\bin\Debug\netcoreapp2.0\appsettings.json
-C:\Users\Przemek\source\repos\vsantos-serverside\src\core\bin\Debug\netcoreapp2.0\core.deps.json
-C:\Users\Przemek\source\repos\vsantos-serverside\src\core\bin\Debug\netcoreapp2.0\core.dll
-C:\Users\Przemek\source\repos\vsantos-serverside\src\core\obj\Debug\netcoreapp2.0\core.csprojResolveAssemblyReference.cache
-C:\Users\Przemek\source\repos\vsantos-serverside\src\core\obj\Debug\netcoreapp2.0\core.csproj.CoreCompileInputs.cache
-C:\Users\Przemek\source\repos\vsantos-serverside\src\core\obj\Debug\netcoreapp2.0\core.AssemblyInfoInputs.cache
-C:\Users\Przemek\source\repos\vsantos-serverside\src\core\obj\Debug\netcoreapp2.0\core.AssemblyInfo.cs
