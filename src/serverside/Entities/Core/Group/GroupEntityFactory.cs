@@ -1,10 +1,10 @@
 ﻿using System;
-using Serverside.Core.Database.Models;
-using Serverside.Entities.Interfaces;
-using Serverside.Economy.Groups.Enums;
-using Serverside.Economy.Groups.Base;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Economy.Groups.Base;
 
-namespace Serverside.Entities.Core.Group
+namespace VRP.Serverside.Entities.Core.Group
 {
     public class GroupEntityFactory : IEntityFactory<GroupEntity, GroupModel>
     {

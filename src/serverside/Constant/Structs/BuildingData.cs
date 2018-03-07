@@ -6,7 +6,7 @@
 
 using GTANetworkAPI;
 
-namespace Serverside.Constant.Structs
+namespace VRP.Serverside.Constant.Structs
 {
     public struct BuildingData
     {

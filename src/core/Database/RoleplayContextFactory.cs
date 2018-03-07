@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Serverside.Core.Database
+namespace VRP.Core.Database
 {
     public class RolePlayContextFactory : IDesignTimeDbContextFactory<RoleplayContext>
     {
@@ -24,7 +24,7 @@ namespace Serverside.Core.Database
         {
             if (_firstAttempt)
             {
-                using (MySqlConnection testConnection = new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString")))
+                using (MySqlConnection testConnection = new MySqlConnection(Tools.ServerInfo.Configuration.GetConnectionString("gameConnectionString")))
                 {
                     testConnection.Open();
                     string query = "select 1";
@@ -49,7 +49,7 @@ namespace Serverside.Core.Database
             }
 
             DbContextOptionsBuilder<RoleplayContext> options = new DbContextOptionsBuilder<RoleplayContext>();
-            options.UseMySql(Constant.ServerInfo.Configuration.GetConnectionString("gameConnectionString"));
+            options.UseMySql(Tools.ServerInfo.Configuration.GetConnectionString("gameConnectionString"));
             
             return new RoleplayContext(options.Options);
         }

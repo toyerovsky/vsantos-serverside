@@ -4,9 +4,9 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Core.Database.Models;
+using VRP.Core.Database.Models;
 
-namespace Serverside.Economy.Groups.Stucts
+namespace VRP.Serverside.Economy.Groups.Structs
 {
     public struct WarehouseItemInfo
     {

@@ -7,9 +7,9 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Entities.Common.Market.Models
+namespace VRP.Serverside.Entities.Common.Market.Models
 {
     [Serializable]
     public class MarketModel : IXmlObject

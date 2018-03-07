@@ -5,11 +5,11 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.DriveThru.Models;
-using Serverside.Entities.Interfaces;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.DriveThru.Models;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Common.DriveThru
+namespace VRP.Serverside.Entities.Common.DriveThru
 {
     public class DriveThruEntity : GameEntity, IInteractive
     {

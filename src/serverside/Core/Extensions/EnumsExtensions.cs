@@ -8,7 +8,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Serverside.Core.Extensions
+namespace VRP.Serverside.Core.Extensions
 {
     public static class EnumExtensions
     {

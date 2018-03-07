@@ -8,9 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Exceptions;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Exceptions;
 
-namespace Serverside.Core.Extensions
+namespace VRP.Serverside.Core.Extensions
 {
     public static class ApiExtensions
     {
@@ -51,7 +52,7 @@ namespace Serverside.Core.Extensions
         }
 
         public static Color GetRandomColor(this Color color) =>
-            new Color(Tools.RandomRange(256), Tools.RandomRange(256), Tools.RandomRange(256), Tools.RandomRange(256));
+            new Color(Utils.RandomRange(256), Utils.RandomRange(256), Utils.RandomRange(256), Utils.RandomRange(256));
 
         public static Color ToColor(this string hex)
         {

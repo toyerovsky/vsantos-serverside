@@ -5,10 +5,10 @@
  */
 
 using System;
-using Serverside.Core;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Peds.CrimeBot.Models
+namespace VRP.Serverside.Entities.Peds.CrimeBot.Models
 {
     [Serializable]
     public class CrimeBotPosition : IXmlObject

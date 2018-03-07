@@ -6,9 +6,9 @@
 
 using System.Collections.Generic;
 using GTANetworkAPI;
-using Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Core.CharacterCreator
+namespace VRP.Serverside.Core.CharacterCreator
 {
     public class CharacterCreator
     {

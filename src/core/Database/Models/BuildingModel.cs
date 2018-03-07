@@ -7,11 +7,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class BuildingModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }

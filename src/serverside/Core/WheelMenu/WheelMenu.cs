@@ -10,7 +10,7 @@ using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 
-namespace Serverside.Core.WheelMenu
+namespace VRP.Serverside.Core.WheelMenu
 {
     public class WheelMenu : IDisposable
     {

@@ -7,7 +7,7 @@
 using System;
 using GTANetworkAPI;
 
-namespace Serverside.Core.WheelMenu
+namespace VRP.Serverside.Core.WheelMenu
 {
     public class WheelMenuItem
     {

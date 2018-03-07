@@ -6,7 +6,7 @@
 
 using GTANetworkAPI;
 
-namespace Serverside.Entities.Interfaces
+namespace VRP.Serverside.Entities.Interfaces
 {
     public interface IInteractive
     {

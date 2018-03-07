@@ -6,11 +6,11 @@
 
 using System.Collections.Generic;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Enums;
-using Serverside.Entities.Interfaces;
+using VRP.Core.Enums;
+using VRP.Serverside.Entities.Interfaces;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Base
+namespace VRP.Serverside.Entities.Base
 {
     public class PedEntity : IGameEntity
     {

@@ -4,10 +4,10 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Economy.Jobs.Base;
-using Serverside.Entities.Core;
+using VRP.Serverside.Economy.Jobs.Base;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Economy.Jobs.Courier
+namespace VRP.Serverside.Economy.Jobs.Courier
 {
     public class CourierWorker : JobWorkerController
     {

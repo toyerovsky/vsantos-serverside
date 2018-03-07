@@ -5,9 +5,9 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Entities.Core.Vehicle;
 
-namespace Serverside.Core.Extensions
+namespace VRP.Serverside.Core.Extensions
 {
     public static class VehicleExtensions
     {

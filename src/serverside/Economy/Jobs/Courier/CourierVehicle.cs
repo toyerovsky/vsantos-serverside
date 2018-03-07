@@ -4,10 +4,11 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Core.Database.Models;
-using Serverside.Economy.Jobs.Base;
 
-namespace Serverside.Economy.Jobs.Courier
+using VRP.Core.Database.Models;
+using VRP.Serverside.Economy.Jobs.Base;
+
+namespace VRP.Serverside.Economy.Jobs.Courier
 {
     public class CourierVehicle : JobVehicleEntity
     {

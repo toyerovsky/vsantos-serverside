@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Serverside.Core.Interfaces
+namespace VRP.Core.Interfaces
 {
     public interface IRepository<T> : IDisposable
     {

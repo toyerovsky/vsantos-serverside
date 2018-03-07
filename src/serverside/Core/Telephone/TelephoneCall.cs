@@ -9,13 +9,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Entities.Core.Item;
 
-namespace Serverside.Core.Telephone
+namespace VRP.Serverside.Core.Telephone
 {
     public class TelephoneCall : IDisposable
     {

@@ -9,11 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Entities.Core;
+using VRP.Core.Database.Models;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Entities.Misc.Description
+namespace VRP.Serverside.Entities.Misc.Description
 {
     public class DescriptionsScript : Script
     {

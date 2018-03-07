@@ -6,14 +6,14 @@
 
 using System.Timers;
 using GTANetworkAPI;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.BusStop.Models;
-using Serverside.Entities.Interfaces;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.BusStop.Models;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Common.BusStop
+namespace VRP.Serverside.Entities.Common.BusStop
 {
     public class BusStopEntity : GameEntity, IInteractive
     {

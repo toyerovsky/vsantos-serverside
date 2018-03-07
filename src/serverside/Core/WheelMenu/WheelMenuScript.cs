@@ -7,11 +7,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Extensions;
-using Serverside.Entities;
-using Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core.Vehicle;
 
-namespace Serverside.Core.WheelMenu
+namespace VRP.Serverside.Core.WheelMenu
 {
     public class WheelMenuScript : Script
     {

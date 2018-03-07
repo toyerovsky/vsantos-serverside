@@ -5,10 +5,10 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Entities.Base;
-using Serverside.Entities.Core;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Entities.Misc.Description
+namespace VRP.Serverside.Entities.Misc.Description
 {
     public class Description : GameEntity
     {

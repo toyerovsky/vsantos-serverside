@@ -5,10 +5,10 @@
  */
 
 using System;
-using Serverside.Core.Extensions;
-using Serverside.Entities.Core;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Economy.Jobs.Base
+namespace VRP.Serverside.Economy.Jobs.Base
 {
     public abstract class JobWorkerController
     {

@@ -6,12 +6,12 @@
 
 using System;
 using System.Linq;
-using Serverside.Core.Database;
-using Serverside.Core.Enums;
+using VRP.Core.Database;
+using VRP.Core.Enums;
 
-namespace Serverside.Core
+namespace VRP.Core.Tools
 {
-    public static class Tools
+    public static class Utils
     {
         /// <summary>
         /// Metoda zwraca następny wymiar który nie jest zajmowany przez budynek lub serwer

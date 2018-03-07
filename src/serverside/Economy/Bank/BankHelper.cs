@@ -5,9 +5,9 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core.Extensions;
+using VRP.Serverside.Core.Extensions;
 
-namespace Serverside.Economy.Bank
+namespace VRP.Serverside.Economy.Bank
 {
     public static class BankHelper
     {

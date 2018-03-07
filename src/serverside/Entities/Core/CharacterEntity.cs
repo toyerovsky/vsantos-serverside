@@ -9,18 +9,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.CharacterCreator;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Entities.Base;
-using Serverside.Entities.Core.Building;
-using Serverside.Entities.Core.Item;
-using Serverside.Entities.Interfaces;
-using Serverside.Entities.Misc.Description;
+using VRP.Core.Database.Models;
+using VRP.Core.Repositories;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.CharacterCreator;
 
-namespace Serverside.Entities.Core
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Core.Building;
+using VRP.Serverside.Entities.Core.Group;
+using VRP.Serverside.Entities.Core.Item;
+using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Entities.Misc.Description;
+
+namespace VRP.Serverside.Entities.Core
 {
     public class CharacterEntity : GameEntity, IDbEntity<CharacterModel>
     {
@@ -72,7 +74,7 @@ namespace Serverside.Entities.Core
 
         public static CharacterEntity Create(AccountEntity accountEntity, string name, string surname, PedHash model)
         {
-            int randomIndex = Tools.RandomRange(Constant.Items.ServerSpawnPositions.Count);
+            int randomIndex = Utils.RandomRange(Constant.Items.ServerSpawnPositions.Count);
 
             CharacterModel dbModel = new CharacterModel
             {
@@ -82,7 +84,7 @@ namespace Serverside.Entities.Core
                 Money = 10000,
                 BankMoney = 1000000,
                 CreateTime = DateTime.Now,
-                Model = model,
+                Model = model.ToString(),
                 HitPoints = 100,
                 IsAlive = true,
                 LastPositionX = Constant.Items.ServerSpawnPositions[randomIndex].X,
@@ -156,7 +158,7 @@ namespace Serverside.Entities.Core
             accountEntity.Client.Nametag = $"({EntityHelper.CalculateServerId(accountEntity)}) {accountEntity.CharacterEntity.FormatName}";
 
             accountEntity.Client.Name = accountEntity.CharacterEntity.FormatName;
-            accountEntity.Client.SetSkin(character.Model);
+            accountEntity.Client.SetSkin(NAPI.Util.PedNameToModel(character.Model));
 
             NAPI.Entity.SetEntityPosition(accountEntity.Client, new Vector3(character.LastPositionX, character.LastPositionY, character.LastPositionZ));
 

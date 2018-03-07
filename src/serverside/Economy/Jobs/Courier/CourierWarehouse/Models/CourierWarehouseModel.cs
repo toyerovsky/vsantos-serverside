@@ -6,9 +6,9 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Economy.Jobs.Courier.CourierWarehouse.Models
+namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse.Models
 {
     [Serializable]
     public class CourierWarehouseModel : IXmlObject

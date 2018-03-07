@@ -7,17 +7,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.Corners.Models;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Entities.Common.Corners.Models;
 
-namespace Serverside.Entities.Common.Corners.Helpers
+namespace VRP.Serverside.Entities.Common.Corners.Helpers
 {
     public class CornerBotHelper
     {
         public static bool TryGetCornerBotIds(List<string> botIds, out List<int> correctBotIds)
         {
             correctBotIds = new List<int>();
-            List<int> ids = XmlHelper.GetXmlObjects<CornerBotModel>(Constant.ServerInfo.XmlDirectory +
+            List<int> ids = XmlHelper.GetXmlObjects<CornerBotModel>(ServerInfo.XmlDirectory +
                                                               @"CornerBots\").Select(x => x.BotId).ToList();            
             foreach (string id in botIds)
             {

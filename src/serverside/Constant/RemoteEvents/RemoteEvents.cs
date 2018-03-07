@@ -4,7 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Constant.RemoteEvents
+namespace VRP.Serverside.Constant.RemoteEvents
 {
     public static class RemoteEvents
     {

@@ -7,12 +7,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Core.Scripts
+namespace VRP.Serverside.Core.Scripts
 {
     public class MiscCommandsScript : Script
     {

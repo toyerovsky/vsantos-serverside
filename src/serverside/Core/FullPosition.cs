@@ -7,7 +7,7 @@
 using System;
 using GTANetworkAPI;
 
-namespace Serverside.Core
+namespace VRP.Serverside.Core
 {
     [Serializable]
     public class FullPosition

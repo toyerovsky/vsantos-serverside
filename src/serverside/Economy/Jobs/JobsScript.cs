@@ -7,22 +7,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Constant;
-using Serverside.Core;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Core.Serialization;
-using Serverside.Economy.Jobs.Base;
-using Serverside.Economy.Jobs.Courier;
-using Serverside.Economy.Jobs.Dustman;
-using Serverside.Economy.Jobs.Dustman.Models;
-using Serverside.Economy.Jobs.Enums;
-using Serverside.Economy.Jobs.Greenkeeper;
-using Serverside.Entities.Core.Vehicle;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Jobs.Base;
+using VRP.Serverside.Economy.Jobs.Courier;
+using VRP.Serverside.Economy.Jobs.Dustman;
+using VRP.Serverside.Economy.Jobs.Dustman.Models;
+using VRP.Serverside.Economy.Jobs.Greenkeeper;
+using VRP.Serverside.Entities.Core.Vehicle;
 
-namespace Serverside.Economy.Jobs
+namespace VRP.Serverside.Economy.Jobs
 {
     public class JobsScript : Script
     {
@@ -83,7 +81,7 @@ namespace Serverside.Economy.Jobs
                 repository.Save();
             }
         }
-        public static GarbageModel GetRandomGarbage() => Garbages[Tools.RandomRange(Garbages.Count)];
+        public static GarbageModel GetRandomGarbage() => Garbages[Utils.RandomRange(Garbages.Count)];
 
         #endregion
 

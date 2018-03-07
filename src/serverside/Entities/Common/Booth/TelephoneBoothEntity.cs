@@ -5,14 +5,14 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core.Extensions;
-using Serverside.Core.Telephone;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.Booth.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Interfaces;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Telephone;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.Booth.Models;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Common.Booth
+namespace VRP.Serverside.Entities.Common.Booth
 {
     public class TelephoneBoothEntity : GameEntity, IInteractive
     {

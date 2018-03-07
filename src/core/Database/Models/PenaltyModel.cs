@@ -6,13 +6,13 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using Serverside.Core.Enums;
+using VRP.Core.Enums;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class PenaltyModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public virtual AccountModel Creator { get; set; }
 

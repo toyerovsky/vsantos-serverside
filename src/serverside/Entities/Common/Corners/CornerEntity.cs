@@ -8,14 +8,14 @@ using System;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Extensions;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.Corners.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Interfaces;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.Corners.Models;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Common.Corners
+namespace VRP.Serverside.Entities.Common.Corners
 {
     public class CornerEntity : GameEntity, IInteractive
     {
@@ -67,14 +67,14 @@ namespace Serverside.Entities.Common.Corners
         private void StartProcess()
         {
             //Przychodzące boty
-            Timer timer = new Timer(Tools.RandomRange(90, 180) * 1000);
+            Timer timer = new Timer(Utils.RandomRange(90, 180) * 1000);
             timer.Start();
 
             timer.Elapsed += (sender, args) =>
             {
                 timer.Stop();
 
-                int random = Tools.RandomRange(Data.CornerBots.Count);
+                int random = Utils.RandomRange(Data.CornerBots.Count);
 
                 CurrentPedEntity = new CornerPedEntity(Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
 

@@ -5,9 +5,9 @@
  */
 
 using System;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Core.Animations.Models
+namespace VRP.Serverside.Core.Animations.Models
 {
     [Serializable]
     public class Animation : IXmlObject

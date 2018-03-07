@@ -6,7 +6,7 @@
 
 using System.ComponentModel;
 
-namespace Serverside.Core.Enums
+namespace VRP.Core.Enums
 {
     public enum ShowType
     {

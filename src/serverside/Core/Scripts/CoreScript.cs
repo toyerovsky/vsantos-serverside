@@ -9,14 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
-using Serverside.Core.Database;
-using Serverside.Core.Extensions;
-using Serverside.Entities;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Building;
-using Serverside.Entities.Core.Vehicle;
+using VRP.Core.Database;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Building;
+using VRP.Serverside.Entities.Core.Vehicle;
 
-namespace Serverside.Core.Scripts
+namespace VRP.Serverside.Core.Scripts
 {
     public class CoreScript : Script
     {

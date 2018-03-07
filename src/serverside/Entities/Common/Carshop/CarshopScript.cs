@@ -9,17 +9,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Constant;
-using Serverside.Core;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.Carshop.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Vehicle;
+using VRP.Core.Enums;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Common.Carshop.Models;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Vehicle;
+using FullPosition = VRP.Serverside.Core.FullPosition;
+using VehicleClass = VRP.Serverside.Core.Extensions.VehicleClass;
 
-namespace Serverside.Entities.Common.Carshop
+namespace VRP.Serverside.Entities.Common.Carshop
 {
     public class CarshopScript : Script
     {

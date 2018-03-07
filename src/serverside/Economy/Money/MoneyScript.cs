@@ -5,10 +5,10 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Extensions;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
 
-namespace Serverside.Economy.Money
+namespace VRP.Serverside.Economy.Money
 {
     sealed class MoneyScript : Script
     {

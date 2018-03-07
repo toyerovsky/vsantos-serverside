@@ -6,9 +6,9 @@
 
 using System;
 using System.Drawing;
-using Serverside.Entities.Interfaces;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Base
+namespace VRP.Serverside.Entities.Base
 {
     public abstract class GameEntity : IGameEntity
     {

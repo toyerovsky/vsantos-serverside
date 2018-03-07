@@ -8,16 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Constant;
-using Serverside.Core.Extensions;
-using Serverside.Core.Serialization;
-using Serverside.Economy.Groups;
-using Serverside.Economy.Groups.Stucts;
-using Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
-using Serverside.Entities;
+using VRP.Core.Enums;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Groups;
+using VRP.Serverside.Economy.Groups.Structs;
+using VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
+using VRP.Serverside.Entities;
 
-namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
+namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
 {
     public class CourierWarehouseScript : Script
     {

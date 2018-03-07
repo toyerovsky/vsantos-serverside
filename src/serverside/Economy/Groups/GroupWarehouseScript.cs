@@ -9,16 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Admin.Enums;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Economy.Groups.Enums;
-using Serverside.Economy.Groups.Stucts;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Groups.Structs;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Group;
 
-namespace Serverside.Economy.Groups
+namespace VRP.Serverside.Economy.Groups
 {
     public class GroupWarehouseScript : Script
     {
@@ -41,7 +40,7 @@ namespace Serverside.Economy.Groups
                  */
 
                 if (Enum.TryParse(arguments[3].ToString(), out GroupType groupType) &&
-                    Enum.TryParse(arguments[1].ToString(), out ItemType itemType))
+                    Enum.TryParse(arguments[1].ToString(), out ItemEntityType itemType))
                 {
                     GroupWarehouseItemModel groupWarehouseItem = new GroupWarehouseItemModel
                     {
@@ -49,7 +48,7 @@ namespace Serverside.Economy.Groups
                         {
                             Creator = sender.GetAccountEntity().DbModel,
                             Name = arguments[0].ToString(),
-                            ItemType = itemType,
+                            ItemEntityType = itemType,
                         },
                         Cost = Convert.ToDecimal(arguments[2]),
                         MinimalCost = Convert.ToDecimal(arguments[4]),

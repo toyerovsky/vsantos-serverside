@@ -9,12 +9,13 @@ using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Admin.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.BusStop.Models;
+using VRP.Core.Enums;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Common.BusStop.Models;
 
-namespace Serverside.Entities.Common.BusStop
+namespace VRP.Serverside.Entities.Common.BusStop
 {
     public class BusStopScript : Script
     {
@@ -78,7 +79,7 @@ namespace Serverside.Entities.Common.BusStop
                         Center = center,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                     };
-                    XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(BusStopModel), data.Name));
+                    XmlHelper.AddXmlObject(data, Path.Combine(ServerInfo.XmlDirectory, nameof(BusStopModel), data.Name));
 
                     sender.Notify("Dodawanie przystanku zakończyło się pomyślnie.");
                     BusStopEntity busStop = new BusStopEntity(data);

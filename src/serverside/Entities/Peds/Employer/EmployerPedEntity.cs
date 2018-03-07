@@ -5,11 +5,11 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Extensions;
-using Serverside.Entities.Base;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Base;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Peds.Employer
+namespace VRP.Serverside.Entities.Peds.Employer
 {
     public sealed class EmployerPedEntity : PedEntity
     {

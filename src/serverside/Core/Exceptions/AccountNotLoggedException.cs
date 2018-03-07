@@ -7,7 +7,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Serverside.Core.Exceptions
+namespace VRP.Serverside.Core.Exceptions
 {
     [Serializable]
     public class AccountNotLoggedException : Exception

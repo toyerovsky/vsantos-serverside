@@ -5,14 +5,12 @@
  */
 
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using GTANetworkAPI;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class VehicleModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
@@ -23,9 +21,8 @@ namespace Serverside.Core.Database.Models
         public int NumberPlateStyle { get; set; }
 
         public string Name { get; set; }
-
-        [EnumDataType(typeof(VehicleHash))]
-        public virtual VehicleHash VehicleHash { get; set; }
+        
+        public virtual string VehicleHash { get; set; }
 
         public float SpawnPositionX { get; set; }
         public float SpawnPositionY { get; set; }

@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace Serverside.Constant
+namespace VRP.Serverside.Constant
 {
     public class Clothes
     {

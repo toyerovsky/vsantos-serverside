@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>Serverside</RootNamespace>
+    <RootNamespace>VRP.Serverside</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
   </PropertyGroup>

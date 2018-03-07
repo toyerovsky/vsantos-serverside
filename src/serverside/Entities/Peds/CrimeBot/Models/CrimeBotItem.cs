@@ -4,9 +4,9 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Entities.Core.Item;
+using VRP.Core.Enums;
 
-namespace Serverside.Entities.Peds.CrimeBot.Models
+namespace VRP.Serverside.Entities.Peds.CrimeBot.Models
 {
     public class CrimeBotItem
     {
@@ -14,10 +14,10 @@ namespace Serverside.Entities.Peds.CrimeBot.Models
         public decimal Cost { get; set; }
         public int Count { get; set; }
         public int DefaultCount { get; set; }
-        public ItemType Type { get; set; }
+        public ItemEntityType Type { get; set; }
         public string DatabaseField { get; set; }
         
-        public CrimeBotItem(string name, decimal cost, int count, int defaultCount, ItemType type, string databaseField)
+        public CrimeBotItem(string name, decimal cost, int count, int defaultCount, ItemEntityType type, string databaseField)
         {
             Name = name;
             Cost = cost;

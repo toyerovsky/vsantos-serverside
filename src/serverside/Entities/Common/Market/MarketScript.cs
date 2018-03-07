@@ -10,15 +10,15 @@ using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Constant;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.Market.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Common.Market.Models;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Entities.Common.Market
+namespace VRP.Serverside.Entities.Common.Market
 {
     public class MarketScript : Script
     {
@@ -41,7 +41,7 @@ namespace Serverside.Entities.Common.Market
                 MarketItem item = new MarketItem
                 {
                     Name = arguments[0].ToString(),
-                    ItemType = (ItemType)Enum.Parse(typeof(ItemType), (string)arguments[1]),
+                    ItemEntityType = (ItemEntityType)Enum.Parse(typeof(ItemEntityType), (string)arguments[1]),
                     Cost = (decimal)arguments[2],
                     FirstParameter = (int)arguments[4],
                     SecondParameter = (int)arguments[5],
@@ -76,7 +76,7 @@ namespace Serverside.Entities.Common.Market
                 controller.CharacterEntity.DbModel.Items.Add(new ItemModel
                 {
                     Creator = null,
-                    ItemType = item.ItemType,
+                    ItemEntityType = item.ItemEntityType,
                     Name = item.Name,
                     Character = controller.CharacterEntity.DbModel,
                     FirstParameter = item.FirstParameter,
@@ -102,7 +102,7 @@ namespace Serverside.Entities.Common.Market
         [Command("dodajprzedmiotsklep")]
         public void AddItemToShop(Client sender)
         {
-            List<string> values = Enum.GetNames(typeof(ItemType)).ToList();
+            List<string> values = Enum.GetNames(typeof(ItemEntityType)).ToList();
             var markets = XmlHelper.GetXmlObjects<MarketModel>($@"{ServerInfo.XmlDirectory}\Markets\").Select(x => new { x.Id, x.Name }).ToList();
             NAPI.ClientEvent.TriggerClientEvent(sender, "ShowAdminMarketItemMenu", values, markets);
         }

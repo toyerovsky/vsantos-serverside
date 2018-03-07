@@ -4,10 +4,10 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Admin.Enums;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Admin.Structs
+namespace VRP.Serverside.Admin.Structs
 {
     public struct ReportData
     {

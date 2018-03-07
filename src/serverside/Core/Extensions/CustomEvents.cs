@@ -6,10 +6,10 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Enums;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Core.Extensions
+namespace VRP.Serverside.Core.Extensions
 {
     public class SaidEventArgs : EventArgs
     {

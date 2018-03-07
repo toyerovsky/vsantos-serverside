@@ -7,13 +7,13 @@
 using System.Globalization;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core.Extensions;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.Atm.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Interfaces;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.Atm.Models;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Common.Atm
+namespace VRP.Serverside.Entities.Common.Atm
 {
     public class AtmEntity : GameEntity, IInteractive
     {

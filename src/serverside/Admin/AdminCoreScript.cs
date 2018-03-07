@@ -9,14 +9,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Constant;
-using Serverside.Core.Extensions;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
 using Color = System.Drawing.Color;
 
-namespace Serverside.Admin
+namespace VRP.Serverside.Admin
 {
     public class AdminCoreScript : Script
     {

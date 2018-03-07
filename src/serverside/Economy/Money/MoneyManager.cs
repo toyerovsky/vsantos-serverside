@@ -6,10 +6,10 @@
 
 using System.Globalization;
 using GTANetworkAPI;
-using Serverside.Core.Extensions;
-using Serverside.Entities.Core;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Economy.Money
+namespace VRP.Serverside.Economy.Money
 {    
     public static class MoneyManager
     {

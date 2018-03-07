@@ -4,9 +4,9 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Entities.Interfaces
+namespace VRP.Serverside.Entities.Interfaces
 {
     public interface IOfferable
     {

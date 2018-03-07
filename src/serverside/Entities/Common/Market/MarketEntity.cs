@@ -8,12 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.Market.Models;
-using Serverside.Entities.Interfaces;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.Market.Models;
+using VRP.Serverside.Entities.Interfaces;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Common.Market
+namespace VRP.Serverside.Entities.Common.Market
 {
     public class MarketEntity : GameEntity, IInteractive
     {

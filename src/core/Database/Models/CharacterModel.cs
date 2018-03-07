@@ -7,14 +7,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using GTANetworkAPI;
-using Serverside.Economy.Jobs.Enums;
+using VRP.Core.Enums;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class CharacterModel
     {
-        public long Id { get; set; }   
+        public int Id { get; set; }
         public virtual AccountModel Account { get; set; }
         public bool Online { get; set; }
         public DateTime? CreateTime { get; set; }
@@ -23,9 +22,8 @@ namespace Serverside.Core.Database.Models
         public DateTime? PlayedTime { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        
-        [EnumDataType(typeof(PedHash))]
-        public virtual PedHash Model { get; set; }
+
+        public string Model { get; set; }
 
         public virtual ICollection<VehicleModel> Vehicles { get; set; }
         public virtual ICollection<ItemModel> Items { get; set; }

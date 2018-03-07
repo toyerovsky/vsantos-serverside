@@ -9,13 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using ChatMessageType = VRP.Core.Enums.ChatMessageType;
+using VehicleClass = VRP.Serverside.Core.Extensions.VehicleClass;
 
-namespace Serverside.Entities.Core.Vehicle
+namespace VRP.Serverside.Entities.Core.Vehicle
 {
     public class VehicleScript : Script
     {
@@ -121,7 +122,7 @@ namespace Serverside.Entities.Core.Vehicle
                     if (vehicleEntity == null) return;
 
                     string tuningJson = JsonConvert.SerializeObject(vehicleEntity.DbModel.ItemsInVehicle
-                        .Where(i => i.ItemType == ItemType.Tuning && i.FourthParameter.HasValue)
+                        .Where(i => i.ItemEntityType == ItemEntityType.Tuning && i.FourthParameter.HasValue)
                         .Select(i => new
                         {
                             i.Name

@@ -4,23 +4,9 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Entities.Core.Item
+namespace VRP.Serverside.Entities.Core.Item
 {
-    public enum ItemType
-    {
-        Food,
-        Weapon,
-        WeaponClip,
-        Mask,
-        Drug,
-        Dice,
-        Watch,
-        Cloth,
-        Transmitter,
-        Alcohol,
-        Cellphone,
-        Tuning
-    }
+    
 
     public enum TuningType
     {

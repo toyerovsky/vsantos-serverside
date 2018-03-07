@@ -6,11 +6,11 @@
 
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Animations.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Serialization;
+using VRP.Core.Serialization;
+using VRP.Serverside.Core.Animations.Models;
+using VRP.Serverside.Core.Extensions;
 
-namespace Serverside.Core.Animations
+namespace VRP.Serverside.Core.Animations
 {
     public class AnimationsScript : Script
     {
@@ -26,7 +26,7 @@ namespace Serverside.Core.Animations
                     Name = arguments[0].ToString(),
                     AnimDictionary = arguments[1].ToString(),
                     AnimName = arguments[2].ToString(),
-                }, Constant.ServerInfo.XmlDirectory + @"Animations\", arguments[2].ToString());
+                }, VRP.Core.Tools.ServerInfo.XmlDirectory + @"Animations\", arguments[2].ToString());
 
                 sender.Notify("Animacja została dodana pomyślnie.");
             }

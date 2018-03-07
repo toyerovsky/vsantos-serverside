@@ -7,11 +7,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Extensions;
-using Serverside.Economy.Jobs.Base;
-using Serverside.Entities.Core;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Jobs.Base;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Economy.Jobs.Greenkeeper
+namespace VRP.Serverside.Economy.Jobs.Greenkeeper
 {
     public class GreenkeeperWorker : JobWorkerController
     {

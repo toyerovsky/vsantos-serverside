@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Extensions;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.Corners.Helpers;
-using Serverside.Entities.Common.Corners.Models;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Common.Corners.Helpers;
+using VRP.Serverside.Entities.Common.Corners.Models;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Common.Corners
+namespace VRP.Serverside.Entities.Common.Corners
 {
     public class CornersScript : Script
     {
@@ -23,7 +24,7 @@ namespace Serverside.Entities.Common.Corners
         [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (CornerModel data in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory, "Corners")))
+            foreach (CornerModel data in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(ServerInfo.XmlDirectory, "Corners")))
             {
                 CornerEntity corner = new CornerEntity(data);
                 corner.Spawn();
@@ -103,11 +104,11 @@ namespace Serverside.Entities.Common.Corners
                     {
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                         Position = position,
-                        CornerBots = XmlHelper.GetXmlObjects<CornerBotModel>(Constant.ServerInfo.XmlDirectory + @"CornerBots\").Where(e => correctBotIds.Contains(e.BotId)).ToList(),
+                        CornerBots = XmlHelper.GetXmlObjects<CornerBotModel>(ServerInfo.XmlDirectory + @"CornerBots\").Where(e => correctBotIds.Contains(e.BotId)).ToList(),
                         BotPositions = botPositions
                     };
                     //Dodajemy nowy plik .xml
-                    XmlHelper.AddXmlObject(data, Constant.ServerInfo.XmlDirectory + @"Corners\");
+                    XmlHelper.AddXmlObject(data, ServerInfo.XmlDirectory + @"Corners\");
                     CornerEntity corner = new CornerEntity(data);
                     Corners.Add(corner);
 

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Serverside.Entities.Interfaces
+namespace VRP.Serverside.Entities.Interfaces
 {
     public interface IGameEntity : IDisposable
     {

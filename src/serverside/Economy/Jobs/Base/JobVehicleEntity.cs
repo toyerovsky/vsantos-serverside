@@ -5,12 +5,12 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Interfaces;
-using Serverside.Entities.Core.Vehicle;
+using VRP.Core.Database.Models;
+using VRP.Core.Interfaces;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Core.Vehicle;
 
-namespace Serverside.Economy.Jobs.Base
+namespace VRP.Serverside.Economy.Jobs.Base
 {
     public abstract class JobVehicleEntity : VehicleEntity, IXmlObject
     {

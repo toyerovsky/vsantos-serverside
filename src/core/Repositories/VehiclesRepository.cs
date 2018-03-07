@@ -8,11 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Serverside.Core.Database;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Interfaces;
+using VRP.Core.Database;
+using VRP.Core.Database.Models;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Core.Repositories
+namespace VRP.Core.Repositories
 {
     public class VehiclesRepository : IRepository<VehicleModel>
     {

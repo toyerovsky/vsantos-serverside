@@ -5,14 +5,14 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using Serverside.Economy.Groups.Enums;
+using VRP.Core.Enums;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     //Tabela do trzymania przedmiotów bazowych w magazynie
     public class GroupWarehouseItemModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public decimal Cost { get; set; }
         public decimal? MinimalCost { get; set; }
         //Ile jest obecnie?

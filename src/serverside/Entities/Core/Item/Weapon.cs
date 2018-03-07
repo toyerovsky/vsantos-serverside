@@ -6,10 +6,11 @@
 
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
 
-namespace Serverside.Entities.Core.Item
+namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Weapon : ItemEntity
     {
@@ -55,7 +56,7 @@ namespace Serverside.Entities.Core.Item
 
         private void OnAccountLoggedOut(Client sender, AccountEntity account)
         {
-            if (DbModel.ItemType == ItemType.Weapon)
+            if (DbModel.ItemEntityType == ItemEntityType.Weapon)
             {
                 if (DbModel.FirstParameter.HasValue)
                     DbModel.SecondParameter = NAPI.Player.GetPlayerWeaponAmmo(sender, (WeaponHash)DbModel.FirstParameter);

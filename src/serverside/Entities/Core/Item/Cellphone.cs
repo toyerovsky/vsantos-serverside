@@ -7,14 +7,14 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Core.Scripts;
-using Serverside.Core.Telephone;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Core.Telephone;
 
-namespace Serverside.Entities.Core.Item
+namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Cellphone : ItemEntity
     {

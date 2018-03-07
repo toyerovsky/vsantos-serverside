@@ -9,10 +9,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Constant.Structs;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Enums;
+using VRP.Core.Tools;
+using VRP.Serverside.Constant.Structs;
 
-namespace Serverside.Constant
+namespace VRP.Serverside.Constant
 {
     public static class Items
     {
@@ -29,104 +30,104 @@ namespace Serverside.Constant
             }
         }
 
-        public static Tuple<string, ItemType> GetCrimeBotItemName(string name)
+        public static Tuple<string, ItemEntityType> GetCrimeBotItemName(string name)
         {
             if (name.Contains("Revolver"))
-                return new Tuple<string, ItemType>("Magazynek Colt Anaconda", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Colt Anaconda", ItemEntityType.WeaponClip);
             else if (name.Contains("AssaultRifleMagazine"))
-                return new Tuple<string, ItemType>("Magazynek AK-47", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek AK-47", ItemEntityType.WeaponClip);
             else if (name.Contains("SNSPistolMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Colt Junior 25", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Colt Junior 25", ItemEntityType.WeaponClip);
             else if (name.Contains("Pistol50Magazine"))
-                return new Tuple<string, ItemType>("Magazynek Colt M45A1", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Colt M45A1", ItemEntityType.WeaponClip);
             else if (name.Contains("CarbineRifleMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Colt M4", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Colt M4", ItemEntityType.WeaponClip);
             else if (name.Contains("DoubleBarrelShotgunMagazine"))
-                return new Tuple<string, ItemType>("Magazynek AYA 12g", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek AYA 12g", ItemEntityType.WeaponClip);
             else if (name.Contains("MachinePistolMagazine"))
-                return new Tuple<string, ItemType>("Magazynek TEC-9", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek TEC-9", ItemEntityType.WeaponClip);
             else if (name.Contains("HeavyPistolMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Desert Eagle", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Desert Eagle", ItemEntityType.WeaponClip);
             else if (name.Contains("SniperRifleMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Barrett M98B", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Barrett M98B", ItemEntityType.WeaponClip);
             else if (name.Contains("VintagePistolMagazine"))
-                return new Tuple<string, ItemType>("Magazynek FN 1922", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek FN 1922", ItemEntityType.WeaponClip);
             else if (name.Contains("CombatPistolMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Walther P99", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Walther P99", ItemEntityType.WeaponClip);
             else if (name.Contains("CompactRifleMagazine"))
-                return new Tuple<string, ItemType>("Magazynek AKMSU", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek AKMSU", ItemEntityType.WeaponClip);
             else if (name.Contains("SawnoffShotgunMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Mossberg 500", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Mossberg 500", ItemEntityType.WeaponClip);
             else if (name.Contains("MicroSMGMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Mini-UZI", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Mini-UZI", ItemEntityType.WeaponClip);
             else if (name.Contains("PistolMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Colt M1911", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Colt M1911", ItemEntityType.WeaponClip);
             else if (name.Contains("PumpShotgunMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Mossberg 590", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Mossberg 590", ItemEntityType.WeaponClip);
             else if (name.Contains("MiniSMGMagazine"))
-                return new Tuple<string, ItemType>("Magazynek Skorpion vz 61", ItemType.WeaponClip);
+                return new Tuple<string, ItemEntityType>("Magazynek Skorpion vz 61", ItemEntityType.WeaponClip);
             else if (name.Contains("Revolver"))
-                return new Tuple<string, ItemType>("Colt Anaconda", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Colt Anaconda", ItemEntityType.Weapon);
             else if (name.Contains("AssaultRifle"))
-                return new Tuple<string, ItemType>("AK-47", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("AK-47", ItemEntityType.Weapon);
             else if (name.Contains("SNSPistol"))
-                return new Tuple<string, ItemType>("Colt Junior 25", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Colt Junior 25", ItemEntityType.Weapon);
             else if (name.Contains("Pistol50"))
-                return new Tuple<string, ItemType>("Colt M45A1", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Colt M45A1", ItemEntityType.Weapon);
             else if (name.Contains("CarbineRifle"))
-                return new Tuple<string, ItemType>("Colt M4", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Colt M4", ItemEntityType.Weapon);
             else if (name.Contains("DoubleBarrelShotgun"))
-                return new Tuple<string, ItemType>("AYA 12g", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("AYA 12g", ItemEntityType.Weapon);
             else if (name.Contains("MachinePistol"))
-                return new Tuple<string, ItemType>("TEC-9", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("TEC-9", ItemEntityType.Weapon);
             else if (name.Contains("HeavyPistol"))
-                return new Tuple<string, ItemType>("Desert Eagle", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Desert Eagle", ItemEntityType.Weapon);
             else if (name.Contains("SniperRifle"))
-                return new Tuple<string, ItemType>("Barrett M98B", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Barrett M98B", ItemEntityType.Weapon);
             else if (name.Contains("VintagePistol"))
-                return new Tuple<string, ItemType>("FN 1922", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("FN 1922", ItemEntityType.Weapon);
             else if (name.Contains("CombatPistol"))
-                return new Tuple<string, ItemType>("Walther P99", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Walther P99", ItemEntityType.Weapon);
             else if (name.Contains("CompactRifle"))
-                return new Tuple<string, ItemType>("AKMSU", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("AKMSU", ItemEntityType.Weapon);
             else if (name.Contains("SawnoffShotgun"))
-                return new Tuple<string, ItemType>("Mossberg 500", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Mossberg 500", ItemEntityType.Weapon);
             else if (name.Contains("MicroSMG"))
-                return new Tuple<string, ItemType>("Mini-UZI", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Mini-UZI", ItemEntityType.Weapon);
             else if (name.Contains("Pistol"))
-                return new Tuple<string, ItemType>("Colt M1911", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Colt M1911", ItemEntityType.Weapon);
             else if (name.Contains("PumpShotgun"))
-                return new Tuple<string, ItemType>("Mossberg 590", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Mossberg 590", ItemEntityType.Weapon);
             else if (name.Contains("MiniSMG"))
-                return new Tuple<string, ItemType>("Skorpion vz 61", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Skorpion vz 61", ItemEntityType.Weapon);
             else if (name.Contains("Golfclub"))
-                return new Tuple<string, ItemType>("Kij golfowy", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Kij golfowy", ItemEntityType.Weapon);
             else if (name.Contains("Bat"))
-                return new Tuple<string, ItemType>("Kij baseballowy", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Kij baseballowy", ItemEntityType.Weapon);
             else if (name.Contains("Hammer"))
-                return new Tuple<string, ItemType>("Młotek", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Młotek", ItemEntityType.Weapon);
             else if (name.Contains("Crowbar"))
-                return new Tuple<string, ItemType>("Łom", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Łom", ItemEntityType.Weapon);
             else if (name.Contains("Marijuana"))
-                return new Tuple<string, ItemType>("Marihuana", ItemType.Weapon);
+                return new Tuple<string, ItemEntityType>("Marihuana", ItemEntityType.Weapon);
             else if (name.Contains("Lsd"))
-                return new Tuple<string, ItemType>("LSD", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("LSD", ItemEntityType.Drug);
             else if (name.Contains("Excstasy"))
-                return new Tuple<string, ItemType>("Ekstazy", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("Ekstazy", ItemEntityType.Drug);
             else if (name.Contains("Amphetamine"))
-                return new Tuple<string, ItemType>("Amfetamina", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("Amfetamina", ItemEntityType.Drug);
             else if (name.Contains("Metaamphetamine"))
-                return new Tuple<string, ItemType>("Metaamfetamina", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("Metaamfetamina", ItemEntityType.Drug);
             else if (name.Contains("Crack"))
-                return new Tuple<string, ItemType>("Crack", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("Crack", ItemEntityType.Drug);
             else if (name.Contains("Cocaine"))
-                return new Tuple<string, ItemType>("Kokaina", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("Kokaina", ItemEntityType.Drug);
             else if (name.Contains("Hasish"))
-                return new Tuple<string, ItemType>("Haszysz", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("Haszysz", ItemEntityType.Drug);
             else if (name.Contains("Heroin"))
-                return new Tuple<string, ItemType>("Heroina", ItemType.Drug);
+                return new Tuple<string, ItemEntityType>("Heroina", ItemEntityType.Drug);
 
-            return new Tuple<string, ItemType>("BRAK NAZWY", ItemType.Weapon);
+            return new Tuple<string, ItemEntityType>("BRAK NAZWY", ItemEntityType.Weapon);
         }
 
         public static Tuple<WeaponHash, int?> GetWeaponData(string friendlyName)

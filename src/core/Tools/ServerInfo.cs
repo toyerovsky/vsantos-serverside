@@ -5,14 +5,11 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
-using Serverside.Core.Interfaces;
 
-namespace Serverside.Constant
+namespace VRP.Core.Tools
 {
     public static class ServerInfo
     {
@@ -34,19 +31,5 @@ namespace Serverside.Constant
             .SetBasePath(WorkingDirectory)
             .AddJsonFile("appsettings.json")
             .Build();
-
-        public static IEnumerable<string> EntityDirectories
-        {
-            get
-            {
-                List<string> directories = new List<string>();
-                foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()
-                    .Where(type => type.GetInterfaces().Contains(typeof(IXmlObject))))
-                {
-                    directories.Add(Path.Combine(XmlDirectory, $"{type.Name.Replace("Entity", "")}s\\"));
-                }
-                return directories;
-            }
-        }
     }
 }

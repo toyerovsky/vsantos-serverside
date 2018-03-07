@@ -4,9 +4,10 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Core.Database.Models;
 
-namespace Serverside.Entities.Core.Item
+using VRP.Core.Database.Models;
+
+namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Transmitter : ItemEntity
     {

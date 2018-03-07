@@ -9,17 +9,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Core;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
-using Serverside.Core.Serialization;
-using Serverside.Core.Telephone;
-using Serverside.Entities.Common.Booth.Models;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Core.Telephone;
+using VRP.Serverside.Entities.Common.Booth.Models;
+using VRP.Serverside.Entities.Core;
+using ChatMessageType = VRP.Core.Enums.ChatMessageType;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Common.Booth
+namespace VRP.Serverside.Entities.Common.Booth
 {
     public class TelephoneBoothScript : Script
     {
@@ -129,7 +130,7 @@ namespace Serverside.Entities.Common.Booth
                         Number = int.Parse(number)
                     };
 
-                    XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(TelephoneBoothModel)));
+                    XmlHelper.AddXmlObject(data, Path.Combine(ServerInfo.XmlDirectory, nameof(TelephoneBoothModel)));
                     TelephoneBoothEntity booth = new TelephoneBoothEntity(data);
                     booth.Spawn();
                     Booths.Add(booth);

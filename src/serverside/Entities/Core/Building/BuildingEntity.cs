@@ -9,16 +9,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Core.Scripts;
-using Serverside.Entities.Base;
-using Serverside.Entities.Interfaces;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Core.Building
+namespace VRP.Serverside.Entities.Core.Building
 {
     public class BuildingEntity : GameEntity, IDbEntity<BuildingModel>, IOfferable
     {
@@ -265,7 +265,7 @@ namespace Serverside.Entities.Core.Building
                 CurrentObjectCount = 0,
                 Description = "",
                 EnterCharge = null,
-                InternalDimension = Tools.GetNextFreeDimension(),
+                InternalDimension = Utils.GetNextFreeDimension(),
                 InternalPickupPositionX = internalPosition.X,
                 InternalPickupPositionY = internalPosition.Y,
                 InternalPickupPositionZ = internalPosition.Z,

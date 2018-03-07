@@ -9,17 +9,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Constant;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.DriveThru.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Common.DriveThru.Models;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Entities.Common.DriveThru
+namespace VRP.Serverside.Entities.Common.DriveThru
 {
     public class DriveThruScript : Script
     {
@@ -44,7 +43,7 @@ namespace Serverside.Entities.Common.DriveThru
                     Name = (string)arguments[0],
                     Character = player.CharacterEntity.DbModel,
                     Creator = null,
-                    ItemType = ItemType.Food,
+                    ItemEntityType = ItemEntityType.Food,
                     FirstParameter = (int)arguments[1],
                 };
 

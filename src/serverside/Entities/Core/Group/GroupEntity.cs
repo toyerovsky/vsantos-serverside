@@ -4,19 +4,16 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Economy.Groups.Base;
-using Serverside.Economy.Groups.Enums;
-using Serverside.Entities.Core.Group;
-using Serverside.Entities.Interfaces;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Core
+namespace VRP.Serverside.Entities.Core.Group
 {
     public abstract class GroupEntity : IDbEntity<GroupModel>
     {

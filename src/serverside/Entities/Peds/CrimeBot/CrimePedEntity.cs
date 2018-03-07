@@ -11,19 +11,21 @@ using System.Reflection;
 using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Economy.Groups.Base;
-using Serverside.Entities.Base;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Item;
-using Serverside.Entities.Core.Vehicle;
-using Serverside.Entities.Peds.CrimeBot.Models;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Groups.Base;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Group;
+using VRP.Serverside.Entities.Core.Item;
+using VRP.Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Entities.Peds.CrimeBot.Models;
+using ChatMessageType = VRP.Core.Enums.ChatMessageType;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Peds.CrimeBot
+namespace VRP.Serverside.Entities.Peds.CrimeBot
 {
     public class CrimePedEntity : PedEntity
     {
@@ -60,7 +62,7 @@ namespace Serverside.Entities.Peds.CrimeBot
             {
                 if (i == 0) continue;
 
-                Tuple<string, ItemType> info = Constant.Items.GetCrimeBotItemName(properties[i - 2].Name);
+                Tuple<string, ItemEntityType> info = Constant.Items.GetCrimeBotItemName(properties[i - 2].Name);
                 Items.Add(new CrimeBotItem(info.Item1, ((decimal?)properties[i - 2].GetValue(DbModel)).Value, ((int?)properties[i - 1].GetValue(DbModel)).Value, ((int?)properties[i].GetValue(DbModel)).Value, info.Item2, properties[i - 1].Name));
 
             }
@@ -72,7 +74,7 @@ namespace Serverside.Entities.Peds.CrimeBot
         {
             base.Spawn();
 
-            Vehicle = VehicleEntity.Create(VehiclePosition, DbModel.Vehicle, DbModel.Name, 0, DbModel.Creator, new Color(0, 0, 0), new Color(0, 0, 0));
+            Vehicle = VehicleEntity.Create(VehiclePosition, NAPI.Util.VehicleNameToModel(DbModel.Vehicle), DbModel.Name, 0, DbModel.Creator, new Color(0, 0, 0), new Color(0, 0, 0));
             Vehicle.GameVehicle.OpenDoor(5);
             BotHandle.PlayScenario("WORLD_HUMAN_SMOKING");
 
@@ -123,34 +125,34 @@ namespace Serverside.Entities.Peds.CrimeBot
                         //TYPY: 0 broń, 1 amunicja, 2 narkotyki 
                         ItemModel item = new ItemModel();
 
-                        if (i.Type == ItemType.Weapon)
+                        if (i.Type == ItemEntityType.Weapon)
                         {
                             Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
                             item.Creator = null;
                             item.Name = i.Name;
-                            item.ItemType = i.Type;
+                            item.ItemEntityType = i.Type;
                             item.FirstParameter = (int)data.Item1;
                             item.SecondParameter = data.Item2;
                         }
-                        else if (i.Type == ItemType.WeaponClip)
+                        else if (i.Type == ItemEntityType.WeaponClip)
                         {
                             Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
                             item.Creator = null;
                             item.Name = i.Name;
-                            item.ItemType = i.Type;
+                            item.ItemEntityType = i.Type;
                             item.FirstParameter = (int)data.Item1;
                             item.SecondParameter = data.Item2;
                         }
-                        else if (i.Type == ItemType.Drug)
+                        else if (i.Type == ItemEntityType.Drug)
                         {
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
                             item.Creator = null;
                             item.Name = i.Name;
-                            item.ItemType = i.Type;
+                            item.ItemEntityType = i.Type;
                             item.FirstParameter = (int)Enum.Parse(typeof(DrugType), i.Name);
                         }
                         else

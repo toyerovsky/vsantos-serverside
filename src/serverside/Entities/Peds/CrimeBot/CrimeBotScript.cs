@@ -8,18 +8,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Core;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Core.Serialization;
-using Serverside.Economy.Groups.Base;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Vehicle;
-using Serverside.Entities.Peds.CrimeBot.Models;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Groups.Base;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Entities.Peds.CrimeBot.Models;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Peds.CrimeBot
+namespace VRP.Serverside.Entities.Peds.CrimeBot
 {
     public class CrimeBotScript : Script
     {
@@ -99,7 +100,7 @@ namespace Serverside.Entities.Peds.CrimeBot
                         Name = name,
                         BotPosition = botPosition,
                         VehiclePosition = botVehiclePosition
-                    }, $@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\");
+                    }, $@"{ServerInfo.XmlDirectory}CrimeBotPositions\");
 
                     sender.Notify("Dodawanie pozycji bota zakończyło się ~h~~g~pomyślnie!");
                     NAPI.Player.WarpPlayerOutOfVehicle(sender);
@@ -113,7 +114,7 @@ namespace Serverside.Entities.Peds.CrimeBot
         {
             CrimeBotPosition position = null;
             List<CrimeBotPosition> positions = XmlHelper
-                .GetXmlObjects<CrimeBotPosition>($@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\");
+                .GetXmlObjects<CrimeBotPosition>($@"{ServerInfo.XmlDirectory}CrimeBotPositions\");
 
             if (name != "")
             {
@@ -155,9 +156,9 @@ namespace Serverside.Entities.Peds.CrimeBot
                     using (CrimeBotsRepository repository = new CrimeBotsRepository())
                     {
                         CrimeBotModel crimeBotData = repository.Get(group.DbModel);
-                        CrimeBotPosition position = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\")[Convert.ToInt32(arguments[0])];
+                        CrimeBotPosition position = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{ServerInfo.XmlDirectory}CrimeBotPositions\")[Convert.ToInt32(arguments[0])];
 
-                        group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition, crimeBotData.Name, crimeBotData.Model, position.BotPosition);
+                        group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition, crimeBotData.Name, NAPI.Util.PedNameToModel(crimeBotData.Model), position.BotPosition);
                         group.CrimePedEntity.Spawn();
                         sender.TriggerEvent("DrawCrimeBotComponents", position.BotPosition.Position, 500, 2);
                     }

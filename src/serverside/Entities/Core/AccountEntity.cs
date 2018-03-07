@@ -6,15 +6,14 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Database;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Entities.EventArgs;
-using Serverside.Entities.Interfaces;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.EventArgs;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Core
+namespace VRP.Serverside.Entities.Core
 {
     public class AccountEntity : IDbEntity<AccountModel>, IDisposable
     {

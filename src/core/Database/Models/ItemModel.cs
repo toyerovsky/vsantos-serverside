@@ -5,13 +5,13 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Enums;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class ItemModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public virtual CharacterModel Character { get; set; }
@@ -29,7 +29,7 @@ namespace Serverside.Core.Database.Models
         public int? ThirdParameter { get; set; }
         public int? FourthParameter { get; set; }
 
-        [EnumDataType(typeof(ItemType))]
-        public virtual ItemType ItemType { get; set; }
+        [EnumDataType(typeof(ItemEntityType))]
+        public virtual ItemEntityType ItemEntityType { get; set; }
     }
 }

@@ -10,17 +10,18 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
-using Serverside.Constant;
-using Serverside.Core;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.Corners.EventArgs;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Enums;
+using VRP.Serverside.Constant;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.Corners.EventArgs;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Item;
+using ChatMessageType = VRP.Core.Enums.ChatMessageType;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Common.Corners
+namespace VRP.Serverside.Entities.Common.Corners
 {
     public class CornerPedEntity : PedEntity
     {
@@ -110,7 +111,7 @@ namespace Serverside.Entities.Common.Corners
             else if (BotHandle.HasData("TransactionLevel") && BotHandle.GetData("TransactionLevel") == 1 && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && (e.Message.Contains(MoneyCount.ToString(CultureInfo.InvariantCulture)) || LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals)))
             {
                 //Sprawdzamy czy gracz posiada dany narkotyk
-                if (Seller.CharacterEntity.DbModel.Items.Any(i => i.ItemType == ItemType.Drug && i.FirstParameter == (int)DrugType))
+                if (Seller.CharacterEntity.DbModel.Items.Any(i => i.ItemEntityType == ItemEntityType.Drug && i.FirstParameter == (int)DrugType))
                 {
                     EndTransaction(LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals) ? LowerMoneyCounts.First(Convert.ToDecimal(e.Message).Equals) : MoneyCount);
                 }
@@ -126,7 +127,7 @@ namespace Serverside.Entities.Common.Corners
             {
                 //Jeśli gracz zgodzi się na cenę bota
                 //Sprawdzamy czy gracz posiada dany narkotyk
-                if (Seller.CharacterEntity.DbModel.Items.Any(i => i.ItemType == ItemType.Drug && i.FirstParameter == (int)DrugType))
+                if (Seller.CharacterEntity.DbModel.Items.Any(i => i.ItemEntityType == ItemEntityType.Drug && i.FirstParameter == (int)DrugType))
                 {
                     if (!e.Message.All(char.IsDigit)) EndTransaction(MoneyCount);
                     else EndTransaction(LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals) ? LowerMoneyCounts.First(Convert.ToDecimal(e.Message).Equals) : MoneyCount);
@@ -158,7 +159,7 @@ namespace Serverside.Entities.Common.Corners
             SendMessageToNerbyPlayers(GoodFarewell, ChatMessageType.Normal);
 
             Seller.CharacterEntity.DbModel.Items.Remove(
-                Seller.CharacterEntity.DbModel.Items.First(x => x.ItemType == ItemType.Drug && x.FirstParameter == (int)DrugType));
+                Seller.CharacterEntity.DbModel.Items.First(x => x.ItemEntityType == ItemEntityType.Drug && x.FirstParameter == (int)DrugType));
             Seller.CharacterEntity.Save();
             Seller.Client.AddMoney(money);
 

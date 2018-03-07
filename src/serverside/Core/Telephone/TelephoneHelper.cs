@@ -6,10 +6,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Serverside.Core.Repositories;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Core.Tools;
 
-namespace Serverside.Core.Telephone
+namespace VRP.Serverside.Core.Telephone
 {
     public static class TelephoneHelper
     {
@@ -18,14 +19,14 @@ namespace Serverside.Core.Telephone
             using (ItemsRepository repository = new ItemsRepository())
             {
                 IEnumerable<int> numbers = repository.GetAll()
-                    .Where(i => i.ItemType == ItemType.Cellphone && i.ThirdParameter.HasValue)
+                    .Where(i => i.ItemEntityType == ItemEntityType.Cellphone && i.ThirdParameter.HasValue)
                     .Select(i => i.ThirdParameter.Value);
 
-                int freeTelephoneNumber = Tools.RandomRange(100000);
+                int freeTelephoneNumber = Utils.RandomRange(100000);
 
                 int[] numbersArray = numbers as int[] ?? numbers.ToArray();
                 while (numbersArray.Any(number => number == freeTelephoneNumber))
-                    freeTelephoneNumber = Tools.RandomRange(100000);
+                    freeTelephoneNumber = Utils.RandomRange(100000);
                 
                 return freeTelephoneNumber;
             }

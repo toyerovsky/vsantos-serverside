@@ -6,12 +6,12 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Extensions;
-using Serverside.Economy.Jobs.Enums;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Core;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Peds.Employer
+namespace VRP.Serverside.Entities.Peds.Employer
 {
     public class EmployerScript : Script
     {

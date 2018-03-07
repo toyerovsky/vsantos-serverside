@@ -6,16 +6,16 @@
 
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Exceptions;
-using Serverside.Core.Extensions;
-using Serverside.Economy.Groups.Enums;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Exceptions;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Group;
 using Color = GTANetworkAPI.Color;
 
-namespace Serverside.Admin
+namespace VRP.Serverside.Admin
 {
     public class AdminGroupsScript : Script
     {

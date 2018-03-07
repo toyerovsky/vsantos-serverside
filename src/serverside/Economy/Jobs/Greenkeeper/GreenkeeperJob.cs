@@ -5,11 +5,11 @@
  */
 
 using System.Collections.Generic;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Serialization;
-using Serverside.Economy.Jobs.Base;
+using VRP.Core.Database.Models;
+using VRP.Core.Serialization;
+using VRP.Serverside.Economy.Jobs.Base;
 
-namespace Serverside.Economy.Jobs.Greenkeeper
+namespace VRP.Serverside.Economy.Jobs.Greenkeeper
 {
     public class GreenkeeperJob : Job
     {

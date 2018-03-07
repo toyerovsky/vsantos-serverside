@@ -7,10 +7,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using Serverside.Core.Serialization;
-using Serverside.Core.ServerInfo.Models;
+using VRP.Core.Serialization;
+using VRP.Serverside.Core.ServerInfo.Models;
 
-namespace Serverside.Core.ServerInfo
+namespace VRP.Serverside.Core.ServerInfo
 {
     [Serializable]
     public class ServerInfo
@@ -22,7 +22,7 @@ namespace Serverside.Core.ServerInfo
 
         public ServerInfo()
         {
-            string directory = Path.Combine(Constant.ServerInfo.XmlDirectory, "ServerInfo\\");
+            string directory = Path.Combine(VRP.Core.Tools.ServerInfo.XmlDirectory, "ServerInfo\\");
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);

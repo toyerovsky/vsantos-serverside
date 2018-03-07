@@ -8,12 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Extensions;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.Corners.Models;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Common.Corners.Models;
+using VRP.Serverside.Entities.Core.Item;
 
-namespace Serverside.Entities.Common.Corners
+namespace VRP.Serverside.Entities.Common.Corners
 {
     public class CornerBotsScript : Script
     {
@@ -24,7 +25,7 @@ namespace Serverside.Entities.Common.Corners
                 CornerBotModel bot = new CornerBotModel
                 {
                     CreatorForumName = sender.GetAccountEntity().DbModel.Name,
-                    BotId = XmlHelper.GetXmlObjects<CornerBotModel>(Constant.ServerInfo.XmlDirectory + @"CornerBots\").Count + 1,
+                    BotId = XmlHelper.GetXmlObjects<CornerBotModel>(ServerInfo.XmlDirectory + @"CornerBots\").Count + 1,
                     Name = Convert.ToString(arguments[0]),
                     PedHash = (PedHash) arguments[1],
                     MoneyCount = Convert.ToDecimal(arguments[2]),
@@ -33,7 +34,7 @@ namespace Serverside.Entities.Common.Corners
                     GoodFarewell = (string) arguments[5],
                     BadFarewell = (string) arguments[6]
                 };
-                XmlHelper.AddXmlObject(bot, Constant.ServerInfo.XmlDirectory + @"CornerBots\");
+                XmlHelper.AddXmlObject(bot, ServerInfo.XmlDirectory + @"CornerBots\");
                 sender.Notify("Dodanie NPC zakończyło się ~h~~g~pomyślnie.");
             }
         }

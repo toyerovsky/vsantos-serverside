@@ -8,10 +8,10 @@ using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Core.Scripts
+namespace VRP.Serverside.Core.Scripts
 {
     public class ScoreBoardScript : Script
     {

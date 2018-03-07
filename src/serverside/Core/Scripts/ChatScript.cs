@@ -8,14 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Economy.Groups.Base;
-using Serverside.Economy.Groups.Enums;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Groups.Base;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core.Group;
+using ChatMessageType = VRP.Core.Enums.ChatMessageType;
 
-namespace Serverside.Core.Scripts
+namespace VRP.Serverside.Core.Scripts
 {
     public class ChatScript : Script
     {
@@ -39,7 +40,7 @@ namespace Serverside.Core.Scripts
         [Command("sprobuj", "~y~UŻYJ: ~w~ /sprobuj [treść]", GreedyArg = true)]
         public void Try(Client player, string message)
         {
-            SendMessageToNearbyPlayers(player, Tools.RandomRange(2) == 0 ? "zawiódł " : "odniósł sukces " + " próbując " + message, ChatMessageType.ServerMe);
+            SendMessageToNearbyPlayers(player, Utils.RandomRange(2) == 0 ? "zawiódł " : "odniósł sukces " + " próbując " + message, ChatMessageType.ServerMe);
 
             SaidEventHandler handler = OnPlayerSaid;
             SaidEventArgs eventArgs = new SaidEventArgs(player, message, ChatMessageType.ServerMe);

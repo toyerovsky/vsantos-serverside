@@ -6,10 +6,10 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Enums;
-using Serverside.Core.Interfaces;
+using VRP.Core.Enums;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Entities.Common.Carshop.Models
+namespace VRP.Serverside.Entities.Common.Carshop.Models
 {
     [Serializable]
     public class CarshopModel : IXmlObject

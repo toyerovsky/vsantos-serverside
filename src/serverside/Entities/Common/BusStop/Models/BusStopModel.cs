@@ -6,9 +6,9 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Entities.Common.BusStop.Models
+namespace VRP.Serverside.Entities.Common.BusStop.Models
 {
     [Serializable]
     public class BusStopModel : IXmlObject

@@ -7,16 +7,18 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using Serverside.Core;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Entities.Base;
-using Serverside.Entities.Core.Item;
-using Serverside.Entities.Interfaces;
-using Serverside.Entities.Misc.Description;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Core.Item;
+using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Entities.Misc.Description;
+using FullPosition = VRP.Serverside.Core.FullPosition;
+using VehicleClass = VRP.Serverside.Core.Extensions.VehicleClass;
 
-namespace Serverside.Entities.Core.Vehicle
+namespace VRP.Serverside.Entities.Core.Vehicle
 {
     public class VehicleEntity : GameEntity, IDbEntity<VehicleModel>, IOfferable
     {
@@ -44,7 +46,7 @@ namespace Serverside.Entities.Core.Vehicle
 
             foreach (ItemModel tuning in DbModel.ItemsInVehicle)
             {
-                if (tuning.ItemType == ItemType.Tuning && tuning.FourthParameter.HasValue)
+                if (tuning.ItemEntityType == ItemEntityType.Tuning && tuning.FourthParameter.HasValue)
                 {
                     if (tuning.FirstParameter != null && (TuningType)tuning.FirstParameter == TuningType.Speed)
                     {
@@ -77,7 +79,7 @@ namespace Serverside.Entities.Core.Vehicle
         {
             VehicleModel vehicleModel = new VehicleModel
             {
-                VehicleHash = hash,
+                VehicleHash = hash.ToString(),
                 NumberPlate = numberplate,
                 NumberPlateStyle = numberplatestyle,
                 Character = character,
@@ -97,9 +99,9 @@ namespace Serverside.Entities.Core.Vehicle
                 Milage = 0.0f,
             };
 
-            vehicleModel.FuelTank = GetFuelTankSize((VehicleClass)NAPI.Vehicle.GetVehicleClass(vehicleModel.VehicleHash));
+            vehicleModel.FuelTank = GetFuelTankSize((VehicleClass)NAPI.Vehicle.GetVehicleClass(NAPI.Util.VehicleNameToModel(vehicleModel.VehicleHash)));
             vehicleModel.Fuel = vehicleModel.FuelTank * 0.2f;
-            vehicleModel.FuelConsumption = NAPI.Vehicle.GetVehicleMaxAcceleration(vehicleModel.VehicleHash) / 0.2f;
+            vehicleModel.FuelConsumption = NAPI.Vehicle.GetVehicleMaxAcceleration(NAPI.Util.VehicleNameToModel(vehicleModel.VehicleHash)) / 0.2f;
 
             bool nonDbVehicle = character == null && groupModel == null;
 
@@ -120,7 +122,7 @@ namespace Serverside.Entities.Core.Vehicle
 
         private void Initialize()
         {
-            GameVehicle = NAPI.Vehicle.CreateVehicle(DbModel.VehicleHash,
+            GameVehicle = NAPI.Vehicle.CreateVehicle(NAPI.Util.VehicleNameToModel(DbModel.VehicleHash),
                 new Vector3(DbModel.SpawnPositionX, DbModel.SpawnPositionY, DbModel.SpawnPositionZ),
                 DbModel.SpawnPositionX, DbModel.PrimaryColor.ToColor(),
                 DbModel.SecondaryColor.ToColor(),

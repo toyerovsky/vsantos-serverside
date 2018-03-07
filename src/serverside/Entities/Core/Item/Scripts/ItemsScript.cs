@@ -9,18 +9,18 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
-using Serverside.Core.Serialization;
-using Serverside.Core.Telephone;
-using Serverside.Economy.Groups.Base;
-using Serverside.Entities.Interfaces;
-using Serverside.Entities.Peds.CrimeBot.Models;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Core.Telephone;
+using VRP.Serverside.Economy.Groups.Base;
+using VRP.Serverside.Entities.Peds.CrimeBot.Models;
 using NAPI = GTANetworkAPI.NAPI;
 
-namespace Serverside.Entities.Core.Item.Scripts
+namespace VRP.Serverside.Entities.Core.Item.Scripts
 {
     public class ItemsScript : Script
     {
@@ -79,7 +79,7 @@ namespace Serverside.Entities.Core.Item.Scripts
                 {
                     if (group.CanPlayerCallCrimeBot(player))
                     {
-                        List<string> names = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{Constant.ServerInfo.XmlDirectory}CrimeBotPositions\").Select(n => n.Name).ToList();
+                        List<string> names = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{ServerInfo.XmlDirectory}CrimeBotPositions\").Select(n => n.Name).ToList();
                         sender.TriggerEvent("OnPlayerCalledCrimeBot", names);
                         return;
                     }

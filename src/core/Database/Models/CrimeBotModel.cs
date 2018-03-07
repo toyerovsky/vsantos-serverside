@@ -4,21 +4,16 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System.ComponentModel.DataAnnotations;
-using GTANetworkAPI;
-
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class CrimeBotModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public virtual AccountModel Creator { get; set; }
         public virtual GroupModel GroupModel { get; set; }
-        [EnumDataType(typeof(VehicleHash))]
-        public virtual VehicleHash Vehicle { get; set; }
-        [EnumDataType(typeof(PedHash))]
-        public virtual PedHash Model { get; set; }
+        public virtual string Vehicle { get; set; }
+        public string Model { get; set; }
 
         public decimal? PistolCost { get; set; }
         public int? PistolCount { get; set; }

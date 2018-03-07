@@ -5,10 +5,10 @@
  */
 
 using System;
-using Serverside.Core;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Common.Atm.Models
+namespace VRP.Serverside.Entities.Common.Atm.Models
 {
     [Serializable]
     public class AtmModel : IXmlObject

@@ -4,11 +4,11 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class WorkerModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public virtual GroupModel Group { get; set; }
         public virtual CharacterModel Character { get; set; }

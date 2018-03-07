@@ -9,15 +9,17 @@ using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Economy.Groups.Base;
-using Serverside.Economy.Groups.Enums;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Groups.Base;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Group;
+using AnimationFlags = VRP.Serverside.Core.Extensions.AnimationFlags;
 
-namespace Serverside.Economy.Groups
+namespace VRP.Serverside.Economy.Groups
 {
     public class GroupsScript : Script
     {

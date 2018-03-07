@@ -5,12 +5,12 @@
  */
 
 using System;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
 
-namespace Serverside.Entities.Core.Item
+namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Watch : ItemEntity
     {

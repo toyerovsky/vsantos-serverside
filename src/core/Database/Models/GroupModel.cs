@@ -6,13 +6,13 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Serverside.Economy.Groups.Enums;
+using VRP.Core.Enums;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class GroupModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Tag { get; set; }
         public int Dotation { get; set; }

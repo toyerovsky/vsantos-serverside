@@ -6,23 +6,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Admin.Enums;
-using Serverside.Constant.RemoteEvents;
-using Serverside.Core.Database;
-using Serverside.Core.Database.Forum;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Login.RemoteData;
-using Serverside.Core.Repositories;
-using Serverside.Core.Scripts;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Core.Database;
+using VRP.Core.Database.Forum;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Constant.RemoteEvents;
+using VRP.Serverside.Core.Login.RemoteData;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
+using ChatMessageType = VRP.Core.Enums.ChatMessageType;
 
-namespace Serverside.Core.Login
+namespace VRP.Serverside.Core.Login
 {
     public class LoginScript : Script
     {
@@ -125,7 +124,7 @@ namespace Serverside.Core.Login
                             {
                                 Name = name[0],
                                 Surname = name[1],
-                                Model = PedHash.FreemodeMale01,
+                                Model = PedHash.FreemodeMale01.ToString(),
                                 Freemode = true,
                                 IsAlive = true,
                                 CreateTime = DateTime.Now,

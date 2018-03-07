@@ -7,13 +7,13 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
-using Serverside.Core.Scripts;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
 
-namespace Serverside.Economy.Offers
+namespace VRP.Serverside.Economy.Offers
 {
     public class Offer : IDisposable
     {

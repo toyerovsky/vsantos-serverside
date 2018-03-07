@@ -5,9 +5,10 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
+using VRP.Core.Database.Models;
 
-namespace Serverside.Entities.Core.Item
+
+namespace VRP.Serverside.Entities.Core.Item
 {
     internal class WeaponClip : ItemEntity
     {

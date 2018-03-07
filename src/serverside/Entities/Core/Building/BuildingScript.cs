@@ -9,12 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Admin.Enums;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Repositories;
+using VRP.Core.Enums;
+using VRP.Core.Repositories;
+using VRP.Serverside.Core.Extensions;
 
-namespace Serverside.Entities.Core.Building
+namespace VRP.Serverside.Entities.Core.Building
 {
     public class BuildingScript : Script
     {

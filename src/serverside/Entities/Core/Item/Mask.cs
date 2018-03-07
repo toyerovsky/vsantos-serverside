@@ -5,11 +5,11 @@
  */
 
 using System.Linq;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Scripts;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Scripts;
 
-namespace Serverside.Entities.Core.Item
+namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Mask : ItemEntity
     {

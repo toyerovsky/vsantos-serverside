@@ -5,11 +5,11 @@
  */
 
 using System.Collections.Generic;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Serialization;
-using Serverside.Economy.Jobs.Base;
+using VRP.Core.Database.Models;
+using VRP.Core.Serialization;
+using VRP.Serverside.Economy.Jobs.Base;
 
-namespace Serverside.Economy.Jobs.Courier
+namespace VRP.Serverside.Economy.Jobs.Courier
 {
     public class CourierJob : Job
     {

@@ -7,13 +7,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Serverside.Admin.Enums;
+using VRP.Core.Enums;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class AccountModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         [StringLength(50)]
         public string Name { get; set; }
         public long UserId { get; set; }

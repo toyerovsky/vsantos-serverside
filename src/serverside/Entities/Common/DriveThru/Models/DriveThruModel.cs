@@ -6,9 +6,9 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Entities.Common.DriveThru.Models
+namespace VRP.Serverside.Entities.Common.DriveThru.Models
 {
     [Serializable]
     public class DriveThruModel : IXmlObject

@@ -6,10 +6,10 @@
 
 using System;
 using System.Collections.Generic;
-using Serverside.Core;
-using Serverside.Core.Interfaces;
+using VRP.Core.Interfaces;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Common.Corners.Models
+namespace VRP.Serverside.Entities.Common.Corners.Models
 {
     [Serializable]
     public class CornerModel : IXmlObject

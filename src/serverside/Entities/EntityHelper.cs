@@ -8,32 +8,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Repositories;
-using Serverside.Core.Serialization;
-using Serverside.Entities.Common.Atm;
-using Serverside.Entities.Common.Atm.Models;
-using Serverside.Entities.Common.Booth;
-using Serverside.Entities.Common.Booth.Models;
-using Serverside.Entities.Common.BusStop;
-using Serverside.Entities.Common.BusStop.Models;
-using Serverside.Entities.Common.Carshop;
-using Serverside.Entities.Common.Carshop.Models;
-using Serverside.Entities.Common.Corners;
-using Serverside.Entities.Common.Corners.Models;
-using Serverside.Entities.Common.DriveThru;
-using Serverside.Entities.Common.DriveThru.Models;
-using Serverside.Entities.Common.Market;
-using Serverside.Entities.Common.Market.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Core.Building;
-using Serverside.Entities.Core.Group;
-using Serverside.Entities.Core.Vehicle;
-using Serverside.Entities.Peds.CrimeBot;
-using Serverside.Entities.Peds.Employer;
+using VRP.Core.Database.Models;
+using VRP.Core.Repositories;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Entities.Common.Atm;
+using VRP.Serverside.Entities.Common.Atm.Models;
+using VRP.Serverside.Entities.Common.Booth;
+using VRP.Serverside.Entities.Common.Booth.Models;
+using VRP.Serverside.Entities.Common.BusStop;
+using VRP.Serverside.Entities.Common.BusStop.Models;
+using VRP.Serverside.Entities.Common.Carshop;
+using VRP.Serverside.Entities.Common.Carshop.Models;
+using VRP.Serverside.Entities.Common.Corners;
+using VRP.Serverside.Entities.Common.Corners.Models;
+using VRP.Serverside.Entities.Common.DriveThru;
+using VRP.Serverside.Entities.Common.DriveThru.Models;
+using VRP.Serverside.Entities.Common.Market;
+using VRP.Serverside.Entities.Common.Market.Models;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Building;
+using VRP.Serverside.Entities.Core.Group;
+using VRP.Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Entities.Peds.CrimeBot;
+using VRP.Serverside.Entities.Peds.Employer;
 using Color = System.Drawing.Color;
 
-namespace Serverside.Entities
+namespace VRP.Serverside.Entities
 {
     public static class EntityHelper
     {
@@ -355,7 +356,7 @@ namespace Serverside.Entities
 
         private static void LoadCommonEntities()
         {
-            foreach (AtmModel atmModel in XmlHelper.GetXmlObjects<AtmModel>(Path.Combine(Constant.ServerInfo.XmlDirectory,
+            foreach (AtmModel atmModel in XmlHelper.GetXmlObjects<AtmModel>(Path.Combine(ServerInfo.XmlDirectory,
                 nameof(AtmModel))))
             {
                 AtmEntity atmEntity = new AtmEntity(atmModel);
@@ -363,7 +364,7 @@ namespace Serverside.Entities
                 Add(atmEntity);
             }
 
-            foreach (TelephoneBoothModel telephoneBoothModel in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(Constant.ServerInfo.XmlDirectory,
+            foreach (TelephoneBoothModel telephoneBoothModel in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(ServerInfo.XmlDirectory,
                 nameof(TelephoneBoothModel))))
             {
                 TelephoneBoothEntity telephoneBoothEntity = new TelephoneBoothEntity(telephoneBoothModel);
@@ -371,7 +372,7 @@ namespace Serverside.Entities
                 Add(telephoneBoothEntity);
             }
 
-            foreach (BusStopModel atmModel in XmlHelper.GetXmlObjects<BusStopModel>(Path.Combine(Constant.ServerInfo.XmlDirectory,
+            foreach (BusStopModel atmModel in XmlHelper.GetXmlObjects<BusStopModel>(Path.Combine(ServerInfo.XmlDirectory,
                 nameof(BusStopModel))))
             {
                 BusStopEntity busStopEntity = new BusStopEntity(atmModel);
@@ -379,7 +380,7 @@ namespace Serverside.Entities
                 Add(busStopEntity);
             }
 
-            foreach (CarshopModel carshopModel in XmlHelper.GetXmlObjects<CarshopModel>(Path.Combine(Constant.ServerInfo.XmlDirectory,
+            foreach (CarshopModel carshopModel in XmlHelper.GetXmlObjects<CarshopModel>(Path.Combine(ServerInfo.XmlDirectory,
                 nameof(CarshopModel))))
             {
                 CarshopEntity carshopEntity = new CarshopEntity(carshopModel);
@@ -387,7 +388,7 @@ namespace Serverside.Entities
                 Add(carshopEntity);
             }
 
-            foreach (CornerModel cornerModel in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Constant.ServerInfo.XmlDirectory,
+            foreach (CornerModel cornerModel in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(ServerInfo.XmlDirectory,
                 nameof(CornerModel))))
             {
                 CornerEntity cornerEntity = new CornerEntity(cornerModel);
@@ -395,7 +396,7 @@ namespace Serverside.Entities
                 Add(cornerEntity);
             }
 
-            foreach (DriveThruModel driveThruModel in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(Constant.ServerInfo.XmlDirectory,
+            foreach (DriveThruModel driveThruModel in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory,
                 nameof(DriveThruModel))))
             {
                 DriveThruEntity driveThruEntity = new DriveThruEntity(driveThruModel);
@@ -403,7 +404,7 @@ namespace Serverside.Entities
                 Add(driveThruEntity);
             }
 
-            foreach (MarketModel marketModel in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(Constant.ServerInfo.XmlDirectory,
+            foreach (MarketModel marketModel in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(ServerInfo.XmlDirectory,
                 nameof(MarketModel))))
             {
                 MarketEntity marketEntity = new MarketEntity(marketModel);

@@ -5,11 +5,11 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core.Extensions;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Economy.Offers
+namespace VRP.Serverside.Economy.Offers
 {
     public static class OfferActions
     {

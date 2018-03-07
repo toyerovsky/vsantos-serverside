@@ -4,16 +4,17 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Core.Database.Models;
-using Serverside.Core.Repositories;
-using Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Core.Item
+using VRP.Core.Database.Models;
+using VRP.Core.Repositories;
+using VRP.Serverside.Entities.Interfaces;
+
+namespace VRP.Serverside.Entities.Core.Item
 {
     public abstract class ItemEntity : IOfferable
     {
-        public long Id { get; }
-        public string Name { get; }
+        public int Id => DbModel.Id;
+        public string Name => DbModel.Name;
 
         protected ItemModel DbModel { get; }
         
@@ -24,9 +25,6 @@ namespace Serverside.Entities.Core.Item
         protected ItemEntity(ItemModel itemModel)
         {
             DbModel = itemModel;
-
-            Id = DbModel.Id;
-            Name = DbModel.Name;
         }
 
         public virtual void UseItem(AccountEntity player)

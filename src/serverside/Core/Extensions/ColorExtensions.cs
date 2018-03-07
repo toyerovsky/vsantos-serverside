@@ -6,7 +6,7 @@
 
 using GTANetworkAPI;
 
-namespace Serverside.Core.Extensions
+namespace VRP.Serverside.Core.Extensions
 {
     public static class ColorExtensions
     {

@@ -4,12 +4,12 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using Serverside.Core;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Enums;
-using Serverside.Core.Scripts;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Scripts;
 
-namespace Serverside.Entities.Core.Item
+namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Dice : ItemEntity
     {   
@@ -23,7 +23,7 @@ namespace Serverside.Entities.Core.Item
         {
             if (DbModel.FirstParameter != null)
                 ChatScript.SendMessageToNearbyPlayers(player.Client,
-                    $"wyrzucił {Tools.RandomRange(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
+                    $"wyrzucił {Utils.RandomRange(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
                     ChatMessageType.ServerMe);
         }
 

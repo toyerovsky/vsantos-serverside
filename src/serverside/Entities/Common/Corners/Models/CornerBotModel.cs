@@ -6,10 +6,10 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Interfaces;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Interfaces;
+using VRP.Serverside.Entities.Core.Item;
 
-namespace Serverside.Entities.Common.Corners.Models
+namespace VRP.Serverside.Entities.Common.Corners.Models
 {
     [Serializable]
     public class CornerBotModel : IXmlObject

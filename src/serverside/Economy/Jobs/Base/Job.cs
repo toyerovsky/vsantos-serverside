@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace Serverside.Economy.Jobs.Base
+namespace VRP.Serverside.Economy.Jobs.Base
 {
     public abstract class Job
     {

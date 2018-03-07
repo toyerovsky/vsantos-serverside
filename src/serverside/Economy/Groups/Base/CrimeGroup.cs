@@ -5,11 +5,12 @@
  */
 
 using System.Linq;
-using Serverside.Core.Database.Models;
-using Serverside.Entities.Core;
-using Serverside.Entities.Peds.CrimeBot;
+using VRP.Core.Database.Models;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Group;
+using VRP.Serverside.Entities.Peds.CrimeBot;
 
-namespace Serverside.Economy.Groups.Base
+namespace VRP.Serverside.Economy.Groups.Base
 {
     public class CrimeGroup : GroupEntity
     {

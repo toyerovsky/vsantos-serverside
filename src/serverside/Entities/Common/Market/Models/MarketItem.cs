@@ -5,16 +5,16 @@
  */
 
 using System;
-using Serverside.Core.Interfaces;
-using Serverside.Entities.Core.Item;
+using VRP.Core.Enums;
+using VRP.Core.Interfaces;
 
-namespace Serverside.Entities.Common.Market.Models
+namespace VRP.Serverside.Entities.Common.Market.Models
 {
     [Serializable]
     public class MarketItem : IXmlObject
     {
         public string Name { get; set; }
-        public ItemType ItemType { get; set; }
+        public ItemEntityType ItemEntityType { get; set; }
         public decimal Cost { get; set; } 
         public int? FirstParameter { get; set; }
         public int? SecondParameter { get; set; }

@@ -7,12 +7,12 @@
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core.Extensions;
-using Serverside.Entities.Base;
-using Serverside.Entities.Common.Carshop.Models;
-using Serverside.Entities.Interfaces;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Base;
+using VRP.Serverside.Entities.Common.Carshop.Models;
+using VRP.Serverside.Entities.Interfaces;
 
-namespace Serverside.Entities.Common.Carshop
+namespace VRP.Serverside.Entities.Common.Carshop
 {
     public class CarshopEntity : GameEntity, IInteractive
     {

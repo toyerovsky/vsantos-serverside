@@ -7,16 +7,17 @@
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Core;
-using Serverside.Core.Enums;
-using Serverside.Core.Extensions;
-using Serverside.Core.Scripts;
-using Serverside.Core.Serialization;
-using Serverside.Economy.Bank;
-using Serverside.Entities.Common.Atm.Models;
+using VRP.Core.Enums;
+using VRP.Core.Serialization;
+using VRP.Core.Tools;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Economy.Bank;
+using VRP.Serverside.Entities.Common.Atm.Models;
+using ChatMessageType = VRP.Core.Enums.ChatMessageType;
+using FullPosition = VRP.Serverside.Core.FullPosition;
 
-namespace Serverside.Entities.Common.Atm
+namespace VRP.Serverside.Entities.Common.Atm
 {
     public class AtmScript : Script
     {
@@ -80,7 +81,7 @@ namespace Serverside.Entities.Common.Atm
                             }
                         }
                     };
-                    XmlHelper.AddXmlObject(data, Path.Combine(Constant.ServerInfo.XmlDirectory, nameof(AtmModel)));
+                    XmlHelper.AddXmlObject(data, Path.Combine(ServerInfo.XmlDirectory, nameof(AtmModel)));
                     AtmEntity atm = new AtmEntity(data);
                     atm.Spawn();
                     EntityHelper.Add(atm);

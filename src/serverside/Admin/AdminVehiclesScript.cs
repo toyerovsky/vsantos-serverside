@@ -5,12 +5,12 @@
  */
 
 using GTANetworkAPI;
-using Serverside.Core.Exceptions;
-using Serverside.Core.Extensions;
-using Serverside.Entities;
-using Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Core.Exceptions;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core.Vehicle;
 
-namespace Serverside.Admin
+namespace VRP.Serverside.Admin
 {
     public class AdminVehiclesScript : Script
     {

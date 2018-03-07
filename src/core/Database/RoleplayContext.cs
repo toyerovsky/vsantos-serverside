@@ -5,9 +5,9 @@
  */
 
 using Microsoft.EntityFrameworkCore;
-using Serverside.Core.Database.Models;
+using VRP.Core.Database.Models;
 
-namespace Serverside.Core.Database
+namespace VRP.Core.Database
 {
     public class RoleplayContext : DbContext
     {

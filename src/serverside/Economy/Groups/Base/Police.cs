@@ -5,10 +5,11 @@
  */
 
 using System.Linq;
-using Serverside.Core.Database.Models;
-using Serverside.Entities.Core;
+using VRP.Core.Database.Models;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Group;
 
-namespace Serverside.Economy.Groups.Base
+namespace VRP.Serverside.Economy.Groups.Base
 {
     public class Police : GroupEntity
     {

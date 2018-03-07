@@ -9,7 +9,7 @@ using System.Data;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Serverside.Core.Database.Forum
+namespace VRP.Core.Database.Forum
 {
     public class ForumDatabaseHelper
     {
@@ -18,7 +18,7 @@ namespace Serverside.Core.Database.Forum
             forumLoginData = null;
             if (UserExists(email))
             {
-                using (MySqlConnection connection = new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("forumConnectionString")))
+                using (MySqlConnection connection = new MySqlConnection(Tools.ServerInfo.Configuration.GetConnectionString("forumConnectionString")))
                 using (MySqlCommand command = new MySqlCommand())
                 {
                     connection.Open();
@@ -38,13 +38,13 @@ namespace Serverside.Core.Database.Forum
                                 string name = reader.GetString(1);
                                 string hash = reader.GetString(2);
                                 string salt = reader.GetString(3);
-                                short groupid = reader.GetInt16(4);
+                                short groupId = reader.GetInt16(4);
                                 string otherGroups = reader.GetString(5);
 
                                 if (hash != "" && salt != "")
                                 {
                                     if (hash.Equals(GenerateIpbHash(password, salt)))
-                                        forumLoginData = new ForumLoginData(id, name, groupid, otherGroups);
+                                        forumLoginData = new ForumLoginData(id, name, groupId, otherGroups);
                                 }
                             }
                         }
@@ -73,7 +73,7 @@ namespace Serverside.Core.Database.Forum
 
         public bool UserExists(string login)
         {
-            using (MySqlConnection connection = new MySqlConnection(Constant.ServerInfo.Configuration.GetConnectionString("forumConnectionString")))
+            using (MySqlConnection connection = new MySqlConnection(Tools.ServerInfo.Configuration.GetConnectionString("forumConnectionString")))
             using (MySqlCommand command = new MySqlCommand())
             {
                 connection.Open();

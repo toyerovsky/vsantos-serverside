@@ -7,11 +7,12 @@
 using System;
 using System.Globalization;
 using GTANetworkAPI;
-using Serverside.Constant;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
+using VRP.Core.Database.Models;
+using VRP.Serverside.Constant;
 
-namespace Serverside.Core.CharacterCreator
+using VRP.Serverside.Core.Extensions;
+
+namespace VRP.Serverside.Core.CharacterCreator
 {
     public class CharacterCreatorScript : Script
     {

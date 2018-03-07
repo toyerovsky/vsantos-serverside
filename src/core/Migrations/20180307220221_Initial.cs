@@ -1,14 +1,9 @@
-﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
- */
-
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
+using System.Collections.Generic;
 
-namespace Serverside.Migrations
+namespace VRP.Core.Migrations
 {
     public partial class Initial : Migration
     {
@@ -18,7 +13,7 @@ namespace Serverside.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Email = table.Column<string>(maxLength: 50, nullable: true),
                     ForumGroup = table.Column<long>(nullable: false),
@@ -28,7 +23,7 @@ namespace Serverside.Migrations
                     Online = table.Column<bool>(nullable: false),
                     OtherForumGroups = table.Column<string>(nullable: true),
                     Serial = table.Column<string>(nullable: true),
-                    ServerRank = table.Column<long>(nullable: false),
+                    ServerRank = table.Column<int>(nullable: false),
                     SocialClub = table.Column<string>(maxLength: 50, nullable: true),
                     UserId = table.Column<long>(nullable: false)
                 },
@@ -41,11 +36,11 @@ namespace Serverside.Migrations
                 name: "Characters",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AccessoryId = table.Column<byte>(nullable: true),
                     AccessoryTexture = table.Column<byte>(nullable: true),
-                    AccountId = table.Column<long>(nullable: true),
+                    AccountId = table.Column<int>(nullable: true),
                     BankAccountNumber = table.Column<int>(nullable: true),
                     BankMoney = table.Column<decimal>(nullable: false),
                     BornDate = table.Column<DateTime>(nullable: false),
@@ -93,7 +88,7 @@ namespace Serverside.Migrations
                     MakeupId = table.Column<byte>(nullable: true),
                     MakeupOpacity = table.Column<float>(nullable: true),
                     MinutesToRespawn = table.Column<int>(nullable: false),
-                    Model = table.Column<uint>(nullable: false),
+                    Model = table.Column<string>(nullable: true),
                     Money = table.Column<decimal>(nullable: false),
                     MoneyJob = table.Column<decimal>(nullable: true),
                     MotherId = table.Column<byte>(nullable: true),
@@ -131,10 +126,10 @@ namespace Serverside.Migrations
                 name: "Penaltlies",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AccountId = table.Column<long>(nullable: true),
-                    CreatorId = table.Column<long>(nullable: true),
+                    AccountId = table.Column<int>(nullable: true),
+                    CreatorId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     ExpiryDate = table.Column<DateTime>(nullable: false),
                     PenaltyType = table.Column<int>(nullable: false),
@@ -161,9 +156,9 @@ namespace Serverside.Migrations
                 name: "Descriptions",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CharacterId = table.Column<long>(nullable: true),
+                    CharacterId = table.Column<int>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true)
                 },
@@ -182,9 +177,9 @@ namespace Serverside.Migrations
                 name: "Groups",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BossCharacterId = table.Column<long>(nullable: true),
+                    BossCharacterId = table.Column<int>(nullable: true),
                     Color = table.Column<string>(nullable: true),
                     Dotation = table.Column<int>(nullable: false),
                     GroupType = table.Column<int>(nullable: false),
@@ -208,18 +203,18 @@ namespace Serverside.Migrations
                 name: "Buildings",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CharacterId = table.Column<long>(nullable: true),
+                    CharacterId = table.Column<int>(nullable: true),
                     Cost = table.Column<decimal>(nullable: true),
-                    CreatorId = table.Column<long>(nullable: false),
+                    CreatorId = table.Column<int>(nullable: false),
                     CurrentObjectCount = table.Column<short>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     EnterCharge = table.Column<decimal>(nullable: true),
                     ExternalPickupPositionX = table.Column<float>(nullable: false),
                     ExternalPickupPositionY = table.Column<float>(nullable: false),
                     ExternalPickupPositionZ = table.Column<float>(nullable: false),
-                    GroupId = table.Column<long>(nullable: true),
+                    GroupId = table.Column<int>(nullable: true),
                     HasCctv = table.Column<bool>(nullable: false),
                     HasSafe = table.Column<bool>(nullable: false),
                     InternalDimension = table.Column<uint>(nullable: false),
@@ -257,7 +252,7 @@ namespace Serverside.Migrations
                 name: "CrimeBots",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AmphetamineCost = table.Column<decimal>(nullable: true),
                     AmphetamineCount = table.Column<int>(nullable: true),
@@ -286,7 +281,7 @@ namespace Serverside.Migrations
                     CrackCost = table.Column<decimal>(nullable: true),
                     CrackCount = table.Column<int>(nullable: true),
                     CrackDefaultCount = table.Column<int>(nullable: true),
-                    CreatorId = table.Column<long>(nullable: true),
+                    CreatorId = table.Column<int>(nullable: true),
                     DoubleBarrelShotgunCost = table.Column<decimal>(nullable: true),
                     DoubleBarrelShotgunCount = table.Column<int>(nullable: true),
                     DoubleBarrelShotgunDefaultCount = table.Column<int>(nullable: true),
@@ -296,7 +291,7 @@ namespace Serverside.Migrations
                     ExcstasyCost = table.Column<decimal>(nullable: true),
                     ExcstasyCount = table.Column<int>(nullable: true),
                     ExcstasyDefaultCount = table.Column<int>(nullable: true),
-                    GroupModelId = table.Column<long>(nullable: true),
+                    GroupModelId = table.Column<int>(nullable: true),
                     HasishCost = table.Column<decimal>(nullable: true),
                     HasishCount = table.Column<int>(nullable: true),
                     HasishDefaultCount = table.Column<int>(nullable: true),
@@ -330,7 +325,7 @@ namespace Serverside.Migrations
                     MiniSmgMagazineCost = table.Column<decimal>(nullable: true),
                     MiniSmgMagazineCount = table.Column<int>(nullable: true),
                     MiniSmgMagazineDefaultCount = table.Column<int>(nullable: true),
-                    Model = table.Column<uint>(nullable: false),
+                    Model = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Pistol50Cost = table.Column<decimal>(nullable: true),
                     Pistol50Count = table.Column<int>(nullable: true),
@@ -392,7 +387,7 @@ namespace Serverside.Migrations
                     SnsPistolMagazineCost = table.Column<decimal>(nullable: true),
                     SnsPistolMagazineCount = table.Column<int>(nullable: true),
                     SnsPistolMagazineDefaultCount = table.Column<int>(nullable: true),
-                    Vehicle = table.Column<uint>(nullable: false)
+                    Vehicle = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -415,9 +410,9 @@ namespace Serverside.Migrations
                 name: "GroupWarehouseOrders",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    GetterId = table.Column<long>(nullable: true),
+                    GetterId = table.Column<int>(nullable: true),
                     OrderItemsJson = table.Column<string>(nullable: true),
                     ShipmentLog = table.Column<string>(nullable: true)
                 },
@@ -436,10 +431,10 @@ namespace Serverside.Migrations
                 name: "Vehicles",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CharacterId = table.Column<long>(nullable: true),
-                    CreatorId = table.Column<long>(nullable: true),
+                    CharacterId = table.Column<int>(nullable: true),
+                    CreatorId = table.Column<int>(nullable: true),
                     Door1Damage = table.Column<bool>(nullable: false),
                     Door2Damage = table.Column<bool>(nullable: false),
                     Door3Damage = table.Column<bool>(nullable: false),
@@ -449,7 +444,7 @@ namespace Serverside.Migrations
                     Fuel = table.Column<float>(nullable: false),
                     FuelConsumption = table.Column<float>(nullable: false),
                     FuelTank = table.Column<float>(nullable: false),
-                    GroupId = table.Column<long>(nullable: true),
+                    GroupId = table.Column<int>(nullable: true),
                     Health = table.Column<float>(nullable: false),
                     IsSpawned = table.Column<bool>(nullable: false),
                     Milage = table.Column<float>(nullable: false),
@@ -464,7 +459,7 @@ namespace Serverside.Migrations
                     SpawnRotationX = table.Column<float>(nullable: false),
                     SpawnRotationY = table.Column<float>(nullable: false),
                     SpawnRotationZ = table.Column<float>(nullable: false),
-                    VehicleHash = table.Column<uint>(nullable: false),
+                    VehicleHash = table.Column<string>(nullable: true),
                     WheelColor = table.Column<int>(nullable: false),
                     WheelType = table.Column<int>(nullable: false),
                     Window1Damage = table.Column<bool>(nullable: false),
@@ -499,9 +494,9 @@ namespace Serverside.Migrations
                 name: "Workers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CharacterId = table.Column<long>(nullable: true),
+                    CharacterId = table.Column<int>(nullable: true),
                     ChatRight = table.Column<bool>(nullable: false),
                     DoorsRight = table.Column<bool>(nullable: false),
                     DutyMinutes = table.Column<int>(nullable: false),
@@ -509,7 +504,7 @@ namespace Serverside.Migrations
                     FifthRight = table.Column<bool>(nullable: true),
                     FirstRight = table.Column<bool>(nullable: true),
                     FourthRight = table.Column<bool>(nullable: true),
-                    GroupId = table.Column<long>(nullable: true),
+                    GroupId = table.Column<int>(nullable: true),
                     OfferFromWarehouseRight = table.Column<bool>(nullable: false),
                     OrderFromWarehouseRight = table.Column<bool>(nullable: false),
                     PaycheckRight = table.Column<bool>(nullable: false),
@@ -541,20 +536,20 @@ namespace Serverside.Migrations
                 name: "Items",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BuildingId = table.Column<long>(nullable: true),
-                    CharacterId = table.Column<long>(nullable: true),
-                    CreatorId = table.Column<long>(nullable: true),
+                    BuildingId = table.Column<int>(nullable: true),
+                    CharacterId = table.Column<int>(nullable: true),
+                    CreatorId = table.Column<int>(nullable: true),
                     FirstParameter = table.Column<int>(nullable: true),
                     FourthParameter = table.Column<int>(nullable: true),
-                    GroupId = table.Column<long>(nullable: true),
+                    GroupId = table.Column<int>(nullable: true),
+                    ItemEntityType = table.Column<int>(nullable: false),
                     ItemHash = table.Column<string>(nullable: true),
-                    ItemType = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     SecondParameter = table.Column<int>(nullable: true),
                     ThirdParameter = table.Column<int>(nullable: true),
-                    VehicleId = table.Column<long>(nullable: true),
+                    VehicleId = table.Column<int>(nullable: true),
                     Weight = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -596,12 +591,12 @@ namespace Serverside.Migrations
                 name: "GroupWarehouseItems",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Cost = table.Column<decimal>(nullable: false),
                     Count = table.Column<int>(nullable: false),
                     GroupType = table.Column<int>(nullable: false),
-                    ItemModelId = table.Column<long>(nullable: true),
+                    ItemModelId = table.Column<int>(nullable: true),
                     MinimalCost = table.Column<decimal>(nullable: true),
                     ResetCount = table.Column<int>(nullable: false)
                 },
@@ -620,9 +615,9 @@ namespace Serverside.Migrations
                 name: "TelephoneContacts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CellphoneId = table.Column<long>(nullable: true),
+                    CellphoneId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Number = table.Column<int>(nullable: false)
                 },
@@ -641,9 +636,9 @@ namespace Serverside.Migrations
                 name: "TelephoneMessages",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CellphoneId = table.Column<long>(nullable: true),
+                    CellphoneId = table.Column<int>(nullable: true),
                     Content = table.Column<string>(maxLength: 256, nullable: true),
                     SenderNumber = table.Column<int>(nullable: false)
                 },

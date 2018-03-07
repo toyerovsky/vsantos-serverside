@@ -6,11 +6,11 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Serverside.Core.Database.Models
+namespace VRP.Core.Database.Models
 {
     public class TelephoneContactModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public ItemModel Cellphone { get; set; }
         public string Name { get; set; }
         [Phone]

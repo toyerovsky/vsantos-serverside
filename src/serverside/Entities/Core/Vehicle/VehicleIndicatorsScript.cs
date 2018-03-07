@@ -6,7 +6,7 @@
 
 using GTANetworkAPI;
 
-namespace Serverside.Entities.Core.Vehicle
+namespace VRP.Serverside.Entities.Core.Vehicle
 {
     public class VehicleIndicatorsScript : Script
     {

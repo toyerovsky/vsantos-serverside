@@ -8,13 +8,13 @@ using System;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using Serverside.Core.Extensions;
-using Serverside.Economy.Groups;
-using Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
-using Serverside.Economy.Jobs.Enums;
-using Serverside.Entities.Core;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Groups;
+using VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
+using VRP.Serverside.Entities.Core;
 
-namespace Serverside.Economy.Jobs.Courier.CourierWarehouse
+namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
 {
     public class CourierWarehouse : IDisposable
     {

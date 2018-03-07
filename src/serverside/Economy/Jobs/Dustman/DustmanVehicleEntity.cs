@@ -6,12 +6,12 @@
 
 using System;
 using GTANetworkAPI;
-using Serverside.Core.Database.Models;
-using Serverside.Core.Extensions;
-using Serverside.Economy.Jobs.Base;
-using Serverside.Economy.Jobs.Enums;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Jobs.Base;
 
-namespace Serverside.Economy.Jobs.Dustman
+namespace VRP.Serverside.Economy.Jobs.Dustman
 {
     public class DustmanVehicleEntity : JobVehicleEntity
     {

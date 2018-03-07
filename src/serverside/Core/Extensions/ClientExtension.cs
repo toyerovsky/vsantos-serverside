@@ -6,13 +6,14 @@
 
 using System.Collections.Generic;
 using GTANetworkAPI;
-using Serverside.Admin.Enums;
-using Serverside.Core.Database.Models;
-using Serverside.Economy.Money;
-using Serverside.Entities;
-using Serverside.Entities.Core;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
+using VRP.Serverside.Economy.Money;
+using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Entities.Core.Group;
 
-namespace Serverside.Core.Extensions
+namespace VRP.Serverside.Core.Extensions
 {
     public static class ClientExtensions
     {

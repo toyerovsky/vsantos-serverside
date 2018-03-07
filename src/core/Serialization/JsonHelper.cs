@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace Serverside.Core.Serialization
+namespace VRP.Core.Serialization
 {
     public static class JsonHelper
     {
