@@ -1,0 +1,11 @@
+C:\RAGEMP\server-files\bridge\resources\netcoreapp2.0\appsettings.json
+C:\RAGEMP\server-files\bridge\resources\netcoreapp2.0\meta.xml
+C:\RAGEMP\server-files\bridge\resources\netcoreapp2.0\vsantos.deps.json
+C:\RAGEMP\server-files\bridge\resources\netcoreapp2.0\vsantos.dll
+C:\RAGEMP\server-files\bridge\resources\netcoreapp2.0\vsantos.pdb
+C:\Users\Przemek\source\repos\vsantos-serverside\src\obj\Debug\netcoreapp2.0\vsantos.csproj.CoreCompileInputs.cache
+C:\Users\Przemek\source\repos\vsantos-serverside\src\obj\Debug\netcoreapp2.0\vsantos.AssemblyInfoInputs.cache
+C:\Users\Przemek\source\repos\vsantos-serverside\src\obj\Debug\netcoreapp2.0\vsantos.AssemblyInfo.cs
+C:\Users\Przemek\source\repos\vsantos-serverside\src\obj\Debug\netcoreapp2.0\vsantos.dll
+C:\Users\Przemek\source\repos\vsantos-serverside\src\obj\Debug\netcoreapp2.0\vsantos.pdb
+C:\Users\Przemek\source\repos\vsantos-serverside\src\obj\Debug\netcoreapp2.0\vsantos.csprojResolveAssemblyReference.cache
