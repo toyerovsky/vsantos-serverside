@@ -18,6 +18,13 @@ namespace VRP.vAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin", builder =>
+                {
+                    builder.AllowAnyOrigin();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,6 +36,7 @@ namespace VRP.vAPI
             }
 
             app.UseMvc();
+            app.UseCors("AllowAnyOrigin");
         }
     }
 }
