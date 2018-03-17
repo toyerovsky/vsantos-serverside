@@ -1,5 +1,7 @@
 <meta>
   <info name="vsantos" type="gamemode" />
-  <script src="vsantos.dll"/>
-  <file src="vsantos.pdb"/>
+  <script src="core.dll"/>
+  <file src="core.pdb"/>
+  <script src="serverside.dll"/>
+  <file src="serverside.pdb"/>
 </meta>
