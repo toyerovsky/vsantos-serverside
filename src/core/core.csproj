@@ -3,28 +3,28 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>VRP.Core</RootNamespace>
-    <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RuntimeFrameworkVersion>2.0.6</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\RAGEMP\server-files\bridge\resources\netcoreapp2.0\</OutputPath>
+    <OutputPath>C:\RAGEMP\server-files\bridge\resources\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Update="Microsoft.NETCore.App" Version="2.0.6" />
     <PackageReference Include="BCrypt.Net-Core" Version="1.4.0" />
     <PackageReference Include="Colorful.Console" Version="1.2.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
-    <PackageReference Update="Microsoft.NETCore.App" Version="2.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

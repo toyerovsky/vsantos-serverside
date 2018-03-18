@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>VRP.Serverside</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.6</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,20 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Core\Money\Scripts\**" />
-    <Compile Remove="_Clientside\**" />
-    <EmbeddedResource Remove="Core\Money\Scripts\**" />
-    <EmbeddedResource Remove="_Clientside\**" />
-    <None Remove="Core\Money\Scripts\**" />
-    <None Remove="_Clientside\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="gtanetwork.api" Version="0.3.5" />
-    <PackageReference Update="Microsoft.NETCore.App" Version="2.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+    <PackageReference Update="Microsoft.NETCore.App" Version="2.0.6" />
   </ItemGroup>
 
   <ItemGroup>

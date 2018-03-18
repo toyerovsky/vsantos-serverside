@@ -12,7 +12,7 @@ using VRP.Core.Enums;
 namespace VRP.Core.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180307220221_Initial")]
+    [Migration("20180318125825_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace VRP.Core.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011");
 
             modelBuilder.Entity("VRP.Core.Database.Models.AccountModel", b =>
                 {
