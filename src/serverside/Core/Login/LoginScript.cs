@@ -62,7 +62,7 @@ namespace VRP.Serverside.Core.Login
                 });
 
             string json = JsonConvert.SerializeObject(characters);
-            sender.TriggerEvent(RemoteEvents.PlayerLoginPassed, json);
+            sender.TriggerEvent(RemoteEvents.PlayerLoginPassed, json, account.AccountId);
         }
 
         private void LoginToAccount(Client sender, string email, string password)
