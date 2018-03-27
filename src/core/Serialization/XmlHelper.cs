@@ -19,15 +19,15 @@ namespace VRP.Core.Serialization
         {
             if (path.Last() != '\\')
             {
-                Colorful.Console.WriteLine(($"[Warning][{nameof(XmlHelper)}] Podano nieprawidłową ścieżkę: {path} " +
-                                         $"\nDodanie obiektu anulowane.", Color.Yellow));
+                Colorful.Console.WriteLine(($"[Warning][{nameof(XmlHelper)}] Specified path is inappropriate: {path} " +
+                                         $"\nAdding object canceled.", Color.Yellow));
                 return;
             }
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Colorful.Console.WriteLine(($"[Info][{nameof(XmlHelper)}] Utworzono ścieżkę: {path}", Color.CornflowerBlue));
+                Colorful.Console.WriteLine(($"[Info][{nameof(XmlHelper)}] Created path: {path}", Color.CornflowerBlue));
             }
 
             if (fileName == string.Empty)
@@ -51,8 +51,8 @@ namespace VRP.Core.Serialization
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Colorful.Console.WriteLine(($"[Error][{nameof(XmlHelper)}] Serializacja nieudana. " +
-                                             $"\n Wyjątek: {ex.Message}", Color.DarkRed));
+                    Colorful.Console.WriteLine(($"[Error][{nameof(XmlHelper)}] Serialization unsuccessful. " +
+                                             $"\n Exception: {ex.Message}", Color.DarkRed));
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace VRP.Core.Serialization
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Colorful.Console.WriteLine($"[Info][{nameof(XmlHelper)}] Utworzono ścieżkę: {path}", Color.CornflowerBlue);
+                Colorful.Console.WriteLine($"[Info][{nameof(XmlHelper)}] Created path: {path}", Color.CornflowerBlue);
             }
 
             XmlSerializer readerSerializer = new XmlSerializer(typeof(T));
@@ -87,8 +87,8 @@ namespace VRP.Core.Serialization
         {
             if (!File.Exists(filePath))
             {
-                Colorful.Console.WriteLine($"[Warning][{nameof(XmlHelper)}] Próbowano usunąć plik który nie istnieje.\n " +
-                                         $"Ścieżka: {filePath}", Color.Yellow);
+                Colorful.Console.WriteLine($"[Warning][{nameof(XmlHelper)}] Tried to delete file which not exists.\n " +
+                                         $"Path: {filePath}", Color.Yellow);
                 return false;
             }
 

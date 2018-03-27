@@ -128,9 +128,10 @@ namespace VRP.Serverside.Core.Scripts
                 if (group.CanPlayerWriteOnChat(sender.GetAccountEntity()))
                 {
                     string m = string.Join(" ", message);
-                    List<Client> clients = EntityHelper.GetAccounts().Where(a => group.DbModel.Workers.Any(
-                        w => w.Character.Id.Equals(a.Value.CharacterEntity.DbModel.Id))).Select(
-                        c => c.Value.Client).ToList();
+                    List<Client> clients = EntityHelper.GetAccounts()
+                        .Where(account => group.DbModel.Workers
+                        .Any(worker => worker.Character.Id.Equals(account.CharacterEntity.DbModel.Id)))
+                        .Select(account => account.Client).ToList();
                     SendMessageToSpecifiedPlayers(sender, clients, m, ChatMessageType.GroupOoc, $"~{group.DbModel.Color}~");
                 }
                 else

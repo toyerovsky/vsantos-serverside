@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using VRP.Core.Tools;
 
 namespace VRP.Core.Database
 {
@@ -24,7 +25,7 @@ namespace VRP.Core.Database
         {
             if (_firstAttempt)
             {
-                using (MySqlConnection testConnection = new MySqlConnection(Tools.ServerInfo.Configuration.GetConnectionString("gameConnectionString")))
+                using (MySqlConnection testConnection = new MySqlConnection(Singletons.Configuration.GetConnectionString("gameConnectionString")))
                 {
                     testConnection.Open();
                     string query = "select 1";
@@ -49,7 +50,7 @@ namespace VRP.Core.Database
             }
 
             DbContextOptionsBuilder<RoleplayContext> options = new DbContextOptionsBuilder<RoleplayContext>();
-            options.UseMySql(Tools.ServerInfo.Configuration.GetConnectionString("gameConnectionString"));
+            options.UseMySql(Singletons.Configuration.GetConnectionString("gameConnectionString"));
             
             return new RoleplayContext(options.Options);
         }

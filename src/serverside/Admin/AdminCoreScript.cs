@@ -217,20 +217,20 @@ namespace VRP.Serverside.Admin
                 return;
             }
 
-            string path = Path.Combine(ServerInfo.WorkingDirectory, @"Files\CustomPositions.txt");
+            string path = Path.Combine(Utils.WorkingDirectory, @"Files\CustomPositions.txt");
 
-            if (!Directory.Exists(Path.Combine(ServerInfo.WorkingDirectory, @"\Files\")))
+            if (!Directory.Exists(Path.Combine(Utils.WorkingDirectory, @"\Files\")))
             {
-                Directory.CreateDirectory(Path.Combine(ServerInfo.WorkingDirectory, @"\Files\"));
+                Directory.CreateDirectory(Path.Combine(Utils.WorkingDirectory, @"\Files\"));
 
-                Colorful.Console.WriteLine($@"[File] Utworzono ścieżkę {ServerInfo.WorkingDirectory}\Files\", Color.CornflowerBlue);
+                Colorful.Console.WriteLine($@"[{nameof(AdminCoreScript)}][File] Created path {Utils.WorkingDirectory}\Files\", Color.CornflowerBlue);
             }
 
             if (!File.Exists(path))
             {
                 File.Create(path);
 
-                Colorful.Console.WriteLine($@"[File] Utworzono plik {path}", Color.CornflowerBlue);
+                Colorful.Console.WriteLine($@"[{nameof(AdminCoreScript)}][File] Created file {path}", Color.CornflowerBlue);
             }
 
             List<string> data = File.ReadAllLines(path).ToList();

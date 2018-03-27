@@ -81,7 +81,7 @@ namespace VRP.Serverside.Entities.Common.Atm
                             }
                         }
                     };
-                    XmlHelper.AddXmlObject(data, Path.Combine(ServerInfo.XmlDirectory, nameof(AtmModel)));
+                    XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, nameof(AtmModel)));
                     AtmEntity atm = new AtmEntity(data);
                     atm.Spawn();
                     EntityHelper.Add(atm);

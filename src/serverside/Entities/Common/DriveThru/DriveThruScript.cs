@@ -59,7 +59,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (DriveThruModel data in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory, "DriveThrus")))
+            foreach (DriveThruModel data in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(Utils.XmlDirectory, "DriveThrus")))
             {
                 DriveThruEntity driveThru = new DriveThruEntity(data);
                 driveThru.Spawn();
@@ -91,7 +91,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                         Position = o.Position,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                     };
-                    XmlHelper.AddXmlObject(data, $"{ServerInfo.XmlDirectory}DriveThrus\\");
+                    XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, "DriveThrus"));
 
                     sender.Notify("Dodawanie DriveThru zakończyło się ~g~~h~pomyślnie.");
                     DriveThruEntity driveThru = new DriveThruEntity(data);

@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Linq;
 using VRP.Core.Serialization;
+using VRP.Core.Tools;
 using VRP.Serverside.Core.ServerInfo.Models;
 
 namespace VRP.Serverside.Core.ServerInfo
@@ -22,7 +23,7 @@ namespace VRP.Serverside.Core.ServerInfo
 
         public ServerInfo()
         {
-            string directory = Path.Combine(VRP.Core.Tools.ServerInfo.XmlDirectory, "ServerInfo\\");
+            string directory = Path.Combine(Utils.XmlDirectory, "ServerInfo\\");
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);

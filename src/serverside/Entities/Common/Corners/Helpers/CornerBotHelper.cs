@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
@@ -18,8 +19,8 @@ namespace VRP.Serverside.Entities.Common.Corners.Helpers
         public static bool TryGetCornerBotIds(List<string> botIds, out List<int> correctBotIds)
         {
             correctBotIds = new List<int>();
-            List<int> ids = XmlHelper.GetXmlObjects<CornerBotModel>(ServerInfo.XmlDirectory +
-                                                              @"CornerBots\").Select(x => x.BotId).ToList();            
+            List<int> ids = XmlHelper.GetXmlObjects<CornerBotModel>(Path.Combine(Utils.XmlDirectory, "CornerBots"))
+                .Select(x => x.BotId).ToList();            
             foreach (string id in botIds)
             {
                 int correctId = Convert.ToInt32(id);

@@ -123,31 +123,6 @@ namespace VRP.Serverside.Entities.Core
             }
         }
 
-        public static void SelectCharacter(Client player, int selectId)
-        {
-            AccountEntity account = player.GetAccountEntity();
-            if (account == null)
-            {
-                player.Notify("Nie uda³o siê za³adowaæ Twojego konta... Skontaktuj siê z Administratorem!");
-                return;
-            }
-
-            if (account.DbModel.Characters.Count == 0)
-            {
-                player.Notify("Twoje konto nie posiada ¿adnych postaci!");
-            }
-            else
-            {
-                long characterId = account.DbModel.Characters.ToList()[selectId].Id;
-                using (CharactersRepository repository = new CharactersRepository())
-                {
-                    CharacterModel characterData = repository.Get(characterId);
-                    CharacterEntity characterEntity = new CharacterEntity(account, characterData);
-                    characterEntity.LoginCharacter(account);
-                }
-            }
-        }
-
         public void LoginCharacter(AccountEntity accountEntity)
         {
             AccountEntity = accountEntity;
@@ -155,7 +130,7 @@ namespace VRP.Serverside.Entities.Core
 
             CharacterModel character = accountEntity.CharacterEntity.DbModel;
 
-            accountEntity.Client.Nametag = $"({EntityHelper.CalculateServerId(accountEntity)}) {accountEntity.CharacterEntity.FormatName}";
+            accountEntity.Client.Nametag = $"({accountEntity.ServerId}) {accountEntity.CharacterEntity.FormatName}";
 
             accountEntity.Client.Name = accountEntity.CharacterEntity.FormatName;
             accountEntity.Client.SetSkin(NAPI.Util.PedNameToModel(character.Model));

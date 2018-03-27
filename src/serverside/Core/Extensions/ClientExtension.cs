@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
@@ -46,7 +47,7 @@ namespace VRP.Serverside.Core.Extensions
             if (slot > 0 || slot <= 3)
             {
                 slot--;
-                List<GroupEntity> groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity());
+                List<GroupEntity> groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity()).ToList();
                 group = slot < groups.Count ? groups[slot] : null;
             }
             return group != null;

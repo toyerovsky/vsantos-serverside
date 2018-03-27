@@ -19,7 +19,7 @@ namespace VRP.Core.Serialization
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Colorful.Console.WriteLine($"[INFO][{nameof(JsonHelper)}] Utworzono ścieżkę {path}", Color.CornflowerBlue);
+                Colorful.Console.WriteLine($"[INFO][{nameof(JsonHelper)}] Created path: {path}", Color.CornflowerBlue);
             }
 
             return Directory.GetFiles(path).Select(JsonConvert.DeserializeObject<T>).ToList();
@@ -29,14 +29,14 @@ namespace VRP.Core.Serialization
         {
             if (path.Last() != '\\')
             {
-                Colorful.Console.WriteLine($"[ERROR][{nameof(JsonHelper)}] Podano nieprawidłową ścieżkę {path}", Color.DarkRed);
+                Colorful.Console.WriteLine($"[ERROR][{nameof(JsonHelper)}] Specified path is inappropriate: {path}", Color.DarkRed);
                 return;
             }
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Colorful.Console.WriteLine($"[INFO][{nameof(JsonHelper)}] Utworzono ścieżkę {path}", Color.CornflowerBlue);
+                Colorful.Console.WriteLine($"[INFO][{nameof(JsonHelper)}] Created path: {path}", Color.CornflowerBlue);
             }
 
             if (fileName == string.Empty)

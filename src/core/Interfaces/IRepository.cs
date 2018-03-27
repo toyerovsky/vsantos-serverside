@@ -14,8 +14,8 @@ namespace VRP.Core.Interfaces
         void Insert(T model);
         bool Contains(T model);
         void Update(T model);
-        void Delete(long model);
-        T Get(long id);
+        void Delete(int id);
+        T Get(int id);
         IEnumerable<T> GetAll();
         void Save();
     }

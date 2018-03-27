@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Core.Database;
@@ -14,7 +16,9 @@ using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
+using VRP.Core.Tools;
 using VRP.Serverside.Constant.RemoteEvents;
+using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Login.RemoteData;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities;
@@ -25,56 +29,24 @@ namespace VRP.Serverside.Core.Login
 {
     public class LoginScript : Script
     {
-        private static readonly ForumDatabaseHelper ForumDatabaseHelper = new ForumDatabaseHelper();
+        private readonly ForumDatabaseHelper _forumDatabaseHelper = new ForumDatabaseHelper();
 
-        public LoginScript()
-        {
-            AccountEntity.AccountLoggedIn += RPLogin_OnPlayerLogin;
-        }
-
-        private void EventOnOnPlayerConnected(Client client)
+        [ServerEvent(Event.PlayerConnected)]
+        public void OnPlayerConnected(Client client)
         {
             client.Dimension = (uint)Dimension.Login;
-            client.FreezePosition = true;
-        }
-
-        private void Event_OnClientEventTrigger(Client player, string eventName, params object[] args)
-        {
-            //Przy używaniu tego musimy jako args[0] wysłać indeks na liście postaci
-            if (eventName == "OnPlayerSelectedCharacter")
-            {
-                int characterId = Convert.ToInt32(args[0]);
-                //FixMe
-                //CharacterEntity.SelectCharacter(player, characterId);
-            }
-        }
-
-        private void RPLogin_OnPlayerLogin(Client sender, AccountEntity account)
-        {
-            var characters = account.DbModel.Characters
-                .Where(c => c.IsAlive)
-                .Select(x => new
-                {
-                    name = x.Name,
-                    surname = x.Surname,
-                    money = x.Money,
-                    playedTime = x.PlayedTime
-                });
-
-            string json = JsonConvert.SerializeObject(characters);
-            sender.TriggerEvent(RemoteEvents.PlayerLoginPassed, json, account.AccountId);
         }
 
         private void LoginToAccount(Client sender, string email, string password)
         {
-            if (ForumDatabaseHelper.CheckPasswordMatch(email, password, out ForumLoginData forumLoginData))
+            if (_forumDatabaseHelper.CheckPasswordMatch(email, password, out ForumLoginData forumLoginData))
             {
                 using (RoleplayContext ctx = RolePlayContextFactory.NewContext())
                 using (AccountsRepository repository = new AccountsRepository(ctx))
                 {
                     AccountModel accountModel = new AccountModel
                     {
-                        UserId = forumLoginData.Id,
+                        ForumUserId = forumLoginData.Id,
                         Name = forumLoginData.UserName,
                         ForumGroup = forumLoginData.GroupId,
                         OtherForumGroups = forumLoginData.OtherGroups,
@@ -101,10 +73,10 @@ namespace VRP.Serverside.Core.Login
                     }
 
                     //We do this to see account Id
-                    accountModel = repository.GetByUserId(accountModel.UserId);
+                    accountModel = repository.GetByUserId(accountModel.ForumUserId);
 
                     //Check if someone is logged on this account
-                    AccountEntity account = EntityHelper.Get(accountModel.Id);
+                    AccountEntity account = EntityHelper.GetById(accountModel.Id);
                     if (account != null)
                     {
                         //FixMe dać wiadomość jako warning
@@ -144,6 +116,35 @@ namespace VRP.Serverside.Core.Login
             else
             {
                 sender.SendNotification("Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
+            }
+        }
+
+        [RemoteEvent(RemoteEvents.PlayerSelectedCharacter)]
+        private void SelectCharacter(Client sender, params object[] args)
+        {
+            int characterIndex = Convert.ToInt32(args[0]);
+
+            AccountEntity account = sender.GetAccountEntity();
+            if (account == null)
+            {
+                sender.Notify("Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!");
+                return;
+            }
+
+            if (account.DbModel.Characters.Count == 0)
+            {
+                sender.Notify("Twoje konto nie posiada żadnych postaci!");
+            }
+            else
+            {
+                int characterId = account.DbModel.Characters.ToList()[characterIndex].Id;
+                using (CharactersRepository repository = new CharactersRepository())
+                {
+                    CharacterModel characterModel = repository.Get(characterId);
+                    CharacterEntity characterEntity = new CharacterEntity(account, characterModel);
+                    characterEntity.LoginCharacter(account);
+                    Singletons.UserBroadcaster.Broadcast(account.DbModel.Id, characterEntity.DbModel.Id, account.WebApiToken.ToString(), BroadcasterActionType.SignIn);
+                }
             }
         }
 

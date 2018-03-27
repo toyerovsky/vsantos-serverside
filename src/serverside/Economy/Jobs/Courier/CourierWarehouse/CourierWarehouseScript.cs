@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
@@ -75,7 +76,7 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
                         Position = o.Position,
                         CreatorForumName = o.GetAccountEntity().DbModel.Name
                     };
-                    XmlHelper.AddXmlObject(warehouse, $@"{ServerInfo.XmlDirectory}CourierWarehouses\");
+                    XmlHelper.AddXmlObject(warehouse, Path.Combine(Utils.XmlDirectory, "CourierWarehouses"));
 
                     Warehouses.Add(new CourierWarehouse(warehouse));
                     o.Notify("Dodawanie magazynu do pracy kuriera zakończyło się ~h~ ~g~pomyślnie.");

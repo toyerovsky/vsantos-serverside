@@ -23,9 +23,9 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public CrimeBotsRepository()
+        public CrimeBotsRepository() : this(RolePlayContextFactory.NewContext())
         {
-            _context = RolePlayContextFactory.NewContext();
+
         }
 
         public void Insert(CrimeBotModel model) => _context.CrimeBots.Add(model);
@@ -37,13 +37,13 @@ namespace VRP.Core.Repositories
 
         public void Update(CrimeBotModel model) => _context.Entry(model).State = EntityState.Modified;
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
             CrimeBotModel crimeBot = _context.CrimeBots.Find(id);
             _context.CrimeBots.Remove(crimeBot);
         }
 
-        public CrimeBotModel Get(long id) => GetAll().Single(c => c.Id == id);
+        public CrimeBotModel Get(int id) => GetAll().Single(c => c.Id == id);
 
         public CrimeBotModel Get(GroupModel model) => GetAll().Single(c => c.GroupModel.Id == model.Id);
 

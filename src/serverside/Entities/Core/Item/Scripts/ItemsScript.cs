@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
@@ -79,7 +80,8 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 {
                     if (group.CanPlayerCallCrimeBot(player))
                     {
-                        List<string> names = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{ServerInfo.XmlDirectory}CrimeBotPositions\").Select(n => n.Name).ToList();
+                        List<string> names = XmlHelper.GetXmlObjects<CrimeBotPosition>(Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"))
+                            .Select(n => n.Name).ToList();
                         sender.TriggerEvent("OnPlayerCalledCrimeBot", names);
                         return;
                     }
@@ -95,10 +97,10 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 //    "cellphone@first_person", "cellphone_call_listen_base");
 
                 int number = Convert.ToInt32(args[0]);
-                if (EntityHelper.GetAccounts().Any(p => p.Value.CharacterEntity.CurrentCellphone.Number == number))
+                if (EntityHelper.GetAccounts().Any(p => p.CharacterEntity.CurrentCellphone.Number == number))
                 {
                     AccountEntity getter = EntityHelper.GetAccounts()
-                        .Single(p => p.Value.CharacterEntity.CurrentCellphone.Number == number).Value;
+                        .Single(p => p.CharacterEntity.CurrentCellphone.Number == number);
 
                     if (getter.CharacterEntity.CurrentCellphone.CurrentCall != null)
                     {

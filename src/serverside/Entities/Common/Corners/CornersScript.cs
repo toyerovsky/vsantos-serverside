@@ -24,7 +24,7 @@ namespace VRP.Serverside.Entities.Common.Corners
         [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
         {
-            foreach (CornerModel data in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(ServerInfo.XmlDirectory, "Corners")))
+            foreach (CornerModel data in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Utils.XmlDirectory, "Corners")))
             {
                 CornerEntity corner = new CornerEntity(data);
                 corner.Spawn();
@@ -104,11 +104,12 @@ namespace VRP.Serverside.Entities.Common.Corners
                     {
                         CreatorForumName = o.GetAccountEntity().DbModel.Name,
                         Position = position,
-                        CornerBots = XmlHelper.GetXmlObjects<CornerBotModel>(ServerInfo.XmlDirectory + @"CornerBots\").Where(e => correctBotIds.Contains(e.BotId)).ToList(),
+                        CornerBots = XmlHelper.GetXmlObjects<CornerBotModel>(Path.Combine(Utils.XmlDirectory, "CornerBots"))
+                            .Where(bot => correctBotIds.Contains(bot.BotId)).ToList(),
                         BotPositions = botPositions
                     };
                     //Dodajemy nowy plik .xml
-                    XmlHelper.AddXmlObject(data, ServerInfo.XmlDirectory + @"Corners\");
+                    XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, "Corners"));
                     CornerEntity corner = new CornerEntity(data);
                     Corners.Add(corner);
 

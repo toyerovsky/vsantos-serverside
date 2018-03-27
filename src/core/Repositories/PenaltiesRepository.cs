@@ -23,9 +23,9 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public PenaltiesRepository()
+        public PenaltiesRepository() : this(RolePlayContextFactory.NewContext())
         {
-            _context = RolePlayContextFactory.NewContext();
+
         }
 
         public void Insert(PenaltyModel model) => _context.Penaltlies.Add(model);
@@ -37,13 +37,13 @@ namespace VRP.Core.Repositories
 
         public void Update(PenaltyModel model) => _context.Entry(model).State = EntityState.Modified;
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
             PenaltyModel penatly = _context.Penaltlies.Find(id);
             _context.Penaltlies.Remove(penatly);
         }
 
-        public PenaltyModel Get(long id) => GetAll().Single(b => b.Id == id);
+        public PenaltyModel Get(int id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<PenaltyModel> GetAll()
         {

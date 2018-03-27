@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
@@ -14,6 +15,7 @@ using VRP.Core.Repositories;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.ServerInfo;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Vehicle;
@@ -100,7 +102,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                         Name = name,
                         BotPosition = botPosition,
                         VehiclePosition = botVehiclePosition
-                    }, $@"{ServerInfo.XmlDirectory}CrimeBotPositions\");
+                    }, Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"));
 
                     sender.Notify("Dodawanie pozycji bota zakończyło się ~h~~g~pomyślnie!");
                     NAPI.Player.WarpPlayerOutOfVehicle(sender);
@@ -114,7 +116,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
         {
             CrimeBotPosition position = null;
             List<CrimeBotPosition> positions = XmlHelper
-                .GetXmlObjects<CrimeBotPosition>($@"{ServerInfo.XmlDirectory}CrimeBotPositions\");
+                .GetXmlObjects<CrimeBotPosition>(Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"));
 
             if (name != "")
             {
@@ -156,7 +158,8 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                     using (CrimeBotsRepository repository = new CrimeBotsRepository())
                     {
                         CrimeBotModel crimeBotData = repository.Get(group.DbModel);
-                        CrimeBotPosition position = XmlHelper.GetXmlObjects<CrimeBotPosition>($@"{ServerInfo.XmlDirectory}CrimeBotPositions\")[Convert.ToInt32(arguments[0])];
+                        CrimeBotPosition position = XmlHelper.GetXmlObjects<CrimeBotPosition>(
+                            Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"))[Convert.ToInt32(arguments[0])];
 
                         group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition, crimeBotData.Name, NAPI.Util.PedNameToModel(crimeBotData.Model), position.BotPosition);
                         group.CrimePedEntity.Spawn();

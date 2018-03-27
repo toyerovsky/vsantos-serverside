@@ -5,6 +5,7 @@
     <RootNamespace>VRP.Serverside</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RuntimeFrameworkVersion>2.0.6</RuntimeFrameworkVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,9 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="meta.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

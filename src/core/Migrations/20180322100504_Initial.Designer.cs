@@ -12,7 +12,7 @@ using VRP.Core.Enums;
 namespace VRP.Core.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180318125825_Initial")]
+    [Migration("20180322100504_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,8 @@ namespace VRP.Core.Migrations
 
                     b.Property<long>("ForumGroup");
 
+                    b.Property<long>("ForumUserId");
+
                     b.Property<string>("Ip")
                         .HasMaxLength(16);
 
@@ -50,8 +52,6 @@ namespace VRP.Core.Migrations
 
                     b.Property<string>("SocialClub")
                         .HasMaxLength(50);
-
-                    b.Property<long>("UserId");
 
                     b.HasKey("Id");
 

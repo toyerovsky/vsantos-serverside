@@ -16,7 +16,7 @@ namespace VRP.Core.Database.Models
         public int Id { get; set; }
         [StringLength(50)]
         public string Name { get; set; }
-        public long UserId { get; set; }
+        public long ForumUserId { get; set; }
         [EmailAddress]
         [StringLength(50)]
         public string Email { get; set; }

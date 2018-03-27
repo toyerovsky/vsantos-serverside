@@ -31,7 +31,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
         {
             Vehicles =
                 XmlHelper.GetXmlObjects<CarshopVehicleModel>(
-                    Path.Combine(ServerInfo.XmlDirectory, "CarshopVehicles"));
+                    Path.Combine(Utils.XmlDirectory, "CarshopVehicles"));
 
             //Vehicles.AddRange(new List<CarshopVehicleModel>
             //{
@@ -87,7 +87,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
             //});
 
             //Tworzenie salonow dla każdego pliku XML
-            XmlHelper.GetXmlObjects<CarshopModel>($@"{ServerInfo.XmlDirectory}Carshops\")
+            XmlHelper.GetXmlObjects<CarshopModel>(Path.Combine(Utils.XmlDirectory, "Carshops"))
                 .ForEach(carshopModel =>
                 {
                     CarshopEntity carshop = new CarshopEntity(carshopModel);
@@ -165,7 +165,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
                     CreatorForumName = sender.GetAccountEntity().DbModel.Name
                 };
 
-            XmlHelper.AddXmlObject(vehicle, Path.Combine(ServerInfo.XmlDirectory, "CarshopVehicles"), vehicle.Name);
+            XmlHelper.AddXmlObject(vehicle, Path.Combine(Utils.XmlDirectory, "CarshopVehicles"), vehicle.Name);
         }
 
         [Command("dodajsalon", "~y~ UŻYJ ~w~ /dodajsalon [nazwa] [typ]")]
@@ -192,7 +192,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
                 };
                 data.CreatorForumName = client.GetAccountEntity().DbModel.Name;
 
-                XmlHelper.AddXmlObject(data, $@"{ServerInfo.XmlDirectory}Carshops\");
+                XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, "Carshops"));
                 Carshops.Add(new CarshopEntity(data));
                 sender.Notify("Dodawanie salonu zakończyło się ~h~~g~pomyślnie.");
             };

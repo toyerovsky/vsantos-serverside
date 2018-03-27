@@ -8,6 +8,7 @@ using System;
 using System.Data;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using VRP.Core.Tools;
 
 namespace VRP.Core.Database.Forum
 {
@@ -18,7 +19,7 @@ namespace VRP.Core.Database.Forum
             forumLoginData = null;
             if (UserExists(email))
             {
-                using (MySqlConnection connection = new MySqlConnection(Tools.ServerInfo.Configuration.GetConnectionString("forumConnectionString")))
+                using (MySqlConnection connection = new MySqlConnection(Singletons.Configuration.GetConnectionString("forumConnectionString")))
                 using (MySqlCommand command = new MySqlCommand())
                 {
                     connection.Open();
@@ -73,7 +74,7 @@ namespace VRP.Core.Database.Forum
 
         public bool UserExists(string login)
         {
-            using (MySqlConnection connection = new MySqlConnection(Tools.ServerInfo.Configuration.GetConnectionString("forumConnectionString")))
+            using (MySqlConnection connection = new MySqlConnection(Singletons.Configuration.GetConnectionString("forumConnectionString")))
             using (MySqlCommand command = new MySqlCommand())
             {
                 connection.Open();

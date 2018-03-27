@@ -23,9 +23,9 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public GroupWarehouseOrdersRepository()
+        public GroupWarehouseOrdersRepository() : this(RolePlayContextFactory.NewContext())
         {
-            _context = RolePlayContextFactory.NewContext();
+
         }
 
         public void Insert(GroupWarehouseOrderModel model) => _context.GroupWarehouseOrders.Add(model);
@@ -40,13 +40,13 @@ namespace VRP.Core.Repositories
             _context.Entry(model).State = EntityState.Modified;
         }
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
             GroupWarehouseOrderModel order = _context.GroupWarehouseOrders.Find(id);
             _context.GroupWarehouseOrders.Remove(order);
         }
 
-        public GroupWarehouseOrderModel Get(long id) => GetAll().Single(b => b.Id == id);
+        public GroupWarehouseOrderModel Get(int id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<GroupWarehouseOrderModel> GetAll()
         {

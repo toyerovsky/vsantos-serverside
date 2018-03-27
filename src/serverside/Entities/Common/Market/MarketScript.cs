@@ -55,7 +55,7 @@ namespace VRP.Serverside.Entities.Common.Market
                     if (market != null)
                     {
                         market.Data.Items.Add(item);
-                        XmlHelper.AddXmlObject(market.Data, $@"{ServerInfo.XmlDirectory}\Markets\", market.Data.Name);
+                        XmlHelper.AddXmlObject(market.Data, Path.Combine(Utils.XmlDirectory, "Markets", market.Data.Name));
                     }
                 }
             }
@@ -91,7 +91,7 @@ namespace VRP.Serverside.Entities.Common.Market
         {
             //TODO: Wczytywanie wszystkich IPL sklepów
 
-            foreach (MarketModel data in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(ServerInfo.XmlDirectory, "Markets")))
+            foreach (MarketModel data in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(Utils.XmlDirectory, "Markets")))
             {
                 MarketEntity market = new MarketEntity(data);
                 market.Spawn();
@@ -103,7 +103,8 @@ namespace VRP.Serverside.Entities.Common.Market
         public void AddItemToShop(Client sender)
         {
             List<string> values = Enum.GetNames(typeof(ItemEntityType)).ToList();
-            var markets = XmlHelper.GetXmlObjects<MarketModel>($@"{ServerInfo.XmlDirectory}\Markets\").Select(x => new { x.Id, x.Name }).ToList();
+            var markets = XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(Utils.XmlDirectory, "Markets"))
+                .Select(x => new { x.Id, x.Name }).ToList();
             NAPI.ClientEvent.TriggerClientEvent(sender, "ShowAdminMarketItemMenu", values, markets);
         }
 
@@ -127,7 +128,7 @@ namespace VRP.Serverside.Entities.Common.Market
             sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
 
             Vector3 center = null;
-            
+
             void Handler(Client o, string message)
             {
                 if (center == null && o == sender && message == "/tu")
@@ -143,12 +144,12 @@ namespace VRP.Serverside.Entities.Common.Market
                         radius = center.DistanceTo2D(o.Position);
                         MarketModel market = new MarketModel
                         {
-                            Id = XmlHelper.GetXmlObjects<MarketModel>(ServerInfo.XmlDirectory + @"Markets\").Count,
+                            Id = XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(Utils.XmlDirectory, "Markets")).Count,
                             Name = name,
                             Center = center,
                             Radius = radius
                         };
-                        XmlHelper.AddXmlObject(market, ServerInfo.XmlDirectory + @"Markets\", market.Name);
+                        XmlHelper.AddXmlObject(market, Path.Combine(Utils.XmlDirectory, "Markets"), market.Name);
                         Markets.Add(new MarketEntity(market));
                     }
                 }

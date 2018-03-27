@@ -39,9 +39,9 @@ namespace VRP.Serverside.Entities.Common.Booth
                         sender.RemoveMoney(boothEntity.Data.Cost);
                         ChatScript.SendMessageToNearbyPlayers(sender, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
 
-                        if (EntityHelper.GetAccounts().Values.Any(t => t.CharacterEntity.CurrentCellphone.Number == Convert.ToInt32(args[0])))
+                        if (EntityHelper.GetAccounts().Any(t => t.CharacterEntity.CurrentCellphone.Number == Convert.ToInt32(args[0])))
                         {
-                            Client getterPlayer = EntityHelper.GetAccounts().Values
+                            Client getterPlayer = EntityHelper.GetAccounts()
                                 .Single(t => t.CharacterEntity.CurrentCellphone.Number ==
                                           Convert.ToInt32(args[0])).Client;
 
@@ -130,7 +130,7 @@ namespace VRP.Serverside.Entities.Common.Booth
                         Number = int.Parse(number)
                     };
 
-                    XmlHelper.AddXmlObject(data, Path.Combine(ServerInfo.XmlDirectory, nameof(TelephoneBoothModel)));
+                    XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, nameof(TelephoneBoothModel)));
                     TelephoneBoothEntity booth = new TelephoneBoothEntity(data);
                     booth.Spawn();
                     Booths.Add(booth);

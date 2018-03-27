@@ -4,9 +4,11 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Serialization;
+using VRP.Core.Tools;
 using VRP.Serverside.Core.Animations.Models;
 using VRP.Serverside.Core.Extensions;
 
@@ -26,7 +28,7 @@ namespace VRP.Serverside.Core.Animations
                     Name = arguments[0].ToString(),
                     AnimDictionary = arguments[1].ToString(),
                     AnimName = arguments[2].ToString(),
-                }, VRP.Core.Tools.ServerInfo.XmlDirectory + @"Animations\", arguments[2].ToString());
+                }, Path.Combine(Utils.XmlDirectory + "Animations"), arguments[2].ToString());
 
                 sender.Notify("Animacja została dodana pomyślnie.");
             }

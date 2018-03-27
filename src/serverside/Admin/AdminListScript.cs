@@ -99,7 +99,7 @@ namespace VRP.Serverside.Admin
 
             AccountEntity player = sender.GetAccountEntity();
 
-            if (AdminsOnDuty.Any(a => a.AccountId == player.AccountId))
+            if (AdminsOnDuty.Any(admin => ReferenceEquals(admin, player)))
             {
                 AdminsOnDuty.Remove(player);
                 NAPI.Chat.SendChatMessageToPlayer(sender, $"Zszedłeś ze służby ~{sender.GetRankColor().ToHex()}~ {player.DbModel.ServerRank.ToString().Where(char.IsLetter)} ~w~ życzymy miłej gry.");

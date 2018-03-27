@@ -251,7 +251,7 @@ namespace VRP.Serverside.Economy.Groups
         public void ShowGroupMenu(Client sender, byte slot)
         {
             AccountEntity player = sender.GetAccountEntity();
-            if (EntityHelper.GetPlayerGroups(player).Count == 0)
+            if (!EntityHelper.GetPlayerGroups(player).Any())
             {
                 sender.Notify("Nie jesteś członkiem żadnej grupy.");
                 return;

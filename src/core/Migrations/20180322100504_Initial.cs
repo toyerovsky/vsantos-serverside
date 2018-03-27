@@ -17,6 +17,7 @@ namespace VRP.Core.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Email = table.Column<string>(maxLength: 50, nullable: true),
                     ForumGroup = table.Column<long>(nullable: false),
+                    ForumUserId = table.Column<long>(nullable: false),
                     Ip = table.Column<string>(maxLength: 16, nullable: true),
                     LastLogin = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
@@ -24,8 +25,7 @@ namespace VRP.Core.Migrations
                     OtherForumGroups = table.Column<string>(nullable: true),
                     Serial = table.Column<string>(nullable: true),
                     ServerRank = table.Column<int>(nullable: false),
-                    SocialClub = table.Column<string>(maxLength: 50, nullable: true),
-                    UserId = table.Column<long>(nullable: false)
+                    SocialClub = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {

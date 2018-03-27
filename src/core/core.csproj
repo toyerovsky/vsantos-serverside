@@ -5,6 +5,7 @@
     <RootNamespace>VRP.Core</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RuntimeFrameworkVersion>2.0.6</RuntimeFrameworkVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -29,6 +30,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

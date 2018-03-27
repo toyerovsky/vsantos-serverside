@@ -28,22 +28,22 @@ namespace VRP.Serverside.Core.Scripts
             NAPI.ClientEvent.TriggerClientEventForAll("playerlist_leave", player.SocialClubName);
         }
 
-        private void Event_OnPlayerConnected(Client player)
+        private void Event_OnPlayerConnected(Client sender)
         {
             List<string> list = new List<string>();
-            foreach (KeyValuePair<long, AccountEntity> ply in EntityHelper.GetAccounts())
+            foreach (var player in EntityHelper.GetAccounts())
             {
                 Dictionary<string, object> dic = new Dictionary<string, object>
                 {
-                    {"socialClubName", ply.Value.Client.SocialClubName},
-                    {"serverId", ply.Value.ServerId},
-                    {"Name", ply.Value.Client.Name},
-                    {"ping", ply.Value.Client.Ping}
+                    {"socialClubName", player.Client.SocialClubName},
+                    {"serverId", player.ServerId},
+                    {"Name", player.Client.Name},
+                    {"ping", player.Client.Ping}
                 };
                 list.Add(JsonConvert.SerializeObject(dic));
             }
 
-            NAPI.ClientEvent.TriggerClientEvent(player, "playerlist", list);
+            NAPI.ClientEvent.TriggerClientEvent(sender, "playerlist", list);
         }
 
         private void RPLogin_OnPlayerLogin(Client sender, CharacterEntity character)
@@ -56,13 +56,13 @@ namespace VRP.Serverside.Core.Scripts
             if (eventName == "playerlist_pings")
             {
                 List<string> list = new List<string>();
-                foreach (KeyValuePair<long, AccountEntity> ply in EntityHelper.GetAccounts())
+                foreach (var player in EntityHelper.GetAccounts())
                 {
                     Dictionary<string, object> dic = new Dictionary<string, object>
                     {
-                        {"socialClubName", ply.Value.Client.SocialClubName},
-                        {"serverId", ply.Value.ServerId},
-                        {"ping", ply.Value.Client.Ping}
+                        {"socialClubName", player.Client.SocialClubName},
+                        {"serverId", player.ServerId},
+                        {"ping", player.Client.Ping}
                     };
                     list.Add(JsonConvert.SerializeObject(dic));
                 }

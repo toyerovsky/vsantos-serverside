@@ -48,9 +48,9 @@ namespace VRP.Serverside.Entities
 
         #region Core        
         /// <summary>
-        /// Klucz to id konta
+        /// Klucz to id gracza na serwerze
         /// </summary>
-        private static readonly Dictionary<long, AccountEntity> Accounts = new Dictionary<long, AccountEntity>();
+        private static readonly List<AccountEntity> Accounts = new List<AccountEntity>();
         private static readonly List<BuildingEntity> Buildings = new List<BuildingEntity>();
         private static readonly List<GroupEntity> Groups = new List<GroupEntity>();
         private static readonly List<VehicleEntity> Vehicles = new List<VehicleEntity>();
@@ -225,40 +225,32 @@ namespace VRP.Serverside.Entities
 
         public static void Add(AccountEntity accountEntity)
         {
-            if (Accounts.ContainsKey(accountEntity.AccountId))
+            if (Accounts.Any(account => account.DbModel.Id == accountEntity.DbModel.Id))
             {
                 Colorful.Console.WriteLine($"[Error][{nameof(EntityHelper)}] Nastąpiła interferencja zalogowanych użytkowników.", Color.DarkRed);
                 return;
             }
 
-            Accounts.Add(accountEntity.AccountId, accountEntity);
+            if (Accounts.Any(account => account == null))
+                Accounts[Accounts.IndexOf(Accounts.First(account => account == null))] = accountEntity;
+            else
+                Accounts.Add(accountEntity);
+
+            accountEntity.ServerId = Accounts.IndexOf(accountEntity);
         }
 
-        public static void Remove(AccountEntity accountEntity) => Accounts.Remove(accountEntity.AccountId);
+        public static void Remove(AccountEntity accountEntity) => Accounts[accountEntity.ServerId] = null;
 
-        public static AccountEntity Get(long accountId)
+        public static AccountEntity GetAccountByServerId(int serverId) => Accounts.Find(account => account.ServerId == serverId);
+
+        public static AccountEntity GetById(int accountId) => Accounts.Find(account => account.DbModel.Id == accountId);
+
+        public static AccountEntity GetAccountByCharacterId(int characterId)
         {
-            return Accounts.TryGetValue(accountId, out AccountEntity value) ? value : null;
+            return Accounts.Find(account => account.CharacterEntity.DbModel.Id == characterId);
         }
 
-        public static AccountEntity GetAccountByServerId(int id) => id > -1 ? Accounts.Values.ElementAtOrDefault(id) : null;
-
-        public static AccountEntity GetAccountByCharacterId(long characterId)
-        {
-            return characterId > -1 ? Accounts.Values.Single(ch => ch.CharacterEntity.DbModel.Id == characterId) : null;
-        }
-
-        public static Dictionary<long, AccountEntity> GetAccounts() => Accounts;
-
-        public static int CalculateServerId(AccountEntity account)
-        {
-            if (!Accounts.ContainsValue(account))
-            {
-                Colorful.Console.Write($"[Error][{nameof(EntityHelper)}] Próbowano uzyskać ID dla gracza który nie jest zalogowany.", Color.DarkRed);
-                return -1;
-            }
-            return Accounts.Values.ToList().IndexOf(account);
-        }
+        public static IEnumerable<AccountEntity> GetAccounts() => Accounts;
 
         #endregion
 
@@ -266,7 +258,7 @@ namespace VRP.Serverside.Entities
 
         public static CharacterEntity GetCharacterByOnlineCellphoneNumber(int number)
         {
-            return GetAccounts().Values
+            return GetAccounts()
                 .Single(account => account.CharacterEntity?.CurrentCellphone.Number == number).CharacterEntity;
         }
 
@@ -286,7 +278,7 @@ namespace VRP.Serverside.Entities
             return id > -1 ? Vehicles.Find(x => x.DbModel.Id == id) : null;
         }
 
-        public static List<VehicleEntity> GetVehicles() => Vehicles;
+        public static IEnumerable<VehicleEntity> GetVehicles() => Vehicles;
         #endregion
 
         #region Group
@@ -299,7 +291,7 @@ namespace VRP.Serverside.Entities
             return groupId > -1 ? Groups.Find(x => x.Id == groupId) : null;
         }
 
-        public static List<GroupEntity> GetPlayerGroups(AccountEntity accountEntity)
+        public static IEnumerable<GroupEntity> GetPlayerGroups(AccountEntity accountEntity)
         {
             if (Groups.Any(g => g.DbModel.Workers.Any(x => x.Character.Id == accountEntity.CharacterEntity.DbModel.Id)))
             {
@@ -310,7 +302,7 @@ namespace VRP.Serverside.Entities
             return null;
         }
 
-        public static List<GroupEntity> GetGroups() => Groups;
+        public static IEnumerable<GroupEntity> GetGroups() => Groups;
 
         #endregion
 
@@ -330,12 +322,12 @@ namespace VRP.Serverside.Entities
             return Buildings.Single(x => x.DbModel.Name.StartsWith(buildingName.ToLower()));
         }
 
-        public static List<BuildingEntity> GetPlayerBuildings(AccountEntity accountEntity)
+        public static IEnumerable<BuildingEntity> GetPlayerBuildings(AccountEntity accountEntity)
         {
             return Buildings.Where(b => b.DbModel.Character.Id == accountEntity.CharacterEntity.DbModel.Id).ToList();
         }
 
-        public static List<BuildingEntity> GetBuildings() => Buildings;
+        public static IEnumerable<BuildingEntity> GetBuildings() => Buildings;
 
         #endregion
 
@@ -356,7 +348,7 @@ namespace VRP.Serverside.Entities
 
         private static void LoadCommonEntities()
         {
-            foreach (AtmModel atmModel in XmlHelper.GetXmlObjects<AtmModel>(Path.Combine(ServerInfo.XmlDirectory,
+            foreach (AtmModel atmModel in XmlHelper.GetXmlObjects<AtmModel>(Path.Combine(Utils.XmlDirectory,
                 nameof(AtmModel))))
             {
                 AtmEntity atmEntity = new AtmEntity(atmModel);
@@ -364,7 +356,7 @@ namespace VRP.Serverside.Entities
                 Add(atmEntity);
             }
 
-            foreach (TelephoneBoothModel telephoneBoothModel in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(ServerInfo.XmlDirectory,
+            foreach (TelephoneBoothModel telephoneBoothModel in XmlHelper.GetXmlObjects<TelephoneBoothModel>(Path.Combine(Utils.XmlDirectory,
                 nameof(TelephoneBoothModel))))
             {
                 TelephoneBoothEntity telephoneBoothEntity = new TelephoneBoothEntity(telephoneBoothModel);
@@ -372,7 +364,7 @@ namespace VRP.Serverside.Entities
                 Add(telephoneBoothEntity);
             }
 
-            foreach (BusStopModel atmModel in XmlHelper.GetXmlObjects<BusStopModel>(Path.Combine(ServerInfo.XmlDirectory,
+            foreach (BusStopModel atmModel in XmlHelper.GetXmlObjects<BusStopModel>(Path.Combine(Utils.XmlDirectory,
                 nameof(BusStopModel))))
             {
                 BusStopEntity busStopEntity = new BusStopEntity(atmModel);
@@ -380,7 +372,7 @@ namespace VRP.Serverside.Entities
                 Add(busStopEntity);
             }
 
-            foreach (CarshopModel carshopModel in XmlHelper.GetXmlObjects<CarshopModel>(Path.Combine(ServerInfo.XmlDirectory,
+            foreach (CarshopModel carshopModel in XmlHelper.GetXmlObjects<CarshopModel>(Path.Combine(Utils.XmlDirectory,
                 nameof(CarshopModel))))
             {
                 CarshopEntity carshopEntity = new CarshopEntity(carshopModel);
@@ -388,7 +380,7 @@ namespace VRP.Serverside.Entities
                 Add(carshopEntity);
             }
 
-            foreach (CornerModel cornerModel in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(ServerInfo.XmlDirectory,
+            foreach (CornerModel cornerModel in XmlHelper.GetXmlObjects<CornerModel>(Path.Combine(Utils.XmlDirectory,
                 nameof(CornerModel))))
             {
                 CornerEntity cornerEntity = new CornerEntity(cornerModel);
@@ -396,7 +388,7 @@ namespace VRP.Serverside.Entities
                 Add(cornerEntity);
             }
 
-            foreach (DriveThruModel driveThruModel in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(ServerInfo.XmlDirectory,
+            foreach (DriveThruModel driveThruModel in XmlHelper.GetXmlObjects<DriveThruModel>(Path.Combine(Utils.XmlDirectory,
                 nameof(DriveThruModel))))
             {
                 DriveThruEntity driveThruEntity = new DriveThruEntity(driveThruModel);
@@ -404,7 +396,7 @@ namespace VRP.Serverside.Entities
                 Add(driveThruEntity);
             }
 
-            foreach (MarketModel marketModel in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(ServerInfo.XmlDirectory,
+            foreach (MarketModel marketModel in XmlHelper.GetXmlObjects<MarketModel>(Path.Combine(Utils.XmlDirectory,
                 nameof(MarketModel))))
             {
                 MarketEntity marketEntity = new MarketEntity(marketModel);

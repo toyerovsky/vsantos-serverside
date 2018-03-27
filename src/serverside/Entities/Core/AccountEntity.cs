@@ -5,10 +5,15 @@
  */
 
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using GTANetworkAPI;
+using GTANetworkMethods;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
+using VRP.Core.Tools;
+using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.EventArgs;
 using VRP.Serverside.Entities.Interfaces;
@@ -20,10 +25,8 @@ namespace VRP.Serverside.Entities.Core
         public delegate void AccountLogOutEventHandler(Client sender, AccountEntity account);
 
         public static event AccountLoginEventHandler AccountLoggedIn;
-        public static event EventHandler<ServerIdChangeEventArgs> ServerIdChanged;
         public static event AccountLogOutEventHandler AccountLoggedOut;
 
-        public long AccountId => DbModel.UserId;
         public AccountModel DbModel { get; set; }
 
         public Client Client { get; }
@@ -31,16 +34,8 @@ namespace VRP.Serverside.Entities.Core
 
         public Action<Client> HereHandler { get; set; }
 
-        private int _serverId = -1;
-        public int ServerId
-        {
-            get
-            {
-                int id = EntityHelper.CalculateServerId(this);
-                ServerIdChanged?.Invoke(this, new ServerIdChangeEventArgs(_serverId, id));
-                return _serverId = id;
-            }
-        }
+        public int ServerId { get; set; }
+        public Guid WebApiToken { get; set; }
 
         public AccountEntity(AccountModel data, Client client)
         {
@@ -57,11 +52,20 @@ namespace VRP.Serverside.Entities.Core
 
             string[] ip = DbModel.Ip.Split('.');
             string safeIp = $"{ip[0]}.{ip[1]}.***.***";
-            Client.Notify($"Witaj, ~g~~h~{DbModel.Name} ~w~zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()}");
+            Client.Notify(
+                $"Witaj, ~g~~h~{DbModel.Name} ~w~zostałeś pomyślnie zalogowany. ~n~Ostatnie logowanie: {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()}");
             Client.Notify($"Z adresu IP: {safeIp}");
 
             EntityHelper.Add(this);
+
+            // setting webapi token
+            WebApiToken = Guid.NewGuid();
+
+            // calling static event telling that player logged in
             AccountLoggedIn?.Invoke(Client, this);
+
+            // calling login pass on clientside
+            Client.TriggerEvent(RemoteEvents.PlayerLoginPassed, WebApiToken, DbModel.Id);
         }
 
         public void Kick(AccountEntity creator, string reason)
@@ -125,13 +129,11 @@ namespace VRP.Serverside.Entities.Core
 
         public void Dispose()
         {
+            Singletons.UserBroadcaster.Broadcast(-1, -1, WebApiToken.ToString(), BroadcasterActionType.SignOut);
             EntityHelper.Remove(this);
-
             DbModel.Online = false;
             Save();
-
             CharacterEntity?.Dispose();
-
             AccountLoggedOut?.Invoke(Client, this);
         }
     }

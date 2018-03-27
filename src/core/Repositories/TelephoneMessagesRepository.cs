@@ -23,9 +23,9 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public TelephoneMessagesRepository()
+        public TelephoneMessagesRepository() : this(RolePlayContextFactory.NewContext())
         {
-            _context = RolePlayContextFactory.NewContext();
+
         }
 
         public void Insert(TelephoneMessageModel model) => _context.TelephoneMessages.Add(model);
@@ -37,13 +37,13 @@ namespace VRP.Core.Repositories
 
         public void Update(TelephoneMessageModel model) => _context.Entry(model).State = EntityState.Modified;
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
             TelephoneMessageModel message = _context.TelephoneMessages.Find(id);
             _context.TelephoneMessages.Remove(message);
         }
 
-        public TelephoneMessageModel Get(long id) => GetAll().Single(b => b.Id == id);
+        public TelephoneMessageModel Get(int id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<TelephoneMessageModel> GetAll()
         {

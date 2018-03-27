@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
@@ -31,13 +32,11 @@ namespace VRP.Serverside.Economy.Jobs
 
         public JobsScript()
         {
-            string jsonDir = ServerInfo.JsonDirectory;
+            DustmanJob dustmanJob = new DustmanJob("Śmieciarz", 500, Path.Combine(Utils.JsonDirectory, "DustmanVehicles\\"));
 
-            DustmanJob dustmanJob = new DustmanJob("Śmieciarz", 500, $"{jsonDir}DustmanVehicles\\");
+            GreenkeeperJob greenkeeperJob = new GreenkeeperJob("Greenkeeper", 400, Path.Combine(Utils.JsonDirectory, "GreenkeeperVehicles\\"));
 
-            GreenkeeperJob greenkeeperJob = new GreenkeeperJob("Greenkeeper", 400, $"{jsonDir}GreenkeeperVehicles\\");
-
-            CourierJob courierJob = new CourierJob("Kurier", 500, $"{jsonDir}CourierVehicles\\");
+            CourierJob courierJob = new CourierJob("Kurier", 500, Path.Combine(Utils.JsonDirectory, "CourierVehicles\\"));
 
             Jobs = new List<Job>
             {
@@ -47,7 +46,7 @@ namespace VRP.Serverside.Economy.Jobs
 
         private void API_OnResourceStart()
         {
-            Garbages = XmlHelper.GetXmlObjects<GarbageModel>($"{ServerInfo.XmlDirectory}JobGarbages\\");
+            Garbages = XmlHelper.GetXmlObjects<GarbageModel>($"{Utils.XmlDirectory}JobGarbages\\");
 
             foreach (GarbageModel garbage in Garbages)
             {
@@ -137,7 +136,7 @@ namespace VRP.Serverside.Economy.Jobs
                         Rotation = sender.Rotation
                     };
 
-                    XmlHelper.AddXmlObject(garbage, $@"{ServerInfo.XmlDirectory}JobGarbages\");
+                    XmlHelper.AddXmlObject(garbage, Path.Combine(Utils.XmlDirectory, "JobGarbages"));
                     Garbages.Add(garbage);
                     sender.Notify("Dodawanie śmietnika zakończyło się pomyślnie.");
                 }

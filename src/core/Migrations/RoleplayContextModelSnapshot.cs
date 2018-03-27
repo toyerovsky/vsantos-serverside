@@ -31,6 +31,8 @@ namespace VRP.Core.Migrations
 
                     b.Property<long>("ForumGroup");
 
+                    b.Property<long>("ForumUserId");
+
                     b.Property<string>("Ip")
                         .HasMaxLength(16);
 
@@ -49,8 +51,6 @@ namespace VRP.Core.Migrations
 
                     b.Property<string>("SocialClub")
                         .HasMaxLength(50);
-
-                    b.Property<long>("UserId");
 
                     b.HasKey("Id");
 

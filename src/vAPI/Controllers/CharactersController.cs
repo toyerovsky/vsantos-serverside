@@ -1,32 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using VRP.Core.Database.Models;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using VRP.Core.Repositories;
+using VRP.vAPI.Model;
+using VRP.vAPI.Services;
 
-namespace vAPI.Controllers
+namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("AllowAnyOrigin")]
     public class CharactersController : Controller
     {
-        [HttpGet("{accountId}")]
-        public JsonResult Get(int accountId)
+        private readonly CharactersRepository _charactersRepository = new CharactersRepository();
+        private readonly IUsersWatcher _usersWatcher;
+
+        public CharactersController(IUsersWatcher usersWatcher)
         {
-            CharacterModel character = new CharacterModel();
-            character.Name = "John";
-            character.Surname = "Doe";
-            character.Money = 4000m;
-            return Json(new
-            {
-                name = character.Name,
-                surname = character.Surname,
-                money = character.Money,
-            });
+            _usersWatcher = usersWatcher;
+        }
+
+        [HttpGet("{accountId}/account")]
+        public JsonResult GetByAccountId(int accountId)
+        {
+            var characters = _charactersRepository.GetAll()
+                .Where(character => character.Account.Id == accountId)
+                .Select(character => new
+                {
+                    name = character.Name,
+                    surname = character.Surname,
+                    money = character.Money,
+                });
+            return Json(characters);
+        }
+
+        [HttpGet("{characterId}")]
+        public JsonResult Get(int characterId)
+        {
+            return Json(_charactersRepository.Get(characterId));
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            _charactersRepository.Dispose();
         }
     }
 }

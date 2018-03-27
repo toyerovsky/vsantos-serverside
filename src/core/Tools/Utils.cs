@@ -5,7 +5,9 @@
  */
 
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using VRP.Core.Database;
 using VRP.Core.Enums;
 
@@ -34,5 +36,19 @@ namespace VRP.Core.Tools
         public static int RandomRange() => _random.Next();
         public static int RandomRange(int max) => _random.Next(max);
         public static int RandomRange(int min, int max) => _random.Next(min, max);
+
+        private static string GetWorkingDirectory()
+        {
+            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            return Path.GetDirectoryName(path);
+        }
+
+        public static readonly string WorkingDirectory = GetWorkingDirectory();
+
+        public static string XmlDirectory => Path.Combine(WorkingDirectory, "Xml");
+
+        public static string JsonDirectory => Path.Combine(WorkingDirectory, "Json");
     }
 }

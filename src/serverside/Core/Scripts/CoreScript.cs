@@ -10,7 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
 using VRP.Core.Database;
+using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Core.Login;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Building;
@@ -52,7 +54,7 @@ namespace VRP.Serverside.Core.Scripts
         [ServerEvent(Event.Update)]
         private void Event_OnUpdate()
         {
-            if (EntityHelper.GetBuildings().Count == 0)
+            if (!EntityHelper.GetBuildings().Any())
                 return;
             //Kręcące się markery od budynków
             if (Math.Abs(_currentRotation - 360f) < 0.4)
@@ -88,23 +90,20 @@ namespace VRP.Serverside.Core.Scripts
             }
         }
 
-
-        private void Event_OnResourceStop()
+        [ServerEvent(Event.ResourceStop)]
+        public void OnResourceStop()
         {
             Task dbStop = Task.Run(() =>
             {
-                foreach (KeyValuePair<long, AccountEntity> account in EntityHelper.GetAccounts().Where(x => x.Value?.CharacterEntity != null))
-                {
-                    //Zmiana postaci pola Online w postaci po wyłączeniu serwera dla graczy którzy byli online
-                    account.Value.CharacterEntity.DbModel.Online = false;
-                    account.Value.DbModel.Online = false;
-                }
+                foreach (AccountEntity account in EntityHelper.GetAccounts()
+                    .Where(x => x.CharacterEntity != null))
+                    account.Dispose();
 
                 foreach (VehicleEntity vehicle in EntityHelper.GetVehicles())
+                {
+                    vehicle.Save();
                     vehicle.Dispose();
-
-                using (RoleplayContext ctx = RolePlayContextFactory.NewContext())
-                    ctx.SaveChanges();
+                }
             });
             dbStop.Wait();
         }

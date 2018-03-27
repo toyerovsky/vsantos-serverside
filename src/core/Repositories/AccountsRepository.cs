@@ -23,29 +23,29 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public AccountsRepository()
+        public AccountsRepository() : this(RolePlayContextFactory.NewContext())
         {
-            _context = RolePlayContextFactory.NewContext();
+
         }
 
         public void Insert(AccountModel model) => _context.Accounts.Add(model);
 
         public bool Contains(AccountModel model)
         {
-            return _context.Accounts.Any(account => account.UserId == model.UserId);
+            return _context.Accounts.Any(account => account.ForumUserId == model.ForumUserId);
         }
 
         public void Update(AccountModel model) => _context.Entry(model).State = EntityState.Modified;
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
             AccountModel account = _context.Accounts.Find(id);
             _context.Accounts.Remove(account);
         }
 
-        public AccountModel Get(long id) => GetAll().Single(account => account.Id == id);
+        public AccountModel Get(int id) => GetAll().Single(account => account.Id == id);
 
-        public AccountModel GetByUserId(long userId) => GetAll().Single(account => account.UserId == userId);
+        public AccountModel GetByUserId(long userId) => GetAll().Single(account => account.ForumUserId == userId);
 
         public IEnumerable<AccountModel> GetAll()
         {

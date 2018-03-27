@@ -23,9 +23,9 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public BuildingsRepository()
+        public BuildingsRepository() : this(RolePlayContextFactory.NewContext())
         {
-            _context = RolePlayContextFactory.NewContext();
+
         }
 
         public void Insert(BuildingModel model) => _context.Buildings.Add(model);
@@ -37,13 +37,13 @@ namespace VRP.Core.Repositories
 
         public void Update(BuildingModel model) => _context.Entry(model).State = EntityState.Modified;
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
             BuildingModel building = _context.Buildings.Find(id);
             _context.Buildings.Remove(building);
         }
 
-        public BuildingModel Get(long id) => GetAll().Single(b => b.Id == id);
+        public BuildingModel Get(int id) => GetAll().Single(b => b.Id == id);
 
         public IEnumerable<BuildingModel> GetAll()
         {

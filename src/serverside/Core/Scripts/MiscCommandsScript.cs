@@ -19,19 +19,19 @@ namespace VRP.Serverside.Core.Scripts
         [Command("id", "~y~UŻYJ ~w~ /id [nazwa]", GreedyArg = true)]
         public void ShowPlayersWithSimilarName(Client sender, string name)
         {
-            if (!EntityHelper.GetAccounts().Any(x => x.Value.CharacterEntity.FormatName.ToLower().StartsWith(name)))
+            if (!EntityHelper.GetAccounts().Any(x => x.CharacterEntity.FormatName.ToLower().StartsWith(name)))
             {
                 sender.Notify("Nie znaleziono gracza o podanej nazwie.");
                 return;
             }
 
-            IEnumerable<KeyValuePair<long, AccountEntity>> accounts = EntityHelper.GetAccounts()
-                .Where(x => x.Value.CharacterEntity.FormatName.ToLower().StartsWith(name));
+            var accounts = EntityHelper.GetAccounts()
+                .Where(account => account.CharacterEntity.FormatName.ToLower().StartsWith(name));
 
             ChatScript.SendMessageToPlayer(sender, "Znalezieni gracze: ", ChatMessageType.ServerInfo);
-            foreach (KeyValuePair<long, AccountEntity> account in accounts)
+            foreach (var account in accounts)
             {
-                ChatScript.SendMessageToPlayer(sender, $"({account.Value.ServerId}) {account.Value.CharacterEntity.FormatName}", ChatMessageType.ServerInfo);
+                ChatScript.SendMessageToPlayer(sender, $"({account.ServerId}) {account.CharacterEntity.FormatName}", ChatMessageType.ServerInfo);
             }
         }
 

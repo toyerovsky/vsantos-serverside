@@ -24,7 +24,7 @@ namespace VRP.Serverside.Constant
         {
             get
             {
-                return File.ReadLines(ServerInfo.WorkingDirectory + @"\Files\dict.txt").Select(
+                return File.ReadLines(Utils.WorkingDirectory + @"\Files\dict.txt").Select(
                     x => x.Split(',')).ToDictionary(
                         s => s[0], s => s[1]);
             }
