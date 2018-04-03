@@ -30,6 +30,7 @@ namespace VRP.Serverside.Core.Login
     public class LoginScript : Script
     {
         private readonly ForumDatabaseHelper _forumDatabaseHelper = new ForumDatabaseHelper();
+        
 
         [ServerEvent(Event.PlayerConnected)]
         public void OnPlayerConnected(Client client)
@@ -115,7 +116,10 @@ namespace VRP.Serverside.Core.Login
             }
             else
             {
-                sender.SendNotification("Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
+               // sender.SendNotification("Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
+                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.", NotificationType.Info);
+                
+                
             }
         }
 
@@ -127,13 +131,16 @@ namespace VRP.Serverside.Core.Login
             AccountEntity account = sender.GetAccountEntity();
             if (account == null)
             {
-                sender.Notify("Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!");
+                //sender.Notify("Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!");
+                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Nie udało się załadować Twojego konta...Skontaktuj się z Administratorem!", NotificationType.Warning);
                 return;
             }
 
             if (account.DbModel.Characters.Count == 0)
             {
-                sender.Notify("Twoje konto nie posiada żadnych postaci!");
+                //sender.Notify("Twoje konto nie posiada żadnych postaci!");
+                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Twoje konto nie posiada żadnych postaci!", NotificationType.Info);
+
             }
             else
             {
