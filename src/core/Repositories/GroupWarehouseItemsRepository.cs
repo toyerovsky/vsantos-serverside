@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public GroupWarehouseItemsRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(GroupWarehouseItemModel model) => _context.GroupWarehouseItems.Add(model);
@@ -43,11 +43,11 @@ namespace VRP.Core.Repositories
             _context.GroupWarehouseItems.Remove(warehouseItem);
         }
 
-        public GroupWarehouseItemModel Get(int id) => GetAll().Single(b => b.Id == id);
+        public GroupWarehouseItemModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<GroupWarehouseItemModel> GetAll()
+        public IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> predicate = null)
         {
-            return _context.GroupWarehouseItems.ToList();
+            return _context.GroupWarehouseItems;
         }
 
         public void Save() => _context.SaveChanges();

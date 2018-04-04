@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection.Metadata;
 using System.Text;
 using Newtonsoft.Json;
 using VRP.Core.Enums;
@@ -10,17 +11,17 @@ namespace VRP.Core.Tools
 {
     public class UserBroadcaster
     {
-        private readonly Socket _workingSocket;
+        private readonly Socket _workingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         /// <summary>
         /// Prepare the socket
         /// </summary>
-        public UserBroadcaster()
+        private void Connect()
         {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            _workingSocket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}] Prepared socket: {ipHostInfo.AddressList[0]}.", Color.CornflowerBlue);
+            var ip = IPAddress.Loopback;
+            //var port = Convert.ToInt32(Singletons.Configuration.GetSection("UserBroadcastPort").Value);
+            _workingSocket.Connect(new IPEndPoint(ip, 2137));
+            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}] Prepared socket: {ip}:{2137}.", Color.CornflowerBlue);
         }
 
         /// <summary>
@@ -40,8 +41,12 @@ namespace VRP.Core.Tools
                 Token = token,
             }).ToCharArray());
 
+            if (!_workingSocket.Connected)
+                Connect();
+
             Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}][{DateTime.Now.ToShortTimeString()}] Sending data to WebAPI. " +
                                        $"{{token: {token} accountId: {accountId}, characterId: {characterId}, actionType: {actionType}", Color.CornflowerBlue);
+
             // Begin sending the data WebAPI  
             _workingSocket.BeginSend(byteData, 0, byteData.Length, 0, SendCallback, _workingSocket);
         }
@@ -58,7 +63,7 @@ namespace VRP.Core.Tools
                 Socket handler = (Socket)asyncResult.AsyncState;
 
                 // Complete sending the data to the remote device.  
-                int bytesSent = handler.EndSend(asyncResult);
+                handler.EndSend(asyncResult);
 
                 Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}][{DateTime.Now.ToShortTimeString()}] Data send successfully completed.", Color.DarkGreen);
                 handler.Shutdown(SocketShutdown.Both);

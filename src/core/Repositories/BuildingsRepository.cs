@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public BuildingsRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(BuildingModel model) => _context.Buildings.Add(model);
@@ -43,17 +43,20 @@ namespace VRP.Core.Repositories
             _context.Buildings.Remove(building);
         }
 
-        public BuildingModel Get(int id) => GetAll().Single(b => b.Id == id);
+        public BuildingModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<BuildingModel> GetAll()
+        public IEnumerable<BuildingModel> GetAll(Expression<Func<BuildingModel, bool>> predicate = null)
         {
-            return _context.Buildings
+            IQueryable<BuildingModel> buildings = predicate != null ?
+                _context.Buildings.Where(predicate).AsQueryable() :
+                _context.Buildings;
+
+            return buildings
                 .Include(building => building.Creator)
                 .Include(building => building.Character)
                 .Include(building => building.Group)
                 .Include(building => building.Items)
-                    .ThenInclude(item => item.Creator)
-                .ToList();
+                    .ThenInclude(item => item.Creator);
         }
 
         public void Save() => _context.SaveChanges();

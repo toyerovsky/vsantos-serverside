@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -43,13 +44,13 @@ namespace VRP.Core.Repositories
             _context.Penaltlies.Remove(penatly);
         }
 
-        public PenaltyModel Get(int id) => GetAll().Single(b => b.Id == id);
+        public PenaltyModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<PenaltyModel> GetAll()
+        public IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> predicate = null)
         {
             return _context.Penaltlies
                 .Include(penatly => penatly.Account)
-                .Include(penatly => penatly.Creator).ToList();
+                .Include(penatly => penatly.Creator);
         }
 
         public void Save() => _context.SaveChanges();

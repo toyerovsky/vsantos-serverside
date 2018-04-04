@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public GroupsRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(GroupModel model) => _context.Groups.Add(model);
@@ -43,9 +43,9 @@ namespace VRP.Core.Repositories
             _context.Groups.Remove(group);
         }
 
-        public GroupModel Get(int id) => GetAll().Single(g => g.Id == id);
+        public GroupModel Get(int id) => GetAll(g => g.Id == id).Single();
 
-        public IEnumerable<GroupModel> GetAll()
+        public IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> predicate = null)
         {
             return _context.Groups
                 .Include(group => group.BossCharacter)
@@ -53,8 +53,7 @@ namespace VRP.Core.Repositories
                     .ThenInclude(worker => worker.Character)
                 .Include(group => group.Workers)
                     .ThenInclude(worker => worker.Character)
-                        .ThenInclude(character => character.Account)
-                .ToList();
+                        .ThenInclude(character => character.Account);
         }
 
         public void Save() => _context.SaveChanges();

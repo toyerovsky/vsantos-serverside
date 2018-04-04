@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public AccountsRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(AccountModel model) => _context.Accounts.Add(model);
@@ -43,40 +43,44 @@ namespace VRP.Core.Repositories
             _context.Accounts.Remove(account);
         }
 
-        public AccountModel Get(int id) => GetAll().Single(account => account.Id == id);
+        public AccountModel Get(int id) => GetAll(account => account.Id == id).Single();
 
-        public AccountModel GetByUserId(long userId) => GetAll().Single(account => account.ForumUserId == userId);
+        public AccountModel GetByUserId(long userId) => GetAll(account => account.ForumUserId == userId).Single();
 
-        public IEnumerable<AccountModel> GetAll()
+        public IEnumerable<AccountModel> GetAll(Expression<Func<AccountModel, bool>> expression = null)
         {
-            return _context.Accounts
+            IQueryable<AccountModel> accounts = expression != null ?
+                _context.Accounts.Where(expression) :
+                _context.Accounts;
+
+            return accounts
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Buildings)
-                        .ThenInclude(building => building.Items)
+                .ThenInclude(character => character.Buildings)
+                .ThenInclude(building => building.Items)
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Buildings)
-                        .ThenInclude(building => building.Creator)
+                .ThenInclude(character => character.Buildings)
+                .ThenInclude(building => building.Creator)
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Items)
-                        .ThenInclude(item => item.Creator)
+                .ThenInclude(character => character.Items)
+                .ThenInclude(item => item.Creator)
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Descriptions)
+                .ThenInclude(character => character.Descriptions)
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Vehicles)
-                        .ThenInclude(vehicle => vehicle.Creator)
+                .ThenInclude(character => character.Vehicles)
+                .ThenInclude(vehicle => vehicle.Creator)
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Vehicles)
-                        .ThenInclude(vehicle => vehicle.ItemsInVehicle)
-                            .ThenInclude(item => item.Creator)
+                .ThenInclude(character => character.Vehicles)
+                .ThenInclude(vehicle => vehicle.ItemsInVehicle)
+                .ThenInclude(item => item.Creator)
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Workers)
-                        .ThenInclude(group => group.Group)
-                            .ThenInclude(group => group.BossCharacter)
+                .ThenInclude(character => character.Workers)
+                .ThenInclude(group => @group.Group)
+                .ThenInclude(group => @group.BossCharacter)
                 .Include(account => account.Characters)
-                    .ThenInclude(character => character.Workers)
-                        .ThenInclude(group => group.Group)
-                .ThenInclude(group => group.Workers)
-                    .Include(account => account.Penalties).ToList();
+                .ThenInclude(character => character.Workers)
+                .ThenInclude(group => @group.Group)
+                .ThenInclude(group => @group.Workers)
+                .Include(account => account.Penalties);
         }
 
         public void Save() => _context.SaveChanges();

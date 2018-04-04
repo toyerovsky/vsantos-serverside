@@ -7,8 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Core.Database;
@@ -20,17 +18,14 @@ using VRP.Core.Tools;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Login.RemoteData;
-using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
-using ChatMessageType = VRP.Core.Enums.ChatMessageType;
 
 namespace VRP.Serverside.Core.Login
 {
     public class LoginScript : Script
     {
         private readonly ForumDatabaseHelper _forumDatabaseHelper = new ForumDatabaseHelper();
-        
 
         [ServerEvent(Event.PlayerConnected)]
         public void OnPlayerConnected(Client client)
@@ -73,21 +68,20 @@ namespace VRP.Serverside.Core.Login
                         repository.Save();
                     }
 
-                    //We do this to see account Id
+                    // We do this to see account Id
                     accountModel = repository.GetByUserId(accountModel.ForumUserId);
 
-                    //Check if someone is logged on this account
+                    // Check if someone is logged on this account
                     AccountEntity account = EntityHelper.GetById(accountModel.Id);
                     if (account != null)
                     {
-                        //FixMe dać wiadomość jako warning
-                        ChatScript.SendMessageToPlayer(sender,
-                            $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.", ChatMessageType.ServerInfo);
-
+                        sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested,
+                            $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.",
+                            NotificationType.Warning);
                         account.Kick(null, "Próba zalogowania na zalogowane konto.");
                     }
 
-                    //Seed the data
+                    // Seed the data
                     if (accountModel.Characters.Count == 0)
                     {
                         using (CharactersRepository charactersRepository = new CharactersRepository(ctx))
@@ -116,29 +110,24 @@ namespace VRP.Serverside.Core.Login
             }
             else
             {
-               // sender.SendNotification("Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
                 sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.", NotificationType.Info);
-                
-                
             }
         }
 
-        [RemoteEvent(RemoteEvents.PlayerSelectedCharacter)]
-        private void SelectCharacter(Client sender, params object[] args)
+        [RemoteEvent(RemoteEvents.CharacterSelectRequested)]
+        public void SelectCharacter(Client sender, params object[] args)
         {
             int characterIndex = Convert.ToInt32(args[0]);
 
             AccountEntity account = sender.GetAccountEntity();
             if (account == null)
             {
-                //sender.Notify("Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!");
-                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Nie udało się załadować Twojego konta...Skontaktuj się z Administratorem!", NotificationType.Warning);
+                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!", NotificationType.Warning);
                 return;
             }
 
             if (account.DbModel.Characters.Count == 0)
             {
-                //sender.Notify("Twoje konto nie posiada żadnych postaci!");
                 sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Twoje konto nie posiada żadnych postaci!", NotificationType.Info);
 
             }

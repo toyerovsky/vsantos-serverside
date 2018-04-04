@@ -5,17 +5,13 @@
  */
 
 using System;
-using System.Security.Cryptography;
-using System.Text;
 using GTANetworkAPI;
-using GTANetworkMethods;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Core.Tools;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Entities.EventArgs;
 using VRP.Serverside.Entities.Interfaces;
 
 namespace VRP.Serverside.Entities.Core

@@ -12,7 +12,6 @@ using GTANetworkAPI;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Core.ServerInfo;
 using VRP.Serverside.Entities.Common.Corners.Models;
 using VRP.Serverside.Entities.Core.Item;
 

@@ -5,14 +5,10 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
-using VRP.Core.Database;
-using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Core.Login;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Building;

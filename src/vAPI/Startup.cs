@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using VRP.vAPI.Services;
 
 namespace VRP.vAPI
@@ -11,6 +12,7 @@ namespace VRP.vAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public static IConfiguration Configuration { get; private set; }
@@ -19,7 +21,10 @@ namespace VRP.vAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IUsersWatcher, UsersWatcher>();
-            services.AddMvc();
+
+            services.AddMvc()
+                .AddJsonOptions(option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAnyOrigin", builder =>

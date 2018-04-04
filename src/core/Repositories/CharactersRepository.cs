@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public CharactersRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(CharacterModel model) => _context.Characters.Add(model);
@@ -43,11 +43,15 @@ namespace VRP.Core.Repositories
             _context.Characters.Remove(character);
         }
 
-        public CharacterModel Get(int id) => GetAll().Single(c => c.Id == id);
+        public CharacterModel Get(int id) => GetAll(c => c.Id == id).Single();
 
-        public IEnumerable<CharacterModel> GetAll()
+        public IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> predicate = null)
         {
-            return _context.Characters
+            IQueryable<CharacterModel> characters = predicate != null ?
+                _context.Characters.Where(predicate).AsQueryable() :
+                _context.Characters;
+
+            return characters
                 .Include(character => character.Buildings)
                     .ThenInclude(building => building.Items)
                 .Include(character => character.Buildings)
@@ -59,14 +63,13 @@ namespace VRP.Core.Repositories
                     .ThenInclude(vehicle => vehicle.Creator)
                 .Include(character => character.Vehicles)
                     .ThenInclude(vehicle => vehicle.ItemsInVehicle)
-                        .ThenInclude(item => item.Creator)
+                    .ThenInclude(item => item.Creator)
                 .Include(character => character.Workers)
                     .ThenInclude(group => group.Group)
-                .Include(character => character.Account).ToList();
+                .Include(character => character.Account);
         }
 
         public void Save() => _context.SaveChanges();
-
 
         public void Dispose() => _context?.Dispose();
     }

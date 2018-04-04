@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public TelephoneMessagesRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(TelephoneMessageModel model) => _context.TelephoneMessages.Add(model);
@@ -43,16 +43,15 @@ namespace VRP.Core.Repositories
             _context.TelephoneMessages.Remove(message);
         }
 
-        public TelephoneMessageModel Get(int id) => GetAll().Single(b => b.Id == id);
+        public TelephoneMessageModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<TelephoneMessageModel> GetAll()
+        public IEnumerable<TelephoneMessageModel> GetAll(Expression<Func<TelephoneMessageModel, bool>> predicate = null)
         {
             return _context.TelephoneMessages
                 .Include(message => message.Cellphone)
                     .ThenInclude(cellphone => cellphone.Creator)
                 .Include(message => message.Cellphone)
-                    .ThenInclude(cellphone => cellphone.Character)
-                .ToList();
+                    .ThenInclude(cellphone => cellphone.Character);
         }
 
         public void Save() => _context.SaveChanges();

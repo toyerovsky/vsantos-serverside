@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public VehiclesRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(VehicleModel model) => _context.Vehicles.Add(model);
@@ -43,9 +43,9 @@ namespace VRP.Core.Repositories
             _context.Vehicles.Remove(vehicle);
         }
 
-        public VehicleModel Get(int id) => _context.Vehicles.Find(id);
+        public VehicleModel Get(int id) => GetAll(v => v.Id == id).Single();
 
-        public IEnumerable<VehicleModel> GetAll()
+        public IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> predicate = null)
         {
             return _context.Vehicles
                 .Include(vehicle => vehicle.Creator)
@@ -53,7 +53,7 @@ namespace VRP.Core.Repositories
                     .ThenInclude(character => character.Account)
                 .Include(vehicle => vehicle.Group)
                 .Include(vehicle => vehicle.ItemsInVehicle)
-                    .ThenInclude(item => item.Creator).ToList();
+                    .ThenInclude(item => item.Creator);
         }
 
         public void Save() => _context.SaveChanges();

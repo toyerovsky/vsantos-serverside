@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +10,6 @@ using Newtonsoft.Json;
 using VRP.Core.Database;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
-using VRP.Core.Tools;
 using VRP.vAPI.Model;
 using VRP.vAPI.Services.Model;
 
@@ -32,11 +30,8 @@ namespace VRP.vAPI.Services
 
         private void Watch()
         {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, Startup.Configuration.GetValue<int>("UserListenPort"));
-
-            Socket socketListener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Loopback, Startup.Configuration.GetValue<int>("UserListenPort"));
+            Socket socketListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             try
             {

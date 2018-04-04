@@ -10,7 +10,9 @@ namespace VRP.Serverside.Constant.RemoteEvents
     {
         public const string PlayerLoginRequested = "playerLoginRequested";
         public const string PlayerLoginPassed = "playerLoginPassed";
-        public const string PlayerSelectedCharacter = "playerSelectedCharacter";
+        
         public const string PlayerNotifyRequested = "playerNotifyRequested";
+
+        public const string CharacterSelectRequested = "characterSelectRequested";
     }
 }

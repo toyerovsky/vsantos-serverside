@@ -15,7 +15,6 @@ using VRP.Core.Repositories;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Core.ServerInfo;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Vehicle;

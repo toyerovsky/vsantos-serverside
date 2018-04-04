@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -43,9 +44,9 @@ namespace VRP.Core.Repositories
             _context.Items.Remove(item);
         }
 
-        public ItemModel Get(int id) => GetAll().Single(i => i.Id == id);
+        public ItemModel Get(int id) => GetAll(i => i.Id == id).Single();
 
-        public IEnumerable<ItemModel> GetAll()
+        public IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> predicate = null)
         {
             return _context.Items
                 .Include(item => item.Creator)
@@ -55,8 +56,7 @@ namespace VRP.Core.Repositories
                     .ThenInclude(character => character.Account)
                 .Include(item => item.Group)
                     .ThenInclude(group => group.BossCharacter)
-                        .ThenInclude(bossCharacter => bossCharacter.Account)
-                .ToList();
+                        .ThenInclude(bossCharacter => bossCharacter.Account);
         }
 
         public void Save() => _context.SaveChanges();

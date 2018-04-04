@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace VRP.Core.Interfaces
 {
@@ -16,7 +17,7 @@ namespace VRP.Core.Interfaces
         void Update(T model);
         void Delete(int id);
         T Get(int id);
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> expression = null);
         void Save();
     }
 }

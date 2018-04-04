@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
@@ -25,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public CrimeBotsRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(CrimeBotModel model) => _context.CrimeBots.Add(model);
@@ -43,18 +43,22 @@ namespace VRP.Core.Repositories
             _context.CrimeBots.Remove(crimeBot);
         }
 
-        public CrimeBotModel Get(int id) => GetAll().Single(c => c.Id == id);
+        public CrimeBotModel Get(int id) => GetAll(c => c.Id == id).Single();
 
-        public CrimeBotModel Get(GroupModel model) => GetAll().Single(c => c.GroupModel.Id == model.Id);
+        public CrimeBotModel Get(GroupModel model) => GetAll(c => c.GroupModel.Id == model.Id).Single();
 
-        public IEnumerable<CrimeBotModel> GetAll()
+        public IEnumerable<CrimeBotModel> GetAll(Expression<Func<CrimeBotModel, bool>> predicate = null)
         {
-            return _context.CrimeBots.Include(cb => cb.Creator)
+            IQueryable<CrimeBotModel> crimeBots = predicate != null ?
+                _context.CrimeBots.Where(predicate).AsQueryable() :
+                _context.CrimeBots;
+
+            return crimeBots
+                .Include(cb => cb.Creator)
                 .Include(crimeBot => crimeBot.GroupModel)
                     .ThenInclude(group => group.BossCharacter)
                 .Include(crimeBot => crimeBot.GroupModel)
-                    .ThenInclude(group => group.Workers)
-                .ToList();
+                    .ThenInclude(group => group.Workers);
         }
 
         public void Save() => _context.SaveChanges();
