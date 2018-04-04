@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection.Metadata;
 using System.Text;
 using Newtonsoft.Json;
 using VRP.Core.Enums;
@@ -19,9 +18,9 @@ namespace VRP.Core.Tools
         private void Connect()
         {
             var ip = IPAddress.Loopback;
-            //var port = Convert.ToInt32(Singletons.Configuration.GetSection("UserBroadcastPort").Value);
-            _workingSocket.Connect(new IPEndPoint(ip, 2137));
-            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}] Prepared socket: {ip}:{2137}.", Color.CornflowerBlue);
+            var port = Convert.ToInt32(Singletons.Configuration.GetSection("UserBroadcastPort").Value);
+            _workingSocket.Connect(new IPEndPoint(ip, port));
+            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}] Prepared socket: {ip}:{port}.", Color.CornflowerBlue);
         }
 
         /// <summary>

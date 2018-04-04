@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.CharacterCreator;
@@ -34,7 +35,7 @@ namespace VRP.Serverside.Entities.Core
         public CharacterCreator CharacterCreator { get; set; }
         public BuildingEntity CurrentBuilding { get; set; }
 
-        internal List<Item.ItemEntity> ItemsInUse { get; set; } = new List<Item.ItemEntity>();
+        internal List<ItemEntity> ItemsInUse { get; set; } = new List<Item.ItemEntity>();
         internal Cellphone CurrentCellphone => ItemsInUse.Single(x => x is Cellphone) as Cellphone;
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
@@ -72,38 +73,6 @@ namespace VRP.Serverside.Entities.Core
             OnPlayerDimensionChanged += OnOnPlayerDimensionChanged;
         }
 
-        public static CharacterEntity Create(AccountEntity accountEntity, string name, string surname, PedHash model)
-        {
-            int randomIndex = Utils.RandomRange(Constant.Items.ServerSpawnPositions.Count);
-
-            CharacterModel dbModel = new CharacterModel
-            {
-                Account = accountEntity.DbModel,
-                Name = name,
-                Surname = surname,
-                Money = 10000,
-                BankMoney = 1000000,
-                CreateTime = DateTime.Now,
-                Model = model.ToString(),
-                HitPoints = 100,
-                IsAlive = true,
-                LastPositionX = Constant.Items.ServerSpawnPositions[randomIndex].X,
-                LastPositionY = Constant.Items.ServerSpawnPositions[randomIndex].Y,
-                LastPositionZ = Constant.Items.ServerSpawnPositions[randomIndex].Z,
-                LastPositionRotX = 0f,
-                LastPositionRotY = 0f,
-                LastPositionRotZ = 0f
-            };
-
-            using (CharactersRepository repository = new CharactersRepository())
-            {
-                repository.Insert(dbModel);
-                repository.Save();
-            }
-
-            return new CharacterEntity(accountEntity, dbModel);
-        }
-
         public void Save()
         {
             if (AccountEntity != null)
@@ -127,34 +96,7 @@ namespace VRP.Serverside.Entities.Core
         {
             AccountEntity = accountEntity;
             accountEntity.CharacterEntity = this;
-
-            CharacterModel character = accountEntity.CharacterEntity.DbModel;
-
-            accountEntity.Client.Nametag = $"({accountEntity.ServerId}) {accountEntity.CharacterEntity.FormatName}";
-
-            accountEntity.Client.Name = accountEntity.CharacterEntity.FormatName;
-            accountEntity.Client.SetSkin(NAPI.Util.PedNameToModel(character.Model));
-
-            NAPI.Entity.SetEntityPosition(accountEntity.Client, new Vector3(character.LastPositionX, character.LastPositionY, character.LastPositionZ));
-
-            accountEntity.Client.Dimension = 0;
-
-            if (character.MinutesToRespawn > 0)
-                NAPI.Player.SetPlayerHealth(accountEntity.Client, -1);
-            else
-                NAPI.Player.SetPlayerHealth(accountEntity.Client, character.HitPoints);
-
-
-            accountEntity.CharacterEntity.CanTalk = true;
-            accountEntity.CharacterEntity.CanNarrate = true;
-            accountEntity.CharacterEntity.CanSendPrivateMessage = true;
-            accountEntity.CharacterEntity.CanCommand = true;
-            accountEntity.CharacterEntity.CanPay = true;
-
-            accountEntity.Client.TriggerEvent("MoneyChanged", character.Money.ToString(CultureInfo.InvariantCulture));
-            accountEntity.Client.TriggerEvent("ToggleHud", true);
-            accountEntity.Client.Notify($"Twoja postaæ ~g~~h~{accountEntity.CharacterEntity.FormatName} zosta³a pomyœlnie za³adowana ¿yczymy mi³ej gry!");
-            CharacterLoggedIn?.Invoke(AccountEntity.Client, this);
+            Spawn();
         }
 
         #region DimensionManager
@@ -168,11 +110,34 @@ namespace VRP.Serverside.Entities.Core
 
         #endregion
 
-        private void OnOnPlayerDimensionChanged(object sender, DimensionChangeEventArgs e)
+        public override void Spawn()
         {
-            AccountEntity account = e.Player.GetAccountEntity();
-            account.CharacterEntity.DbModel.CurrentDimension = (int)e.CurrentDimension;
-            account.CharacterEntity.Save();
+            AccountEntity.Client.Nametag = $"({AccountEntity.ServerId}) {AccountEntity.CharacterEntity.FormatName}";
+            AccountEntity.Client.Name = AccountEntity.CharacterEntity.FormatName;
+
+            // FixMe obs³uga kreatora postaci
+            AccountEntity.Client.SetSkin(NAPI.Util.PedNameToModel(DbModel.Model));
+
+            // FixMe spawn w domu
+            AccountEntity.Client.Position = new Vector3(DbModel.LastPositionX, DbModel.LastPositionY, DbModel.LastPositionZ);
+            AccountEntity.Client.Dimension = 0;
+
+            if (DbModel.MinutesToRespawn > 0)
+                NAPI.Player.SetPlayerHealth(AccountEntity.Client, -1);
+            else
+                NAPI.Player.SetPlayerHealth(AccountEntity.Client, DbModel.HitPoints);
+
+            CanTalk = true;
+            CanNarrate = true;
+            CanSendPrivateMessage = true;
+            CanCommand = true;
+            CanPay = true;
+
+            AccountEntity.Client.TriggerEvent(Constant.RemoteEvents.RemoteEvents.CharacterMoneyChangeRequested, DbModel.Money.ToString(CultureInfo.InvariantCulture));
+            AccountEntity.Client.Notify(
+                $"Twoja postaæ {FormatName} zosta³a pomyœlnie za³adowana ¿yczymy mi³ej gry!", NotificationType.Info);
+
+            CharacterLoggedIn?.Invoke(AccountEntity.Client, this);
         }
 
         public override void Dispose()
@@ -180,9 +145,11 @@ namespace VRP.Serverside.Entities.Core
             Description?.Dispose();
         }
 
-        public override void Spawn()
+        private void OnOnPlayerDimensionChanged(object sender, DimensionChangeEventArgs e)
         {
-            throw new NotImplementedException();
+            AccountEntity account = e.Player.GetAccountEntity();
+            account.CharacterEntity.DbModel.CurrentDimension = (int)e.CurrentDimension;
+            account.CharacterEntity.Save();
         }
     }
 }

@@ -27,7 +27,12 @@ namespace VRP.Serverside.Core.Extensions
 
         public static void Notify(this Client client, string message, bool flashing = false)
         {
-            client.SendNotification(message, flashing);
+            NAPI.Notification.SendNotificationToPlayer(client, message, flashing);
+        }
+
+        public static void Notify(this Client client, string message, NotificationType notificationType)
+        {
+            client.TriggerEvent(Constant.RemoteEvents.RemoteEvents.PlayerNotifyRequested, message, notificationType);
         }
 
         public static Color GetRankColor(this Client client)
@@ -40,20 +45,19 @@ namespace VRP.Serverside.Core.Extensions
             return new Color(255, 255, 255);
         }
 
-        //slot-- żeby numerowanie dla graczy było od 1 do 3
         public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group)
         {
             group = null;
             if (slot > 0 || slot <= 3)
             {
-                slot--;
+                slot--; // slot-- żeby numerowanie dla graczy było od 1 do 3
                 List<GroupEntity> groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity()).ToList();
                 group = slot < groups.Count ? groups[slot] : null;
             }
             return group != null;
         }
 
-        #region Pieniądze
+        #region Money
         public static bool HasMoney(this Client client, decimal count, bool bank = false)
         {
            return MoneyManager.HasMoney(client, count, bank);

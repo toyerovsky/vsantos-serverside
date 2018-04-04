@@ -15,7 +15,7 @@ using VRP.vAPI.Services.Model;
 
 namespace VRP.vAPI.Services
 {
-    public class UsersWatcher : IUsersWatcher
+    public class UsersWatcher : IUsersWatcher, IDisposable
     {
         /// <summary>
         /// Key is user token
@@ -23,9 +23,11 @@ namespace VRP.vAPI.Services
         private readonly Dictionary<Guid, AppUser> _onlineUsers = new Dictionary<Guid, AppUser>();
         private readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
 
+        private Task WatcherTask { get; }
+
         public UsersWatcher()
         {
-            Task.Run(() => Watch());
+            WatcherTask = Task.Run(() => Watch());
         }
 
         private void Watch()
@@ -110,5 +112,11 @@ namespace VRP.vAPI.Services
 
         public bool TryGetUser(Guid token, out AppUser appUser) =>
             _onlineUsers.TryGetValue(token, out appUser);
+
+        public void Dispose()
+        {
+            _manualResetEvent?.Dispose();
+            WatcherTask?.Dispose();
+        }
     }
 }

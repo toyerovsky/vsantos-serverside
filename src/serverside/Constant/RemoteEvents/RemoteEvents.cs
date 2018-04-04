@@ -14,5 +14,7 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string PlayerNotifyRequested = "playerNotifyRequested";
 
         public const string CharacterSelectRequested = "characterSelectRequested";
+
+        public const string CharacterMoneyChangeRequested = "characterMoneyChangeRequested";
     }
 }
