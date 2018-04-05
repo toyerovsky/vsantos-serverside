@@ -26,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public ItemsRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(ItemModel model) => _context.Items.Add(model);
@@ -46,9 +45,13 @@ namespace VRP.Core.Repositories
 
         public ItemModel Get(int id) => GetAll(i => i.Id == id).Single();
 
-        public IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> predicate = null)
+        public IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> expression = null)
         {
-            return _context.Items
+            IQueryable<ItemModel> items = expression != null ?
+                _context.Items.Where(expression) :
+                _context.Items;
+
+            return items
                 .Include(item => item.Creator)
                 .Include(item => item.Building)
                     .ThenInclude(building => building.Creator)

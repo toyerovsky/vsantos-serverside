@@ -45,9 +45,13 @@ namespace VRP.Core.Repositories
 
         public GroupModel Get(int id) => GetAll(g => g.Id == id).Single();
 
-        public IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> predicate = null)
+        public IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> expression = null)
         {
-            return _context.Groups
+            IQueryable<GroupModel> groups = expression != null ?
+                _context.Groups.Where(expression) :
+                _context.Groups;
+
+            return groups
                 .Include(group => group.BossCharacter)
                 .Include(group => group.Workers)
                     .ThenInclude(worker => worker.Character)

@@ -26,7 +26,6 @@ namespace VRP.Core.Repositories
 
         public PenaltiesRepository() : this(RolePlayContextFactory.NewContext())
         {
-
         }
 
         public void Insert(PenaltyModel model) => _context.Penaltlies.Add(model);
@@ -46,9 +45,13 @@ namespace VRP.Core.Repositories
 
         public PenaltyModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> predicate = null)
+        public IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {
-            return _context.Penaltlies
+            IQueryable<PenaltyModel> penatlies = expression != null ?
+                _context.Penaltlies.Where(expression) :
+                _context.Penaltlies;
+
+            return penatlies
                 .Include(penatly => penatly.Account)
                 .Include(penatly => penatly.Creator);
         }

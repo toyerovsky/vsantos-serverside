@@ -45,9 +45,13 @@ namespace VRP.Core.Repositories
 
         public VehicleModel Get(int id) => GetAll(v => v.Id == id).Single();
 
-        public IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> predicate = null)
+        public IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
         {
-            return _context.Vehicles
+            IQueryable<VehicleModel> vehicles = expression != null ?
+                _context.Vehicles.Where(expression) :
+                _context.Vehicles;
+
+            return vehicles
                 .Include(vehicle => vehicle.Creator)
                 .Include(vehicle => vehicle.Character)
                     .ThenInclude(character => character.Account)

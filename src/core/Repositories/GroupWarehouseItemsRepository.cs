@@ -45,9 +45,13 @@ namespace VRP.Core.Repositories
 
         public GroupWarehouseItemModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> predicate = null)
+        public IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
         {
-            return _context.GroupWarehouseItems;
+            IQueryable<GroupWarehouseItemModel> groupWarehouseItems = expression != null ?
+                _context.GroupWarehouseItems.Where(expression) :
+                _context.GroupWarehouseItems;
+
+            return groupWarehouseItems;
         }
 
         public void Save() => _context.SaveChanges();

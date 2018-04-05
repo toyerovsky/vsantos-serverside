@@ -48,9 +48,13 @@ namespace VRP.Core.Repositories
 
         public GroupWarehouseOrderModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<GroupWarehouseOrderModel> GetAll(Expression<Func<GroupWarehouseOrderModel, bool>> predicate = null)
+        public IEnumerable<GroupWarehouseOrderModel> GetAll(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
         {
-            return _context.GroupWarehouseOrders
+            IQueryable<GroupWarehouseOrderModel> groupWarehouseOrders = expression != null ?
+                _context.GroupWarehouseOrders.Where(expression) :
+                _context.GroupWarehouseOrders;
+
+            return groupWarehouseOrders
                 .Include(order => order.Getter);
         }
 

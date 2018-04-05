@@ -45,9 +45,13 @@ namespace VRP.Core.Repositories
 
         public TelephoneMessageModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<TelephoneMessageModel> GetAll(Expression<Func<TelephoneMessageModel, bool>> predicate = null)
+        public IEnumerable<TelephoneMessageModel> GetAll(Expression<Func<TelephoneMessageModel, bool>> expression = null)
         {
-            return _context.TelephoneMessages
+            IQueryable<TelephoneMessageModel> telephoneMessages = expression != null ?
+                _context.TelephoneMessages.Where(expression) :
+                _context.TelephoneMessages;
+
+            return telephoneMessages
                 .Include(message => message.Cellphone)
                     .ThenInclude(cellphone => cellphone.Creator)
                 .Include(message => message.Cellphone)

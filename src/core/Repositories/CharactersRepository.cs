@@ -45,10 +45,10 @@ namespace VRP.Core.Repositories
 
         public CharacterModel Get(int id) => GetAll(c => c.Id == id).Single();
 
-        public IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> predicate = null)
+        public IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {
-            IQueryable<CharacterModel> characters = predicate != null ?
-                _context.Characters.Where(predicate).AsQueryable() :
+            IQueryable<CharacterModel> characters = expression != null ?
+                _context.Characters.Where(expression) :
                 _context.Characters;
 
             return characters

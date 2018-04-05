@@ -47,10 +47,10 @@ namespace VRP.Core.Repositories
 
         public CrimeBotModel Get(GroupModel model) => GetAll(c => c.GroupModel.Id == model.Id).Single();
 
-        public IEnumerable<CrimeBotModel> GetAll(Expression<Func<CrimeBotModel, bool>> predicate = null)
+        public IEnumerable<CrimeBotModel> GetAll(Expression<Func<CrimeBotModel, bool>> expression = null)
         {
-            IQueryable<CrimeBotModel> crimeBots = predicate != null ?
-                _context.CrimeBots.Where(predicate).AsQueryable() :
+            IQueryable<CrimeBotModel> crimeBots = expression != null ?
+                _context.CrimeBots.Where(expression) :
                 _context.CrimeBots;
 
             return crimeBots

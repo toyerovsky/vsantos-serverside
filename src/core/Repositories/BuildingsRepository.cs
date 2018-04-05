@@ -45,10 +45,10 @@ namespace VRP.Core.Repositories
 
         public BuildingModel Get(int id) => GetAll(b => b.Id == id).Single();
 
-        public IEnumerable<BuildingModel> GetAll(Expression<Func<BuildingModel, bool>> predicate = null)
+        public IEnumerable<BuildingModel> GetAll(Expression<Func<BuildingModel, bool>> expression = null)
         {
-            IQueryable<BuildingModel> buildings = predicate != null ?
-                _context.Buildings.Where(predicate).AsQueryable() :
+            IQueryable<BuildingModel> buildings = expression != null ?
+                _context.Buildings.Where(expression) :
                 _context.Buildings;
 
             return buildings
