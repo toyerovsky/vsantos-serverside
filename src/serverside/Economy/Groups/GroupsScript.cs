@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Tools;
+using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities;
@@ -251,9 +252,11 @@ namespace VRP.Serverside.Economy.Groups
         public void ShowGroupMenu(Client sender, byte slot)
         {
             AccountEntity player = sender.GetAccountEntity();
-            if (!EntityHelper.GetPlayerGroups(player).Any())
+            // Nie wiem czy nie popsuje to czegos gdy grupa jest - do sprawdzenia
+            if ((EntityHelper.GetPlayerGroups(player) == null ?  true :  false) )
             {
                 sender.Notify("Nie jesteś członkiem żadnej grupy.");
+                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Nie jesteś członkiem żadnej grupy.", NotificationType.Info);
                 return;
             }
 

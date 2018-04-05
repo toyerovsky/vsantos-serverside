@@ -40,7 +40,7 @@ namespace VRP.Serverside.Core.Scripts
         [Command("try", "~y~UŻYJ: ~w~ /try [treść]", GreedyArg = true, Alias = "sprobuj")]
         public void Try(Client player, string message)
         {
-            SendMessageToNearbyPlayers(player, Utils.RandomRange(2) == 0 ? "zawiódł próbując" + message, ChatMessageType.ServerMe : "odniósł sukces próbując "  + message, ChatMessageType.ServerMe);
+            SendMessageToNearbyPlayers(player, Utils.RandomRange(2) == 0 ? "zawiódł próbując" + message : "odniósł sukces próbując "  + message, ChatMessageType.ServerMe);
 
             SaidEventHandler handler = OnPlayerSaid;
             SaidEventArgs eventArgs = new SaidEventArgs(player, message, ChatMessageType.ServerMe);
