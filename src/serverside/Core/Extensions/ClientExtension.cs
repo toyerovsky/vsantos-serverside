@@ -37,6 +37,21 @@ namespace VRP.Serverside.Core.Extensions
             client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, notificationType, title);
         }
 
+        public static void SendWarning(this Client client, string message, string title = "")
+        {
+            client.Notify(message, NotificationType.Warning, title);
+        }
+
+        public static void SendError(this Client client, string message, string title = "")
+        {
+            client.Notify(message, NotificationType.Error, title);
+        }
+
+        public static void SendInfo(this Client client, string message, string title = "")
+        {
+            client.Notify(message, NotificationType.Info, title);
+        }
+
         public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group)
         {
             group = null;
