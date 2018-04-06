@@ -8,7 +8,6 @@ using System;
 using GTANetworkAPI;
 using VRP.Core.Enums;
 using VRP.Core.Interfaces;
-using VehicleClass = VRP.Serverside.Core.Extensions.VehicleClass;
 
 namespace VRP.Serverside.Entities.Common.Carshop.Models
 {

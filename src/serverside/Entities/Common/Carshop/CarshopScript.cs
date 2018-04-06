@@ -17,7 +17,6 @@ using VRP.Serverside.Entities.Common.Carshop.Models;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Vehicle;
 using FullPosition = VRP.Serverside.Core.FullPosition;
-using VehicleClass = VRP.Serverside.Core.Extensions.VehicleClass;
 
 namespace VRP.Serverside.Entities.Common.Carshop
 {

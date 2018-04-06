@@ -16,7 +16,6 @@ using VRP.Serverside.Entities.Core.Item;
 using VRP.Serverside.Entities.Interfaces;
 using VRP.Serverside.Entities.Misc.Description;
 using FullPosition = VRP.Serverside.Core.FullPosition;
-using VehicleClass = VRP.Serverside.Core.Extensions.VehicleClass;
 
 namespace VRP.Serverside.Entities.Core.Vehicle
 {

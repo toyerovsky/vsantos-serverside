@@ -14,7 +14,6 @@ using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using ChatMessageType = VRP.Core.Enums.ChatMessageType;
-using VehicleClass = VRP.Serverside.Core.Extensions.VehicleClass;
 
 namespace VRP.Serverside.Entities.Core.Vehicle
 {

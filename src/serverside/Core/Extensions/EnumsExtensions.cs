@@ -6,7 +6,10 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using GTANetworkAPI;
+using VRP.Core.Enums;
 
 namespace VRP.Serverside.Core.Extensions
 {
@@ -31,65 +34,22 @@ namespace VRP.Serverside.Core.Extensions
             return null;
         }
 
-    }
-    [Flags]
-    public enum AnimationFlags
-    {
-        Loop = 1 << 0,
-        StopOnLastFrame = 1 << 1,
-        OnlyAnimateUpperBody = 1 << 4,
-        AllowPlayerControl = 1 << 5,
-        Cancellable = 1 << 7
-    }
+        public static string GetColoredRankName(this ServerRank serverRank)
+        {
+            Color color;
 
-    public enum VehicleClass
-    {
-        Compact = 0,
-        Sedans = 1,
-        Suv = 2,
-        Coupe = 3,
-        Muscle = 4,
-        SportClassics = 5,
-        Sports = 6,
-        Super = 7,
-        Motorcycles = 8,
-        Offroad = 9,
-        Industrial = 10,
-        Utility = 11,
-        Vans = 12,
-        Cycle = 13,
-        Boat = 14,
-        Heli = 15,
-        Planes = 16,
-        Service = 17,
-        Emergency = 18,
-        Military = 19,
-        Commercial = 20,
-        Train = 21,
-        Trailer = 22
-    }
+            if (serverRank >= ServerRank.Support && serverRank <= ServerRank.Support6)
+                color = new Color(51, 143, 255);
+            else if (serverRank >= ServerRank.GameMaster && serverRank <= ServerRank.GameMaster5)
+                color = new Color(0, 109, 15);
+            else if (serverRank >= ServerRank.Administrator && serverRank <= ServerRank.Adminadministrator3)
+                color = new Color(117, 13, 18);
+            else if (serverRank >= ServerRank.Zarzad && serverRank <= ServerRank.Zarzad2)
+                color = new Color(255, 0, 0);
+            else
+                color = new Color(255, 255, 255);
 
-    public enum Wheel
-    {
-        FrontLeft,
-        FrontRight,
-        MiddleLeft,
-        MiddleRight,
-        RearLeft,
-        RearRight,
-        BikeFront,
-        BikeRear
-    }
-
-    public enum Doors
-    {
-        FrontLeftDoor,
-        FrontRightDoor,
-        BackLeftDoor,
-        BackRightDoor,
-        Hood,
-        Trunk,
-        Back,
-        Back2,
+            return $"<p style='color:{color.ToHex()}'>{serverRank.ToString().Where(char.IsLetter)}</p>";
+        }
     }
 }

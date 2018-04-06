@@ -15,7 +15,6 @@ using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Corners.Models;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Interfaces;
-using AnimationFlags = VRP.Serverside.Core.Extensions.AnimationFlags;
 
 namespace VRP.Serverside.Entities.Common.Corners
 {

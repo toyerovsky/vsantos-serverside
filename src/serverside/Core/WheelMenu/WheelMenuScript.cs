@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core.Vehicle;

@@ -18,7 +18,6 @@ using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Group;
-using AnimationFlags = VRP.Serverside.Core.Extensions.AnimationFlags;
 
 namespace VRP.Serverside.Economy.Groups
 {
