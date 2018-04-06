@@ -101,15 +101,25 @@ namespace VRP.Serverside.Core.Scripts
                 return;
             }
 
-            Client getter = EntityHelper.GetAccountByServerId(id).Client;
-            if (getter == null)
+            try
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
-                return;
+                Client getter = EntityHelper.GetAccountByServerId(id).Client;
+                sender.SendChatMessage($"~o~ [{getter.GetAccountEntity().ServerId}] {getter.Name}: {message}");
+                getter.SendChatMessage($"~o~ [{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}");
             }
+            catch (Exception e)
+            {
+                //Client getter = null;
+               // if (getter == null)
+                //{
+                    sender.SendError("Nie znaleziono gracza o podanym Id.");
+                    return;
+               // }
+            }
+           
 
-            sender.SendChatMessage($"~o~ [{getter.GetAccountEntity().ServerId}] {getter.Name}: {message}");
-            getter.SendChatMessage($"~o~ [{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}");
+            //sender.SendChatMessage($"~o~ [{getter.GetAccountEntity().ServerId}] {getter.Name}: {message}");
+           // getter.SendChatMessage($"~o~ [{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}");
         }
 
         [Command("b", GreedyArg = true)]
