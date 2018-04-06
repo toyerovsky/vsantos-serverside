@@ -75,14 +75,14 @@ namespace VRP.Serverside.Entities
 
         public static void Add(AtmEntity atmEntity) => Atms.Add(atmEntity);
 
-        public static AtmEntity GetAtm(int id) => Atms.Single(atm => atm.Data.Id == id);
+        public static AtmEntity GetAtm(int id) => Atms.FirstOrDefault(atm => atm.Data.Id == id);
         public static AtmEntity GetAtm(Vector3 position, float precision = float.MinValue)
         {
             return precision.Equals(float.MinValue)
                 ? Atms.Single(atm => atm.ColShape.Position == position)
                 : Atms.Single(atm => atm.ColShape.Position.DistanceTo(position) < precision);
         }
-        public static AtmEntity GetAtm(string filePath) => Atms.Single(atm => atm.Data.FilePath == filePath);
+        public static AtmEntity GetAtm(string filePath) => Atms.FirstOrDefault(atm => atm.Data.FilePath == filePath);
 
         public static void Remove(AtmEntity atmEntity) => Atms.Remove(atmEntity);
 
@@ -94,7 +94,7 @@ namespace VRP.Serverside.Entities
 
         public static void Add(BusStopEntity busStopEntity) => BusStops.Add(busStopEntity);
 
-        public static BusStopEntity GetBusStop(int id) => BusStops.Single(busStop => busStop.Data.Id == id);
+        public static BusStopEntity GetBusStop(int id) => BusStops.FirstOrDefault(busStop => busStop.Data.Id == id);
 
         public static BusStopEntity GetBusStop(Vector3 position, float precision = float.MinValue)
         {
@@ -103,7 +103,7 @@ namespace VRP.Serverside.Entities
                 : BusStops.Single(busStop => busStop.ColShape.Position.DistanceTo(position) < precision);
         }
 
-        public static BusStopEntity GetBusStop(string name) => BusStops.Single(busStop => busStop.Data.Name == name);
+        public static BusStopEntity GetBusStop(string name) => BusStops.FirstOrDefault(busStop => busStop.Data.Name == name);
 
         public static void Remove(BusStopEntity busStopEntity) => BusStops.Remove(busStopEntity);
 
@@ -115,7 +115,7 @@ namespace VRP.Serverside.Entities
 
         public static void Add(CarshopEntity carshopEntity) => Carshops.Add(carshopEntity);
 
-        public static CarshopEntity GetCarshop(int id) => Carshops.Single(carshop => carshop.Data.Id == id);
+        public static CarshopEntity GetCarshop(int id) => Carshops.FirstOrDefault(carshop => carshop.Data.Id == id);
 
         public static CarshopEntity GetCarshop(Vector3 position, float precision = float.MinValue)
         {
@@ -124,7 +124,7 @@ namespace VRP.Serverside.Entities
                 : Carshops.Single(carshop => carshop.ColShape.Position.DistanceTo(position) < precision);
         }
 
-        public static CarshopEntity GetCarshop(string filePath) => Carshops.Single(carshop => carshop.Data.FilePath == filePath);
+        public static CarshopEntity GetCarshop(string filePath) => Carshops.FirstOrDefault(carshop => carshop.Data.FilePath == filePath);
 
         public static void Remove(CarshopEntity carshopEntity) => Carshops.Remove(carshopEntity);
 
@@ -136,7 +136,7 @@ namespace VRP.Serverside.Entities
 
         public static void Add(DriveThruEntity driveThruEntity) => DriveThrus.Add(driveThruEntity);
 
-        public static DriveThruEntity GetDriveThru(int id) => DriveThrus.Single(driveThru => driveThru.Data.Id == id);
+        public static DriveThruEntity GetDriveThru(int id) => DriveThrus.FirstOrDefault(driveThru => driveThru.Data.Id == id);
 
         public static DriveThruEntity GetDriveThru(Vector3 position, float precision = 0f)
         {
@@ -145,8 +145,7 @@ namespace VRP.Serverside.Entities
                 : DriveThrus.First(driveThru => driveThru.ColShape.Position.DistanceTo(position) < precision);
         }
 
-        public static DriveThruEntity GetDriveThru(string filePath) =>
-            DriveThrus.Single(driveThru => driveThru.Data.FilePath == filePath);
+        public static DriveThruEntity GetDriveThru(string filePath) => DriveThrus.FirstOrDefault(driveThru => driveThru.Data.FilePath == filePath);
 
         public static void Remove(DriveThruEntity driveThruEntity) => DriveThrus.Remove(driveThruEntity);
 
@@ -158,7 +157,7 @@ namespace VRP.Serverside.Entities
 
         public static void Add(MarketEntity martketEntity) => Markets.Add(martketEntity);
 
-        public static MarketEntity GetMarket(int id) => Markets.Single(market => market.Data.Id == id);
+        public static MarketEntity GetMarket(int id) => Markets.FirstOrDefault(market => market.Data.Id == id);
 
         public static MarketEntity GetMarket(Vector3 position, float precision = float.MinValue)
         {
@@ -167,7 +166,7 @@ namespace VRP.Serverside.Entities
                 : Markets.First(market => market.ColShape.Position.DistanceTo(position) < precision);
         }
 
-        public static MarketEntity GetMarket(string filePath) => Markets.Single(market => market.Data.FilePath == filePath);
+        public static MarketEntity GetMarket(string filePath) => Markets.FirstOrDefault(market => market.Data.FilePath == filePath);
 
         public static void Remove(MarketEntity marketEntity) => Markets.Remove(marketEntity);
 
@@ -203,7 +202,7 @@ namespace VRP.Serverside.Entities
 
         public static void Add(CornerEntity cornerEntity) => Corners.Add(cornerEntity);
 
-        public static CornerEntity GetCorner(int id) => Corners.Single(corner => corner.Data.Id == id);
+        public static CornerEntity GetCorner(int id) => Corners.FirstOrDefault(corner => corner.Data.Id == id);
 
         public static CornerEntity GetCorner(Vector3 position, float precision = float.MinValue)
         {
@@ -212,7 +211,7 @@ namespace VRP.Serverside.Entities
                 : Corners.First(corner => corner.ColShape.Position.DistanceTo(position) < precision);
         }
 
-        public static CornerEntity GetCorner(string filePath) => Corners.Single(corner => corner.Data.FilePath == filePath);
+        public static CornerEntity GetCorner(string filePath) => Corners.FirstOrDefault(corner => corner.Data.FilePath == filePath);
 
         public static void Remove(CornerEntity corner) => Corners.Remove(corner);
 
@@ -241,13 +240,13 @@ namespace VRP.Serverside.Entities
 
         public static void Remove(AccountEntity accountEntity) => Accounts[accountEntity.ServerId] = null;
 
-        public static AccountEntity GetAccountByServerId(int serverId) => Accounts.Find(account => account.ServerId == serverId);
+        public static AccountEntity GetAccountByServerId(int serverId) => Accounts.FirstOrDefault(account => account.ServerId == serverId);
 
-        public static AccountEntity GetById(int accountId) => Accounts.Find(account => account.DbModel.Id == accountId);
+        public static AccountEntity GetById(int accountId) => Accounts.FirstOrDefault(account => account.DbModel.Id == accountId);
 
         public static AccountEntity GetAccountByCharacterId(int characterId)
         {
-            return Accounts.Find(account => account.CharacterEntity.DbModel.Id == characterId);
+            return Accounts.FirstOrDefault(account => account.CharacterEntity.DbModel.Id == characterId);
         }
 
         public static IEnumerable<AccountEntity> GetAccounts() => Accounts;
@@ -259,7 +258,8 @@ namespace VRP.Serverside.Entities
         public static CharacterEntity GetCharacterByOnlineCellphoneNumber(int number)
         {
             return GetAccounts()
-                .Single(account => account.CharacterEntity?.CurrentCellphone.Number == number).CharacterEntity;
+                .FirstOrDefault(account => account.CharacterEntity?.CurrentCellphone.Number == number)
+                ?.CharacterEntity;
         }
 
         #endregion
@@ -269,13 +269,13 @@ namespace VRP.Serverside.Entities
 
         public static void Remove(VehicleEntity vehicle) => Vehicles.Remove(vehicle);
 
-        public static VehicleEntity GetVehicle(Vehicle vehicle) => Vehicles.Find(x => x.GameVehicle == vehicle);
+        public static VehicleEntity GetVehicle(Vehicle vehicle) => Vehicles.FirstOrDefault(x => x.GameVehicle == vehicle);
 
-        public static VehicleEntity GetVehicle(NetHandle vehicle) => Vehicles.Find(x => x.GameVehicle.Handle == vehicle);
+        public static VehicleEntity GetVehicle(NetHandle vehicle) => Vehicles.FirstOrDefault(x => x.GameVehicle.Handle == vehicle);
 
         public static VehicleEntity GetVehicle(long id)
         {
-            return id > -1 ? Vehicles.Find(x => x.DbModel.Id == id) : null;
+            return Vehicles.FirstOrDefault(x => x.DbModel.Id == id);
         }
 
         public static IEnumerable<VehicleEntity> GetVehicles() => Vehicles;
@@ -288,18 +288,13 @@ namespace VRP.Serverside.Entities
 
         public static GroupEntity GetGroup(long groupId)
         {
-            return groupId > -1 ? Groups.Find(x => x.Id == groupId) : null;
+            return Groups.FirstOrDefault(x => x.Id == groupId);
         }
 
         public static IEnumerable<GroupEntity> GetPlayerGroups(AccountEntity accountEntity)
         {
-            if (Groups.Any(g => g.DbModel.Workers.Any(x => x.Character.Id == accountEntity.CharacterEntity.DbModel.Id)))
-            {
-                return Groups.Where(
-                    g => g.DbModel.Workers.Any(x => x.Character?.Id == accountEntity.CharacterEntity.DbModel.Id))
-                .ToList();
-            }
-            return null;
+            return Groups.Where(
+                g => g.DbModel.Workers.Any(x => x.Character?.Id == accountEntity.CharacterEntity.DbModel.Id));
         }
 
         public static IEnumerable<GroupEntity> GetGroups() => Groups;
@@ -314,17 +309,17 @@ namespace VRP.Serverside.Entities
 
         public static BuildingEntity GetBuilding(long buildingId)
         {
-            return buildingId > -1 ? Buildings.Find(x => x.DbModel.Id == buildingId) : null;
+            return Buildings.FirstOrDefault(x => x.DbModel.Id == buildingId);
         }
 
         public static BuildingEntity GetBuilding(string buildingName)
         {
-            return Buildings.Single(x => x.DbModel.Name.StartsWith(buildingName.ToLower()));
+            return Buildings.FirstOrDefault(x => x.DbModel.Name.StartsWith(buildingName.ToLower()));
         }
 
         public static IEnumerable<BuildingEntity> GetPlayerBuildings(AccountEntity accountEntity)
         {
-            return Buildings.Where(b => b.DbModel.Character.Id == accountEntity.CharacterEntity.DbModel.Id).ToList();
+            return Buildings.Where(b => b.DbModel.Character.Id == accountEntity.CharacterEntity.DbModel.Id);
         }
 
         public static IEnumerable<BuildingEntity> GetBuildings() => Buildings;

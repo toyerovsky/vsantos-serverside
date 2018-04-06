@@ -254,8 +254,7 @@ namespace VRP.Serverside.Economy.Groups
         public void ShowGroupMenu(Client sender, byte slot)
         {
             AccountEntity player = sender.GetAccountEntity();
-            // Nie wiem czy nie popsuje to czegos gdy grupa jest - do sprawdzenia
-            if ((EntityHelper.GetPlayerGroups(player) == null ? true : false))
+            if (!EntityHelper.GetPlayerGroups(player).Any())
             {
                 sender.Notify("Nie jesteś członkiem żadnej grupy.", NotificationType.Warning);
                 return;
