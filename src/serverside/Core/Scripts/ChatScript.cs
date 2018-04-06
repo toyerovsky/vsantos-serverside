@@ -43,7 +43,7 @@ namespace VRP.Serverside.Core.Scripts
         public void Try(Client sender, string message)
         {
             CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-            SendMessageToNearbyPlayers(character, Utils.RandomRange(100) <= 49 ? "zawiódł próbując" + message : "odniósł sukces próbując " + message, ChatMessageType.ServerMe);
+            SendMessageToNearbyPlayers(character, Utils.RandomRange(100) <= 49 ? "zawiódł próbując " + message : "odniósł sukces próbując " + message, ChatMessageType.ServerMe);
 
             SaidEventHandler handler = OnPlayerSaid;
             SaidEventArgs eventArgs = new SaidEventArgs(character, message, ChatMessageType.ServerMe);

@@ -1,7 +1,7 @@
-/* Copyright (C) Przemys³aw Postrach - All Rights Reserved
+ï»¿/* Copyright (C) PrzemysÂ³aw Postrach - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Przemys³aw Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ * Written by PrzemysÂ³aw Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
 using System;
@@ -146,7 +146,7 @@ namespace VRP.Serverside.Entities.Core
             AccountEntity.Client.Nametag = $"({AccountEntity.ServerId}) {AccountEntity.CharacterEntity.FormatName}";
             AccountEntity.Client.Name = AccountEntity.CharacterEntity.FormatName;
 
-            // FixMe obs³uga kreatora postaci
+            // FixMe obsÂ³uga kreatora postaci
             AccountEntity.Client.SetSkin(NAPI.Util.PedNameToModel(DbModel.Model));
 
             // FixMe spawn w domu
@@ -165,8 +165,8 @@ namespace VRP.Serverside.Entities.Core
             CanPay = true;
 
             AccountEntity.Client.TriggerEvent(Constant.RemoteEvents.RemoteEvents.CharacterMoneyChangeRequested, DbModel.Money.ToString(CultureInfo.InvariantCulture));
-            AccountEntity.Client.Notify(
-                $"Twoja postaæ {FormatName} zosta³a pomyœlnie za³adowana ¿yczymy mi³ej gry!", NotificationType.Info);
+            AccountEntity.Client.SendInfo(
+                $"Twoja postaÄ‡ {FormatName} zostaÅ‚a pomyÅ›lnie zaÅ‚adowana Å¼yczymy miÅ‚ej gry!");
 
             CharacterSelected?.Invoke(AccountEntity.Client, this);
         }
