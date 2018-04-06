@@ -34,44 +34,7 @@ namespace VRP.Serverside.Core.Extensions
 
         public static void Notify(this Client client, string message, NotificationType notificationType, string title = "")
         {
-<<<<<<< Updated upstream
             client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, notificationType, title);
-=======
-            client.TriggerEvent(Constant.RemoteEvents.RemoteEvents.PlayerNotifyRequested, message, notificationType, title);
-        }
-
-        public static void SendWarning(this Client client, string message, string title = "")
-        {
-            client.Notify(message, NotificationType.Warning, title);
-        }
-
-        public static void SendError(this Client client, string message, string title = "")
-        {
-            client.Notify(message, NotificationType.Error, title);
-        }
-
-        public static void SendInfo(this Client client, string message, string title = "")
-        {
-            client.Notify(message, NotificationType.Info, title);
-        }
-
-        public static string GetColoredRankName(this ServerRank serverRank)
-        {
-            Color color;
-
-            if (serverRank >= ServerRank.Support && serverRank <= ServerRank.Support6)
-                color = new Color(51, 143, 255);
-            else if (serverRank >= ServerRank.GameMaster && serverRank <= ServerRank.GameMaster5)
-                color = new Color(0, 109, 15);
-            else if (serverRank >= ServerRank.Administrator && serverRank <= ServerRank.Adminadministrator3)
-                color = new Color(117, 13, 18);
-            else if (serverRank >= ServerRank.Zarzad && serverRank <= ServerRank.Zarzad2)
-                color = new Color(255, 0, 0);
-            else
-                color = new Color(255, 255, 255);
-
-            return $"<p style='color:{color.ToHex()}'>{serverRank.ToString().Where(char.IsLetter)}</p>";
->>>>>>> Stashed changes
         }
 
         public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group)
