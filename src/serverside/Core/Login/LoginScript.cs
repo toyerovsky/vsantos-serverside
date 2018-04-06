@@ -20,6 +20,7 @@ using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Login.RemoteData;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Core.Extensions;
 
 namespace VRP.Serverside.Core.Login
 {
@@ -128,6 +129,7 @@ namespace VRP.Serverside.Core.Login
 
             if (account.DbModel.Characters.Count == 0)
             {
+                //sender.Notify();
                 sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Twoje konto nie posiada żadnych postaci!", NotificationType.Info);
 
             }
