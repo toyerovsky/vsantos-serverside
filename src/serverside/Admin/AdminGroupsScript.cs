@@ -24,7 +24,7 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster2)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia grupy.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do tworzenia grupy.");
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace VRP.Serverside.Admin
             }
             catch (ColorConvertException)
             {
-                sender.Notify("Wprowadzony kolor jest nieprawidłowy.", NotificationType.Error);
+                sender.SendError("Wprowadzony kolor jest nieprawidłowy.");
                 return;
             }
 
@@ -61,19 +61,19 @@ namespace VRP.Serverside.Admin
                         Salary = 0
                     });
                     group.Save();
-                    sender.Notify($"Stworzyłeś grupę {group.GetColoredName()}.", NotificationType.Info);
+                    sender.SendInfo($"Stworzyłeś grupę {group.GetColoredName()}.");
                 }
                 else
                 {
-                    boss.Client.Notify("Nie posiadasz wolnych slotów grupowych.", NotificationType.Error);
+                    boss.Client.SendError("Nie posiadasz wolnych slotów grupowych.");
                     if (boss.Client != sender)
-                        sender.Notify(
-                            $"Gracz: {boss.Client.Name} nie posiada wolnych slotów grupowych.", NotificationType.Error);
+                        sender.SendError(
+                            $"Gracz: {boss.Client.Name} nie posiada wolnych slotów grupowych.");
                 }
             }
             else
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
+                sender.SendError("Nie znaleziono gracza o podanym Id.");
             }
         }
 
@@ -82,7 +82,7 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do ustawienia wchodzenia do grupy.", NotificationType.Error);
+                sender.SendError("Nie posiadasz uprawnień do ustawienia wchodzenia do grupy.");
                 return;
             }
 
@@ -94,7 +94,7 @@ namespace VRP.Serverside.Admin
 
                 if (group.GetWorkers().Any(p => p.Character == player.CharacterEntity.DbModel))
                 {
-                    sender.Notify("Jesteś już w tej grupie.", NotificationType.Error);
+                    sender.SendError("Jesteś już w tej grupie.");
                     return;
                 }
 
@@ -114,16 +114,16 @@ namespace VRP.Serverside.Admin
                     });
                     group.Save();
 
-                    sender.Notify($"Wszedłeś do grupy {group.GetColoredName()}.", NotificationType.Info);
+                    sender.SendInfo($"Wszedłeś do grupy {group.GetColoredName()}.");
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz wolnych slotów grupowych.", NotificationType.Error);
+                    sender.SendError("Nie posiadasz wolnych slotów grupowych.");
                 }
             }
             else
             {
-                sender.Notify("Nie znaleziono grupy o podanym Id.", NotificationType.Error);
+                sender.SendError("Nie znaleziono grupy o podanym Id.");
             }
         }
     }

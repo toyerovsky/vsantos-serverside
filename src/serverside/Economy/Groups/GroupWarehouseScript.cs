@@ -68,11 +68,11 @@ namespace VRP.Serverside.Economy.Groups
                         repository.Insert(groupWarehouseItem);
                         repository.Save();
                     }
-                    sender.Notify("Dodawanie przedmiotu zakończyło się pomyślnie.", NotificationType.Info);
+                    sender.SendInfo("Dodawanie przedmiotu zakończyło się pomyślnie.");
                 }
                 else
                 {
-                    sender.Notify("Dodawanie przedmiotu zakończone niepowodzeniem.", NotificationType.Error);
+                    sender.SendError("Dodawanie przedmiotu zakończone niepowodzeniem.");
                 }
 
             }
@@ -111,11 +111,13 @@ namespace VRP.Serverside.Economy.Groups
                             Data = shipment
                         });
 
-                        sender.Notify("Zamawianie przesyłki zakończyło się pomyślnie.", NotificationType.Info);
+
+                        sender.SendInfo("Zamawianie przesyłki zakończyło się pomyślnie.");
+
                     }
                     else
                     {
-                        sender.Notify($"Grupa {group.GetColoredName()} nie posiada wystarczającej ilości środków.", NotificationType.Error);
+                        sender.SendError($"Grupa {group.GetColoredName()} nie posiada wystarczającej ilości środków.");
                     }
                 }
             }

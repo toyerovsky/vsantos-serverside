@@ -67,7 +67,7 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do przeglądania raportów.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do przeglądania raportów.");
                 return;
             }
 
@@ -93,7 +93,8 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do służby administracyjnej.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do służby administracyjnej.");
+               
                 return;
             }
 
@@ -102,12 +103,14 @@ namespace VRP.Serverside.Admin
             if (AdminsOnDuty.Any(admin => ReferenceEquals(admin, player)))
             {
                 AdminsOnDuty.Remove(player);
-                sender.Notify($"Zszedłeś ze służby {player.DbModel.ServerRank.GetColoredRankName()} życzymy miłej gry.", NotificationType.Info);
+                sender.SendInfo($"Zszedłeś ze służby {player.DbModel.ServerRank.GetColoredRankName()} życzymy miłej gry.");
+                
             }
             else
             {
                 AdminsOnDuty.Add(player);
-                sender.Notify($"Wszedłeś na służbę {player.DbModel.ServerRank.GetColoredRankName()} życzymy cierpliwości.", NotificationType.Info);
+                sender.SendInfo($"Wszedłeś na służbę {player.DbModel.ServerRank.GetColoredRankName()} życzymy cierpliwości.");
+                
             }
         }
     }

@@ -21,7 +21,8 @@ namespace VRP.Serverside.Core.Scripts
         {
             if (!EntityHelper.GetAccounts().Any(x => x.CharacterEntity.FormatName.ToLower().StartsWith(name)))
             {
-                sender.Notify("Nie znaleziono gracza o podanej nazwie.", NotificationType.Warning);
+                sender.SendWarning("Nie znaleziono gracza o podanej nazwie.");
+                //sender.Notify("Nie znaleziono gracza o podanej nazwie.", NotificationType.Warning);
                 return;
             }
 
@@ -40,7 +41,7 @@ namespace VRP.Serverside.Core.Scripts
         {
             if (NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender).All(x => x.GetAccountEntity().ServerId != id))
             {
-                sender.Notify("W twoim otoczeniu nie znaleziono gracza o podanym Id.", NotificationType.Warning);
+                sender.SendWarning("W twoim otoczeniu nie znaleziono gracza o podanym Id.");;
                 return;
             }
 

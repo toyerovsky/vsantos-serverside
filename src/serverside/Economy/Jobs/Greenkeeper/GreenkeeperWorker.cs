@@ -42,9 +42,9 @@ namespace VRP.Serverside.Economy.Jobs.Greenkeeper
 
         public override void Start()
         {
-            Player.Client.Notify("Rozpocząłeś pracę ogrodnika, jeździj po polu golfowym, aby kosić trawnik.", NotificationType.Info);
+            Player.Client.SendInfo("Rozpocząłeś pracę ogrodnika, jeździj po polu golfowym, aby kosić trawnik.");
             //TODO: dzwonienie na numer alarmowy
-            Player.Client.Notify("Jeżeli wyjedziesz z obszaru pola golfowego zostanie wysłane zgłoszenie na numer alarmowy.", NotificationType.Info);
+            Player.Client.SendInfo("Jeżeli wyjedziesz z obszaru pola golfowego zostanie wysłane zgłoszenie na numer alarmowy.");
         }
 
         public override void Stop()

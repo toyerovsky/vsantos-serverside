@@ -75,9 +75,10 @@ namespace VRP.Serverside.Core.Login
                     AccountEntity account = EntityHelper.GetById(accountModel.Id);
                     if (account != null)
                     {
-                        sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested,
-                            $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.",
-                            NotificationType.Warning);
+                        //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested,
+                        //    $"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.",
+                        //    NotificationType.Warning);
+                        sender.SendWarning($"Osoba o IP: {account.DbModel.Ip} znajduje się obecnie na twoim koncie. Została ona wyrzucona z serwera. Rozważ zmianę hasła.");
                         account.Kick(null, "Próba zalogowania na zalogowane konto.");
                     }
 
@@ -110,7 +111,8 @@ namespace VRP.Serverside.Core.Login
             }
             else
             {
-                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.", NotificationType.Info);
+                sender.SendInfo("Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
+                //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.", NotificationType.Info);
             }
         }
 
@@ -122,13 +124,15 @@ namespace VRP.Serverside.Core.Login
             AccountEntity account = sender.GetAccountEntity();
             if (account == null)
             {
-                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!", NotificationType.Warning);
+                sender.SendWarning("Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!");
+                //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!", NotificationType.Warning);
                 return;
             }
 
             if (account.DbModel.Characters.Count == 0)
             {
-                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Twoje konto nie posiada żadnych postaci!", NotificationType.Info);
+                sender.SendInfo("Twoje konto nie posiada żadnych postaci!");
+                //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Twoje konto nie posiada żadnych postaci!", NotificationType.Info);
 
             }
             else

@@ -38,7 +38,7 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
         {
             if (!Player.Client.IsInVehicle && DateTime.Now >= NextUpdate && Player.Client.Position.DistanceTo2D(JobVehicle.GameVehicle.Position) > 25)
             {
-                Player.Client.Notify("Oddaliłeś się od swojego pojazdu. Praca została przerwana.", NotificationType.Warning);
+                Player.Client.SendWarning("Oddaliłeś się od swojego pojazdu. Praca została przerwana.");
                 Stop();
                 JobVehicle.Respawn();
             }
@@ -69,14 +69,14 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
             {
                 //Dodać animację
                 Count++;
-                Player.Client.Notify($"Pomyślnie rozładowano kontener. Zapełnienie: {Count}/10.", NotificationType.Info);
+                Player.Client.SendInfo($"Pomyślnie rozładowano kontener. Zapełnienie: {Count}/10.");
                 NAPI.ColShape.DeleteColShape(shape);
                 NAPI.Player.PlaySoundFrontEnd(NAPI.Player.GetPlayerFromHandle(entity), "CHECKPOINT_NORMAL", "HUD_MINI_GAME_SOUNDSET");
                 DrawNextPoint(false);
             }
             else if (entity == Player.Client && Player.Client.Position.DistanceTo2D(JobVehicle.GameVehicle.Position) <= 25 && !Player.Client.IsInVehicle && Count == 10)
             {
-                Player.Client.Notify("Śmieciarka została zapełniona udaj się na wysypisko, aby ją rozładować.", NotificationType.Info);
+                Player.Client.SendInfo("Śmieciarka została zapełniona udaj się na wysypisko, aby ją rozładować.");
                 NAPI.Player.PlaySoundFrontEnd(NAPI.Player.GetPlayerFromHandle(entity), "CHECKPOINT_NORMAL", "HUD_MINI_GAME_SOUNDSET");
                 DrawNextPoint(true);
                 InProgress = false;
@@ -89,12 +89,12 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
                     characterEntity.DbModel.MoneyJob += 25;
                 }
                 characterEntity.Save();
-                Player.Client.Notify(
-                    $"Zakończyłeś pracę operatora śmieciarki, zarobiłeś: ${characterEntity.DbModel.MoneyJob}.", NotificationType.Info);
+                Player.Client.SendInfo(
+                    $"Zakończyłeś pracę operatora śmieciarki, zarobiłeś: ${characterEntity.DbModel.MoneyJob}.");
             }
             else
             {
-                Player.Client.Notify("Twoja śmieciarka jest za daleko, aby można było pomyślnie załadować kontener.", NotificationType.Info);
+                Player.Client.SendInfo("Twoja śmieciarka jest za daleko, aby można było pomyślnie załadować kontener.");
             }
         }
 

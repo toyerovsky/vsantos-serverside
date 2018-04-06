@@ -19,7 +19,7 @@ namespace VRP.Serverside.Economy.Money
         {
             if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
             {
-                sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.", NotificationType.Error);
+                sender.SendError("Podano kwotę gotówki w nieprawidłowym formacie.");
             }
 
             CharacterEntity sendingCharacter = sender.GetAccountEntity().CharacterEntity;
@@ -27,13 +27,13 @@ namespace VRP.Serverside.Economy.Money
 
             if (!sendingCharacter.HasMoney(safeMoneyCount))
             {
-                sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz wystarczającej ilości gotówki.");
                 return;
             }
 
             if (sender.GetAccountEntity().ServerId == id)
             {
-                sender.Notify("Nie możesz podać gotówki samemu sobie.", NotificationType.Error);
+                sender.SendError("Nie możesz podać gotówki samemu sobie.");
                 return;
             }
             
@@ -42,7 +42,7 @@ namespace VRP.Serverside.Economy.Money
 
             if (gettingPlayer == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id", NotificationType.Warning);
+                sender.SendWarning("Nie znaleziono gracza o podanym Id");
                 return;
             }
 

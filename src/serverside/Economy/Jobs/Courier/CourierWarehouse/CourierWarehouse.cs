@@ -40,13 +40,13 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
                     AccountEntity player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
                     if (player.CharacterEntity.DbModel.Job != JobType.Courier)
                     {
-                        player.Client.Notify("Aby podjąć pracę kuriera udaj się do pracodawcy.", NotificationType.Info);
+                        player.Client.SendInfo("Aby podjąć pracę kuriera udaj się do pracodawcy.");
                         return;
                     }
 
                     if (GroupWarehouseScript.CurrentOrders.Count == 0)
                     {
-                        player.Client.Notify("Obecnie nie ma żadnych paczek w magazynie.", NotificationType.Info);
+                        player.Client.SendInfo("Obecnie nie ma żadnych paczek w magazynie.");
                         return;
                     }
 

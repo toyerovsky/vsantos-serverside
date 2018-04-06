@@ -45,8 +45,8 @@ namespace VRP.Serverside.Economy.Jobs.Base
         /// </summary>
         public virtual void ReleaseWorker()
         {
-            Player.Client.Notify("Nie wypracowałeś wystarczającej ilości gotówki na pokrycie szkód.", NotificationType.Info);
-            Player.Client.Notify("Zostałeś zwolniony. Zanim ponownie znajdziesz zatrudnienie minie trochę czasu.", NotificationType.Info);
+            Player.Client.SendInfo("Nie wypracowałeś wystarczającej ilości gotówki na pokrycie szkód.");
+            Player.Client.SendInfo("Zostałeś zwolniony. Zanim ponownie znajdziesz zatrudnienie minie trochę czasu.");
             Stop();
             Player.CharacterEntity.DbModel.Job = 0;
             Player.CharacterEntity.DbModel.JobReleaseDate = DateTime.Now;

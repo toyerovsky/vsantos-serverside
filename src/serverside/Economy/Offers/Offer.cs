@@ -139,6 +139,7 @@ namespace VRP.Serverside.Economy.Offers
             }
             else
             {
+                
                 Getter.Notify(bank
                     ? "Nie posiadasz wystarczającej ilości środków na karcie"
                     : "Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Warning);

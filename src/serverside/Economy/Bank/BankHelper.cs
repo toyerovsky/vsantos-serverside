@@ -21,12 +21,11 @@ namespace VRP.Serverside.Economy.Bank
                 character.RemoveMoney(count);
                 character.AddMoney(count, true);
 
-                player.Notify(
-                    $"Wpłacono ${count} na konto o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}", NotificationType.Info);
+                player.SendInfo($"Wpłacono ${count} na konto o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}");
             }
             else
             {
-                player.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Warning);
+                player.SendWarning("Nie posiadasz wystarczającej ilości gotówki.");
             }
         }
 
@@ -38,12 +37,11 @@ namespace VRP.Serverside.Economy.Bank
                 character.RemoveMoney(count, true);
                 character.AddMoney(count);
 
-                player.Notify(
-                    $"Wypłacono ${count} z konta o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}", NotificationType.Info);
+                player.SendInfo($"Wypłacono ${count} z konta o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}");
             }
             else
             {
-                player.Notify("Nie posiadasz wystarczającej ilości środków na koncie bankowym.", NotificationType.Warning);
+                player.SendWarning("Nie posiadasz wystarczającej ilości środków na koncie bankowym.");
             }
         }
     }

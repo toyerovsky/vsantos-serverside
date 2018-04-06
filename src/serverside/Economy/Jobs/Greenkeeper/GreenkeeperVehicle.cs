@@ -31,11 +31,11 @@ namespace VRP.Serverside.Economy.Jobs.Greenkeeper
         {
             if (player.GetAccountEntity().CharacterEntity.DbModel.Job != JobType.Greenkeeper)
             {
-                player.Notify("Aby skorzystać z tego pojazdu musisz podjąć pracę ogrodnik.", NotificationType.Info);
+                player.SendInfo("Aby skorzystać z tego pojazdu musisz podjąć pracę ogrodnik.");
                 return;
             }
 
-            player.Notify("Pojazd do którego wsiadłeś zapewnił Ci pracodawca. Jesteś zobowiązany umową do pokrycia wszelkich strat.", NotificationType.Info);
+            player.SendInfo("Pojazd do którego wsiadłeś zapewnił Ci pracodawca. Jesteś zobowiązany umową do pokrycia wszelkich strat.");
 
             WorkerInVehicle = new GreenkeeperWorker(player.GetAccountEntity(), this);
             WorkerInVehicle.Start();

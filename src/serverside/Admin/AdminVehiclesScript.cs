@@ -21,7 +21,7 @@ namespace VRP.Serverside.Admin
         {
             if (!sender.IsInVehicle && vehicleId == -1)
             {
-                sender.Notify("Wsiądź do pojazu lub podaj Id aby ustawić jego kolor.", NotificationType.Warning);
+                sender.SendWarning("Wsiądź do pojazu lub podaj Id aby ustawić jego kolor.");
                 return;
             }
 
@@ -38,7 +38,7 @@ namespace VRP.Serverside.Admin
             }
             catch (ColorConvertException e)
             {
-                sender.Notify("Wprowadzony kolor jest nieprawidłowy.", NotificationType.Error);
+                sender.SendError("Wprowadzony kolor jest nieprawidłowy.");
                 Colorful.Console.WriteLine($"[Error]{nameof(AdminGroupsScript)} Nieprawidłowy kolor", System.Drawing.Color.DarkRed);
                 Colorful.Console.WriteLine(e.Message, System.Drawing.Color.DarkRed);
                 return;
@@ -52,7 +52,7 @@ namespace VRP.Serverside.Admin
         {
             if (!sender.IsInVehicle && vehicleId == -1)
             {
-                sender.Notify("Wsiądź do pojazu lub podaj Id aby go naprawić.", NotificationType.Warning);
+                sender.SendWarning("Wsiądź do pojazu lub podaj Id aby go naprawić.");
                 return;
             }
 
