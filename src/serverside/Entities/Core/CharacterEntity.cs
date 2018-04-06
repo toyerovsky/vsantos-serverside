@@ -54,8 +54,6 @@ namespace VRP.Serverside.Entities.Core
         public bool CanNarrate { get; set; }
         public bool CanPay { get; set; }
 
-        private Timer PositionSyncTimer { get; }
-
         public int Health
         {
             get => DbModel.Health;
@@ -125,7 +123,6 @@ namespace VRP.Serverside.Entities.Core
             if (DbModel.Freemode)
                 CharacterCreator = new CharacterCreator(this);
             Description = new Description(AccountEntity);
-            PositionSyncTimer = new Timer(10000);
         }
 
         public void Save()
@@ -172,25 +169,11 @@ namespace VRP.Serverside.Entities.Core
                 $"Twoja postaæ {FormatName} zosta³a pomyœlnie za³adowana ¿yczymy mi³ej gry!", NotificationType.Info);
 
             CharacterSelected?.Invoke(AccountEntity.Client, this);
-
-            // every 10 seconds synchronize player position and rotation
-            PositionSyncTimer.Elapsed += (o, e) =>
-            {
-                DbModel.LastPositionX = AccountEntity.Client.Position.X;
-                DbModel.LastPositionY = AccountEntity.Client.Position.Y;
-                DbModel.LastPositionZ = AccountEntity.Client.Position.Z;
-                DbModel.LastPositionRotX = AccountEntity.Client.Rotation.X;
-                DbModel.LastPositionRotY = AccountEntity.Client.Rotation.Y;
-                DbModel.LastPositionRotZ = AccountEntity.Client.Rotation.Z;
-                Save();
-            };
-            PositionSyncTimer.Start();
         }
 
         public override void Dispose()
         {
             Description?.Dispose();
-            PositionSyncTimer.Dispose();
         }
 
         public bool HasMoney(decimal count, bool bank = false)
