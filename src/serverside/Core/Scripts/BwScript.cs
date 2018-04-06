@@ -54,7 +54,7 @@ namespace VRP.Serverside.Core.Scripts
                 {
                     playerCharacter.MinutesToRespawn = 0;
 
-                    playerCharacter.HitPoints = 20;
+                    playerCharacter.Health = 20;
                     NAPI.Player.SetPlayerHealth(sender, 20);
 
                     NAPI.Player.SpawnPlayer(player.Client, new Vector3(sender.Position.X, sender.Position.Y, sender.Rotation.Z));
@@ -78,7 +78,7 @@ namespace VRP.Serverside.Core.Scripts
                 //Koniec BW
                 else
                 {
-                    playerCharacter.HitPoints = 20;
+                    playerCharacter.Health = 20;
                     NAPI.Player.SetPlayerHealth(sender, 20);
 
                     NAPI.Player.SpawnPlayer(player.Client, new Vector3(sender.Position.X, sender.Position.Y, sender.Rotation.Z));
@@ -126,7 +126,7 @@ namespace VRP.Serverside.Core.Scripts
             }
             else
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.");
+                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
             }
         }
         #endregion

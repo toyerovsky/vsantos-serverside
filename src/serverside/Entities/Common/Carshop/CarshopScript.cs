@@ -106,17 +106,18 @@ namespace VRP.Serverside.Entities.Common.Carshop
 
                 CarshopVehicleModel vehicle = Vehicles.First(v => v.Name == arguments[0].ToString());
 
-                if (sender.HasMoney(vehicle.Cost))
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+                if (character.HasMoney(vehicle.Cost))
                 {
-                    sender.RemoveMoney(vehicle.Cost);
+                    character.RemoveMoney(vehicle.Cost);
 
                     VehicleEntity.Create(new FullPosition(new Vector3(-50, -1680, 29.5), new Vector3(0, 0, 0)),
                         vehicleHash, "", 0, null, new Color().GetRandomColor(), new Color().GetRandomColor(), 0f, 0f, sender.GetAccountEntity().CharacterEntity.DbModel);
-                    sender.Notify($"Pojazd {vehicleHash.ToString()} zakupiony ~h~~g~pomyślnie.");
+                    sender.Notify($"Pojazd {vehicleHash.ToString()} zakupiony pomyślnie.", NotificationType.Info);
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
+                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Error);
                 }
             }
         }
@@ -126,37 +127,39 @@ namespace VRP.Serverside.Entities.Common.Carshop
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia pojazdu w salonie.");
+                sender.Notify("Nie posiadasz uprawnień do tworzenia pojazdu w salonie.", NotificationType.Error);
                 return;
             }
 
             if (Vehicles.Any(v => v.Hash == hash))
             {
-                sender.Notify("Podany pojazd jest już dodany.");
+                sender.Notify("Podany pojazd jest już dodany.", NotificationType.Warning);
                 return;
             }
 
             if (!ValidationHelper.IsMoneyValid(cost))
             {
-                sender.Notify("Wprowadzona kwota gotówki jest nieprawidłowa.");
+                sender.Notify("Wprowadzona kwota gotówki jest nieprawidłowa.", NotificationType.Error);
                 return;
             }
 
             CarshopType endType = CarshopType.Empty;
             CarshopType endType2 = CarshopType.Empty;
-            foreach (CarshopType item in Enum.GetValues(typeof(CarshopType)))
+            var carshopTypes = ((CarshopType[])Enum.GetValues(typeof(CarshopType))).ToList();
+
+            if (carshopTypes.All(carshopType => carshopType.GetDescription() != type && carshopType.GetDescription() != type2)) ;
+            {
+                sender.Notify("Wprowadzony typ salonu jest nieprawidłowy.", NotificationType.Error);
+            }
+
+            foreach (CarshopType item in carshopTypes)
             {
                 if (item.GetDescription() == type)
                     endType = item;
-                else if (item.GetDescription() == type2)
+                if (item.GetDescription() == type2)
                     endType2 = item;
-                else
-                {
-                    sender.Notify("Wprowadzony typ salonu jest nieprawidłowy.");
-                    return;
-                }
             }
-            
+
             if (endType2 != CarshopType.Empty) endType = endType | endType2;
 
             CarshopVehicleModel vehicle =
@@ -175,12 +178,11 @@ namespace VRP.Serverside.Entities.Common.Carshop
 
             if (player.DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia salonu samochodowego.");
+                sender.Notify("Nie posiadasz uprawnień do tworzenia salonu samochodowego.", NotificationType.Error);
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
 
             player.HereHandler += client =>
             {
@@ -194,7 +196,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
 
                 XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, "Carshops"));
                 Carshops.Add(new CarshopEntity(data));
-                sender.Notify("Dodawanie salonu zakończyło się ~h~~g~pomyślnie.");
+                sender.Notify("Dodawanie salonu zakończyło się pomyślnie.", NotificationType.Info);
             };
         }
 
@@ -203,26 +205,26 @@ namespace VRP.Serverside.Entities.Common.Carshop
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania salonu samochodowego.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania salonu samochodowego.", NotificationType.Error);
                 return;
             }
 
             if (Carshops.Count == 0)
             {
-                sender.Notify("Nie znaleziono salonu pojazdów który można usunąć.");
+                sender.Notify("Nie znaleziono salonu pojazdów który można usunąć.", NotificationType.Warning);
                 return;
             }
 
             CarshopEntity carshop = Carshops.First(x => x.ColShape.IsPointWithin(sender.Position));
             if (XmlHelper.TryDeleteXmlObject(carshop.Data.FilePath))
             {
-                sender.Notify("Usuwanie salonu zakończyło się ~h~~g~pomyślnie");
+                sender.Notify("Usuwanie salonu zakończyło się pomyślnie", NotificationType.Info);
                 Carshops.Remove(carshop);
                 carshop.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie salonu zakończyło się ~h~~r~niepomyślnie.");
+                sender.Notify("Usuwanie salonu zakończyło się niepomyślnie.", NotificationType.Error);
             }
         }
     }

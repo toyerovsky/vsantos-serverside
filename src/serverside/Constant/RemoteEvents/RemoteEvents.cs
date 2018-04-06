@@ -16,5 +16,7 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string CharacterSelectRequested = "characterSelectRequested";
 
         public const string CharacterMoneyChangeRequested = "characterMoneyChangeRequested";
+
+        public const string CharacterShowShardRequested = "characterShowShardRequested";
     }
 }

@@ -11,6 +11,7 @@ using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.BusStop.Models;
+using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Interfaces;
 
 namespace VRP.Serverside.Entities.Common.BusStop
@@ -45,32 +46,32 @@ namespace VRP.Serverside.Entities.Common.BusStop
             entity.ResetData("Bus");
         }
 
-        public static void StartTransport(Client player, decimal cost, int seconds, Vector3 position, string name)
+        public static void StartTransport(CharacterEntity player, decimal cost, int seconds, Vector3 position, string name)
         {
-            //TODO: Przez pierwsze 5h autobus za darmo dla nowych graczy
-            if (!player.HasMoney(cost))
+            if (player.DbModel.PlayedTime.Hours > 5 && !player.HasMoney(cost))
             {
-                player.Notify("Nie posiadasz wystarczającej ilości gotówki.");
+                player.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Error);
                 return;
             }
 
             player.RemoveMoney(cost);
 
-            //Zaciemnianie ekranu
-            NAPI.Native.SendNativeToPlayer(player, Hash.DO_SCREEN_FADE_OUT, 2000);
+            // TODO: Zaciemnianie ekranu
+            // NAPI.Native.SendNativeToPlayer(player, Hash.DO_SCREEN_FADE_OUT, 2000);
 
             ChatScript.SendMessageToNearbyPlayers(player,
                 $"wsiadł do autobusu zmierzającego w stronę {name}", ChatMessageType.ServerMe);
 
-            player.Dimension = (uint)Dimension.Bus;
+            player.Dimension = ((uint)Dimension.Bus);
 
-            //Teleport po danym czasie
+            // Teleport po danym czasie
             Timer busTimer = new Timer(seconds * 1000);
             busTimer.Start();
             busTimer.Elapsed += (sender, args) =>
             {
                 player.Position = position;
-                NAPI.Native.SendNativeToPlayer(player, Hash.DO_SCREEN_FADE_IN, 2000); //Odciemnianie ekranu
+                // TODO: Odciemnianie ekranu
+                // NAPI.Native.SendNativeToPlayer(player, Hash.DO_SCREEN_FADE_IN, 2000); //Odciemnianie ekranu
                 player.Dimension = (uint)Dimension.Global;
                 ChatScript.SendMessageToNearbyPlayers(player, "wysiadł z autobusu", ChatMessageType.ServerMe);
 

@@ -48,20 +48,20 @@ namespace VRP.Serverside.Entities.Core.Item
             Contacts.CollectionChanged += Contacts_CollectionChanged;
         }
 
-        public override void UseItem(AccountEntity player)
+        public override void UseItem(CharacterEntity character)
         {
-            if (player.CharacterEntity.ItemsInUse.Any(item => ReferenceEquals(item, this)))
+            if (character.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
-                player.CharacterEntity.ItemsInUse.Remove(this);
+                character.ItemsInUse.Remove(this);
                 Save();
-                ChatScript.SendMessageToNearbyPlayers(player.Client, $"wyłącza {DbModel.Name}", ChatMessageType.ServerMe);
-                player.Client.Notify($"Telefon {DbModel.Name} został wyłączony.");
+                ChatScript.SendMessageToNearbyPlayers(character, $"wyłącza {DbModel.Name}", ChatMessageType.ServerMe);
+                character.Notify($"Telefon {DbModel.Name} został wyłączony.", NotificationType.Info);
             }
-            else if (player.CharacterEntity.ItemsInUse.All(item => !(item is Cellphone)))
+            else if (character.ItemsInUse.All(item => !(item is Cellphone)))
             {
-                player.CharacterEntity.ItemsInUse.Add(this);
-                ChatScript.SendMessageToNearbyPlayers(player.Client, $"włącza {DbModel.Name}", ChatMessageType.ServerMe);
-                player.Client.Notify($"Telefon {DbModel.Name} został włączony naciśnij klawisz END, aby go używać.");
+                character.ItemsInUse.Add(this);
+                ChatScript.SendMessageToNearbyPlayers(character, $"włącza {DbModel.Name}", ChatMessageType.ServerMe);
+                character.Notify($"Telefon {DbModel.Name} został włączony naciśnij klawisz END, aby go używać.", NotificationType.Info);
             }
         }
 

@@ -13,24 +13,27 @@ namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Mask : ItemEntity
     {
+        public int UseCount => DbModel.FirstParameter.Value;
+
         /// <summary>
         /// Pierwszy parametr to liczba liczba użyć do zniszczenia
         /// </summary>
         /// <param name="itemModel"></param>
         public Mask(ItemModel itemModel) : base(itemModel) { }
 
-        public override void UseItem(AccountEntity player)
+        public override void UseItem(CharacterEntity character)
         {
-            string encryptedName = $"Nieznajomy {player.Client.Name.GetHashCode().ToString().Substring(1, 6)}";
-            
-            if (player.CharacterEntity.ItemsInUse.Any(item => ReferenceEquals(item, this)))
+            string encryptedName = $"Nieznajomy {character.FormatName.GetHashCode().ToString().Substring(1, 6)}";
+
+            if (character.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
-                ChatScript.SendMessageToNearbyPlayers(player.Client, "zdejmuje kominiarkę", ChatMessageType.Me);
+                ChatScript.SendMessageToNearbyPlayers(character, "zdejmuje kominiarkę", ChatMessageType.Me);
+                character.AccountEntity.Client.Name = character.FormatName;
 
-                player.Client.Name = player.CharacterEntity.FormatName;
-                player.Client.ResetNametag();
+                // FixMe zmienić na narzędzie do wyświetlania nicków
+                // character.Client.ResetNametag();
 
-                player.CharacterEntity.ItemsInUse.Remove(this);
+                character.ItemsInUse.Remove(this);
 
                 if (DbModel.FirstParameter.HasValue && DbModel.FirstParameter.Value == 0)
                 {
@@ -39,14 +42,16 @@ namespace VRP.Serverside.Entities.Core.Item
                 }
                 Save();
             }
-            else if (player.CharacterEntity.ItemsInUse.All(item => !(item is Mask)))
+            else if (character.ItemsInUse.All(item => !(item is Mask)))
             {
-                ChatScript.SendMessageToNearbyPlayers(player.Client, "zakłada kominiarkę", ChatMessageType.Me);
-                player.Client.Name = encryptedName;
-                player.Client.ResetNametag();
+                ChatScript.SendMessageToNearbyPlayers(character, "zakłada kominiarkę", ChatMessageType.Me);
+                character.AccountEntity.Client.Name = encryptedName;
+
+                // FixMe zmienić na narzędzie do wyświetlania nicków
+                // character.Client.ResetNametag();
 
                 DbModel.FirstParameter -= 1;
-                player.CharacterEntity.ItemsInUse.Add(this);
+                character.ItemsInUse.Add(this);
 
                 Save();
             }

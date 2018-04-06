@@ -13,14 +13,14 @@ namespace VRP.Serverside.Core.Extensions
 {
     public class SaidEventArgs : EventArgs
     {
-        public SaidEventArgs(Client player, string message, ChatMessageType chatMessageType)
+        public SaidEventArgs(CharacterEntity character, string message, ChatMessageType chatMessageType)
         {
-            Player = player;
+            Character = character;
             Message = message;
             ChatMessageType = chatMessageType;
         }
 
-        public Client Player { get; }
+        public CharacterEntity Character { get; }
         public string Message { get; }
         public ChatMessageType ChatMessageType { get; }
     }
@@ -29,19 +29,19 @@ namespace VRP.Serverside.Core.Extensions
 
     public class DimensionChangeEventArgs : EventArgs
     {
-        public DimensionChangeEventArgs(Client player, uint currentDimension, uint oldDimension)
+        public DimensionChangeEventArgs(CharacterEntity character, uint currentDimension, uint oldDimension)
         {
-            Player = player;
+            Character = character;
             CurrentDimension = currentDimension;
             OldDimension = oldDimension;
         }
 
-        public Client Player { get; }
+        public CharacterEntity Character { get; }
         public uint CurrentDimension { get; }
         public uint OldDimension { get; }
     }
     public delegate void DimensionChangeEventHandler(object sender, DimensionChangeEventArgs e);
 
     public delegate void AccountLoginEventHandler(Client sender, AccountEntity account);
-    public delegate void CharacterLoginEventHandler(Client sender, CharacterEntity account);
+    public delegate void CharacterSelectEventHandler(Client sender, CharacterEntity character);
 }

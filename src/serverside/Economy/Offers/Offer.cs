@@ -12,6 +12,7 @@ using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Offers
 {
@@ -24,13 +25,13 @@ namespace VRP.Serverside.Economy.Offers
         public decimal Money { get; }
 
         //Ten co wysyłał oferte
-        public Client Sender { get; }
+        public CharacterEntity Sender { get; }
 
         //Ten co odbiera oferte
-        public Client Getter { get; }
+        public CharacterEntity Getter { get; }
 
         //Oferta z przedmiotem
-        public Offer(Client sender, Client getter, ItemModel itemModel, decimal moneyCount)
+        public Offer(CharacterEntity sender, CharacterEntity getter, ItemModel itemModel, decimal moneyCount)
         {
             ItemModel = itemModel;
             Money = moneyCount;
@@ -39,7 +40,7 @@ namespace VRP.Serverside.Economy.Offers
         }
 
         //Oferta z pojazdem
-        public Offer(Client sender, Client getter, VehicleModel vehicle, decimal moneyCount)
+        public Offer(CharacterEntity sender, CharacterEntity getter, VehicleModel vehicle, decimal moneyCount)
         {
             Vehicle = vehicle;
             Money = moneyCount;
@@ -48,7 +49,7 @@ namespace VRP.Serverside.Economy.Offers
         }
 
         //Oferta z budynkiem
-        public Offer(Client sender, Client getter, BuildingModel building, decimal moneyCount)
+        public Offer(CharacterEntity sender, CharacterEntity getter, BuildingModel building, decimal moneyCount)
         {
             Building = building;
             Money = moneyCount;
@@ -57,7 +58,7 @@ namespace VRP.Serverside.Economy.Offers
         }
 
         //Oferta bez niczego, np. taxi, naprawa, itp.
-        public Offer(Client sender, Client getter, decimal moneyCount, Action<Client> action, bool moneyToGroup)
+        public Offer(CharacterEntity sender, CharacterEntity getter, decimal moneyCount, Action<CharacterEntity> action, bool moneyToGroup)
         {
             _action = action;
             Money = moneyCount;
@@ -66,7 +67,7 @@ namespace VRP.Serverside.Economy.Offers
             _moneyToGroup = moneyToGroup;
         }
 
-        private Action<Client> _action;
+        private Action<CharacterEntity> _action;
         //Determinuje czy gotówka ma iść do kieszeni gracza czy do grupy
         private bool _moneyToGroup;
 
@@ -74,13 +75,19 @@ namespace VRP.Serverside.Economy.Offers
         {
             if (Getter.HasMoney(Money, bank))
             {
+                if (_moneyToGroup && Sender.OnDutyGroup == null)
+                {
+                    Sender.Notify("Musisz znajdować się na służbie grupy.", NotificationType.Info);
+                    return;
+                }
+
                 if (ItemModel != null)
                 {
                     ChatScript.SendMessageToNearbyPlayers(Sender,
-                        $"{Sender.GetAccountEntity().CharacterEntity.FormatName} podaje przedmiot {Getter.GetAccountEntity().CharacterEntity.FormatName}",
+                        $"{Sender.FormatName} podaje przedmiot {Getter.FormatName}",
                         ChatMessageType.ServerMe);
 
-                    ItemModel.Character = Getter.GetAccountEntity().CharacterEntity.DbModel;
+                    ItemModel.Character = Getter.DbModel;
 
                     using (ItemsRepository repository = new ItemsRepository())
                     {
@@ -90,7 +97,11 @@ namespace VRP.Serverside.Economy.Offers
                 }
                 else if (Vehicle != null)
                 {
-                    Vehicle.Character = Getter.GetAccountEntity().CharacterEntity.DbModel;
+                    ChatScript.SendMessageToNearbyPlayers(Sender,
+                        $"{Sender.FormatName} podaje klucze {Getter.FormatName}",
+                        ChatMessageType.ServerMe);
+
+                    Vehicle.Character = Getter.DbModel;
 
                     using (VehiclesRepository repository = new VehiclesRepository())
                     {
@@ -100,7 +111,12 @@ namespace VRP.Serverside.Economy.Offers
                 }
                 else if (Building != null)
                 {
-                    Building.Character = Getter.GetAccountEntity().CharacterEntity.DbModel;
+                    ChatScript.SendMessageToNearbyPlayers(Sender,
+                        $"{Sender.FormatName} podaje klucze {Getter.FormatName}",
+                        ChatMessageType.ServerMe);
+
+                    Building.Character = Getter.DbModel;
+
                     using (BuildingsRepository repository = new BuildingsRepository())
                     {
                         repository.Update(Building);
@@ -110,7 +126,7 @@ namespace VRP.Serverside.Economy.Offers
 
                 if (_moneyToGroup)
                 {
-                    Sender.GetAccountEntity().CharacterEntity.OnDutyGroup.AddMoney(Money);
+                    Sender.OnDutyGroup.AddMoney(Money);
                 }
                 else
                 {
@@ -125,19 +141,19 @@ namespace VRP.Serverside.Economy.Offers
             {
                 Getter.Notify(bank
                     ? "Nie posiadasz wystarczającej ilości środków na karcie"
-                    : "Nie posiadasz wystarczającej ilości gotówki.");
-                Sender.Notify("Wymiana zakończona niepowodzeniem.");
+                    : "Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Warning);
+                Sender.Notify("Wymiana zakończona niepowodzeniem.", NotificationType.Error);
             }
         }
 
         public void ShowWindow(List<string> dataSource)
         {
-            NAPI.ClientEvent.TriggerClientEvent(Getter, "ShowOfferCef", dataSource);
+            NAPI.ClientEvent.TriggerClientEvent(Getter.AccountEntity.Client, "ShowOfferCef", dataSource);
         }
 
         public void Dispose()
         {
-            Getter.ResetData("Offer");
+            Getter.PendingOffer = null;
         }
     }
 }

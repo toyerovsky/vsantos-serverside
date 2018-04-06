@@ -57,7 +57,7 @@ namespace VRP.Serverside.Core.Extensions
         public static Color ToColor(this string hex)
         {
             if (hex == null)
-                throw new NullReferenceException();
+                throw new ColorConvertException();
             if (hex.StartsWith("#"))
                 hex = hex.Substring(1);
             if (hex.All(c => !char.IsDigit(c)))

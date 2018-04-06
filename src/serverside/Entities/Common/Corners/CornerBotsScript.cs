@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
@@ -36,7 +37,7 @@ namespace VRP.Serverside.Entities.Common.Corners
                     BadFarewell = (string) arguments[6]
                 };
                 XmlHelper.AddXmlObject(bot, Path.Combine(Utils.XmlDirectory, "CornerBots"));
-                sender.Notify("Dodanie NPC zakończyło się ~h~~g~pomyślnie.");
+                sender.Notify("Dodanie NPC zakończyło się pomyślnie.", NotificationType.Info);
             }
         }
 

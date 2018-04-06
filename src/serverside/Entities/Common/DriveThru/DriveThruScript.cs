@@ -29,12 +29,13 @@ namespace VRP.Serverside.Entities.Common.DriveThru
             if (eventName == "OnPlayerDriveThruBought")
             {
                 decimal money = Convert.ToDecimal(arguments[2]);
-                if (!sender.HasMoney(money))
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+                if (!character.HasMoney(money))
                 {
-                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
+                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Info);
                     return;
                 }
-                sender.RemoveMoney(money);
+                character.RemoveMoney(money);
 
                 AccountEntity player = sender.GetAccountEntity();
 
@@ -52,7 +53,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                     repository.Insert(itemModel);
                     repository.Save();
                 }
-                sender.Notify($"Pomyślnie zakupiłeś ~h~{itemModel.Name} za ${money}.");
+                sender.Notify($"Pomyślnie zakupiłeś {itemModel.Name} za ${money}.", NotificationType.Info);
             }
         }
 
@@ -72,13 +73,12 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do dodawania DriveThru.");
+                sender.Notify("Nie posiadasz uprawnień do dodawania DriveThru.", NotificationType.Error);
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
-
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\" ctrl + alt + shift + d użyj /diag aby poznać swoją obecną pozycję.", NotificationType.Info);
+            
             Vector3 center = null;
 
             void Handler(Client o, string message)
@@ -93,7 +93,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                     };
                     XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, "DriveThrus"));
 
-                    sender.Notify("Dodawanie DriveThru zakończyło się ~g~~h~pomyślnie.");
+                    sender.Notify("Dodawanie DriveThru zakończyło się pomyślnie.", NotificationType.Info);
                     DriveThruEntity driveThru = new DriveThruEntity(data);
                     driveThru.Spawn();
                     DriveThrus.Add(driveThru);                    
@@ -106,25 +106,25 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku DriveThru.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku DriveThru.", NotificationType.Error);
                 return;
             }
 
             if (DriveThrus.Count == 0)
             {
-                sender.Notify("Nie znaleziono DriveThru które można usunąć.");
+                sender.Notify("Nie znaleziono DriveThru które można usunąć.", NotificationType.Warning);
                 return;
             }
             DriveThruEntity driveThru = DriveThrus.OrderBy(d => d.Data.Position.DistanceTo2D(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(driveThru.Data.FilePath))
             {
-                sender.Notify("Usuwanie DriveThru zakończyło się ~g~~h~pomyślnie.");
+                sender.Notify("Usuwanie DriveThru zakończyło się pomyślnie.", NotificationType.Info);
                 DriveThrus.Remove(driveThru);
                 driveThru.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie DriveThru zakończyło się ~r~~h~niepomyślnie.");
+                sender.Notify("Usuwanie DriveThru zakończyło się niepomyślnie.", NotificationType.Error);
             }
         }
     }

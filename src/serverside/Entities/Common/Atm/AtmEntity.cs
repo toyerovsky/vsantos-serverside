@@ -7,6 +7,7 @@
 using System.Globalization;
 using GTANetworkAPI;
 using Newtonsoft.Json;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Atm.Models;
@@ -45,7 +46,7 @@ namespace VRP.Serverside.Entities.Common.Atm
 
                     if (accountEntity.CharacterEntity.DbModel.BankAccountNumber == null)
                     {
-                        accountEntity.Client.Notify("Nie posiadasz karty bankomatowej, udaj się do banku, aby założyć konto.");
+                        accountEntity.Client.Notify("Nie posiadasz karty bankomatowej, udaj się do banku, aby założyć konto.", NotificationType.Error);
                         return;
                     }
 

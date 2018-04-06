@@ -9,18 +9,20 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
+using Microsoft.CodeAnalysis.Emit;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
+using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Item;
 
 namespace VRP.Serverside.Core.Telephone
 {
     public class TelephoneCall : IDisposable
     {
-        public Client Sender { get; set; }
-        public Client Getter { get; set; }
+        public CharacterEntity Sender { get; set; }
+        public CharacterEntity Getter { get; set; }
 
         public int BoothNumber { get; }
 
@@ -53,7 +55,7 @@ namespace VRP.Serverside.Core.Telephone
         }
 
         //Połączenie z komórki
-        public TelephoneCall(Client sender, Client getter)
+        public TelephoneCall(CharacterEntity sender, CharacterEntity getter)
         {
             //gracz który dokonuje połączenia
             Sender = sender;
@@ -68,18 +70,22 @@ namespace VRP.Serverside.Core.Telephone
 
             ChatScript.OnPlayerSaid += RPChat_PlayerSaid;
             Getter.SetSharedData("CellphoneRinging", true);
-            ChatScript.SendMessageToNearbyPlayers(Getter, $"dzwoni telefon {Getter.Name}", ChatMessageType.Do);
+            ChatScript.SendMessageToNearbyPlayers(Getter, $"dzwoni telefon {Getter.FormatName}", ChatMessageType.Do);
 
-            Cellphone senderCellphone = Sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
-            Cellphone getterCellphone = getter.GetAccountEntity().CharacterEntity.CurrentCellphone;
-            ObservableCollection<TelephoneContactModel> contacts = getterCellphone.Contacts;
+            ObservableCollection<TelephoneContactModel> contacts = Getter.CurrentCellphone.Contacts;
 
-            NAPI.Chat.SendChatMessageToPlayer(Getter, "~#ffdb00~", contacts.Any(c => c.Number == senderCellphone.Number) ? $"Połączenie przychodzące od: {contacts.First(c => c.Number == senderCellphone.Number).Name}, naciśnij klawisz END aby, akceptować połączenie."
-                : $"Połączenie przychodzące od: {senderCellphone.Number}, naciśnij klawisz END aby, akceptować połączenie.");
+            string name = contacts.Any(c => c.Number == Sender.CurrentCellphone.Number)
+                ? contacts.First(c => c.Number == Sender.CurrentCellphone.Number).Name
+                : Sender.CurrentCellphone.Number.ToString();
+
+            NAPI.Chat.SendChatMessageToPlayer(Getter.AccountEntity.Client, "~#ffdb00~",
+                $"Połączenie przychodzące od: {name}, naciśnij klawisz END aby, akceptować połączenie.");
+
+            // FixMe dzwonek telefonu
         }
 
         //Połączenie z budki
-        public TelephoneCall(Client sender, Client getter, int number)
+        public TelephoneCall(CharacterEntity sender, CharacterEntity getter, int number)
         {
             //gracz który dokonuje połączenia
             Sender = sender;
@@ -94,13 +100,16 @@ namespace VRP.Serverside.Core.Telephone
 
             ChatScript.OnPlayerSaid += RPChat_PlayerSaid;
             Getter.SetSharedData("CellphoneRinging", true);
-            ChatScript.SendMessageToNearbyPlayers(Getter, $"dzwoni telefon {Getter.Name}", ChatMessageType.Do);
+            ChatScript.SendMessageToNearbyPlayers(Getter, $"dzwoni telefon {Getter.FormatName}", ChatMessageType.Do);
 
-            Cellphone telephone = Getter.GetAccountEntity().CharacterEntity.CurrentCellphone;
-            ObservableCollection<TelephoneContactModel> contacts = telephone.Contacts;
+            ObservableCollection<TelephoneContactModel> contacts = Getter.CurrentCellphone.Contacts;
 
-            NAPI.Chat.SendChatMessageToPlayer(Getter, "~#ffdb00~", contacts.Any(c => c.Number == number) ? $"Połączenie przychodzące od: {contacts.First(c => c.Number == number).Name}, naciśnij klawisz END aby, akceptować połączenie."
-                : $"Połączenie przychodzące od: {number}, naciśnij klawisz END aby, akceptować połączenie.");
+            string name = contacts.Any(c => c.Number == Sender.CurrentCellphone.Number)
+                ? contacts.First(c => c.Number == Sender.CurrentCellphone.Number).Name
+                : number.ToString();
+
+            NAPI.Chat.SendChatMessageToPlayer(Getter.AccountEntity.Client, "~#ffdb00~",
+                $"Połączenie przychodzące od: {name}, naciśnij klawisz END aby, akceptować połączenie.");
 
         }
 
@@ -119,19 +128,19 @@ namespace VRP.Serverside.Core.Telephone
             ChatScript.OnPlayerSaid -= RPChat_PlayerSaid;
             Timer.Dispose();
 
-            NAPI.Player.StopPlayerAnimation(Sender);
-            NAPI.Player.StopPlayerAnimation(Getter);
+            NAPI.Player.StopPlayerAnimation(Sender.AccountEntity.Client);
+            NAPI.Player.StopPlayerAnimation(Getter.AccountEntity.Client);
         }
 
         private void RPChat_PlayerSaid(object s, SaidEventArgs e)
         {
-            if (Accepted && e.Player == Sender)
+            if (Accepted && e.Character == Sender)
             {
-                ChatScript.SendMessageToPlayer(Getter, e.Message, ChatMessageType.Phone);
+                ChatScript.SendMessageToPlayer(Getter.AccountEntity.Client, e.Message, ChatMessageType.Phone);
             }
-            else if (Accepted && e.Player == Getter)
+            else if (Accepted && e.Character == Getter)
             {
-                ChatScript.SendMessageToPlayer(Sender, e.Message, ChatMessageType.Phone);
+                ChatScript.SendMessageToPlayer(Sender.AccountEntity.Client, e.Message, ChatMessageType.Phone);
             }
         }
     }

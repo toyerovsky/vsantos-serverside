@@ -41,11 +41,11 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
         {
             if (player.GetAccountEntity().CharacterEntity.DbModel.Job != JobType.Dustman)
             {
-                player.Notify("Aby skorzystać z tego pojazdu musisz podjąć pracę ~h~ Śmieciarz");
+                player.Notify("Aby skorzystać z tego pojazdu musisz podjąć pracę operator śmieciarki.", NotificationType.Info);
                 return;
             }
 
-            player.Notify("Pojazd do którego wsiadłeś zapewnił Ci pracodawca. Jesteś zobowiązany umową do pokrycia wszelkich strat.");
+            player.Notify("Pojazd do którego wsiadłeś zapewnił Ci pracodawca. Jesteś zobowiązany umową do pokrycia wszelkich strat.", NotificationType.Info);
 
             WorkerInVehicle = new DustmanWorker(player.GetAccountEntity(), this);
             WorkerInVehicle.Start();

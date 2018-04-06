@@ -13,6 +13,7 @@ using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Group;
 using ChatMessageType = VRP.Core.Enums.ChatMessageType;
 
@@ -22,12 +23,13 @@ namespace VRP.Serverside.Core.Scripts
     {
         public static event SaidEventHandler OnPlayerSaid;
 
-        private void API_onChatMessageHandler(Client sender, string message)
+        [ServerEvent(Event.ChatMessage)]
+        private void OnChatMessageHandler(CharacterEntity sender, string message)
         {
-            if (sender.GetAccountEntity() == null || !sender.GetAccountEntity().CharacterEntity.CanTalk) return;
+            if (sender.CanTalk) return;
 
-            if (sender.GetAccountEntity().CharacterEntity.CurrentCellphone != null)
-                SendMessageToNearbyPlayers(sender, message, sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall != null ? ChatMessageType.PhoneOthers : ChatMessageType.Normal);
+            if (sender.CurrentCellphone != null)
+                SendMessageToNearbyPlayers(sender, message, sender.CurrentCellphone.CurrentCall != null ? ChatMessageType.PhoneOthers : ChatMessageType.Normal);
 
             SendMessageToNearbyPlayers(sender, message, ChatMessageType.Normal);
 
@@ -38,67 +40,71 @@ namespace VRP.Serverside.Core.Scripts
         #region PLAYER COMMANDS
 
         [Command("try", "~y~UŻYJ: ~w~ /try [treść]", GreedyArg = true, Alias = "sprobuj")]
-        public void Try(Client player, string message)
+        public void Try(Client sender, string message)
         {
-            SendMessageToNearbyPlayers(player, Utils.RandomRange(2) == 0 ? "zawiódł próbując" + message : "odniósł sukces próbując "  + message, ChatMessageType.ServerMe);
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            SendMessageToNearbyPlayers(character, Utils.RandomRange(100) <= 49 ? "zawiódł próbując" + message : "odniósł sukces próbując " + message, ChatMessageType.ServerMe);
 
             SaidEventHandler handler = OnPlayerSaid;
-            SaidEventArgs eventArgs = new SaidEventArgs(player, message, ChatMessageType.ServerMe);
+            SaidEventArgs eventArgs = new SaidEventArgs(character, message, ChatMessageType.ServerMe);
             handler?.Invoke(this, eventArgs);
         }
 
         [Command("c", "~y~UŻYJ: ~w~ /c [treść]", GreedyArg = true)]
-        public void SendQuietMessage(Client player, string message)
+        public void SendQuietMessage(Client sender, string message)
         {
-            SendMessageToNearbyPlayers(player, message, ChatMessageType.Quiet);
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            SendMessageToNearbyPlayers(character, message, ChatMessageType.Quiet);
 
             SaidEventHandler handler = OnPlayerSaid;
-            SaidEventArgs eventArgs = new SaidEventArgs(player, message, ChatMessageType.Quiet);
+            SaidEventArgs eventArgs = new SaidEventArgs(character, message, ChatMessageType.Quiet);
             handler?.Invoke(this, eventArgs);
         }
 
         [Command("k", "~y~UŻYJ: ~w~ /k [treść]", GreedyArg = true)]
-        public void SendScreamMessage(Client player, string message)
+        public void SendScreamMessage(Client sender, string message)
         {
-            SendMessageToNearbyPlayers(player, message, ChatMessageType.Loud);
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            SendMessageToNearbyPlayers(character, message, ChatMessageType.Loud);
 
             SaidEventHandler handler = OnPlayerSaid;
-            SaidEventArgs eventArgs = new SaidEventArgs(player, message, ChatMessageType.Loud);
+            SaidEventArgs eventArgs = new SaidEventArgs(character, message, ChatMessageType.Loud);
             handler?.Invoke(this, eventArgs);
         }
 
         [Command("me", "~y~UŻYJ: ~w~ /me [czynność]", GreedyArg = true)]
-        public void SendMeMessage(Client player, string message)
+        public void SendMeMessage(Client sender, string message)
         {
-            SendMessageToNearbyPlayers(player, message, ChatMessageType.Me);
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            SendMessageToNearbyPlayers(character, message, ChatMessageType.Me);
         }
 
         [Command("do", "~y~UŻYJ: ~w~ /do [czynność]", GreedyArg = true)]
-        public void SendDoMessage(Client player, string message)
+        public void SendDoMessage(Client sender, string message)
         {
-            SendMessageToNearbyPlayers(player, message, ChatMessageType.Do);
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            SendMessageToNearbyPlayers(character, message, ChatMessageType.Do);
         }
-
 
         [Command("w", "~y~UŻYJ: ~w~ /w [id] [treść]", GreedyArg = true)]
         public void SendPrivateMessageToPlayer(Client sender, int id, string message)
         {
             if (!sender.GetAccountEntity().CharacterEntity.CanSendPrivateMessage)
             {
-                sender.Notify("Nie możesz teraz pisać wiadomości!");
+                sender.Notify("Nie możesz teraz pisać wiadomości!", NotificationType.Error);
                 return;
             }
 
             if (sender.GetAccountEntity().ServerId.Equals(id))
             {
-                sender.Notify("Nie możesz wysłać wiadomości samemu sobie.");
+                sender.Notify("Nie możesz wysłać wiadomości samemu sobie.", NotificationType.Error);
                 return;
             }
 
             Client getter = EntityHelper.GetAccountByServerId(id).Client;
             if (getter == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.");
+                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                 return;
             }
 
@@ -109,7 +115,8 @@ namespace VRP.Serverside.Core.Scripts
         [Command("b", GreedyArg = true)]
         public void SendOocMessage(Client sender, string message)
         {
-            SendMessageToNearbyPlayers(sender, message, ChatMessageType.Ooc);
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            SendMessageToNearbyPlayers(character, message, ChatMessageType.Ooc);
         }
 
         [Command("go", "~y~UŻYJ: ~w~ /go [slot] [treść]", GreedyArg = true)]
@@ -119,7 +126,7 @@ namespace VRP.Serverside.Core.Scripts
             byte groupSlot = slot.All(char.IsDigit) ? Convert.ToByte(slot) : (byte)0;
             if (groupSlot != 0 && ValidationHelper.IsGroupSlotValid(groupSlot))
             {
-                sender.Notify("Podany slot grupy jest nieprawidłowy.");
+                sender.Notify("Podany slot grupy jest nieprawidłowy.", NotificationType.Error);
                 return;
             }
 
@@ -127,16 +134,17 @@ namespace VRP.Serverside.Core.Scripts
             {
                 if (group.CanPlayerWriteOnChat(sender.GetAccountEntity()))
                 {
-                    string m = string.Join(" ", message);
-                    List<Client> clients = EntityHelper.GetAccounts()
+                    message = string.Join(" ", message);
+                    List<CharacterEntity> characters = EntityHelper.GetAccounts()
                         .Where(account => group.DbModel.Workers
                         .Any(worker => worker.Character.Id.Equals(account.CharacterEntity.DbModel.Id)))
-                        .Select(account => account.Client).ToList();
-                    SendMessageToSpecifiedPlayers(sender, clients, m, ChatMessageType.GroupOoc, $"~{group.DbModel.Color}~");
+                        .Select(a => a.CharacterEntity).ToList();
+                    CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+                    SendMessageToSpecifiedPlayers(character, characters, message, ChatMessageType.GroupOoc, $"~{group.DbModel.Color}~");
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz uprawnień do czatu w tej grupie.");
+                    sender.Notify("Nie posiadasz uprawnień do czatu w tej grupie.", NotificationType.Warning);
                 }
             }
         }
@@ -144,14 +152,15 @@ namespace VRP.Serverside.Core.Scripts
         [Command("m", "~y~ UŻYJ ~w~ /m [tekst]", GreedyArg = true)]
         public void SayThroughTheMegaphone(Client sender, string message)
         {
-            GroupEntity group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
-            if (group == null) return;
-            if (group.DbModel.GroupType != GroupType.Police || !((Police)group).CanPlayerUseMegaphone(sender.GetAccountEntity()))
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            if (character.OnDutyGroup is Police police && police.CanPlayerUseMegaphone(sender.GetAccountEntity()))
             {
-                sender.Notify("Twoja grupa, bądź postać nie posiada uprawnień do używania megafonu.");
-                return;
+                SendMessageToNearbyPlayers(character, message, ChatMessageType.Megaphone);
             }
-            SendMessageToNearbyPlayers(sender, message, ChatMessageType.Megaphone);
+            else
+            {
+                sender.Notify("Twoja grupa, bądź postać nie posiada uprawnień do używania megafonu.", NotificationType.Warning);
+            }
         }
 
         #endregion
@@ -167,35 +176,35 @@ namespace VRP.Serverside.Core.Scripts
 
         #endregion
 
-        public static void SendMessageToSpecifiedPlayers(Client sender, List<Client> players, string message, ChatMessageType chatMessageType, string color = "")
+        public static void SendMessageToSpecifiedPlayers(CharacterEntity sender, IEnumerable<CharacterEntity> players, string message, ChatMessageType chatMessageType, string color = "")
         {
-            message = PrepareMessage(sender.Name, message, chatMessageType, out string messageColor);
+            message = PrepareMessage(sender.FormatName, message, chatMessageType, out string messageColor);
             if (color != "") messageColor = color;
             if (chatMessageType == ChatMessageType.GroupOoc)
             {
-                message = $"[{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}";
+                message = $"[{sender.AccountEntity.ServerId}] {sender.FormatName}: {message}";
             }
 
-            foreach (Client p in players)
+            foreach (CharacterEntity p in players)
             {
-                p.SendChatMessage(messageColor, message);
+                p.AccountEntity.Client.SendChatMessage(messageColor, message);
             }
         }
 
-        public static void SendMessageToNearbyPlayers(Client player, string message, ChatMessageType chatMessageType, string color = "")
+        public static void SendMessageToNearbyPlayers(CharacterEntity sender, string message, ChatMessageType chatMessageType, string color = "")
         {
-            message = PrepareMessage(player.Name, message, chatMessageType, out string messageColor);
+            message = PrepareMessage(sender.FormatName, message, chatMessageType, out string messageColor);
             if (color != "") messageColor = color;
             switch (chatMessageType)
             {
                 case ChatMessageType.Ooc:
-                    message = $"(( [{player.GetAccountEntity().ServerId}] {player.Name} {message} ))";
+                    message = $"(( [{sender.AccountEntity.ServerId}] {sender.FormatName} {message} ))";
                     messageColor = "~#CCCCCC~";
                     break;
             }
 
             //Dla każdego klienta w zasięgu wyświetl wiadomość, zasięg jest pobierany przez rzutowanie enuma do floata
-            NAPI.Player.GetPlayersInRadiusOfPlayer((float)chatMessageType, player)
+            NAPI.Player.GetPlayersInRadiusOfPlayer((float)chatMessageType, sender.AccountEntity.Client)
                 .ForEach(c => c.SendChatMessage(messageColor, message));
         }
 

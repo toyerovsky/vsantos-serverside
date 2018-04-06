@@ -42,27 +42,27 @@ namespace VRP.Serverside.Entities.Peds.Employer
                 switch (player.CharacterEntity.DbModel.Job)
                 {
                     case JobType.Dustman:
-                        sender.Notify("Podjąłeś się pracy: Operator śmieciarki. Udaj się na wysypisko i wsiądź do śmieciarki.");
+                        sender.Notify("Podjąłeś się pracy: Operator śmieciarki. Udaj się na wysypisko i wsiądź do śmieciarki.", NotificationType.Info);
                         break;
                     case JobType.Greenkeeper:
-                        sender.Notify("Podjąłeś się pracy: Greenkeeper. Udaj się na pole golfowe i wsiądź do kosiarki.");
+                        sender.Notify("Podjąłeś się pracy: Ogrodnik. Udaj się na pole golfowe i wsiądź do kosiarki.", NotificationType.Info);
                         break;
                     case JobType.Thief:
-                        sender.Notify("Podjąłeś się pracy: Złodziej. Udaj się do portu i wsiądź do jednej z ciężarówek.");
+                        sender.Notify("Podjąłeś się pracy: Złodziej. Udaj się do portu i wsiądź do jednej z ciężarówek.", NotificationType.Info);
                         break;
                     case JobType.Courier:
-                        sender.Notify("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.");
+                        sender.Notify("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.", NotificationType.Info);
                         break;
                 }
             }
             else if (eventName == "OnPlayerTakeMoneyJob")
             {
-                AccountEntity player = sender.GetAccountEntity();
-                if (player.CharacterEntity.DbModel.MoneyJob != null)
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+                if (character.DbModel.MoneyJob != null)
                 {
-                    sender.AddMoney((decimal)player.CharacterEntity.DbModel.MoneyJob);
-                    player.CharacterEntity.DbModel.MoneyJob = 0;
-                    player.CharacterEntity.Save();
+                    character.AddMoney(character.DbModel.MoneyJob.Value);
+                    character.DbModel.MoneyJob = 0;
+                    character.Save();
                 }
             }
         }

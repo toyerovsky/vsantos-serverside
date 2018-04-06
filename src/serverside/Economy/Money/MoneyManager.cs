@@ -6,14 +6,15 @@
 
 using System.Globalization;
 using GTANetworkAPI;
+using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Money
-{    
+{
     public static class MoneyManager
     {
-        private delegate void MoneyChangedEventHandler(Client sender);
+        private delegate void MoneyChangedEventHandler(CharacterEntity sender);
 
         private static event MoneyChangedEventHandler MoneyChanged;
 
@@ -22,46 +23,43 @@ namespace VRP.Serverside.Economy.Money
             MoneyChanged += RPMoney_MoneyChanged;
         }
 
-        private static void RPMoney_MoneyChanged(Client sender)
+        private static void RPMoney_MoneyChanged(CharacterEntity sender)
         {
-            NAPI.ClientEvent.TriggerClientEvent(sender, "MoneyChanged", sender.GetAccountEntity().CharacterEntity.DbModel.Money.ToString(CultureInfo.InvariantCulture));
+            sender.AccountEntity.Client.TriggerEvent(RemoteEvents.CharacterMoneyChangeRequested, sender.DbModel.Money.ToString(CultureInfo.InvariantCulture));
         }
 
-        public static bool HasMoney(Client sender, decimal count, bool bank = false)
+        public static bool HasMoney(CharacterEntity sender, decimal count, bool bank = false)
         {
-            AccountEntity player = sender.GetAccountEntity();
-            if (bank) return player.CharacterEntity.DbModel.BankMoney >= count;
-            return player.CharacterEntity.DbModel.Money >= count;
+            if (bank) return sender.DbModel.BankMoney >= count;
+            return sender.DbModel.Money >= count;
         }
 
-        public static void AddMoney(Client sender, decimal count, bool bank = false)
+        public static void AddMoney(CharacterEntity sender, decimal count, bool bank = false)
         {
-            AccountEntity player = sender.GetAccountEntity();
             if (bank)
             {
-                player.CharacterEntity.DbModel.BankMoney += count;
+                sender.DbModel.BankMoney += count;
             }
             else
             {
-                player.CharacterEntity.DbModel.Money += count;
+                sender.DbModel.Money += count;
                 MoneyChanged?.Invoke(sender);
             }
-            player.CharacterEntity.Save();
+            sender.Save();
         }
 
-        public static void RemoveMoney(Client sender, decimal count, bool bank = false)
+        public static void RemoveMoney(CharacterEntity sender, decimal count, bool bank = false)
         {
-            AccountEntity player = sender.GetAccountEntity();
             if (bank)
             {
-                player.CharacterEntity.DbModel.BankMoney -= count;
+                sender.DbModel.BankMoney -= count;
             }
             else
             {
-                player.CharacterEntity.DbModel.Money -= count;
+                sender.DbModel.Money -= count;
                 MoneyChanged?.Invoke(sender);
             }
-            player.CharacterEntity.Save();
+            sender.Save();
         }
     }
 }

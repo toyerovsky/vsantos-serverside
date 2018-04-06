@@ -21,7 +21,7 @@ namespace VRP.Serverside.Admin
     {
         private List<AccountEntity> AdminsOnDuty { get; set; } = new List<AccountEntity>();
         private List<ReportData> CurrentReports { get; set; } = new List<ReportData>();
-        
+
         private void OnClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
         {
             /* Arguments
@@ -44,13 +44,13 @@ namespace VRP.Serverside.Admin
                 CurrentReports.Add(data);
             }
         }
-        
+
         [Command("a")]
         public void ShowAdministratorsList(Client sender)
         {
             if (AdminsOnDuty.Count == 0)
             {
-                sender.Notify("Obecnie nie ma administratorów na służbie.");
+                sender.Notify("Obecnie nie ma administratorów na służbie.", NotificationType.Info);
                 return;
             }
 
@@ -67,18 +67,18 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do przeglądania raportów.");
+                sender.Notify("Nie posiadasz uprawnień do przeglądania raportów.", NotificationType.Warning);
                 return;
             }
 
             sender.TriggerEvent("ShowAdminReportMenu", JsonConvert.SerializeObject(CurrentReports.Select(x => new
             {
-                SenderName = x.Sender.CharacterEntity.FormatName,
-                SenderId = x.Sender.ServerId.ToString(),
-                AccusedName = x.Accused?.CharacterEntity.FormatName ?? "",
-                AccusedId = x.Accused?.ServerId.ToString() ?? "",
-                x.Content,
-                ReportType = x.Type.ToString().Replace('_', ' ')
+                senderName = x.Sender.CharacterEntity.FormatName,
+                senderId = x.Sender.ServerId.ToString(),
+                accusedName = x.Accused?.CharacterEntity.FormatName ?? "",
+                accusedId = x.Accused?.ServerId.ToString() ?? "",
+                content = x.Content,
+                reportType = x.Type.ToString().Replace('_', ' ')
             })));
         }
 
@@ -93,7 +93,7 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do służby administracyjnej.");
+                sender.Notify("Nie posiadasz uprawnień do służby administracyjnej.", NotificationType.Warning);
                 return;
             }
 
@@ -102,12 +102,12 @@ namespace VRP.Serverside.Admin
             if (AdminsOnDuty.Any(admin => ReferenceEquals(admin, player)))
             {
                 AdminsOnDuty.Remove(player);
-                NAPI.Chat.SendChatMessageToPlayer(sender, $"Zszedłeś ze służby ~{sender.GetRankColor().ToHex()}~ {player.DbModel.ServerRank.ToString().Where(char.IsLetter)} ~w~ życzymy miłej gry.");
+                sender.Notify($"Zszedłeś ze służby {player.DbModel.ServerRank.GetColoredRankName()} życzymy miłej gry.", NotificationType.Info);
             }
             else
             {
                 AdminsOnDuty.Add(player);
-                NAPI.Chat.SendChatMessageToPlayer(sender, $"Wszedłeś na służbę ~{sender.GetRankColor().ToHex()}~ {player.DbModel.ServerRank.ToString().Where(char.IsLetter)} ~w~ życzymy cierpliwości.");
+                sender.Notify($"Wszedłeś na służbę {player.DbModel.ServerRank.GetColoredRankName()} życzymy cierpliwości.", NotificationType.Info);
             }
         }
     }

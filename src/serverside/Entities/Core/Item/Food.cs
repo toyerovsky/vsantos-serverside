@@ -13,6 +13,7 @@ namespace VRP.Serverside.Entities.Core.Item
 {
     internal class Food : ItemEntity
     {
+        public int HealthToRestore => DbModel.FirstParameter.Value;
         /// <summary>
         /// Pierwszy parametr to ilość HP do przyznania
         /// </summary>
@@ -22,13 +23,13 @@ namespace VRP.Serverside.Entities.Core.Item
         {
         }
 
-        public override void UseItem(AccountEntity player)
+        public override void UseItem(CharacterEntity sender)
         {
-            ChatScript.SendMessageToNearbyPlayers(player.Client, $"zjada {DbModel.Name}", ChatMessageType.ServerMe);
-            player.Client.Health += Convert.ToInt32(DbModel.FirstParameter);
+            ChatScript.SendMessageToNearbyPlayers(sender, $"zjada {DbModel.Name}", ChatMessageType.ServerMe);
+            sender.Health += Convert.ToInt32(HealthToRestore);
             Delete();
         }
 
-        public override string UseInfo => $"Ten przedmiot odnawia: {DbModel.FirstParameter} punktów życia.";
+        public override string UseInfo => $"Ten przedmiot odnawia: {HealthToRestore} punktów życia.";
     }
 }

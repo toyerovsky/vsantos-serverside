@@ -8,14 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Timers;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.CharacterCreator;
-
 using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Economy.Money;
+using VRP.Serverside.Economy.Offers;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Core.Building;
 using VRP.Serverside.Entities.Core.Group;
@@ -41,15 +43,69 @@ namespace VRP.Serverside.Entities.Core
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 
         public event DimensionChangeEventHandler OnPlayerDimensionChanged;
-        public static event CharacterLoginEventHandler CharacterLoggedIn;
+        public static event CharacterSelectEventHandler CharacterSelected;
 
         public IInteractive CurrentInteractive { get; set; }
+        public Offer PendingOffer { get; set; }
 
         public bool CanSendPrivateMessage { get; set; }
         public bool CanCommand { get; set; }
         public bool CanTalk { get; set; }
         public bool CanNarrate { get; set; }
         public bool CanPay { get; set; }
+
+        private Timer PositionSyncTimer { get; }
+
+        public int Health
+        {
+            get => DbModel.Health;
+            set
+            {
+                AccountEntity.Client.Health = value;
+                DbModel.Health = value;
+                Save();
+            }
+        }
+
+        public Vector3 Position
+        {
+            get => new Vector3(DbModel.LastPositionX, DbModel.LastPositionY, DbModel.LastPositionZ);
+            set
+            {
+                AccountEntity.Client.Position = value;
+                DbModel.LastPositionX = value.X;
+                DbModel.LastPositionY = value.Y;
+                DbModel.LastPositionZ = value.Z;
+                Save();
+            }
+        }
+
+        public Vector3 Rotation
+        {
+            get => new Vector3(DbModel.LastPositionRotX, DbModel.LastPositionRotY, DbModel.LastPositionRotZ);
+            set
+            {
+                AccountEntity.Client.Rotation = value;
+                DbModel.LastPositionRotX = value.X;
+                DbModel.LastPositionRotY = value.Y;
+                DbModel.LastPositionRotZ = value.Z;
+                Save();
+            }
+        }
+
+        public uint Dimension
+        {
+            get => DbModel.CurrentDimension;
+            set
+            {
+                NAPI.Entity.SetEntityDimension(AccountEntity.Client, value);
+
+                OnPlayerDimensionChanged?.Invoke(this,
+                    new DimensionChangeEventArgs(this, AccountEntity.Client.Dimension, value));
+                DbModel.CurrentDimension = value;
+                Save();
+            }
+        }
 
         public CharacterEntity(AccountEntity accountEntity, CharacterModel dbModel)
         {
@@ -69,22 +125,11 @@ namespace VRP.Serverside.Entities.Core
             if (DbModel.Freemode)
                 CharacterCreator = new CharacterCreator(this);
             Description = new Description(AccountEntity);
-
-            OnPlayerDimensionChanged += OnOnPlayerDimensionChanged;
+            PositionSyncTimer = new Timer(10000);
         }
 
         public void Save()
         {
-            if (AccountEntity != null)
-            {
-                DbModel.CurrentDimension = (int)AccountEntity.Client.Dimension;
-                DbModel.LastPositionX = AccountEntity.Client.Position.X;
-                DbModel.LastPositionY = AccountEntity.Client.Position.Y;
-                DbModel.LastPositionZ = AccountEntity.Client.Position.Z;
-                DbModel.LastPositionRotX = AccountEntity.Client.Rotation.X;
-                DbModel.LastPositionRotY = AccountEntity.Client.Rotation.Y;
-                DbModel.LastPositionRotZ = AccountEntity.Client.Rotation.Z;
-            }
             using (CharactersRepository repository = new CharactersRepository())
             {
                 repository.Update(DbModel);
@@ -98,17 +143,6 @@ namespace VRP.Serverside.Entities.Core
             accountEntity.CharacterEntity = this;
             Spawn();
         }
-
-        #region DimensionManager
-
-        public void ChangeDimension(uint dimension)
-        {
-            OnPlayerDimensionChanged?.Invoke(this,
-                new DimensionChangeEventArgs(AccountEntity.Client, AccountEntity.Client.Dimension, dimension));
-            NAPI.Entity.SetEntityDimension(AccountEntity.Client, dimension);
-        }
-
-        #endregion
 
         public override void Spawn()
         {
@@ -125,7 +159,7 @@ namespace VRP.Serverside.Entities.Core
             if (DbModel.MinutesToRespawn > 0)
                 NAPI.Player.SetPlayerHealth(AccountEntity.Client, -1);
             else
-                NAPI.Player.SetPlayerHealth(AccountEntity.Client, DbModel.HitPoints);
+                NAPI.Player.SetPlayerHealth(AccountEntity.Client, DbModel.Health);
 
             CanTalk = true;
             CanNarrate = true;
@@ -137,19 +171,61 @@ namespace VRP.Serverside.Entities.Core
             AccountEntity.Client.Notify(
                 $"Twoja postaæ {FormatName} zosta³a pomyœlnie za³adowana ¿yczymy mi³ej gry!", NotificationType.Info);
 
-            CharacterLoggedIn?.Invoke(AccountEntity.Client, this);
+            CharacterSelected?.Invoke(AccountEntity.Client, this);
+
+            // every 10 seconds synchronize player position and rotation
+            PositionSyncTimer.Elapsed += (o, e) =>
+            {
+                DbModel.LastPositionX = AccountEntity.Client.Position.X;
+                DbModel.LastPositionY = AccountEntity.Client.Position.Y;
+                DbModel.LastPositionZ = AccountEntity.Client.Position.Z;
+                DbModel.LastPositionRotX = AccountEntity.Client.Rotation.X;
+                DbModel.LastPositionRotY = AccountEntity.Client.Rotation.Y;
+                DbModel.LastPositionRotZ = AccountEntity.Client.Rotation.Z;
+                Save();
+            };
+            PositionSyncTimer.Start();
         }
 
         public override void Dispose()
         {
             Description?.Dispose();
+            PositionSyncTimer.Dispose();
         }
 
-        private void OnOnPlayerDimensionChanged(object sender, DimensionChangeEventArgs e)
+        public bool HasMoney(decimal count, bool bank = false)
         {
-            AccountEntity account = e.Player.GetAccountEntity();
-            account.CharacterEntity.DbModel.CurrentDimension = (int)e.CurrentDimension;
-            account.CharacterEntity.Save();
+            return MoneyManager.HasMoney(this, count, bank);
+        }
+
+        public void AddMoney(decimal count, bool bank = false)
+        {
+            MoneyManager.AddMoney(this, count, bank);
+        }
+
+        public void RemoveMoney(decimal count, bool bank = false)
+        {
+            MoneyManager.RemoveMoney(this, count, bank);
+        }
+
+        public void Notify(string message, NotificationType notificationType)
+        {
+            AccountEntity.Client.Notify(message, notificationType);
+        }
+
+        public void SetSharedData(string key, object value)
+        {
+            AccountEntity.Client.SetSharedData(key, value);
+        }
+
+        public void ResetSharedData(string key)
+        {
+            AccountEntity.Client.ResetSharedData(key);
+        }
+
+        public bool HasSharedData(string key)
+        {
+            return AccountEntity.Client.HasSharedData(key);
         }
     }
 }

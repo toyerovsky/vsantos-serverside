@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Jobs.Base;
 using VRP.Serverside.Entities.Core;
@@ -41,8 +42,9 @@ namespace VRP.Serverside.Economy.Jobs.Greenkeeper
 
         public override void Start()
         {
-            Player.Client.Notify("Rozpocząłeś pracę ogrodnika, jeździj po polu golfowym, aby kosić trawnik.");
-            Player.Client.Notify("Jeżeli wyjedziesz z obszaru pola golfowego zostanie wysłane zgłoszenie na numer alarmowy.");
+            Player.Client.Notify("Rozpocząłeś pracę ogrodnika, jeździj po polu golfowym, aby kosić trawnik.", NotificationType.Info);
+            //TODO: dzwonienie na numer alarmowy
+            Player.Client.Notify("Jeżeli wyjedziesz z obszaru pola golfowego zostanie wysłane zgłoszenie na numer alarmowy.", NotificationType.Info);
         }
 
         public override void Stop()

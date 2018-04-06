@@ -19,10 +19,10 @@ namespace VRP.Serverside.Entities.Core.Item
         /// <param name="itemModel"></param>
         public Dice(ItemModel itemModel) : base(itemModel) { }
 
-        public override void UseItem(AccountEntity player)
+        public override void UseItem(CharacterEntity sender)
         {
             if (DbModel.FirstParameter != null)
-                ChatScript.SendMessageToNearbyPlayers(player.Client,
+                ChatScript.SendMessageToNearbyPlayers(sender,
                     $"wyrzucił {Utils.RandomRange(1, DbModel.FirstParameter.Value)} oczek z {DbModel.FirstParameter} możliwych",
                     ChatMessageType.ServerMe);
         }

@@ -28,7 +28,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
             {
                 BusStopEntity busStop = EntityHelper.GetBusStops().ElementAt(Convert.ToInt32(arguments[2]));
 
-                BusStopEntity.StartTransport(sender, Convert.ToDecimal(arguments[1]), Convert.ToInt32(arguments[0]),
+                BusStopEntity.StartTransport(sender.GetAccountEntity().CharacterEntity, Convert.ToDecimal(arguments[1]), Convert.ToInt32(arguments[0]),
                     busStop.Data.Center, busStop.Data.Name);
             }
         }
@@ -39,7 +39,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
             //Jeśli gracz nie jest na przystanku to anulujemy proces
             if (!sender.HasData("Bus") || EntityHelper.GetBusStops().Count() < 2)
             {
-                sender.Notify("Liczba przystanków autobusowych musi być większa lub równa dwa.");
+                sender.Notify("Liczba przystanków autobusowych musi być większa lub równa dwa.", NotificationType.Warning);
                 return;
             }
             //Wybieramy wszystkie przystanki oprócz tego w którym obecnie się znajduje
@@ -53,24 +53,22 @@ namespace VRP.Serverside.Entities.Common.BusStop
             sender.TriggerEvent("ShowBusMenu", json);
         }
 
-        [Command("dodajbus", "~y~UŻYJ ~w~ /dodajbus [nazwa]",  GreedyArg = true)]
+        [Command("dodajbus", "~y~UŻYJ ~w~ /dodajbus [nazwa]", GreedyArg = true)]
         public void AddBusStop(Client sender, string name)
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.", NotificationType.Error);
                 return;
             }
 
-            sender.Notify("Ustaw się na środku przystanku aby stworzyć sferyczną strefę o promieniu 5f.");
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz /tu.");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz tu użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
 
             Vector3 center = null;
 
             void Handler(Client o, string command)
             {
-                if (center == null && o == sender && command == "/tu")
+                if (center == null && o == sender && command == "tu")
                 {
                     center = o.Position;
                     BusStopModel data = new BusStopModel
@@ -81,7 +79,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
                     };
                     XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, nameof(BusStopModel), data.Name));
 
-                    sender.Notify("Dodawanie przystanku zakończyło się pomyślnie.");
+                    sender.Notify("Dodawanie przystanku zakończyło się pomyślnie.", NotificationType.Info);
                     BusStopEntity busStop = new BusStopEntity(data);
                     busStop.Spawn();
                     EntityHelper.Add(busStop);
@@ -94,13 +92,13 @@ namespace VRP.Serverside.Entities.Common.BusStop
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku autobusowego.", NotificationType.Error);
                 return;
             }
 
             if (!EntityHelper.GetBusStops().Any())
             {
-                sender.Notify("Nie znaleziono przystanku autobusowego który można usunąć.");
+                sender.Notify("Nie znaleziono przystanku autobusowego który można usunąć.", NotificationType.Warning);
                 return;
             }
 
@@ -108,19 +106,19 @@ namespace VRP.Serverside.Entities.Common.BusStop
 
             if (busStop == null)
             {
-                sender.Notify("Nie znaleziono przystanku autobusowego w Twoim otoczeniu.");
+                sender.Notify("Nie znaleziono przystanku autobusowego w Twoim otoczeniu.", NotificationType.Error);
                 return;
             }
 
             if (XmlHelper.TryDeleteXmlObject(busStop.Data.FilePath))
             {
-                sender.Notify("Usuwanie przystanku autobusowego zakończyło się ~g~pomyślnie.");
+                sender.Notify("Usuwanie przystanku autobusowego zakończyło się pomyślnie.", NotificationType.Info);
                 EntityHelper.Remove(busStop);
                 busStop.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie przystanku autobusowego zakończyło się ~r~niepowodzeniem.");
+                sender.Notify("Usuwanie przystanku autobusowego zakończyło się ~r~niepowodzeniem.", NotificationType.Error);
             }
         }
     }

@@ -62,28 +62,31 @@ namespace VRP.Serverside.Entities.Common.Market
             else if (eventName == "OnPlayerBoughtMarketItem")
             {
                 //args[0] index
-                if (!sender.HasData("CurrentMarket")) return;
-                MarketEntity market = (MarketEntity)sender.GetData("CurrentMarket");
-                MarketItem item = market.Data.Items[(int)arguments[0]];
-                if (!sender.HasMoney(item.Cost))
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+                if (character.CurrentInteractive is MarketEntity market)
                 {
-                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
-                    return;
-                }
-                sender.RemoveMoney(item.Cost);
+                    MarketItem item = market.Data.Items[(int)arguments[0]];
 
-                AccountEntity controller = sender.GetAccountEntity();
-                controller.CharacterEntity.DbModel.Items.Add(new ItemModel
-                {
-                    Creator = null,
-                    ItemEntityType = item.ItemEntityType,
-                    Name = item.Name,
-                    Character = controller.CharacterEntity.DbModel,
-                    FirstParameter = item.FirstParameter,
-                    SecondParameter = item.SecondParameter,
-                    ThirdParameter = item.ThirdParameter
-                });
-                controller.Save();
+                    if (!character.HasMoney(item.Cost))
+                    {
+                        character.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Info);
+                        return;
+                    }
+                    character.RemoveMoney(item.Cost);
+
+                    AccountEntity controller = sender.GetAccountEntity();
+                    controller.CharacterEntity.DbModel.Items.Add(new ItemModel
+                    {
+                        Creator = null,
+                        ItemEntityType = item.ItemEntityType,
+                        Name = item.Name,
+                        Character = controller.CharacterEntity.DbModel,
+                        FirstParameter = item.FirstParameter,
+                        SecondParameter = item.SecondParameter,
+                        ThirdParameter = item.ThirdParameter
+                    });
+                    controller.Save();
+                }
             }
         }
 
@@ -111,22 +114,24 @@ namespace VRP.Serverside.Entities.Common.Market
         [Command("kup")]
         public void BuyItemFromShop(Client sender)
         {
-            if (!sender.HasData("CurrentMarket"))
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            if (character.CurrentInteractive is MarketEntity market)
             {
-                sender.Notify("Nie znajdujesz się w sklepie");
-                return;
+                if (market.Data.Items == null || market.Data.Items.Count == 0)
+                    return;
+                sender.TriggerEvent("ShowMarketMenu", JsonConvert.SerializeObject(market.Data.Items));
             }
-            MarketEntity market = (MarketEntity)sender.GetData("CurrentMarket");
-            if (market.Data.Items == null || market.Data.Items.Count == 0) return;
-            sender.TriggerEvent("ShowMarketMenu", JsonConvert.SerializeObject(market.Data.Items));
+            else
+            {
+                sender.Notify("Nie znajdujesz się w sklepie", NotificationType.Info);
+            }
         }
 
         [Command("dodajsklep", "~y~UŻYJ ~w~ /dodajsklep [nazwa]")]
         public void AddMarket(Client sender, string name)
         {
-            sender.Notify("Ustaw się w pozycji NPC, a następnie wpisz /tu.");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
-
+            sender.Notify("Ustaw się w pozycji NPC, a następnie wpisz /tu użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
+            
             Vector3 center = null;
 
             void Handler(Client o, string message)
@@ -134,7 +139,7 @@ namespace VRP.Serverside.Entities.Common.Market
                 if (center == null && o == sender && message == "/tu")
                 {
                     center = o.Position;
-                    sender.Notify("Przejdź do pozycji końca promienia zasięgu i wpisz \"tu.\"");
+                    sender.Notify("Przejdź do pozycji końca promienia zasięgu i wpisz \"tu.\"", NotificationType.Info);
                 }
                 else
                 {

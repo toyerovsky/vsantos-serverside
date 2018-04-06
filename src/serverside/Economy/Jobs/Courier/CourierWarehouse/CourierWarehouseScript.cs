@@ -31,11 +31,11 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
                 WarehouseOrderInfo package = GroupWarehouseScript.CurrentOrders.Single(x => x.Data.Id == (int)arguments[0]);
                 if (package.CurrentCourier != null)
                 {
-                    sender.Notify("Ktoś obecnie dostarcza tę paczkę.");
+                    sender.Notify("Ktoś obecnie dostarcza tę paczkę.", NotificationType.Error);
                     return;
                 }
 
-                sender.Notify($"Podjąłeś się dostarczenia przesyłki do: {EntityHelper.GetGroup(package.Data.Getter.Id).GetColoredName()}");
+                sender.Notify($"Podjąłeś się dostarczenia przesyłki do: {EntityHelper.GetGroup(package.Data.Getter.Id).GetColoredName()}", NotificationType.Info);
                 package.CurrentCourier = sender.GetAccountEntity();
                 GroupWarehouseScript.CurrentOrders.Remove(package);
 
@@ -45,7 +45,7 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
                 {
                     if (package.CurrentCourier.CharacterEntity.DbModel.Online)
                     {
-                        package.CurrentCourier.Client.Notify("Nie dostarczyłeś paczki na czas.");
+                        package.CurrentCourier.Client.Notify("Nie dostarczyłeś paczki na czas.", NotificationType.Info);
                     }
 
                     package.CurrentCourier = null;
@@ -60,11 +60,11 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do dodawania auta do pracy.");
+                sender.Notify("Nie posiadasz uprawnień do dodawania auta do pracy.", NotificationType.Warning);
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji a następnie wpisz \"tu\"");
+            sender.Notify("Ustaw się w wybranej pozycji a następnie wpisz \"tu\"", NotificationType.Info);
 
             void Handler(Client o, string message)
             {
@@ -79,7 +79,7 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
                     XmlHelper.AddXmlObject(warehouse, Path.Combine(Utils.XmlDirectory, "CourierWarehouses"));
 
                     Warehouses.Add(new CourierWarehouse(warehouse));
-                    o.Notify("Dodawanie magazynu do pracy kuriera zakończyło się ~h~ ~g~pomyślnie.");
+                    o.Notify("Dodawanie magazynu do pracy kuriera zakończyło się pomyślnie.", NotificationType.Info);
                 }
             }
         }

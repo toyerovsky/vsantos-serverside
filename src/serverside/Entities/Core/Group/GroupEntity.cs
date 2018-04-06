@@ -73,7 +73,7 @@ namespace VRP.Serverside.Entities.Core.Group
             return factory.Create(groupModel);
         }
 
-        public string GetColoredName() => $"{DbModel.Color.ToColor().ToRocstar()} ~h~ {DbModel.Name} ~w~";
+        public string GetColoredName() => $"<p style='color:{DbModel.Color}'>{DbModel.Name}</p>";
 
         public bool HasMoney(decimal money) => DbModel.Money >= money;
 

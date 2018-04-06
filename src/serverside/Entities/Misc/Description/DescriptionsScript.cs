@@ -10,6 +10,7 @@ using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;
 
@@ -25,7 +26,7 @@ namespace VRP.Serverside.Entities.Misc.Description
 
                 if (player.CharacterEntity.DbModel.Descriptions.Count > 3)
                 {
-                    sender.Notify("Liczba twoich opisów nie może być większa niż 3.");
+                    sender.Notify("Liczba twoich opisów nie może być większa niż 3.", NotificationType.Error);
                     return;
                 }
                 //arguments[0] tytul, arguments[1] opis
@@ -39,7 +40,7 @@ namespace VRP.Serverside.Entities.Misc.Description
                 player.CharacterEntity.DbModel.Descriptions.Add(descriptionModel);
                 player.Save();
 
-                sender.Notify("Twój opis został pomyślnie dodany.");
+                sender.Notify("Twój opis został pomyślnie dodany.", NotificationType.Info);
 
                 sender.TriggerEvent("ShowDescriptionsCef", false);
 
@@ -61,7 +62,7 @@ namespace VRP.Serverside.Entities.Misc.Description
 
                     player.Save();
                     
-                    sender.Notify("Twój opis został pomyślnie edytowany.");
+                    sender.Notify("Twój opis został pomyślnie edytowany.", NotificationType.Info);
 
                     sender.TriggerEvent("ShowDescriptionsCef", false);
 
@@ -82,7 +83,7 @@ namespace VRP.Serverside.Entities.Misc.Description
                     player.CharacterEntity.DbModel.Descriptions.Remove(description);
                     player.Save();
 
-                    sender.Notify("Twój opis został pomyślnie usunięty.");
+                    sender.Notify("Twój opis został pomyślnie usunięty.", NotificationType.Info);
                     sender.TriggerEvent("ShowDescriptionsCef", false);
 
                     string descriptionsClient = JsonConvert.SerializeObject(player.CharacterEntity.DbModel.Descriptions);

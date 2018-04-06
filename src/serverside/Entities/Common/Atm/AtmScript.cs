@@ -27,7 +27,7 @@ namespace VRP.Serverside.Entities.Common.Atm
             {
                 if (decimal.TryParse(arguments[0].ToString(), out decimal money))
                 {
-                    ChatScript.SendMessageToNearbyPlayers(sender,
+                    ChatScript.SendMessageToNearbyPlayers(sender.GetAccountEntity().CharacterEntity,
                         $"wkłada {(money >= 3000 ? "gruby" : "chudy")} plik gotówki do bankomatu i po przetworzeniu operacji zabiera kartę.", ChatMessageType.ServerMe);
                     BankHelper.DepositMoney(sender, money);
                 }
@@ -36,7 +36,7 @@ namespace VRP.Serverside.Entities.Common.Atm
             {
                 if (decimal.TryParse(arguments[0].ToString(), out decimal money))
                 {
-                    ChatScript.SendMessageToNearbyPlayers(sender,
+                    ChatScript.SendMessageToNearbyPlayers(sender.GetAccountEntity().CharacterEntity,
                         $"wyciąga z bankomatu {(money >= 3000 ? "gruby" : "chudy")} plik gotówki, oraz kartę.", ChatMessageType.ServerMe);
                     BankHelper.WithdrawMoney(sender, money);
                 }
@@ -50,12 +50,11 @@ namespace VRP.Serverside.Entities.Common.Atm
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do dodawania bankomatu.");
+                sender.Notify("Nie posiadasz uprawnień do dodawania bankomatu.", NotificationType.Error);
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
 
             void Handler(Client o, string message)
             {
@@ -85,7 +84,7 @@ namespace VRP.Serverside.Entities.Common.Atm
                     AtmEntity atm = new AtmEntity(data);
                     atm.Spawn();
                     EntityHelper.Add(atm);
-                    sender.Notify("Dodawanie bankomatu zakończyło się ~h~~g~pomyślnie.");
+                    sender.Notify("Dodawanie bankomatu zakończyło się pomyślnie.", NotificationType.Info);
 
                 }
             }
@@ -96,26 +95,26 @@ namespace VRP.Serverside.Entities.Common.Atm
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania bankomatu.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania bankomatu.", NotificationType.Error);
                 return;
             }
 
             if (!EntityHelper.GetAtms().Any())
             {
-                sender.Notify("Nie znaleziono bankomatu który można usunąć.");
+                sender.Notify("Nie znaleziono bankomatu który można usunąć.", NotificationType.Error);
                 return;
             }
 
             AtmEntity atm = EntityHelper.GetAtms().First(a => a.ColShape.IsPointWithin(sender.Position));
             if (XmlHelper.TryDeleteXmlObject(atm.Data.FilePath))
             {
-                sender.Notify("Usuwanie bankomatu zakończyło się ~h~~g~pomyślnie.");
+                sender.Notify("Usuwanie bankomatu zakończyło się pomyślnie.", NotificationType.Info);
                 EntityHelper.Remove(atm);
                 atm.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie bankomatu zakończyło się ~h~~r~niepomyślnie.");
+                sender.Notify("Usuwanie bankomatu zakończyło się niepomyślnie.", NotificationType.Error);
             }
         }
         #endregion

@@ -5,7 +5,9 @@
  */
 
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Bank
 {
@@ -13,33 +15,35 @@ namespace VRP.Serverside.Economy.Bank
     {
         public static void DepositMoney(Client player, decimal count)
         {
-            if (player.HasMoney(count))
+            CharacterEntity character = player.GetAccountEntity().CharacterEntity;
+            if (character.HasMoney(count))
             {
-                player.RemoveMoney(count);
-                player.AddMoney(count, true);
+                character.RemoveMoney(count);
+                character.AddMoney(count, true);
 
                 player.Notify(
-                    $"Wpłacono ${count} na konto o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}");
+                    $"Wpłacono ${count} na konto o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}", NotificationType.Info);
             }
             else
             {
-                player.Notify("Nie posiadasz wystarczającej ilości gotówki.");
+                player.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Warning);
             }
         }
 
         public static void WithdrawMoney(Client player, decimal count)
         {
-            if (player.HasMoney(count, true))
+            CharacterEntity character = player.GetAccountEntity().CharacterEntity;
+            if (character.HasMoney(count, true))
             {
-                player.RemoveMoney(count, true);
-                player.AddMoney(count);
+                character.RemoveMoney(count, true);
+                character.AddMoney(count);
 
                 player.Notify(
-                    $"Wypłacono ${count} z konta o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}");
+                    $"Wypłacono ${count} z konta o numerze {player.GetAccountEntity().CharacterEntity.DbModel.BankAccountNumber}", NotificationType.Info);
             }
             else
             {
-                player.Notify("Nie posiadasz wystarczającej ilości środków na koncie bankowym.");
+                player.Notify("Nie posiadasz wystarczającej ilości środków na koncie bankowym.", NotificationType.Warning);
             }
         }
     }

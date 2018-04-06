@@ -25,20 +25,20 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Adminadministrator3)
             {
-                sender.Notify("Nie posiadasz uprawnień do ustawiania rang.");
+                sender.Notify("Nie posiadasz uprawnień do ustawiania rang.", NotificationType.Warning);
                 return;
             }
 
             AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.");
+                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                 return;
             }
 
             controller.DbModel.ServerRank = rank;
             controller.Save();
-            sender.Notify($"Nadałeś {controller.CharacterEntity.FormatName} ({controller.DbModel.Name}) rangę {controller.DbModel.ServerRank.ToString()}");
+            sender.Notify($"Nadałeś {controller.CharacterEntity.FormatName} ({controller.DbModel.Name}) rangę {controller.DbModel.ServerRank}", NotificationType.Info);
         }
 
         [Command("tpc", "~y~ UŻYJ ~w~ /tpc [x] [y] [z]")]
@@ -46,11 +46,11 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do teleportu na koordynaty.");
+                sender.Notify("Nie posiadasz uprawnień do teleportu na koordynaty.", NotificationType.Warning);
                 return;
             }
             sender.Position = new Vector3(x, y, z);
-            sender.Notify($"Teleportowałeś się na X:{x} Y:{y} Z:{z}");
+            sender.Notify($"Teleportowałeś się na X:{x} Y:{y} Z:{z}", NotificationType.Info);
         }
 
         [Command("tpmap", "~y~ UŻYJ ~w~ /tpmap")]
@@ -58,7 +58,7 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do teleportu na waypoint.");
+                sender.Notify("Nie posiadasz uprawnień do teleportu na waypoint.", NotificationType.Warning);
                 return;
             }
             Action<Vector3> teleportAction = position => sender.Position = position;
@@ -73,13 +73,13 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do teleportu.");
+                sender.Notify("Nie posiadasz uprawnień do teleportu.", NotificationType.Warning);
                 return;
             }
             AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.");
+                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                 return;
             }
             sender.Position = new Vector3(controller.Client.Position.X - 5f, controller.Client.Position.Y, controller.Client.Position.Z + 1f);
@@ -90,24 +90,24 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do obserwowania.");
+                sender.Notify("Nie posiadasz uprawnień do obserwowania.", NotificationType.Warning);
                 return;
             }
             AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.");
+                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                 return;
             }
             NAPI.Player.SetPlayerToSpectatePlayer(sender, controller.Client);
-            sender.Notify($"Włączono obserwowanie na gracza {controller.CharacterEntity.FormatName}");
+            sender.Notify($"Włączono obserwowanie na gracza {controller.CharacterEntity.FormatName}", NotificationType.Info);
         }
 
         [Command("specoff")]
         public void TurnOffSpectating(Client sender)
         {
             NAPI.Player.SetPlayerToSpectator(sender);
-            sender.Notify("~r~ ~h~Wyłączono ~w~obserwowanie.");
+            sender.Notify("Wyłączono obserwowanie.", NotificationType.Info);
         }
 
         [Command("addspec", "~y~ UŻYJ ~w~ /addspec [id]", Description = "Polecenie ustawia wybranemu graczowi specowanie na nas.")]
@@ -115,17 +115,17 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support3)
             {
-                sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.");
+                sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.", NotificationType.Warning);
                 return;
             }
             AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.");
+                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                 return;
             }
             NAPI.Player.SetPlayerToSpectator(controller.Client);
-            sender.Notify("~g~ ~h~Włączono ~w~obserwowanie.");
+            sender.Notify("Włączono obserwowanie.", NotificationType.Info);
         }
 
         [Command("kick", "~y~ UŻYJ ~w~ /kick [id] (powod)", GreedyArg = true)]
@@ -133,13 +133,13 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do ustawienia obserwowania.");
+                sender.Notify("Nie posiadasz uprawnień do wyrzucenia gracza.", NotificationType.Warning);
                 return;
             }
             AccountEntity accountEntity = EntityHelper.GetAccountByServerId(id);
             if (accountEntity == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.");
+                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                 return;
             }
             accountEntity.Kick(sender.GetAccountEntity(), reason);
@@ -150,7 +150,7 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support5)
             {
-                sender.Notify("Nie posiadasz uprawnień do ustawienia latania.");
+                sender.Notify("Nie posiadasz uprawnień do latania.", NotificationType.Warning);
                 return;
             }
 
@@ -158,53 +158,53 @@ namespace VRP.Serverside.Admin
             {
                 sender.ResetData("FlyState");
                 NAPI.ClientEvent.TriggerClientEvent(sender, "FreeCamStop");
-                sender.Notify("~r~ ~h~Wyłączono ~w~latanie.");
+                sender.Notify("Wyłączono latanie.", NotificationType.Info);
                 return;
             }
 
             sender.SetData("FlyState", true);
             NAPI.ClientEvent.TriggerClientEvent(sender, "FreeCamStart", sender.Position);
-            sender.Notify("~g~ ~h~Włączono ~w~latanie.");
+            sender.Notify("Włączono latanie.", NotificationType.Info);
         }
 
         [Command("god")]
         public void SetPlayerInvicible(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Administrator)
             {
-                sender.Notify("Nie posiadasz uprawnień do ustawienia nieśmiertelności.");
+                sender.Notify("Nie posiadasz uprawnień do ustawienia nieśmiertelności.", NotificationType.Warning);
                 return;
             }
             if (sender.Invincible)
             {
                 sender.Invincible = false;
-                sender.Notify("~r~Wyłączono ~w~nieśmiertelność.");
+                sender.Notify("Wyłączono nieśmiertelność.", NotificationType.Info);
             }
             else
             {
                 sender.Invincible = true;
-                sender.Notify("~g~~h~Włączono ~w~nieśmiertelność.");
+                sender.Notify("Włączono nieśmiertelność.", NotificationType.Info);
             }
         }
 
         [Command("inv")]
         public void SetPlayerInvisible(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Administrator)
             {
-                sender.Notify("Nie posiadasz uprawnień do ustawienia niewidzialności.");
+                sender.Notify("Nie posiadasz uprawnień do ustawienia niewidzialności.", NotificationType.Warning);
                 return;
             }
 
             if (sender.Transparency == 0)
             {
                 sender.Transparency = 1;
-                sender.Notify("~r~Wyłączono ~w~niewidzialności.");
+                sender.Notify("Wyłączono niewidzialność.", NotificationType.Info);
             }
             else
             {
                 sender.Transparency = 0;
-                sender.Notify("~g~~h~Włączono ~w~niewidzialności.");
+                sender.Notify("Włączono niewidzialności.", NotificationType.Info);
             }
         }
 
@@ -213,7 +213,7 @@ namespace VRP.Serverside.Admin
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {
-                sender.Notify("Nie posiadasz uprawnień do zapisywania pozycji.");
+                sender.Notify("Nie posiadasz uprawnień do zapisywania pozycji.", NotificationType.Warning);
                 return;
             }
 
@@ -238,7 +238,7 @@ namespace VRP.Serverside.Admin
             data.Add($"[{DateTime.Now}] {name} Pos: {sender.Position} Rot: {sender.Rotation} Autor: {sender.GetAccountEntity().DbModel.Name}");
 
             File.WriteAllLines(path, data);
-            sender.Notify($"Zapisano pozycję: {name}");
+            sender.Notify($"Zapisano pozycję: {name}", NotificationType.Info);
         }
     }
 }

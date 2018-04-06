@@ -25,24 +25,33 @@ namespace VRP.Serverside.Core.Extensions
             return client.GetData("RP_ACCOUNT") as AccountEntity;
         }
 
-        public static void Notify(this Client client, string message, bool flashing = false)
+        // until rage mp won't fix utf 8 characters we don't use this method
+        // public static void Notify(this Client client, string message, bool flashing = false)
+        // {
+        //    NAPI.Notification.SendNotificationToPlayer(client, message, flashing);
+        // }
+
+        public static void Notify(this Client client, string message, NotificationType notificationType, string title = "")
         {
-            NAPI.Notification.SendNotificationToPlayer(client, message, flashing);
+            client.TriggerEvent(Constant.RemoteEvents.RemoteEvents.PlayerNotifyRequested, message, notificationType, title);
         }
 
-        public static void Notify(this Client client, string message, NotificationType notificationType)
+        public static string GetColoredRankName(this ServerRank serverRank)
         {
-            client.TriggerEvent(Constant.RemoteEvents.RemoteEvents.PlayerNotifyRequested, message, notificationType);
-        }
+            Color color;
 
-        public static Color GetRankColor(this Client client)
-        {
-            AccountModel account = client.GetAccountEntity().DbModel;
-            if ((ServerRank)account.ForumGroup >= ServerRank.Support && (ServerRank)account.ForumGroup <= ServerRank.Support6) return new Color(51, 143, 255);
-            if ((ServerRank)account.ForumGroup >= ServerRank.GameMaster && (ServerRank)account.ForumGroup <= ServerRank.GameMaster5) return new Color(0, 109, 15);
-            if ((ServerRank)account.ForumGroup >= ServerRank.Administrator && (ServerRank)account.ForumGroup <= ServerRank.Adminadministrator3) return new Color(117, 13, 18);
-            if ((ServerRank)account.ForumGroup >= ServerRank.Zarzad && (ServerRank)account.ForumGroup <= ServerRank.Zarzad2) return new Color(255, 0, 0);
-            return new Color(255, 255, 255);
+            if (serverRank >= ServerRank.Support && serverRank <= ServerRank.Support6)
+                color = new Color(51, 143, 255);
+            else if (serverRank >= ServerRank.GameMaster && serverRank <= ServerRank.GameMaster5)
+                color = new Color(0, 109, 15);
+            else if (serverRank >= ServerRank.Administrator && serverRank <= ServerRank.Adminadministrator3)
+                color = new Color(117, 13, 18);
+            else if (serverRank >= ServerRank.Zarzad && serverRank <= ServerRank.Zarzad2)
+                color = new Color(255, 0, 0);
+            else
+                color = new Color(255, 255, 255);
+
+            return $"<p style='color:{color.ToHex()}'>{serverRank.ToString().Where(char.IsLetter)}</p>";
         }
 
         public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group)
@@ -56,22 +65,5 @@ namespace VRP.Serverside.Core.Extensions
             }
             return group != null;
         }
-
-        #region Money
-        public static bool HasMoney(this Client client, decimal count, bool bank = false)
-        {
-           return MoneyManager.HasMoney(client, count, bank);
-        }
-
-        public static void AddMoney(this Client client, decimal count, bool bank = false)
-        {
-            MoneyManager.AddMoney(client, count, bank);
-        }
-
-        public static void RemoveMoney(this Client client, decimal count, bool bank = false)
-        {
-            MoneyManager.RemoveMoney(client, count, bank);
-        }
-        #endregion
     }
 }

@@ -84,9 +84,9 @@ namespace VRP.vAPI.Services
                     if (data.ActionType == BroadcasterActionType.SignIn)
                     {
                         // Add user to dictionary
-                        using (var ctx = RolePlayContextFactory.NewContext())
-                        using (var accountsRepository = new AccountsRepository(ctx))
-                        using (var charactersRepository = new CharactersRepository(ctx))
+                        using (RoleplayContext ctx = RolePlayContextFactory.NewContext())
+                        using (AccountsRepository accountsRepository = new AccountsRepository(ctx))
+                        using (CharactersRepository charactersRepository = new CharactersRepository(ctx))
                         {
                             AppUser appUser = data.CharacterId != -1 ?
                                 new AppUser(accountsRepository.Get(data.AccountId), charactersRepository.Get(data.CharacterId)) :

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
@@ -41,12 +42,11 @@ namespace VRP.Serverside.Entities.Common.Corners
             //Sprawdzamy czy gracz podał prawidłowe ID NPC
             if (!CornerBotHelper.TryGetCornerBotIds(botIds, out List<int> correctBotIds))
             {
-                sender.Notify("Podano dane w nieprawidłowym formacie. Lub podany NPC nie istnieje.");
+                sender.Notify("Podano dane w nieprawidłowym formacie. Lub podany NPC nie istnieje.", NotificationType.Error);
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + shift + alt + d aby poznać swoją obecną pozycję.", NotificationType.Info);
 
             FullPosition position = null;
             List<FullPosition> botPositions = new List<FullPosition>();
@@ -72,9 +72,9 @@ namespace VRP.Serverside.Entities.Common.Corners
                         }
                     };
 
-                    sender.Notify("Wyznacz trasę npc na rogu. Ustaw się w danym punkcie i wpisz \"poz\".");
-                    sender.Notify("Aby zacząć od nowa wpisz \"reset\"");
-                    sender.Notify("Aby usunąć ostatnią pozycję wpisz \"usun\"");
+                    sender.Notify("Wyznacz trasę npc na rogu. Ustaw się w danym punkcie i wpisz \"poz\".", NotificationType.Info);
+                    sender.Notify("Aby zacząć od nowa wpisz \"reset\"", NotificationType.Info);
+                    sender.Notify("Aby usunąć ostatnią pozycję wpisz \"usun\"", NotificationType.Info);
                 }
                 else if (position != null && o == sender && message == "/poz")
                 {
@@ -95,8 +95,8 @@ namespace VRP.Serverside.Entities.Common.Corners
                         }
                     });
 
-                    sender.Notify($"Obecna liczba punktów: {botPositions.Count}. Aby zakończyć wpisz \"zakoncz\"");
-                    sender.Notify("Aby zacząć od nowa wpisz /reset");
+                    sender.Notify($"Obecna liczba punktów: {botPositions.Count}. Aby zakończyć wpisz \"zakoncz\"", NotificationType.Info);
+                    sender.Notify("Aby zacząć od nowa wpisz /reset", NotificationType.Info);
                 }
                 else if (position != null && botPositions.Count != 0 && o == sender && message == "zakoncz")
                 {
@@ -113,7 +113,7 @@ namespace VRP.Serverside.Entities.Common.Corners
                     CornerEntity corner = new CornerEntity(data);
                     Corners.Add(corner);
 
-                    sender.Notify("Dodawanie rogu zakończyło się ~h~~g~pomyślnie.");
+                    sender.Notify("Dodawanie rogu zakończyło się pomyślnie.", NotificationType.Info);
                 }
                 else if (botPositions.Count != 0 && position != null && o == sender && message == "usun")
                 {
@@ -123,8 +123,8 @@ namespace VRP.Serverside.Entities.Common.Corners
                 {
                     position = null;
                     botPositions = new List<FullPosition>();
-                    sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
-                    sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+                    sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".", NotificationType.Info);
+                    sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.", NotificationType.Info);
                 }
             };
         }
@@ -135,13 +135,13 @@ namespace VRP.Serverside.Entities.Common.Corners
             CornerEntity corner = Corners.OrderBy(a => a.Data.Position.Position.DistanceTo(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(corner.Data.FilePath))
             {
-                sender.Notify("Usuwanie rogu zakończyło się ~h~~g~pomyślnie.");
+                sender.Notify("Usuwanie rogu zakończyło się pomyślnie.", NotificationType.Info);
                 Corners.Remove(corner);
                 corner.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie rogu zakończyło się ~h~~r~niepomyślnie.");
+                sender.Notify("Usuwanie rogu zakończyło się niepomyślnie.", NotificationType.Error);
             }
         }
         #endregion

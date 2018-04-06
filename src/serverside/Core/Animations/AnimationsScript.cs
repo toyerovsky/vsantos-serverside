@@ -7,6 +7,7 @@
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Animations.Models;
@@ -30,7 +31,7 @@ namespace VRP.Serverside.Core.Animations
                     AnimName = arguments[2].ToString(),
                 }, Path.Combine(Utils.XmlDirectory + "Animations"), arguments[2].ToString());
 
-                sender.Notify("Animacja została dodana pomyślnie.");
+                sender.Notify("Animacja została dodana pomyślnie.", NotificationType.Info);
             }
         }
 

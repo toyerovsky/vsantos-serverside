@@ -32,7 +32,7 @@ namespace VRP.Serverside.Entities.Common.Corners
         public string GoodFarewell { get; set; }
         public string BadFarewell { get; set; }
 
-        private AccountEntity Seller { get; }
+        private CharacterEntity Seller { get; }
         private List<FullPosition> NextPositions { get; }
 
         public delegate void EndTransactionEventHandler(object sender, EndTransactionEventArgs e);
@@ -61,10 +61,12 @@ namespace VRP.Serverside.Entities.Common.Corners
             }
         }
 
-        public CornerPedEntity(string name, PedHash pedHash, FullPosition spawnPosition, List<FullPosition> nextPositions, DrugType drugType, decimal moneyCount, string greeting, string goodFarewell, string badFarewell, AccountEntity seller, int botId) : base(name, pedHash, spawnPosition)
+        public CornerPedEntity(string name, PedHash pedHash, FullPosition spawnPosition, IEnumerable<FullPosition> nextPositions,
+            DrugType drugType, decimal moneyCount, string greeting, string goodFarewell, string badFarewell, CharacterEntity seller, int botId)
+            : base(name, pedHash, spawnPosition)
         {
             BotId = botId;
-            NextPositions = nextPositions;
+            NextPositions = nextPositions.ToList();
             DrugType = drugType;
             MoneyCount = moneyCount;
             Greeting = greeting;
@@ -86,32 +88,47 @@ namespace VRP.Serverside.Entities.Common.Corners
             //TransactionLevel == 2 Podana cena była za wysoka i bot wynegocjował zgodnie z tym co może dać, czeka aż gracz powie tak lub poda cenę
 
             //Jeśli gracz powie że nie ma
-            if ((!BotHandle.HasData("TransactionLevel") || BotHandle.GetData("TransactionLevel") == 2) && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && Messages.NoMessagesList.Any(e.Message.Contains))
+            if ((!BotHandle.HasData("TransactionLevel") || BotHandle.GetData("TransactionLevel") == 2)
+                && e.Character == Seller
+                && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud)
+                && Messages.NoMessagesList.Any(e.Message.Contains))
             {
                 GoAllPoints(true);
             }
-            else if (BotHandle.HasData("TransactionLevel") && BotHandle.GetData("TransactionLevel") == 1 && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && !e.Message.All(char.IsDigit))
+            else if (BotHandle.HasData("TransactionLevel")
+                     && BotHandle.GetData("TransactionLevel") == 1
+                     && e.Character == Seller
+                     && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud)
+                     && !e.Message.All(char.IsDigit))
             {
                 //Jeśli gracz nie napisze zadnej liczby
-                Seller.Client.Notify("Aby podać cenę kupującemu NPC musisz używać liczb np. 70.");
+                Seller.Notify("Aby podać cenę kupującemu NPC musisz używać liczb np. 70.", NotificationType.Info);
             }
             //Jeśli gracz powie tak
-            else if (!BotHandle.HasData("TransactionLevel") && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && Messages.YesMessagesList.Any(e.Message.Contains))
+            else if (!BotHandle.HasData("TransactionLevel") && e.Character == Seller && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && Messages.YesMessagesList.Any(e.Message.Contains))
             {
                 BotHandle.SetData("TransactionLevel", 1);
                 SendMessageToNerbyPlayers("Ile za to cudo?", ChatMessageType.Normal);
             }
             //Jeśli gracz poda za wysoką cenę, ale w granicach rozsądku
-            else if (BotHandle.HasData("TransactionLevel") && BotHandle.GetData("TransactionLevel") == 1 && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && MostlyGoodMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals))
+            else if (BotHandle.HasData("TransactionLevel")
+                     && BotHandle.GetData("TransactionLevel") == 1 
+                     && e.Character == Seller 
+                     && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) 
+                     && MostlyGoodMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals))
             {
                 SendMessageToNerbyPlayers($"Co powiesz na ${MoneyCount}?", ChatMessageType.Normal);
                 BotHandle.SetData("TransactionLevel", 2);
             }
             //Jeśli gracz poda właściwą lub niższą cenę
-            else if (BotHandle.HasData("TransactionLevel") && BotHandle.GetData("TransactionLevel") == 1 && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && (e.Message.Contains(MoneyCount.ToString(CultureInfo.InvariantCulture)) || LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals)))
+            else if (BotHandle.HasData("TransactionLevel") 
+                     && BotHandle.GetData("TransactionLevel") == 1 
+                     && e.Character == Seller 
+                     && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) 
+                     && (e.Message.Contains(MoneyCount.ToString(CultureInfo.InvariantCulture)) || LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals)))
             {
                 //Sprawdzamy czy gracz posiada dany narkotyk
-                if (Seller.CharacterEntity.DbModel.Items.Any(i => i.ItemEntityType == ItemEntityType.Drug && i.FirstParameter == (int)DrugType))
+                if (Seller.DbModel.Items.Any(i => i.ItemEntityType == ItemEntityType.Drug && i.FirstParameter == (int)DrugType))
                 {
                     EndTransaction(LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals) ? LowerMoneyCounts.First(Convert.ToDecimal(e.Message).Equals) : MoneyCount);
                 }
@@ -123,11 +140,15 @@ namespace VRP.Serverside.Entities.Common.Corners
                 GoAllPoints(true);
             }
             //Po negocjacji
-            else if (BotHandle.HasData("TransactionLevel") && BotHandle.GetData("TransactionLevel") == 2 && e.Player == Seller.Client && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && (Messages.YesMessagesList.Any(e.Message.Contains) || e.Message.Contains(MoneyCount.ToString(CultureInfo.InvariantCulture)) || LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals)))
+            else if (BotHandle.HasData("TransactionLevel") 
+                     && BotHandle.GetData("TransactionLevel") == 2 
+                     && e.Character == Seller 
+                     && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) 
+                     && (Messages.YesMessagesList.Any(e.Message.Contains) || e.Message.Contains(MoneyCount.ToString(CultureInfo.InvariantCulture)) || LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals)))
             {
                 //Jeśli gracz zgodzi się na cenę bota
                 //Sprawdzamy czy gracz posiada dany narkotyk
-                if (Seller.CharacterEntity.DbModel.Items.Any(i => i.ItemEntityType == ItemEntityType.Drug && i.FirstParameter == (int)DrugType))
+                if (Seller.DbModel.Items.Any(i => i.ItemEntityType == ItemEntityType.Drug && i.FirstParameter == (int)DrugType))
                 {
                     if (!e.Message.All(char.IsDigit)) EndTransaction(MoneyCount);
                     else EndTransaction(LowerMoneyCounts.Any(Convert.ToDecimal(e.Message).Equals) ? LowerMoneyCounts.First(Convert.ToDecimal(e.Message).Equals) : MoneyCount);
@@ -149,8 +170,8 @@ namespace VRP.Serverside.Entities.Common.Corners
 
         private void SendFailMessage()
         {
-            ChatScript.SendMessageToNearbyPlayers(Seller.Client, "szuka narkotyku w swoim otoczeniu, błądzi wzrokiem.", ChatMessageType.ServerMe);
-            SendMessageToNerbyPlayers($"popatrzył się na {Seller.CharacterEntity.FormatName} jak na debila.", ChatMessageType.ServerMe);
+            ChatScript.SendMessageToNearbyPlayers(Seller, "szuka narkotyku w swoim otoczeniu, błądzi wzrokiem.", ChatMessageType.ServerMe);
+            SendMessageToNerbyPlayers($"popatrzył się na {Seller.FormatName} jak na debila.", ChatMessageType.ServerMe);
         }
 
         private void EndTransaction(decimal money)
@@ -158,10 +179,10 @@ namespace VRP.Serverside.Entities.Common.Corners
             SendMessageToNerbyPlayers("wystawia dyskretnie dłoń z gotówką i odbiera narkotyk.", ChatMessageType.Me);
             SendMessageToNerbyPlayers(GoodFarewell, ChatMessageType.Normal);
 
-            Seller.CharacterEntity.DbModel.Items.Remove(
-                Seller.CharacterEntity.DbModel.Items.First(x => x.ItemEntityType == ItemEntityType.Drug && x.FirstParameter == (int)DrugType));
-            Seller.CharacterEntity.Save();
-            Seller.Client.AddMoney(money);
+            Seller.DbModel.Items.Remove(
+                Seller.DbModel.Items.First(x => x.ItemEntityType == ItemEntityType.Drug && x.FirstParameter == (int)DrugType));
+            Seller.Save();
+            Seller.AddMoney(money);
 
             GoAllPoints(true);
         }

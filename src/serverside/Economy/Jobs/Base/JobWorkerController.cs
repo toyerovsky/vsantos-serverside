@@ -5,6 +5,7 @@
  */
 
 using System;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;
 
@@ -44,8 +45,8 @@ namespace VRP.Serverside.Economy.Jobs.Base
         /// </summary>
         public virtual void ReleaseWorker()
         {
-            Player.Client.Notify("Nie wypracowałeś wystarczającej ilości gotówki na pokrycie szkód.");
-            Player.Client.Notify("Zostałeś zwolniony. Zanim ponownie znajdziesz zatrudnienie minie trochę czasu.");
+            Player.Client.Notify("Nie wypracowałeś wystarczającej ilości gotówki na pokrycie szkód.", NotificationType.Info);
+            Player.Client.Notify("Zostałeś zwolniony. Zanim ponownie znajdziesz zatrudnienie minie trochę czasu.", NotificationType.Info);
             Stop();
             Player.CharacterEntity.DbModel.Job = 0;
             Player.CharacterEntity.DbModel.JobReleaseDate = DateTime.Now;

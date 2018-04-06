@@ -8,12 +8,14 @@ using System;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Corners.Models;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Interfaces;
+using AnimationFlags = VRP.Serverside.Core.Extensions.AnimationFlags;
 
 namespace VRP.Serverside.Entities.Common.Corners
 {
@@ -25,7 +27,7 @@ namespace VRP.Serverside.Entities.Common.Corners
         public ColShape ColShape { get; set; }
 
         private bool CornerBusy { get; set; }
-        private AccountEntity Player { get; set; }
+        private CharacterEntity SellingCharacter { get; set; }
         private CornerPedEntity CurrentPedEntity { get; set; }
 
         public CornerEntity(CornerModel corner)
@@ -46,21 +48,21 @@ namespace VRP.Serverside.Entities.Common.Corners
         {
             if (DateTime.Now.Hour < 16 || DateTime.Now.Hour > 23)
             {
-                entity.Notify("Handel na rogu możliwy jest od 16 do 23.", true);
+                entity.Notify("Handel na rogu możliwy jest od 16 do 23.", NotificationType.Warning);
                 return;
             }
 
             if (!CornerBusy)
             {
-                Player = entity.GetAccountEntity();
+                SellingCharacter = entity.GetAccountEntity().CharacterEntity;
 
                 CornerBusy = true;
-                Player.CharacterEntity.CurrentInteractive = this;
+                SellingCharacter.CurrentInteractive = this;
 
-                Player.Client.Notify("Rozpocząłeś proces sprzedaży, pozostań w znaczniku.", true);
+                SellingCharacter.Notify("Rozpocząłeś proces sprzedaży, pozostań w znaczniku.", NotificationType.Info);
 
                 StartProcess();
-                Player.Client.PlayAnimation("amb@world_human_drug_dealer_hard@male@idle_a", "idle_a", (int)AnimationFlags.Loop | (int)AnimationFlags.AllowPlayerControl | (int)AnimationFlags.Cancellable);
+                SellingCharacter.AccountEntity.Client.PlayAnimation("amb@world_human_drug_dealer_hard@male@idle_a", "idle_a", (int)AnimationFlags.Loop | (int)AnimationFlags.AllowPlayerControl | (int)AnimationFlags.Cancellable);
             }
         }
 
@@ -76,7 +78,18 @@ namespace VRP.Serverside.Entities.Common.Corners
 
                 int random = Utils.RandomRange(Data.CornerBots.Count);
 
-                CurrentPedEntity = new CornerPedEntity(Data.CornerBots[random].Name, Data.CornerBots[random].PedHash, Data.BotPositions[0], Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(), Data.CornerBots[random].DrugType, Data.CornerBots[random].MoneyCount, Data.CornerBots[random].Greeting, Data.CornerBots[random].GoodFarewell, Data.CornerBots[random].BadFarewell, Player, Data.CornerBots[random].BotId);
+                CurrentPedEntity = new CornerPedEntity(
+                    Data.CornerBots[random].Name,
+                    Data.CornerBots[random].PedHash,
+                    Data.BotPositions[0],
+                    Data.BotPositions.Where(x => x != Data.BotPositions[0]).ToList(),
+                    Data.CornerBots[random].DrugType,
+                    Data.CornerBots[random].MoneyCount,
+                    Data.CornerBots[random].Greeting,
+                    Data.CornerBots[random].GoodFarewell,
+                    Data.CornerBots[random].BadFarewell,
+                    SellingCharacter,
+                    Data.CornerBots[random].BotId);
 
                 CurrentPedEntity.Spawn();
                 CurrentPedEntity.OnTransactionEnd += (o, eventArgs) =>
@@ -89,12 +102,12 @@ namespace VRP.Serverside.Entities.Common.Corners
             ColShape.OnEntityExitColShape += (shape, entity) =>
             {
                 if (CornerBusy && NAPI.Entity.GetEntityType(entity) == EntityType.Player &&
-                    entity == Player.Client.Handle)
+                    entity == SellingCharacter.AccountEntity.Client)
                 {
                     timer.Dispose();
 
                     CornerBusy = false;
-                    Player.Client.StopAnimation();
+                    SellingCharacter.AccountEntity.Client.StopAnimation();
 
                     if (CurrentPedEntity != null)
                     {
@@ -102,7 +115,7 @@ namespace VRP.Serverside.Entities.Common.Corners
                         CurrentPedEntity = null;
                     }
 
-                    Player = null;
+                    SellingCharacter = null;
                 }
             };
         }

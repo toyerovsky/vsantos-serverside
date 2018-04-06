@@ -5,6 +5,7 @@
  */
 
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Exceptions;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
@@ -20,7 +21,7 @@ namespace VRP.Serverside.Admin
         {
             if (!sender.IsInVehicle && vehicleId == -1)
             {
-                sender.Notify("Wsiądź do pojazu lub podaj Id aby ustawić jego kolor.");
+                sender.Notify("Wsiądź do pojazu lub podaj Id aby ustawić jego kolor.", NotificationType.Warning);
                 return;
             }
 
@@ -37,7 +38,7 @@ namespace VRP.Serverside.Admin
             }
             catch (ColorConvertException e)
             {
-                sender.Notify("Wprowadzony kolor jest nieprawidłowy.");
+                sender.Notify("Wprowadzony kolor jest nieprawidłowy.", NotificationType.Error);
                 Colorful.Console.WriteLine($"[Error]{nameof(AdminGroupsScript)} Nieprawidłowy kolor", System.Drawing.Color.DarkRed);
                 Colorful.Console.WriteLine(e.Message, System.Drawing.Color.DarkRed);
                 return;
@@ -51,7 +52,7 @@ namespace VRP.Serverside.Admin
         {
             if (!sender.IsInVehicle && vehicleId == -1)
             {
-                sender.Notify("Wsiądź do pojazu lub podaj Id aby ustawić jego kolor.");
+                sender.Notify("Wsiądź do pojazu lub podaj Id aby go naprawić.", NotificationType.Warning);
                 return;
             }
 

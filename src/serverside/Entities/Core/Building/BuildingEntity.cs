@@ -125,23 +125,25 @@ namespace VRP.Serverside.Entities.Core.Building
         {
             if (!DbModel.Cost.HasValue)
             {
-                sender.Notify("Ten budynek nie jest na sprzedaż");
+                sender.Notify("Ten budynek nie jest na sprzedaż", NotificationType.Warning);
                 return;
             }
 
-            if (!sender.HasMoney(DbModel.Cost.Value))
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+
+            if (!character.HasMoney(DbModel.Cost.Value))
             {
-                sender.Notify("Nie posiadasz wystarczającej ilości gotówki");
+                sender.Notify("Nie posiadasz wystarczającej ilości gotówki", NotificationType.Error);
                 return;
             }
 
             BuildingMarker.Color = new Color(255, 255, 0);
 
-            sender.RemoveMoney(DbModel.Cost.Value);
-            sender.TriggerEvent("ShowShard", "Zakupiono budynek", 5000);
+            character.RemoveMoney(DbModel.Cost.Value);
+            sender.TriggerEvent(Constant.RemoteEvents.RemoteEvents.CharacterShowShardRequested, "Zakupiono budynek", 5000);
             NAPI.Player.PlaySoundFrontEnd(sender, "BASE_JUMP_PASSED", "HUD_AWARDS");
 
-            DbModel.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
+            DbModel.Character = character.DbModel;
             DbModel.Cost = null;
             Save();
         }
@@ -175,7 +177,7 @@ namespace VRP.Serverside.Entities.Core.Building
                 {
                     p.Client.Dimension = (uint)Dimension.Global;
                     p.Client.Position = p.CharacterEntity.CurrentBuilding.BuildingMarker.Position;
-                    p.Client.Notify("Budynek w którym się znajdowałeś został usunięty.");
+                    p.Client.Notify("Budynek w którym się znajdowałeś został usunięty.", NotificationType.Warning);
                     p.CharacterEntity.CurrentBuilding = null;
                 }
             }
@@ -186,42 +188,44 @@ namespace VRP.Serverside.Entities.Core.Building
 
         #region STATIC
 
-        public static void PassDoors(Client player)
+        public static void PassDoors(Client sender)
         {
-            if (!player.HasData("CurrentDoors") || !player.HasSharedData("DoorsTarget")) return;
+            if (!sender.HasData("CurrentDoors") || !sender.HasSharedData("DoorsTarget")) return;
 
-            BuildingEntity buildingEntity = (BuildingEntity)player.GetData("CurrentDoors");
+            BuildingEntity buildingEntity = (BuildingEntity)sender.GetData("CurrentDoors");
 
             if (buildingEntity.DoorsLocked)
             {
-                player.Notify("Drzwi są zamknięte.");
+                sender.Notify("Drzwi są zamknięte.", NotificationType.Warning);
                 return;
             }
 
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
             if (buildingEntity.DbModel.EnterCharge.HasValue &&
-                !player.HasMoney(buildingEntity.DbModel.EnterCharge.Value))
+                !character.HasMoney(buildingEntity.DbModel.EnterCharge.Value))
             {
-                player.Notify("Nie posiadasz wystarczającej ilości gotówki");
+                sender.Notify("Nie posiadasz wystarczającej ilości gotówki", NotificationType.Error);
                 return;
             }
 
-            if (buildingEntity.DbModel.EnterCharge.HasValue) player.RemoveMoney(buildingEntity.DbModel.EnterCharge.Value);
+            if (buildingEntity.DbModel.EnterCharge.HasValue)
+                character.RemoveMoney(buildingEntity.DbModel.EnterCharge.Value);
 
-            if (buildingEntity.PlayersInBuilding.Contains(player.GetAccountEntity()))
+            if (buildingEntity.PlayersInBuilding.Contains(sender.GetAccountEntity()))
             {
-                player.Position = (Vector3)player.GetSharedData("DoorsTarget");
-                player.Dimension = 0;
-                buildingEntity.PlayersInBuilding.Remove(player.GetAccountEntity());
+                sender.Position = (Vector3)sender.GetSharedData("DoorsTarget");
+                sender.Dimension = 0;
+                buildingEntity.PlayersInBuilding.Remove(sender.GetAccountEntity());
 
-                player.GetAccountEntity().CharacterEntity.CurrentBuilding = null;
+                character.CurrentBuilding = null;
             }
             else
             {
-                player.Position = (Vector3)player.GetSharedData("DoorsTarget");
-                player.Dimension = ((BuildingEntity)player.GetData("CurrentDoors")).InteriorDoorsColshape
+                sender.Position = (Vector3)sender.GetSharedData("DoorsTarget");
+                sender.Dimension = ((BuildingEntity)sender.GetData("CurrentDoors")).InteriorDoorsColshape
                     .Dimension;
-                buildingEntity.PlayersInBuilding.Add(player.GetAccountEntity());
-                player.GetAccountEntity().CharacterEntity.CurrentBuilding = player.GetData("CurrentDoors");
+                buildingEntity.PlayersInBuilding.Add(sender.GetAccountEntity());
+                character.CurrentBuilding = sender.GetData("CurrentDoors");
             }
         }
 
@@ -233,10 +237,11 @@ namespace VRP.Serverside.Entities.Core.Building
             if (building._spamProtector) return;
 
             building._spamProtector = true;
-            ChatScript.SendMessageToNearbyPlayers(player, "unosi dłoń i puka do drzwi budynku", ChatMessageType.ServerMe);
-            ChatScript.SendMessageToSpecifiedPlayers(player, building.PlayersInBuilding.Select(x => x.Client).ToList(), "Słychać pukanie do drzwi.", ChatMessageType.ServerDo);
+            CharacterEntity character = player.GetAccountEntity().CharacterEntity;
+            ChatScript.SendMessageToNearbyPlayers(character, "unosi dłoń i puka do drzwi budynku", ChatMessageType.ServerMe);
+            ChatScript.SendMessageToSpecifiedPlayers(character, building.PlayersInBuilding.Select(x => x.CharacterEntity), "Słychać pukanie do drzwi.", ChatMessageType.ServerDo);
 
-            //Ochrona przed spamem w pukaniu do drzwi
+            // Ochrona przed spamem w pukaniu do drzwi
             Timer timer = new Timer(4000);
             timer.Start();
             timer.Elapsed += (o, e) =>

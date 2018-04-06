@@ -91,7 +91,7 @@ namespace VRP.Serverside.Economy.Jobs
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania śmietnika.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania śmietnika.", NotificationType.Warning);
                 return;
             }
 
@@ -116,14 +116,12 @@ namespace VRP.Serverside.Economy.Jobs
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia śmietnika.");
+                sender.Notify("Nie posiadasz uprawnień do tworzenia śmietnika.", NotificationType.Warning);
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\", użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
 
-            
             void Handler(Client o, string command)
             {
                 if (o == sender && command == "tu")
@@ -138,7 +136,7 @@ namespace VRP.Serverside.Economy.Jobs
 
                     XmlHelper.AddXmlObject(garbage, Path.Combine(Utils.XmlDirectory, "JobGarbages"));
                     Garbages.Add(garbage);
-                    sender.Notify("Dodawanie śmietnika zakończyło się pomyślnie.");
+                    sender.Notify("Dodawanie śmietnika zakończyło się pomyślnie.", NotificationType.Info);
                 }
             }
         }
@@ -148,11 +146,11 @@ namespace VRP.Serverside.Economy.Jobs
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do dodawania auta do pracy.");
+                sender.Notify("Nie posiadasz uprawnień do dodawania auta do pracy.", NotificationType.Warning);
                 return;
             }
 
-            sender.Notify("Wsiądź do pojazdu a następnie wpisz \"ok\".");
+            sender.Notify("Wsiądź do pojazdu a następnie wpisz \"ok\".", NotificationType.Info);
 
             void Handler(Client o, string command)
             {
@@ -160,15 +158,15 @@ namespace VRP.Serverside.Economy.Jobs
                 {
                     if (!o.IsInVehicle || o.Vehicle.GetVehicleEntity() == null)
                     {
-                        o.Notify("Musisz znajdować się w pojeździe.");
-                        o.Notify("Dodawanie auta do pracy zakończyło się ~h~ ~r~niepomyślnie.");
+                        o.Notify("Musisz znajdować się w pojeździe.", NotificationType.Error);
+                        o.Notify("Dodawanie auta do pracy zakończyło się niepomyślnie.", NotificationType.Error);
                         return;
                     }
 
                     VehicleEntity vehicle = o.Vehicle.GetVehicleEntity();
                     AddVehicleToJob(vehicle.DbModel, type);
 
-                    o.Notify("Dodawanie auta do pracy zakończyło się ~h~ ~g~pomyślnie.");
+                    o.Notify("Dodawanie auta do pracy zakończyło się pomyślnie.", NotificationType.Info);
                 }
             }
         }
@@ -177,29 +175,33 @@ namespace VRP.Serverside.Economy.Jobs
         {
             if (type == JobType.Dustman)
             {
-                DustmanVehicleEntity vehicle = new DustmanVehicleEntity(data);
-                vehicle.Spawn();
-                DustmanJob job = (DustmanJob)Jobs.First(
-                    x => x is DustmanJob);
-                job.Vehicles.Add(vehicle);
-                JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
+                DustmanVehicle vehicle = new DustmanVehicle(data);
+                if (Jobs.First(x => x is DustmanJob) is DustmanJob job)
+                {
+                    job.Vehicles.Add(vehicle);
+                    JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
+                    vehicle.Spawn();
+                }
             }
             else if (type == JobType.Greenkeeper)
             {
                 GreenkeeperVehicle vehicle = new GreenkeeperVehicle(data);
-                vehicle.Spawn();
-                GreenkeeperJob job = (GreenkeeperJob)Jobs.First(
-                    x => x is GreenkeeperJob);
-                job.Vehicles.Add(vehicle);
-                JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
+                if (Jobs.First(x => x is GreenkeeperJob) is GreenkeeperJob job)
+                {
+                    job.Vehicles.Add(vehicle);
+                    JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
+                    vehicle.Spawn();
+                }
             }
             else if (type == JobType.Courier)
             {
                 CourierVehicle vehicle = new CourierVehicle(data);
-                vehicle.Spawn();
-                CourierJob job = (CourierJob)Jobs.First
-                    (x => x is CourierJob);
-                JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
+                if (Jobs.First(x => x is CourierJob) is CourierJob job)
+                {
+                    job.Vehicles.Add(vehicle);
+                    JsonHelper.AddJsonObject(vehicle.DbModel, job.JsonDirectory);
+                    vehicle.Spawn();
+                }
             }
         }
         #endregion

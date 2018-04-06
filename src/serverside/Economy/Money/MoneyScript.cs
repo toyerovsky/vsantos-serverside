@@ -5,8 +5,10 @@
  */
 
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
+using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Money
 {
@@ -17,39 +19,41 @@ namespace VRP.Serverside.Economy.Money
         {
             if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
             {
-                sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.");
+                sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.", NotificationType.Error);
             }
 
-            if (!sender.GetAccountEntity().CharacterEntity.CanPay) return;
+            CharacterEntity sendingCharacter = sender.GetAccountEntity().CharacterEntity;
+            if (!sendingCharacter.CanPay) return;
 
-            if (!sender.HasMoney(safeMoneyCount))
+            if (!sendingCharacter.HasMoney(safeMoneyCount))
             {
-                sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
+                sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Warning);
                 return;
             }
 
             if (sender.GetAccountEntity().ServerId == id)
             {
-                sender.Notify("Nie możesz podać gotówki samemu sobie.");
+                sender.Notify("Nie możesz podać gotówki samemu sobie.", NotificationType.Error);
                 return;
             }
             
-            Client gettingPlayer = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender).Find(
-                x => x.GetAccountEntity().ServerId == id);
+            CharacterEntity gettingPlayer = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender).Find(
+                x => x.GetAccountEntity().ServerId == id).GetAccountEntity().CharacterEntity;
+
             if (gettingPlayer == null)
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id");
+                sender.Notify("Nie znaleziono gracza o podanym Id", NotificationType.Warning);
                 return;
             }
 
             //temu zabieramy
-            sender.RemoveMoney(safeMoneyCount);
+            sendingCharacter.RemoveMoney(safeMoneyCount);
 
             //temu dodajemy gotówke
             gettingPlayer.AddMoney(safeMoneyCount);
 
-            sender.SendChatMessage($"~g~Osoba {gettingPlayer.Name} otrzymała od ciebie ${safeMoneyCount}.");
-            gettingPlayer.SendChatMessage($"~g~Osoba {sender.Name} przekazała ci ${safeMoneyCount}.");
+            sender.SendChatMessage($"~g~Osoba {gettingPlayer.FormatName} otrzymała od ciebie ${safeMoneyCount}.");
+            gettingPlayer.AccountEntity.Client.SendChatMessage($"~g~Osoba {sender.Name} przekazała ci ${safeMoneyCount}.");
         }
     }
 }

@@ -13,13 +13,13 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
 {
     public class DustmanJob : Job
     {
-        public List<DustmanVehicleEntity> Vehicles { get; set; } = new List<DustmanVehicleEntity>();
+        public List<DustmanVehicle> Vehicles { get; set; } = new List<DustmanVehicle>();
 
         public DustmanJob(string name, decimal moneyLimit, string jsonDirectory) : base(name, moneyLimit, jsonDirectory)
         {
             foreach (VehicleModel vehicleData in JsonHelper.GetJsonObjects<VehicleModel>(jsonDirectory))
             {
-                Vehicles.Add(new DustmanVehicleEntity(vehicleData));
+                Vehicles.Add(new DustmanVehicle(vehicleData));
             }
         }
     }

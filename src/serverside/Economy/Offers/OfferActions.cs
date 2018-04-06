@@ -13,18 +13,16 @@ namespace VRP.Serverside.Economy.Offers
 {
     public static class OfferActions
     {
-        public static void GiveIdCard(Client getter)
+        public static void GiveIdCard(CharacterEntity getter)
         {
-            AccountEntity player = getter.GetAccountEntity();
-            player.CharacterEntity.DbModel.HasIdCard = true;
-            player.CharacterEntity.Save();
+            getter.DbModel.HasIdCard = true;
+            getter.Save();
         }
 
-        public static void GiveDrivingLicense(Client getter)
+        public static void GiveDrivingLicense(CharacterEntity getter)
         {
-            AccountEntity player = getter.GetAccountEntity();
-            player.CharacterEntity.DbModel.HasDrivingLicense = true;
-            player.CharacterEntity.Save();
+            getter.DbModel.HasDrivingLicense = true;
+            getter.Save();
         }
 
         public static void RepairVehicle(Client getter) =>

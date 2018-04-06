@@ -16,10 +16,10 @@ namespace VRP.Core.Database.Models
         public int Id { get; set; }
         public virtual AccountModel Account { get; set; }
         public bool Online { get; set; }
-        public DateTime? CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
         public DateTime? LastLoginTime { get; set; }
-        public DateTime? TodayPlayedTime { get; set; }
-        public DateTime? PlayedTime { get; set; }
+        public TimeSpan TodayPlayedTime { get; set; }
+        public TimeSpan PlayedTime { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
 
@@ -45,14 +45,14 @@ namespace VRP.Core.Database.Models
         public string ForumDescription { get; set; }
         public string Story { get; set; }
         public bool IsAlive { get; set; }
-        public int HitPoints { get; set; }
+        public int Health { get; set; }
         public float LastPositionX { get; set; }
         public float LastPositionY { get; set; }
         public float LastPositionZ { get; set; }
         public float LastPositionRotX { get; set; }
         public float LastPositionRotY { get; set; }
         public float LastPositionRotZ { get; set; }
-        public int CurrentDimension { get; set; }
+        public uint CurrentDimension { get; set; }
         public int MinutesToRespawn { get; set; }
         public bool? IsCreated { get; set; }
         public bool Freemode { get; set; }

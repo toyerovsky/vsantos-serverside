@@ -20,10 +20,10 @@ namespace VRP.Serverside.Entities.Core.Item
         /// <param name="itemModel"></param>
         public Watch(ItemModel itemModel) : base(itemModel) { }
 
-        public override void UseItem(AccountEntity player)
+        public override void UseItem(CharacterEntity sender)
         {
-            ChatScript.SendMessageToNearbyPlayers(player.Client, $"spogląda na zegarek {DbModel.Name}", ChatMessageType.Me);
-            player.Client.Notify($"Godzina: {DateTime.Now.ToShortTimeString()}");
+            ChatScript.SendMessageToNearbyPlayers(sender, $"spogląda na zegarek {DbModel.Name}", ChatMessageType.Me);
+            sender.Notify($"Godzina: {DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}", NotificationType.Info);
         }
 
         public override string UseInfo => "Ten przedmiot pokazuje bieżącą godzinę.";

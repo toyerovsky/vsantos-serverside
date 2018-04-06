@@ -20,7 +20,7 @@ namespace VRP.Serverside.Core.Scripts
 
         public ScoreBoardScript()
         {
-            CharacterEntity.CharacterLoggedIn += RPLogin_OnPlayerLogin;
+            CharacterEntity.CharacterSelected += RPLogin_OnPlayerLogin;
         }
 
         private void Event_OnPlayerDisconnected(Client player, byte type, string reason)
@@ -31,7 +31,7 @@ namespace VRP.Serverside.Core.Scripts
         private void Event_OnPlayerConnected(Client sender)
         {
             List<string> list = new List<string>();
-            foreach (var player in EntityHelper.GetAccounts())
+            foreach (AccountEntity player in EntityHelper.GetAccounts())
             {
                 Dictionary<string, object> dic = new Dictionary<string, object>
                 {
@@ -56,7 +56,7 @@ namespace VRP.Serverside.Core.Scripts
             if (eventName == "playerlist_pings")
             {
                 List<string> list = new List<string>();
-                foreach (var player in EntityHelper.GetAccounts())
+                foreach (AccountEntity player in EntityHelper.GetAccounts())
                 {
                     Dictionary<string, object> dic = new Dictionary<string, object>
                     {

@@ -30,12 +30,12 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia bota przestępczego.");
+                sender.Notify("Nie posiadasz uprawnień do tworzenia bota przestępczego.", NotificationType.Warning);
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".", NotificationType.Info);
+            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.", NotificationType.Info);
 
             FullPosition botPosition = null;
             VehicleEntity botVehicle = null;
@@ -63,17 +63,24 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                         Direction = new Vector3(0f, 0f, 0f)
                     };
 
-                    NAPI.ClientEvent.TriggerClientEvent(sender, "DrawAddingCrimeBotComponents", new Vector3(botPosition.Position.X, botPosition.Position.Y, botPosition.Position.Z - 1));
-                    sender.Notify("Ustaw pojazd w wybranej pozycji następnie wpisz \"tu\".");
+                    NAPI.ClientEvent.TriggerClientEvent(sender,
+                        "DrawAddingCrimeBotComponents",
+                        new Vector3(botPosition.Position.X, botPosition.Position.Y, botPosition.Position.Z - 1));
 
-                    botVehicle = VehicleEntity.Create(new FullPosition(new Vector3(sender.Position.X + 2, sender.Position.Y + 2, sender.Position.Z), sender.Rotation), VehicleHash.Sentinel, name, 0, sender.GetAccountEntity().DbModel, new Color(0, 0, 0), new Color(0, 0, 0));
+                    sender.Notify("Ustaw pojazd w wybranej pozycji następnie wpisz \"tu\".", NotificationType.Info);
+
+                    botVehicle = VehicleEntity.Create(
+                        new FullPosition(new Vector3(
+                                sender.Position.X + 2,
+                                sender.Position.Y + 2,
+                                sender.Position.Z), sender.Rotation),
+                        VehicleHash.Sentinel, name, 0, sender.GetAccountEntity().DbModel, new Color(0, 0, 0), new Color(0, 0, 0));
 
                     NAPI.Player.SetPlayerIntoVehicle(sender, botVehicle.GameVehicle, -1);
 
                 }
                 else if (o == sender && message == "tu" && botPosition != null && botVehicle != null)
                 {
-
                     FullPosition botVehiclePosition = new FullPosition
                     {
                         Position = new Vector3
@@ -103,7 +110,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                         VehiclePosition = botVehiclePosition
                     }, Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"));
 
-                    sender.Notify("Dodawanie pozycji bota zakończyło się ~h~~g~pomyślnie!");
+                    sender.Notify("Dodawanie pozycji bota zakończyło się pomyślnie!", NotificationType.Info);
                     NAPI.Player.WarpPlayerOutOfVehicle(sender);
                     botVehicle.Dispose();
                 }
@@ -131,11 +138,11 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
 
             if (position != null && XmlHelper.TryDeleteXmlObject(position.FilePath))
             {
-                sender.Notify("Usuwanie pozycji bota zakończyło się ~h~~g~pomyślnie.");
+                sender.Notify("Usuwanie pozycji bota zakończyło się pomyślnie.", NotificationType.Info);
             }
             else
             {
-                sender.Notify("Usuwanie pozycji bota zakończyło się ~h~~r~niepomyślnie.");
+                sender.Notify("Usuwanie pozycji bota zakończyło się niepomyślnie.", NotificationType.Error);
             }
         }
 
@@ -167,7 +174,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                 }
                 else
                 {
-                    sender.Notify("Aby wezwać sprzedawcę musisz znajdować się na służbie grupy.");
+                    sender.Notify("Aby wezwać sprzedawcę musisz znajdować się na służbie grupy.", NotificationType.Error);
                 }
             }
         }

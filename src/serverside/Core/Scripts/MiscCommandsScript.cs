@@ -4,6 +4,7 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Enums;
@@ -20,15 +21,15 @@ namespace VRP.Serverside.Core.Scripts
         {
             if (!EntityHelper.GetAccounts().Any(x => x.CharacterEntity.FormatName.ToLower().StartsWith(name)))
             {
-                sender.Notify("Nie znaleziono gracza o podanej nazwie.");
+                sender.Notify("Nie znaleziono gracza o podanej nazwie.", NotificationType.Warning);
                 return;
             }
 
-            var accounts = EntityHelper.GetAccounts()
+            IEnumerable<AccountEntity> accounts = EntityHelper.GetAccounts()
                 .Where(account => account.CharacterEntity.FormatName.ToLower().StartsWith(name));
 
             ChatScript.SendMessageToPlayer(sender, "Znalezieni gracze: ", ChatMessageType.ServerInfo);
-            foreach (var account in accounts)
+            foreach (AccountEntity account in accounts)
             {
                 ChatScript.SendMessageToPlayer(sender, $"({account.ServerId}) {account.CharacterEntity.FormatName}", ChatMessageType.ServerInfo);
             }
@@ -39,23 +40,23 @@ namespace VRP.Serverside.Core.Scripts
         {
             if (NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender).All(x => x.GetAccountEntity().ServerId != id))
             {
-                sender.Notify("W twoim otoczeniu nie znaleziono gracza o podanym Id.");
+                sender.Notify("W twoim otoczeniu nie znaleziono gracza o podanym Id.", NotificationType.Warning);
                 return;
             }
 
-            AccountEntity player = sender.GetAccountEntity();
-            Client getter = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender)
-                .Single(x => x.GetAccountEntity().ServerId == id);
+            CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
+            CharacterEntity getterCharacter = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender)
+                .Single(x => x.GetAccountEntity().ServerId == id).GetAccountEntity().CharacterEntity;
 
             if (type.ToLower().Trim() == ShowType.IdCard.GetDescription())
             {
-                ChatScript.SendMessageToNearbyPlayers(player.Client, $"pokazuje dowód osobisty {getter.Name}", ChatMessageType.ServerMe);
-                getter.Notify($"Osoba {player.CharacterEntity.FormatName} pokazała Ci swój dowód osobisty.");
+                ChatScript.SendMessageToNearbyPlayers(senderCharacter, $"pokazuje dowód osobisty {getterCharacter.FormatName}", ChatMessageType.ServerMe);
+                getterCharacter.Notify($"Osoba {senderCharacter.FormatName} pokazała Ci swój dowód osobisty.", NotificationType.Info);
             }
             else if (type.ToLower().Trim() == ShowType.DrivingLicense.GetDescription())
             {
-                ChatScript.SendMessageToNearbyPlayers(player.Client, $"pokazuje prawo jazdy {getter.Name}", ChatMessageType.ServerMe);
-                getter.Notify($"Osoba {player.CharacterEntity.FormatName} pokazała Ci swoje prawo jazdy.");
+                ChatScript.SendMessageToNearbyPlayers(senderCharacter, $"pokazuje prawo jazdy {getterCharacter.FormatName}", ChatMessageType.ServerMe);
+                getterCharacter.Notify($"Osoba {senderCharacter.FormatName} pokazała Ci swoje prawo jazdy.", NotificationType.Info);
             }
         }
     }

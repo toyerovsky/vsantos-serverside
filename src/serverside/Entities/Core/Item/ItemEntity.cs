@@ -27,7 +27,7 @@ namespace VRP.Serverside.Entities.Core.Item
             DbModel = itemModel;
         }
 
-        public virtual void UseItem(AccountEntity player)
+        public virtual void UseItem(CharacterEntity character)
         {
             //TODO Pomysł, można tutaj dopisywać wszystkie logi używania przedmiotów
         }

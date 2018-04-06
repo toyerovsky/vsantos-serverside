@@ -31,62 +31,67 @@ namespace VRP.Serverside.Entities.Common.Booth
             //args[0] to numer na jaki dzwoni
             if (eventName == "OnPlayerTelephoneBoothCall")
             {
-                CharacterEntity characterEntity = sender.GetAccountEntity().CharacterEntity;
-                if (characterEntity.CurrentInteractive is TelephoneBoothEntity boothEntity)
+                CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
+                if (senderCharacter.CurrentInteractive is TelephoneBoothEntity boothEntity)
                 {
-                    if (sender.HasMoney(boothEntity.Data.Cost))
+                    if (senderCharacter.HasMoney(boothEntity.Data.Cost))
                     {
-                        sender.RemoveMoney(boothEntity.Data.Cost);
-                        ChatScript.SendMessageToNearbyPlayers(sender, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
+                        senderCharacter.RemoveMoney(boothEntity.Data.Cost);
+                        ChatScript.SendMessageToNearbyPlayers(senderCharacter, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
 
-                        if (EntityHelper.GetAccounts().Any(t => t.CharacterEntity.CurrentCellphone.Number == Convert.ToInt32(args[0])))
+                        CharacterEntity getterCharacter = EntityHelper.GetAccounts()
+                            .FirstOrDefault(t => t.CharacterEntity?.CurrentCellphone.Number ==
+                                      Convert.ToInt32(args[0]))
+                            ?.CharacterEntity;
+
+                        if (getterCharacter == null)
                         {
-                            Client getterPlayer = EntityHelper.GetAccounts()
-                                .Single(t => t.CharacterEntity.CurrentCellphone.Number ==
-                                          Convert.ToInt32(args[0])).Client;
-
-                            if (getterPlayer.HasData("CellphoneTalking"))
-                            {
-                                sender.SendChatMessage("~#ffdb00~",
-                                    "Wybrany abonent prowadzi obecnie rozmowę, spróbuj później.");
-                                return;
-                            }
-
-                            boothEntity.CurrentCall = new TelephoneCall(sender, getterPlayer, boothEntity.Data.Number);
-
-                            boothEntity.CurrentCall.Timer.Elapsed += (o, eventArgs) =>
-                            {
-                                sender.SendChatMessage("~#ffdb00~",
-                                    "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
-                                boothEntity.CurrentCall.Dispose();
-                                boothEntity.CurrentCall = null;
-                            };
+                            sender.SendChatMessage("~#ffdb00~",
+                                "Wybrany abonent ma wyłączony telefon bądź znajduje się poza zasięgiem spróbuj później.");
+                            return;
                         }
-                        else
+
+                        if (getterCharacter.CurrentCellphone.CurrentCall != null)
+                        {
+                            sender.SendChatMessage("~#ffdb00~",
+                                "Wybrany abonent prowadzi obecnie rozmowę. Spróbuj później.");
+                            return;
+                        }
+
+                        boothEntity.CurrentCall = new TelephoneCall(senderCharacter, getterCharacter, boothEntity.Data.Number);
+
+                        boothEntity.CurrentCall.Timer.Elapsed += (o, eventArgs) =>
                         {
                             sender.SendChatMessage("~#ffdb00~",
                                 "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
-                        }
+                            boothEntity.CurrentCall.Dispose();
+                            boothEntity.CurrentCall = null;
+                        };
                     }
-                    else
-                    {
-                        sender.Notify("Nie posiadasz wystarczającej ilości gotówki.");
-                    }
+
                 }
+                else
+                {
+                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Error);
+                }
+
             }
             else if (eventName == "OnPlayerTelephoneBoothEnd" && sender.HasData("Booth"))
             {
-                TelephoneBoothEntity boothEntity = sender.GetData("Booth");
+                CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
 
-                if (boothEntity.CurrentCall != null && boothEntity.CurrentCall.CurrentlyTalking)
+                if (senderCharacter.CurrentInteractive is TelephoneBoothEntity boothEntity)
                 {
-                    boothEntity.CurrentCall.Sender.SendChatMessage("~#ffdb00~",
-                        "Rozmowa zakończona.");
-                    boothEntity.CurrentCall.Getter.SendChatMessage("~#ffdb00~",
-                        "Rozmowa zakończona.");
+                    if (boothEntity.CurrentCall != null && boothEntity.CurrentCall.CurrentlyTalking)
+                    {
+                        boothEntity.CurrentCall.Sender.Notify(
+                            "Rozmowa zakończona.", NotificationType.Info);
+                        boothEntity.CurrentCall.Getter.Notify(
+                            "Rozmowa zakończona.", NotificationType.Info);
 
-                    boothEntity.CurrentCall.Dispose();
-                    boothEntity.CurrentCall = null;
+                        boothEntity.CurrentCall.Dispose();
+                        boothEntity.CurrentCall = null;
+                    }
                 }
             }
         }
@@ -95,12 +100,12 @@ namespace VRP.Serverside.Entities.Common.Booth
         [Command("dodajbudke")]
         public void CreateAtm(Client sender, decimal cost, string number)
         {
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu.\"");
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.");
+            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu.\" użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
 
             if (!ValidationHelper.IsMoneyValid(cost) || !ValidationHelper.IsCellphoneNumberValid(number))
             {
-                sender.Notify("Wprowadzono dane w nieprawidłowym formacie.");
+                sender.Notify("Wprowadzono dane w nieprawidłowym formacie.", NotificationType.Error);
+                return;
             }
 
             void Handler(Client o, string message)
@@ -134,7 +139,7 @@ namespace VRP.Serverside.Entities.Common.Booth
                     TelephoneBoothEntity booth = new TelephoneBoothEntity(data);
                     booth.Spawn();
                     Booths.Add(booth);
-                    sender.Notify("Dodawanie budki zakończyło się ~g~~h~pomyślnie.");
+                    sender.Notify("Dodawanie budki zakończyło się pomyślnie.", NotificationType.Info);
                 }
             }
         }
@@ -144,26 +149,26 @@ namespace VRP.Serverside.Entities.Common.Booth
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania budki.");
+                sender.Notify("Nie posiadasz uprawnień do usuwania budki.", NotificationType.Error);
                 return;
             }
 
             if (Booths.Count == 0)
             {
-                sender.Notify("Nie znaleziono budki telefonicznej którą można usunąć.");
+                sender.Notify("Nie znaleziono budki telefonicznej którą można usunąć.", NotificationType.Warning);
                 return;
             }
 
             TelephoneBoothEntity telephoneBooth = Booths.OrderBy(a => a.Data.Position.Position.DistanceTo(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(telephoneBooth.Data.FilePath))
             {
-                sender.Notify("Usuwanie budki telefonicznej zakończyło się ~g~~h~pomyślnie.");
+                sender.Notify("Usuwanie budki telefonicznej zakończyło się pomyślnie.", NotificationType.Info);
                 Booths.Remove(telephoneBooth);
                 telephoneBooth.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie budki telefonicznej zakończyło ~r~~h~się niepomyślnie.");
+                sender.Notify("Usuwanie budki telefonicznej zakończyło się niepomyślnie.", NotificationType.Error);
             }
         }
         #endregion

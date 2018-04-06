@@ -37,11 +37,11 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
             }
             else if (eventName == "UseItem")
             {
-                AccountEntity player = sender.GetAccountEntity();
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
                 int index = Convert.ToInt32(sender.GetData("SelectedItem"));
 
-                ItemEntity item = _itemFactory.Create(player.CharacterEntity.DbModel.Items.ToList()[index]);
-                item.UseItem(player);
+                ItemEntity item = _itemFactory.Create(character.DbModel.Items.ToList()[index]);
+                item.UseItem(character);
             }
             else if (eventName == "InformationsItem")
             {
@@ -89,27 +89,29 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
 
                 if (sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall != null)
                 {
-                    sender.Notify("Obecnie prowadzisz rozmowę telefoniczną. Zakończ ją klawiszem END.");
+                    sender.Notify("Obecnie prowadzisz rozmowę telefoniczną. Zakończ ją klawiszem END.", NotificationType.Error);
                     return;
                 }
-                ////animka dzwonienia przez telefon
+                // FixMe animka dzwonienia przez telefon
                 //NAPI.playPlayerAnimation(senderPlayer.Client, (int)(AnimationFlags.AllowPlayerControl | AnimationFlags.Loop),
                 //    "cellphone@first_person", "cellphone_call_listen_base");
 
                 int number = Convert.ToInt32(args[0]);
                 if (EntityHelper.GetAccounts().Any(p => p.CharacterEntity.CurrentCellphone.Number == number))
                 {
-                    AccountEntity getter = EntityHelper.GetAccounts()
-                        .Single(p => p.CharacterEntity.CurrentCellphone.Number == number);
+                    CharacterEntity getterCharacter = EntityHelper.GetAccounts()
+                        .Single(p => p.CharacterEntity.CurrentCellphone.Number == number).CharacterEntity;
 
-                    if (getter.CharacterEntity.CurrentCellphone.CurrentCall != null)
+                    if (getterCharacter.CurrentCellphone.CurrentCall != null)
                     {
                         sender.SendChatMessage("~#ffdb00~",
                             "Wybrany abonent prowadzi obecnie rozmowę, spróbuj później.");
                         return;
                     }
 
-                    TelephoneCall call = new TelephoneCall(sender, getter.Client);
+                    CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
+
+                    TelephoneCall call = new TelephoneCall(senderCharacter, getterCharacter);
                     sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall = call;
 
                     call.Timer.Elapsed += (o, eventArgs) =>
@@ -147,10 +149,10 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 Cellphone cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
                 TelephoneCall telephoneCall = cellphone.CurrentCall;
 
-                if (telephoneCall.Getter.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall != null)
+
+                if (telephoneCall.Getter.CurrentCellphone.CurrentCall != null)
                 {
-                    telephoneCall.Getter.SendChatMessage("~#ffdb00~",
-                        "Aby odebrać musisz zakończyć bieżące połączenie.");
+                    telephoneCall.Getter.Notify("Aby odebrać musisz zakończyć bieżące połączenie.", NotificationType.Warning);
                     return;
                 }
 
@@ -159,23 +161,19 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
 
                 telephoneCall.Open();
 
-                telephoneCall.Getter.SendChatMessage("~#ffdb00~",
-                    "Odebrano telefon, aby zakończyć rozmowę naciśnij klawisz END.");
-                telephoneCall.Sender.SendChatMessage("~#ffdb00~",
-                    "Rozmówca odebrał telefon, aby zakończyć rozmowę naciśnij klawisz END.");
+                telephoneCall.Getter.Notify("Odebrano telefon, aby zakończyć rozmowę naciśnij klawisz END.", NotificationType.Info);
+                telephoneCall.Sender.Notify("Rozmówca odebrał telefon, aby zakończyć rozmowę naciśnij klawisz END.", NotificationType.Info);
             }
             else if (eventName == "OnPlayerCellphoneEnd")
             {
-                Cellphone controller = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
+                Cellphone cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
 
-                if (controller?.CurrentCall != null)
+                if (cellphone?.CurrentCall != null)
                 {
-                    sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall = null;
+                    cellphone.CurrentCall.Sender.Notify("Rozmowa zakończona.", NotificationType.Info);
+                    cellphone.CurrentCall.Getter.Notify("Rozmowa zakończona.", NotificationType.Info);
 
-                    NAPI.Chat.SendChatMessageToPlayer(controller.CurrentCall.Sender, "~#ffdb00~",
-                        "Rozmowa zakończona.");
-                    NAPI.Chat.SendChatMessageToPlayer(controller.CurrentCall.Getter, "~#ffdb00~",
-                        "Rozmowa zakończona.");
+                    cellphone.CurrentCall = null;
                 }
             }
             //args[0] to numer kontaktu args[1] to nazwa 
@@ -184,7 +182,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 Cellphone cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
                 if (cellphone == null)
                 {
-                    sender.Notify("Musisz mieć włączony telefon.");
+                    sender.Notify("Musisz mieć włączony telefon.", NotificationType.Error);
                     return;
                 }
 
@@ -200,8 +198,6 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 cellphone.Contacts.Add(telephoneContactModel);
             }
         }
-
-
 
         #region Komendy
         [Command("p")]

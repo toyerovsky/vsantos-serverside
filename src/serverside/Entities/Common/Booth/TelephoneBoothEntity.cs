@@ -5,6 +5,7 @@
  */
 
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Telephone;
 using VRP.Serverside.Entities.Base;
@@ -48,7 +49,7 @@ namespace VRP.Serverside.Entities.Common.Booth
                 if (CurrentCall != null && CurrentCall.Accepted)
                 {
                     //Budka jest używana
-                    entity.Notify("Ta budka obecnie jest używana.");
+                    entity.Notify("Ta budka obecnie jest używana.", NotificationType.Warning);
                 }
                 else if (CurrentCall != null)
                 {

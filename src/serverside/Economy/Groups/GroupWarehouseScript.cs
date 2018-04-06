@@ -68,11 +68,11 @@ namespace VRP.Serverside.Economy.Groups
                         repository.Insert(groupWarehouseItem);
                         repository.Save();
                     }
-                    sender.Notify("Dodawanie przedmiotu zakończyło się ~h~ ~g~ pomyślnie.");
+                    sender.Notify("Dodawanie przedmiotu zakończyło się pomyślnie.", NotificationType.Info);
                 }
                 else
                 {
-                    sender.Notify("Dodawanie przedmiotu zakończone ~h~ ~r~ niepowodzeniem.");
+                    sender.Notify("Dodawanie przedmiotu zakończone niepowodzeniem.", NotificationType.Error);
                 }
 
             }
@@ -111,11 +111,11 @@ namespace VRP.Serverside.Economy.Groups
                             Data = shipment
                         });
 
-                        sender.Notify("Zamawianie przesyłki zakończyło się ~h~ ~g~ pomyślnie.");
+                        sender.Notify("Zamawianie przesyłki zakończyło się pomyślnie.", NotificationType.Info);
                     }
                     else
                     {
-                        sender.Notify($"Grupa {group.GetColoredName()} nie posiada wystarczającej ilości środków.");
+                        sender.Notify($"Grupa {group.GetColoredName()} nie posiada wystarczającej ilości środków.", NotificationType.Error);
                     }
                 }
             }
@@ -134,7 +134,7 @@ namespace VRP.Serverside.Economy.Groups
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster4)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia grupy.");
+                sender.Notify("Nie posiadasz uprawnień do tworzenia grupy.", NotificationType.Warning);
                 return;
             }
 

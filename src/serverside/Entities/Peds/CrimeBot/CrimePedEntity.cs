@@ -54,7 +54,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
 
             if (properties.Count % 3 != 1)
             {
-                player.Client.Notify($"Konfiguracja bota grupy {Group} jest nieporawna, skontaktuj się z administratorem.");
+                player.Client.Notify($"Konfiguracja bota grupy {Group} jest nieporawna, skontaktuj się z administratorem.", NotificationType.Error);
                 return;
             }
 
@@ -105,7 +105,9 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                     if (item.Count != 0) sum += item.Cost * item.Count;
                 }
 
-                if (!sender.HasMoney(sum))
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+
+                if (!character.HasMoney(sum))
                 {
                     SendMessageToNerbyPlayers(
                         $"Co to jest? Brakuje ${sum - sender.GetAccountEntity().CharacterEntity.DbModel.Money}, forsa w gotówce", ChatMessageType.Normal);
@@ -167,7 +169,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                     }
                     repository.Save();
                 }
-                sender.RemoveMoney(sum);
+                character.RemoveMoney(sum);
 
 
                 using (CrimeBotsRepository repository = new CrimeBotsRepository())

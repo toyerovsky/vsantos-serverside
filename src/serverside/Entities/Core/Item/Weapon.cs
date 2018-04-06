@@ -22,28 +22,28 @@ namespace VRP.Serverside.Entities.Core.Item
         /// </summary>
         public Weapon(ItemModel itemModel) : base(itemModel) { }
 
-        public override void UseItem(AccountEntity player)
+        public override void UseItem(CharacterEntity sender)
         {
             if (Ammo <= 0)
             {
-                player.Client.Notify("Twoja broń nie ma amunicji.");
+                sender.Notify("Twoja broń nie ma amunicji.", NotificationType.Error);
                 return;
             }
 
-            if (player.CharacterEntity.ItemsInUse.Any(item => ReferenceEquals(item, this)))
+            if (sender.ItemsInUse.Any(item => ReferenceEquals(item, this)))
             {
-                DbModel.SecondParameter = NAPI.Player.GetPlayerWeaponAmmo(player.Client, WeaponHash);
+                DbModel.SecondParameter = NAPI.Player.GetPlayerWeaponAmmo(sender.AccountEntity.Client, WeaponHash);
                 Save();
-                NAPI.Player.RemovePlayerWeapon(player.Client, WeaponHash);
+                NAPI.Player.RemovePlayerWeapon(sender.AccountEntity.Client, WeaponHash);
 
-                player.CharacterEntity.ItemsInUse.Remove(this);
+                sender.ItemsInUse.Remove(this);
                 
                 AccountEntity.AccountLoggedOut -= OnAccountLoggedOut;
             }
             else
             {
-                NAPI.Player.GivePlayerWeapon(player.Client, WeaponHash, Ammo);
-                player.CharacterEntity.ItemsInUse.Add(this);
+                NAPI.Player.GivePlayerWeapon(sender.AccountEntity.Client, WeaponHash, Ammo);
+                sender.ItemsInUse.Add(this);
 
                 AccountEntity.AccountLoggedOut += OnAccountLoggedOut;
             }

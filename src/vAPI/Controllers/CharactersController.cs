@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
+using VRP.Core.Database.Models;
 using VRP.vAPI.Services;
 
 namespace VRP.vAPI.Controllers
@@ -27,7 +28,7 @@ namespace VRP.vAPI.Controllers
             Stopwatch sw = new Stopwatch();
             sw.Reset();
             sw.Start();
-            var account = _roleplayContext.Accounts
+            AccountModel account = _roleplayContext.Accounts
                 .Single(a => a.Id == accountId);
 
             // loading alive characters

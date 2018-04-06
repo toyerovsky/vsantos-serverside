@@ -24,7 +24,7 @@ namespace VRP.Serverside.Economy.Groups
 {
     public class GroupsScript : Script
     {
-        #region Player commands
+        #region Character commands
 
         [Command("prowadz", "~y~ UŻYJ ~w~ /pro(wadz) (id)", Alias = "pro")]
         public void ForcePlayerToGo(Client sender, int id = -1)
@@ -33,7 +33,7 @@ namespace VRP.Serverside.Economy.Groups
             {
                 if (!group.CanPlayerDoPolice(sender.GetAccountEntity()))
                 {
-                    sender.Notify("Twoja postać nie posiada uprawnień do używania prowadzenia.");
+                    sender.Notify("Twoja postać nie posiada uprawnień do używania prowadzenia.", NotificationType.Warning);
                     return;
                 }
 
@@ -47,13 +47,13 @@ namespace VRP.Serverside.Economy.Groups
                         distance = getter.Client.Position.DistanceTo(sender.Position);
                         if (distance > 3 || distance < -3)
                         {
-                            sender.Notify("Podany gracz znajduje się za daleko.");
+                            sender.Notify("Podany gracz znajduje się za daleko.", NotificationType.Warning);
                             return;
                         }
                     }
                     else
                     {
-                        sender.Notify("Nie znaleziono gracza o podanym Id.");
+                        sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                         return;
                     }
                 }
@@ -84,7 +84,7 @@ namespace VRP.Serverside.Economy.Groups
             if (group == null) return;
             if (group.DbModel.GroupType != GroupType.Police || !((Police)group).CanPlayerDoPolice(sender.GetAccountEntity()))
             {
-                sender.Notify("Twoja grupa, bądź postać nie posiada uprawnień do używania kajdanek.");
+                sender.Notify("Twoja grupa, bądź postać nie posiada uprawnień do używania kajdanek.", NotificationType.Warning);
                 return;
             }
 
@@ -98,13 +98,13 @@ namespace VRP.Serverside.Economy.Groups
                     distance = getter.Client.Position.DistanceTo2D(sender.Position);
                     if (distance > 3 || distance < -3)
                     {
-                        sender.Notify("Podany gracz znajduje się za daleko.");
+                        sender.Notify("Podany gracz znajduje się za daleko.", NotificationType.Warning);
                         return;
                     }
                 }
                 else
                 {
-                    sender.Notify("Nie znaleziono gracza o podanym Id.");
+                    sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                     return;
                 }
             }
@@ -135,7 +135,7 @@ namespace VRP.Serverside.Economy.Groups
             if (player.CharacterEntity.OnDutyGroup != null)
             {
                 sender.Notify(
-                    $"Zszedłeś ze służby grupy: {player.CharacterEntity.OnDutyGroup.GetColoredName()}");
+                    $"Zszedłeś ze służby grupy: {player.CharacterEntity.OnDutyGroup.GetColoredName()}", NotificationType.Info);
 
                 player.CharacterEntity.OnDutyGroup.PlayersOnDuty.Remove(player);
                 player.CharacterEntity.OnDutyGroup = null;
@@ -148,7 +148,7 @@ namespace VRP.Serverside.Economy.Groups
             {
                 if (!ValidationHelper.IsGroupSlotValid(slot))
                 {
-                    sender.Notify("Podany slot grupy nie jest poprawny.");
+                    sender.Notify("Podany slot grupy nie jest poprawny.", NotificationType.Error);
                     return;
                 }
 
@@ -171,7 +171,7 @@ namespace VRP.Serverside.Economy.Groups
                     player.CharacterEntity.OnDutyGroup = group;
                     player.CharacterEntity.OnDutyGroup.PlayersOnDuty.Add(player);
                     sender.Notify(
-                        $"Wszedłeś na służbę grupy: {group.GetColoredName()}");
+                        $"Wszedłeś na służbę grupy: {group.GetColoredName()}", NotificationType.Info);
 
                     AccountEntity.AccountLoggedOut += (client, account) =>
                     {
@@ -180,7 +180,7 @@ namespace VRP.Serverside.Economy.Groups
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz grupy w tym slocie.");
+                    sender.Notify("Nie posiadasz grupy w tym slocie.", NotificationType.Info);
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace VRP.Serverside.Economy.Groups
         {
             if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
             {
-                sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.");
+                sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.", NotificationType.Error);
             }
 
             if (sender.TryGetGroupByUnsafeSlot(slot, out GroupEntity group))
@@ -200,23 +200,24 @@ namespace VRP.Serverside.Economy.Groups
                     if (group.HasMoney(safeMoneyCount))
                     {
                         group.RemoveMoney(safeMoneyCount);
-                        sender.AddMoney(safeMoneyCount);
+                        CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+                        character.AddMoney(safeMoneyCount);
 
-                        sender.Notify($"Wypłacono ${safeMoneyCount} z konta grupy {group.GetColoredName()}.");
+                        sender.Notify($"Wypłacono ${safeMoneyCount} z konta grupy {group.GetColoredName()}.", NotificationType.Info);
                     }
                     else
                     {
-                        sender.Notify($"Grupa {group.GetColoredName()}, nie posiada tyle pieniędzy na koncie.");
+                        sender.Notify($"Grupa {group.GetColoredName()}, nie posiada tyle pieniędzy na koncie.", NotificationType.Info);
                     }
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz uprawnień do wypłacania gotówki.");
+                    sender.Notify("Nie posiadasz uprawnień do wypłacania gotówki.", NotificationType.Warning);
                 }
             }
             else
             {
-                sender.Notify("Nie posiadasz grupy w tym slocie.");
+                sender.Notify("Nie posiadasz grupy w tym slocie.", NotificationType.Info);
             }
         }
 
@@ -225,26 +226,27 @@ namespace VRP.Serverside.Economy.Groups
         {
             if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
             {
-                sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.");
+                sender.Notify("Podano kwotę gotówki w nieprawidłowym formacie.", NotificationType.Error);
             }
 
             if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group))
             {
-                if (sender.HasMoney(safeMoneyCount))
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+                if (character.HasMoney(safeMoneyCount))
                 {
-                    sender.RemoveMoney(safeMoneyCount);
+                    character.RemoveMoney(safeMoneyCount);
                     group.AddMoney(safeMoneyCount);
 
-                    sender.Notify($"Wpłacono ${safeMoneyCount} na konto grupy {group.GetColoredName()}.");
+                    sender.Notify($"Wpłacono ${safeMoneyCount} na konto grupy {group.GetColoredName()}.", NotificationType.Info);
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz tyle gotówki.");
+                    sender.Notify("Nie posiadasz tyle gotówki.", NotificationType.Info);
                 }
             }
             else
             {
-                sender.Notify("Nie posiadasz grupy w tym slocie.");
+                sender.Notify("Nie posiadasz grupy w tym slocie.", NotificationType.Info);
             }
         }
 
@@ -253,16 +255,15 @@ namespace VRP.Serverside.Economy.Groups
         {
             AccountEntity player = sender.GetAccountEntity();
             // Nie wiem czy nie popsuje to czegos gdy grupa jest - do sprawdzenia
-            if ((EntityHelper.GetPlayerGroups(player) == null ?  true :  false) )
+            if ((EntityHelper.GetPlayerGroups(player) == null ? true : false))
             {
-                sender.Notify("Nie jesteś członkiem żadnej grupy.");
-                sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Nie jesteś członkiem żadnej grupy.", NotificationType.Info);
+                sender.Notify("Nie jesteś członkiem żadnej grupy.", NotificationType.Warning);
                 return;
             }
 
             if (!ValidationHelper.IsGroupSlotValid(slot))
             {
-                sender.Notify("Podano dane w nieprawidłowym formacie.");
+                sender.Notify("Podano dane w nieprawidłowym formacie.", NotificationType.Error);
                 return;
             }
 
@@ -287,7 +288,7 @@ namespace VRP.Serverside.Economy.Groups
             }
             else
             {
-                sender.Notify("Nie posiadasz grupy w tym slocie.");
+                sender.Notify("Nie posiadasz grupy w tym slocie.", NotificationType.Info);
             }
         }
 
@@ -301,27 +302,27 @@ namespace VRP.Serverside.Economy.Groups
                     AccountEntity getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)
                     {
-                        sender.Notify("Nie znaleziono gracza o podanym Id.");
+                        sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                         return;
                     }
 
                     if (group.ContainsWorker(getter))
                     {
-                        sender.Notify($"{getter.CharacterEntity.FormatName} już znajduje się w grupie {group.GetColoredName()}");
+                        sender.Notify($"{getter.CharacterEntity.FormatName} już znajduje się w grupie {group.GetColoredName()}", NotificationType.Info);
                         return;
                     }
                     group.AddWorker(getter);
-                    getter.Client.Notify($"Zostałeś zaproszony do grupy {group.GetColoredName()} przez {sender.Name}.");
-                    sender.Notify($"Zaprosiłeś gracza {getter.Client.Name} do grupy {group.GetColoredName()}.");
+                    getter.Notify($"Zostałeś zaproszony do grupy {group.GetColoredName()} przez {sender.Name}.", NotificationType.Info);
+                    sender.Notify($"Zaprosiłeś gracza {getter.Client.Name} do grupy {group.GetColoredName()}.", NotificationType.Info);
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz uprawnień do zarządzania pracownikami.");
+                    sender.Notify("Nie posiadasz uprawnień do zarządzania pracownikami.", NotificationType.Warning);
                 }
             }
             else
             {
-                sender.Notify("Nie posiadasz grupy w tym slocie.");
+                sender.Notify("Nie posiadasz grupy w tym slocie.", NotificationType.Info);
             }
         }
 
@@ -335,28 +336,28 @@ namespace VRP.Serverside.Economy.Groups
                     AccountEntity getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)
                     {
-                        sender.Notify("Nie znaleziono gracza o podanym Id.");
+                        sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
                         return;
                     }
 
                     if (group.ContainsWorker(getter))
                     {
-                        sender.Notify($"{getter.CharacterEntity.FormatName} nie należy do grupy {group.GetColoredName()}");
+                        sender.Notify($"{getter.CharacterEntity.FormatName} nie należy do grupy {group.GetColoredName()}", NotificationType.Info);
                         return;
                     }
 
                     group.RemoveWorker(getter);
-                    getter.Client.Notify($"Zostałeś wyproszony z grupy {group.GetColoredName()} przez {sender.Name}.");
-                    sender.Notify($"Wyprosiłeś gracza {getter.Client.Name} z grupy {group.GetColoredName()}.");
+                    getter.Notify($"Zostałeś wyproszony z grupy {group.GetColoredName()} przez {sender.Name}.", NotificationType.Info);
+                    sender.Notify($"Wyprosiłeś gracza {getter.Client.Name} z grupy {group.GetColoredName()}.", NotificationType.Info);
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz uprawnień do zarządzania pracownikami.");
+                    sender.Notify("Nie posiadasz uprawnień do zarządzania pracownikami.", NotificationType.Warning);
                 }
             }
             else
             {
-                sender.Notify("Nie posiadasz grupy w tym slocie.");
+                sender.Notify("Nie posiadasz grupy w tym slocie.", NotificationType.Info);
             }
         }
 
