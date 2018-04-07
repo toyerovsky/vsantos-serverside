@@ -33,9 +33,8 @@ namespace VRP.Serverside.Core.Animations
             }, Path.Combine(Utils.XmlDirectory + "Animations"), arguments[2].ToString());
 
                 sender.SendInfo("Animacja została dodana pomyślnie.");
-            }
-        }
-    
+         }
+
 
         #region Komendy administracji
         [Command("dodajanim")]
@@ -46,6 +45,8 @@ namespace VRP.Serverside.Core.Animations
             player.TriggerEvent("ShowAdminAnimMenu", Constant.Items.Animations.Select(anim => $"{anim.Key},{anim.Value}").ToList());
         }
         #endregion
-
     }
+
+
+
 }

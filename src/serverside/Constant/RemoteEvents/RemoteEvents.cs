@@ -4,6 +4,8 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
+using System.Security.Authentication.ExtendedProtection;
+
 namespace VRP.Serverside.Constant.RemoteEvents
 {
     public static class RemoteEvents
@@ -60,6 +62,22 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string OnPlayerAddWarehouseItem = "OnPlayerAddWarehouseItem";
 
         public const string OnPlayerPlaceOrder = "OnPlayerPlaceOrder";
+
+        #endregion
+
+        #region CourierWarehouseScript
+
+        public const string OnPlayerTakePackage = "OnPlayerTakePackage";
+
+
+
+        #endregion
+
+        #region OffersScript
+
+        public const string OnPlayerCancelOffer = "OnPlayerCancelOffer";
+
+        public const string OnPlayerPayOffer = "OnPlayerPayOffer";
 
         #endregion
 

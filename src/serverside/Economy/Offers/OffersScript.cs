@@ -17,40 +17,42 @@ using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Building;
 using VRP.Serverside.Entities.Core.Group;
 using VRP.Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Economy.Offers
 {
     public class OffersScript : Script
     {
-        public void API_OnClientEventTrigger(Client sender, string eventName, object[] arguments)
+        [RemoteEvent(RemoteEvents.OnPlayerCancelOffer)]
+        public void OnPLayerCancelOfferHandler(Client sender, string eventName, object[] arguments)
         {
-            if (eventName == "OnPlayerCancelOffer")
-            {
-                Offer offer = sender.GetData("Offer");
+            Offer offer = sender.GetData("Offer");
 
-                offer.Sender.SendWarning($"Gracz {offer.Getter.FormatName} odrzucił twoją ofertę.");
-                offer.Getter.SendWarning($"Odrzuciłeś ofertę gracza { offer.Sender.FormatName}");
-                offer.Dispose();
-            }
-            else if (eventName == "OnPlayerPayOffer")
-            {
-                Offer offer = sender.GetData("Offer");
-
-                if (offer.Sender.AccountEntity.Client.Position.DistanceTo(offer.Getter.AccountEntity.Client.Position) <= 10)
-                {
-                    //Trzeba nadać to pole przed wykonaniem oferty
-                    //FixMe
-                    //offer.Bank = Convert.ToBoolean(arguments[0]);
-                    //offer.Trade();
-                }
-                else
-                {
-                    offer.Sender.SendError("Osoba do której wysyłasz ofertę znajduje się za daleko.");
-                    offer.Getter.SendError("Znajdujesz się za daleko od osoby która wysłała ofertę.");
-                }
-                offer.Dispose();
-            }
+            offer.Sender.SendWarning($"Gracz {offer.Getter.FormatName} odrzucił twoją ofertę.");
+            offer.Getter.SendWarning($"Odrzuciłeś ofertę gracza { offer.Sender.FormatName}");
+            offer.Dispose();
         }
+
+        [RemoteEvent(RemoteEvents.OnPlayerPayOffer)]
+        public void OnPlayerPayOfferHandler(Client sender, string eventName, object[] arguments)
+        {
+            Offer offer = sender.GetData("Offer");
+
+            if (offer.Sender.AccountEntity.Client.Position.DistanceTo(offer.Getter.AccountEntity.Client.Position) <= 10)
+            {
+                //Trzeba nadać to pole przed wykonaniem oferty
+                //FixMe
+                //offer.Bank = Convert.ToBoolean(arguments[0]);
+                //offer.Trade();
+            }
+            else
+            {
+                offer.Sender.SendError("Osoba do której wysyłasz ofertę znajduje się za daleko.");
+                offer.Getter.SendError("Znajdujesz się za daleko od osoby która wysłała ofertę.");
+            }
+            offer.Dispose();
+        }
+      
 
         #region Komendy
         [Command("o", "~y~UŻYJ: ~w~ /o [id] [typ] [cena] (indeks)")]

@@ -17,43 +17,44 @@ using VRP.Serverside.Economy.Groups;
 using VRP.Serverside.Economy.Groups.Structs;
 using VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;
 using VRP.Serverside.Entities;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
 {
     public class CourierWarehouseScript : Script
     {
+     
         public List<CourierWarehouse> Warehouses { get; set; } = new List<CourierWarehouse>();
 
-        private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.OnPlayerTakePackage)]
+        public void OnPlayerTakePackageHandler(Client sender, string eventName, params object[] arguments)
         {
-            if (eventName == "OnPlayerTakePackage")
+            WarehouseOrderInfo package = GroupWarehouseScript.CurrentOrders.Single(x => x.Data.Id == (int)arguments[0]);
+            if (package.CurrentCourier != null)
             {
-                WarehouseOrderInfo package = GroupWarehouseScript.CurrentOrders.Single(x => x.Data.Id == (int)arguments[0]);
-                if (package.CurrentCourier != null)
+                sender.SendError("Ktoś obecnie dostarcza tę paczkę.");
+                return;
+            }
+
+            sender.SendInfo($"Podjąłeś się dostarczenia przesyłki do: {EntityHelper.GetGroup(package.Data.Getter.Id).GetColoredName()}");
+            package.CurrentCourier = sender.GetAccountEntity();
+            GroupWarehouseScript.CurrentOrders.Remove(package);
+
+            Timer timer = new Timer(1800000);
+            timer.Start();
+            timer.Elapsed += (o, args) =>
+            {
+                if (package.CurrentCourier.CharacterEntity.DbModel.Online)
                 {
-                    sender.SendError("Ktoś obecnie dostarcza tę paczkę.");
-                    return;
+                    package.CurrentCourier.Client.SendInfo("Nie dostarczyłeś paczki na czas.");
                 }
 
-                sender.SendInfo($"Podjąłeś się dostarczenia przesyłki do: {EntityHelper.GetGroup(package.Data.Getter.Id).GetColoredName()}");
-                package.CurrentCourier = sender.GetAccountEntity();
-                GroupWarehouseScript.CurrentOrders.Remove(package);
-
-                Timer timer = new Timer(1800000);
-                timer.Start();
-                timer.Elapsed += (o, args) =>
-                {
-                    if (package.CurrentCourier.CharacterEntity.DbModel.Online)
-                    {
-                        package.CurrentCourier.Client.SendInfo("Nie dostarczyłeś paczki na czas.");
-                    }
-
-                    package.CurrentCourier = null;
-                    GroupWarehouseScript.CurrentOrders.Add(package);
-                };
-
-            }
+                package.CurrentCourier = null;
+                GroupWarehouseScript.CurrentOrders.Add(package);
+            };
         }
+
+     
 
         [Command("dodajmagazyn", "~y~ UŻYJ ~w~ /dodajmagazyn [nazwa]")]
         public void AddVehicleToJob(Client sender, string name)
