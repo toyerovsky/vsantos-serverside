@@ -17,6 +17,7 @@ using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Common.DriveThru.Models;
 using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Common.DriveThru
 {
@@ -24,38 +25,38 @@ namespace VRP.Serverside.Entities.Common.DriveThru
     {
         private List<DriveThruEntity> DriveThrus { get; set; } = new List<DriveThruEntity>();
 
-        private void OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.OnPlayerDriveThruBought)]
+        public void OnPlayerDriveThruBoughtHandler(Client sender, params object[] arguments)
         {
-            if (eventName == "OnPlayerDriveThruBought")
+            decimal money = Convert.ToDecimal(arguments[2]);
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            if (!character.HasMoney(money))
             {
-                decimal money = Convert.ToDecimal(arguments[2]);
-                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-                if (!character.HasMoney(money))
-                {
-                    sender.SendInfo("Nie posiadasz wystarczającej ilości gotówki.");
-                    return;
-                }
-                character.RemoveMoney(money);
-
-                AccountEntity player = sender.GetAccountEntity();
-
-                ItemModel itemModel = new ItemModel
-                {
-                    Name = (string)arguments[0],
-                    Character = player.CharacterEntity.DbModel,
-                    Creator = null,
-                    ItemEntityType = ItemEntityType.Food,
-                    FirstParameter = (int)arguments[1],
-                };
-
-                using (ItemsRepository repository = new ItemsRepository())
-                {
-                    repository.Insert(itemModel);
-                    repository.Save();
-                }
-                sender.SendInfo($"Pomyślnie zakupiłeś {itemModel.Name} za ${money}.");
+                sender.SendInfo("Nie posiadasz wystarczającej ilości gotówki.");
+                return;
             }
+            character.RemoveMoney(money);
+
+            AccountEntity player = sender.GetAccountEntity();
+
+            ItemModel itemModel = new ItemModel
+            {
+                Name = (string)arguments[0],
+                Character = player.CharacterEntity.DbModel,
+                Creator = null,
+                ItemEntityType = ItemEntityType.Food,
+                FirstParameter = (int)arguments[1],
+            };
+
+            using (ItemsRepository repository = new ItemsRepository())
+            {
+                repository.Insert(itemModel);
+                repository.Save();
+            }
+            sender.SendInfo($"Pomyślnie zakupiłeś {itemModel.Name} za ${money}.");
         }
+
+ 
 
         [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()

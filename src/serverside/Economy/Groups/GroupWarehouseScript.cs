@@ -25,7 +25,7 @@ namespace VRP.Serverside.Economy.Groups
         public static List<WarehouseOrderInfo> CurrentOrders { get; set; } = new List<WarehouseOrderInfo>();
 
         [RemoteEvent(RemoteEvents.OnPlayerAddWarehouseItem)]
-        public void OnPlayerAddWarehouseItemHandler(Client sender, string eventName, params object[] arguments)
+        public void OnPlayerAddWarehouseItemHandler(Client sender , params object[] arguments)
         {
             /* Argumenty
                  * args[0] string nameResult,
@@ -77,7 +77,7 @@ namespace VRP.Serverside.Economy.Groups
         }
 
         [RemoteEvent(RemoteEvents.OnPlayerPlaceOrder)]
-        public void OnPlayerPlaceOrderHandler(Client sender, string eventName, params object[] arguments)
+        public void OnPlayerPlaceOrderHandler(Client sender, params object[] arguments)
         {
             /* Argumenty
                  * args[0] - List<WarehouseItemInfo> JSON

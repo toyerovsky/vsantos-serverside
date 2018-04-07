@@ -19,7 +19,7 @@ namespace VRP.Serverside.Core.WheelMenu
     public class WheelMenuScript : Script
     {
         [RemoteEvent(RemoteEvents.RequestWheelMenu)]
-        public void RequestWheelMenuHandler(Client sender, string eventName, params object[] arguments)
+        public void RequestWheelMenuHandler(Client sender, params object[] arguments)
         {
             //args[0] to NetHandle które przyszło z RayCast
             //nie używam as ponieważ do struktury nie wolno
@@ -36,7 +36,7 @@ namespace VRP.Serverside.Core.WheelMenu
         }
 
         [RemoteEvent(RemoteEvents.UseWheelMenuItem)]
-        public void UseWheelMenuItemHandler(Client sender, string eventName, params object[] arguments)
+        public void UseWheelMenuItemHandler(Client sender , params object[] arguments)
         {
             //args[0] to nazwa opcji
             WheelMenu wheel = (WheelMenu)sender.GetData("WheelMenu");

@@ -16,32 +16,34 @@ using VRP.Serverside.Economy.Bank;
 using VRP.Serverside.Entities.Common.Atm.Models;
 using ChatMessageType = VRP.Core.Enums.ChatMessageType;
 using FullPosition = VRP.Serverside.Core.FullPosition;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Common.Atm
 {
     public class AtmScript : Script
     {
-        private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.OnPlayerAtmTake)]
+        public void OnPlayerAtmTakeHandler(Client sender, params object[] arguments)
         {
-            if (eventName == "OnPlayerAtmTake")
+            if (decimal.TryParse(arguments[0].ToString(), out decimal money))
             {
-                if (decimal.TryParse(arguments[0].ToString(), out decimal money))
-                {
-                    ChatScript.SendMessageToNearbyPlayers(sender.GetAccountEntity().CharacterEntity,
-                        $"wkłada {(money >= 3000 ? "gruby" : "chudy")} plik gotówki do bankomatu i po przetworzeniu operacji zabiera kartę.", ChatMessageType.ServerMe);
-                    BankHelper.DepositMoney(sender, money);
-                }
-            }
-            else if (eventName == "OnPlayerAtmGive")
-            {
-                if (decimal.TryParse(arguments[0].ToString(), out decimal money))
-                {
-                    ChatScript.SendMessageToNearbyPlayers(sender.GetAccountEntity().CharacterEntity,
-                        $"wyciąga z bankomatu {(money >= 3000 ? "gruby" : "chudy")} plik gotówki, oraz kartę.", ChatMessageType.ServerMe);
-                    BankHelper.WithdrawMoney(sender, money);
-                }
+                ChatScript.SendMessageToNearbyPlayers(sender.GetAccountEntity().CharacterEntity,
+                    $"wkłada {(money >= 3000 ? "gruby" : "chudy")} plik gotówki do bankomatu i po przetworzeniu operacji zabiera kartę.", ChatMessageType.ServerMe);
+                BankHelper.DepositMoney(sender, money);
             }
         }
+
+        [RemoteEvent(RemoteEvents.OnPlayerAtmGive)]
+        public void OnPlayerAtmGiveHandler(Client sender, params object[] arguments)
+        {
+            if (decimal.TryParse(arguments[0].ToString(), out decimal money))
+            {
+                ChatScript.SendMessageToNearbyPlayers(sender.GetAccountEntity().CharacterEntity,
+                    $"wyciąga z bankomatu {(money >= 3000 ? "gruby" : "chudy")} plik gotówki, oraz kartę.", ChatMessageType.ServerMe);
+                BankHelper.WithdrawMoney(sender, money);
+            }
+        }
+  
 
         #region ADMIN COMMANDS
 

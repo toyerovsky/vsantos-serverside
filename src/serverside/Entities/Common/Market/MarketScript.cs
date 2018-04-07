@@ -17,6 +17,7 @@ using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Common.Market.Models;
 using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Common.Market
 {
@@ -24,72 +25,72 @@ namespace VRP.Serverside.Entities.Common.Market
     {
         private static List<MarketEntity> Markets { get; set; } = new List<MarketEntity>();
 
-
-        private void OnClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.AddMarketItem)]
+        public void AddMarketItemHandler(Client sender, params object[] arguments)
         {
-            if (eventName == "AddMarketItem")
+            /*
+                * args[0] nameResult
+                * args[1] typeResult
+                * args[2] decimal costResult
+                * args[3] List<string> names
+                * args[4] FirstParameter
+                * args[5] SecondParameter
+                * args[6] ThirdParameter
+                */
+            MarketItem item = new MarketItem
             {
-                /*
-                 * args[0] nameResult
-                 * args[1] typeResult
-                 * args[2] decimal costResult
-                 * args[3] List<string> names
-                 * args[4] FirstParameter
-                 * args[5] SecondParameter
-                 * args[6] ThirdParameter
-                 */
-                MarketItem item = new MarketItem
-                {
-                    Name = arguments[0].ToString(),
-                    ItemEntityType = (ItemEntityType)Enum.Parse(typeof(ItemEntityType), (string)arguments[1]),
-                    Cost = (decimal)arguments[2],
-                    FirstParameter = (int)arguments[4],
-                    SecondParameter = (int)arguments[5],
-                    ThirdParameter = (int)arguments[6]
-                };
+                Name = arguments[0].ToString(),
+                ItemEntityType = (ItemEntityType)Enum.Parse(typeof(ItemEntityType), (string)arguments[1]),
+                Cost = (decimal)arguments[2],
+                FirstParameter = (int)arguments[4],
+                SecondParameter = (int)arguments[5],
+                ThirdParameter = (int)arguments[6]
+            };
 
-                List<string> names = (List<string>)arguments[3];
-                foreach (string name in names)
-                {
-                    MarketEntity market = Markets.First(x => x.Data.Name == name);
-                    if (market != null)
-                    {
-                        market.Data.Items.Add(item);
-                        XmlHelper.AddXmlObject(market.Data, Path.Combine(Utils.XmlDirectory, "Markets", market.Data.Name));
-                    }
-                }
-            }
-            else if (eventName == "OnPlayerBoughtMarketItem")
+            List<string> names = (List<string>)arguments[3];
+            foreach (string name in names)
             {
-                //args[0] index
-                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-                if (character.CurrentInteractive is MarketEntity market)
+                MarketEntity market = Markets.First(x => x.Data.Name == name);
+                if (market != null)
                 {
-                    MarketItem item = market.Data.Items[(int)arguments[0]];
-
-                    if (!character.HasMoney(item.Cost))
-                    {
-                        character.SendInfo("Nie posiadasz wystarczającej ilości gotówki.");
-                        return;
-                    }
-                    character.RemoveMoney(item.Cost);
-
-                    AccountEntity controller = sender.GetAccountEntity();
-                    controller.CharacterEntity.DbModel.Items.Add(new ItemModel
-                    {
-                        Creator = null,
-                        ItemEntityType = item.ItemEntityType,
-                        Name = item.Name,
-                        Character = controller.CharacterEntity.DbModel,
-                        FirstParameter = item.FirstParameter,
-                        SecondParameter = item.SecondParameter,
-                        ThirdParameter = item.ThirdParameter
-                    });
-                    controller.Save();
+                    market.Data.Items.Add(item);
+                    XmlHelper.AddXmlObject(market.Data, Path.Combine(Utils.XmlDirectory, "Markets", market.Data.Name));
                 }
             }
         }
 
+        [RemoteEvent(RemoteEvents.OnPlayerBoughtMarketItem)]
+        public void OnPlayerBoughtMarketItemHandler(Client sender, params object[] arguments)
+        {
+            //args[0] index
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            if (character.CurrentInteractive is MarketEntity market)
+            {
+                MarketItem item = market.Data.Items[(int)arguments[0]];
+
+                if (!character.HasMoney(item.Cost))
+                {
+                    character.SendInfo("Nie posiadasz wystarczającej ilości gotówki.");
+                    return;
+                }
+                character.RemoveMoney(item.Cost);
+
+                AccountEntity controller = sender.GetAccountEntity();
+                controller.CharacterEntity.DbModel.Items.Add(new ItemModel
+                {
+                    Creator = null,
+                    ItemEntityType = item.ItemEntityType,
+                    Name = item.Name,
+                    Character = controller.CharacterEntity.DbModel,
+                    FirstParameter = item.FirstParameter,
+                    SecondParameter = item.SecondParameter,
+                    ThirdParameter = item.ThirdParameter
+                });
+                controller.Save();
+            }
+        }
+
+      
         private void OnResourceStart()
         {
             //TODO: Wczytywanie wszystkich IPL sklepów

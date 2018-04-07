@@ -19,7 +19,7 @@ namespace VRP.Serverside.Core.Animations
     public class AnimationsScript : Script
     {
         [RemoteEvent(RemoteEvents.OnPlayerAddAnim)]
-        public void OnPlayerAddAnimHandler(Client sender, string eventName, params object[] arguments)
+        public void OnPlayerAddAnimHandler(Client sender, params object[] arguments)
         {
             //args[0] Polska nazwa animacji
             //args[1] Słownik animacji z GTA:N

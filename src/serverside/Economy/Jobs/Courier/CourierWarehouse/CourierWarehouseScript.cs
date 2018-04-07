@@ -27,7 +27,7 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
         public List<CourierWarehouse> Warehouses { get; set; } = new List<CourierWarehouse>();
 
         [RemoteEvent(RemoteEvents.OnPlayerTakePackage)]
-        public void OnPlayerTakePackageHandler(Client sender, string eventName, params object[] arguments)
+        public void OnPlayerTakePackageHandler(Client sender , params object[] arguments)
         {
             WarehouseOrderInfo package = GroupWarehouseScript.CurrentOrders.Single(x => x.Data.Id == (int)arguments[0]);
             if (package.CurrentCourier != null)

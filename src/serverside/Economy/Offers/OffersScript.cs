@@ -24,7 +24,7 @@ namespace VRP.Serverside.Economy.Offers
     public class OffersScript : Script
     {
         [RemoteEvent(RemoteEvents.OnPlayerCancelOffer)]
-        public void OnPLayerCancelOfferHandler(Client sender, string eventName, object[] arguments)
+        public void OnPLayerCancelOfferHandler(Client sender, object[] arguments)
         {
             Offer offer = sender.GetData("Offer");
 
@@ -34,7 +34,7 @@ namespace VRP.Serverside.Economy.Offers
         }
 
         [RemoteEvent(RemoteEvents.OnPlayerPayOffer)]
-        public void OnPlayerPayOfferHandler(Client sender, string eventName, object[] arguments)
+        public void OnPlayerPayOfferHandler(Client sender, object[] arguments)
         {
             Offer offer = sender.GetData("Offer");
 

@@ -53,7 +53,7 @@ namespace VRP.Serverside.Core.Scripts
         }
 
         [RemoteEvent(RemoteEvents.playerlist_pings)]
-        public void playerlist_pingsHandler(Client sender, string eventName, params object[] arguments)
+        public void playerlist_pingsHandler(Client sender, params object[] arguments)
         {
             List<string> list = new List<string>();
             foreach (AccountEntity player in EntityHelper.GetAccounts())

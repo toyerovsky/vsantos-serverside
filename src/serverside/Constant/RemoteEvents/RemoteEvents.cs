@@ -81,5 +81,52 @@ namespace VRP.Serverside.Constant.RemoteEvents
 
         #endregion
 
+        #region AtmScript
+
+        public const string OnPlayerAtmTake = "OnPlayerAtmTake";
+
+        public const string OnPlayerAtmGive = "OnPlayerAtmGive";
+
+        #endregion
+
+        #region TelephoneBoothScript
+
+        public const string OnPlayerTelephoneBoothCall = "OnPlayerTelephoneBoothCall";
+
+        public const string OnPlayerTelephoneBoothEnd = "OnPlayerTelephoneBoothEnd";
+
+        #endregion
+
+        #region BusStopScript
+
+        public const string RequestBus = "RequestBus";
+
+        #endregion
+
+        #region CarshopScript
+
+        public const string OnPlayerBoughtVehicle = "OnPlayerBoughtVehicle";
+
+        #endregion
+
+        #region CornerBotsScript
+
+        public const string AddCornerBot = "AddCornerBot";
+
+        #endregion
+
+        #region DriveThruScript
+
+        public const string OnPlayerDriveThruBought = "OnPlayerDriveThruBought";
+
+        #endregion
+
+        #region MarketScript
+
+        public const string AddMarketItem = "AddMarketItem";
+
+        public const string OnPlayerBoughtMarketItem = "OnPlayerBoughtMarketItem";
+
+        #endregion
     }
 }

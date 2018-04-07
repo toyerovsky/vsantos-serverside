@@ -19,6 +19,7 @@ using VRP.Serverside.Entities.Common.Booth.Models;
 using VRP.Serverside.Entities.Core;
 using ChatMessageType = VRP.Core.Enums.ChatMessageType;
 using FullPosition = VRP.Serverside.Core.FullPosition;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Common.Booth
 {
@@ -26,57 +27,61 @@ namespace VRP.Serverside.Entities.Common.Booth
     {
         private List<TelephoneBoothEntity> Booths { get; set; } = new List<TelephoneBoothEntity>();
 
-        private void API_OnClientEventTrigger(Client sender, string eventName, params object[] args)
+        [RemoteEvent(RemoteEvents.OnPlayerTelephoneBoothCall)]
+        public void OnPlayerTelephoneBoothCallHandler(Client sender, params object[] args)
         {
-            //args[0] to numer na jaki dzwoni
-            if (eventName == "OnPlayerTelephoneBoothCall")
+            CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
+            if (senderCharacter.CurrentInteractive is TelephoneBoothEntity boothEntity)
             {
-                CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
-                if (senderCharacter.CurrentInteractive is TelephoneBoothEntity boothEntity)
+                //args[0] to numer na jaki dzwoni
+                if (senderCharacter.HasMoney(boothEntity.Data.Cost))
                 {
-                    if (senderCharacter.HasMoney(boothEntity.Data.Cost))
+                    senderCharacter.RemoveMoney(boothEntity.Data.Cost);
+                    ChatScript.SendMessageToNearbyPlayers(senderCharacter, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
+
+                    CharacterEntity getterCharacter = EntityHelper.GetAccounts()
+                        .FirstOrDefault(t => t.CharacterEntity?.CurrentCellphone.Number ==
+                                  Convert.ToInt32(args[0]))
+                        ?.CharacterEntity;
+
+                    if (getterCharacter == null)
                     {
-                        senderCharacter.RemoveMoney(boothEntity.Data.Cost);
-                        ChatScript.SendMessageToNearbyPlayers(senderCharacter, "wrzuca monetę do automatu i wybiera numer", ChatMessageType.ServerMe);
-
-                        CharacterEntity getterCharacter = EntityHelper.GetAccounts()
-                            .FirstOrDefault(t => t.CharacterEntity?.CurrentCellphone.Number ==
-                                      Convert.ToInt32(args[0]))
-                            ?.CharacterEntity;
-
-                        if (getterCharacter == null)
-                        {
-                            sender.SendChatMessage("~#ffdb00~",
-                                "Wybrany abonent ma wyłączony telefon bądź znajduje się poza zasięgiem spróbuj później.");
-                            return;
-                        }
-
-                        if (getterCharacter.CurrentCellphone.CurrentCall != null)
-                        {
-                            sender.SendChatMessage("~#ffdb00~",
-                                "Wybrany abonent prowadzi obecnie rozmowę. Spróbuj później.");
-                            return;
-                        }
-
-                        boothEntity.CurrentCall = new TelephoneCall(senderCharacter, getterCharacter, boothEntity.Data.Number);
-
-                        boothEntity.CurrentCall.Timer.Elapsed += (o, eventArgs) =>
-                        {
-                            sender.SendChatMessage("~#ffdb00~",
-                                "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
-                            boothEntity.CurrentCall.Dispose();
-                            boothEntity.CurrentCall = null;
-                        };
+                        sender.SendChatMessage("~#ffdb00~",
+                            "Wybrany abonent ma wyłączony telefon bądź znajduje się poza zasięgiem spróbuj później.");
+                        return;
                     }
 
-                }
-                else
-                {
-                    sender.SendError("Nie posiadasz wystarczającej ilości gotówki.");
+                    if (getterCharacter.CurrentCellphone.CurrentCall != null)
+                    {
+                        sender.SendChatMessage("~#ffdb00~",
+                            "Wybrany abonent prowadzi obecnie rozmowę. Spróbuj później.");
+                        return;
+                    }
+
+                    boothEntity.CurrentCall = new TelephoneCall(senderCharacter, getterCharacter, boothEntity.Data.Number);
+
+                    boothEntity.CurrentCall.Timer.Elapsed += (o, eventArgs) =>
+                    {
+                        sender.SendChatMessage("~#ffdb00~",
+                            "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
+                        boothEntity.CurrentCall.Dispose();
+                        boothEntity.CurrentCall = null;
+                    };
                 }
 
             }
-            else if (eventName == "OnPlayerTelephoneBoothEnd" && sender.HasData("Booth"))
+            else
+            {
+                sender.SendError("Nie posiadasz wystarczającej ilości gotówki.");
+            }
+
+        }
+
+        [RemoteEvent(RemoteEvents.OnPlayerTelephoneBoothEnd)]
+        public void OnPlayerTelephoneBoothEndHandler(Client sender, params object[] args)
+        {
+
+            if (sender.HasData("Booth"))
             {
                 CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
 
@@ -94,8 +99,10 @@ namespace VRP.Serverside.Entities.Common.Booth
                     }
                 }
             }
+           
         }
 
+     
         #region ADMIN COMMANDS
         [Command("dodajbudke")]
         public void CreateAtm(Client sender, decimal cost, string number)

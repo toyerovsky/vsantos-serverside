@@ -18,6 +18,7 @@ using VRP.Serverside.Entities.Common.Carshop.Models;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Vehicle;
 using FullPosition = VRP.Serverside.Core.FullPosition;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Common.Carshop
 {
@@ -96,31 +97,31 @@ namespace VRP.Serverside.Entities.Common.Carshop
                 });
         }
 
-        private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.OnPlayerBoughtVehicle)]
+        public void OnPlayerBoughtVehicleHandler(Client sender, params object[] arguments)
         {
-            if (eventName == "OnPlayerBoughtVehicle")
+            //arguments[0] to nazwa pojazdu
+
+            if (!Enum.TryParse(arguments[0].ToString(), out VehicleHash vehicleHash)) return;
+
+            CarshopVehicleModel vehicle = Vehicles.First(v => v.Name == arguments[0].ToString());
+
+            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            if (character.HasMoney(vehicle.Cost))
             {
-                //arguments[0] to nazwa pojazdu
+                character.RemoveMoney(vehicle.Cost);
 
-                if (!Enum.TryParse(arguments[0].ToString(), out VehicleHash vehicleHash)) return;
-
-                CarshopVehicleModel vehicle = Vehicles.First(v => v.Name == arguments[0].ToString());
-
-                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-                if (character.HasMoney(vehicle.Cost))
-                {
-                    character.RemoveMoney(vehicle.Cost);
-
-                    VehicleEntity.Create(new FullPosition(new Vector3(-50, -1680, 29.5), new Vector3(0, 0, 0)),
-                        vehicleHash, "", 0, null, new Color().GetRandomColor(), new Color().GetRandomColor(), 0f, 0f, sender.GetAccountEntity().CharacterEntity.DbModel);
-                    sender.SendInfo($"Pojazd {vehicleHash.ToString()} zakupiony pomyślnie.");
-                }
-                else
-                {
-                    sender.SendError("Nie posiadasz wystarczającej ilości gotówki.");
-                }
+                VehicleEntity.Create(new FullPosition(new Vector3(-50, -1680, 29.5), new Vector3(0, 0, 0)),
+                    vehicleHash, "", 0, null, new Color().GetRandomColor(), new Color().GetRandomColor(), 0f, 0f, sender.GetAccountEntity().CharacterEntity.DbModel);
+                sender.SendInfo($"Pojazd {vehicleHash.ToString()} zakupiony pomyślnie.");
+            }
+            else
+            {
+                sender.SendError("Nie posiadasz wystarczającej ilości gotówki.");
             }
         }
+
+       
 
         [Command("dodajautosalon", "~y~ UŻYJ ~w~ /dodajautosalon [model] [koszt] [typ salonu]")]
         public void AddVehicleToCarshop(Client sender, VehicleHash hash, VehicleClass vehicleClass, decimal cost, string type, string type2 = "Empty")

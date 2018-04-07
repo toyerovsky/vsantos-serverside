@@ -14,24 +14,25 @@ using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Common.BusStop.Models;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Common.BusStop
 {
     public class BusStopScript : Script
     {
-        private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.RequestBus)]
+        public void RequestBusHandler(Client sender, params object[] arguments)
         {
             //args[0] Czas
             //args[1] Koszt
             //args[2] Indeks przystanku na jaki chce się udać
-            if (eventName == "RequestBus")
-            {
-                BusStopEntity busStop = EntityHelper.GetBusStops().ElementAt(Convert.ToInt32(arguments[2]));
 
-                BusStopEntity.StartTransport(sender.GetAccountEntity().CharacterEntity, Convert.ToDecimal(arguments[1]), Convert.ToInt32(arguments[0]),
-                    busStop.Data.Center, busStop.Data.Name);
-            }
+            BusStopEntity busStop = EntityHelper.GetBusStops().ElementAt(Convert.ToInt32(arguments[2]));
+
+            BusStopEntity.StartTransport(sender.GetAccountEntity().CharacterEntity, Convert.ToDecimal(arguments[1]), Convert.ToInt32(arguments[0]),
+                busStop.Data.Center, busStop.Data.Name);
         }
+   
 
         [Command("bus")]
         public void ShowBusMenu(Client sender)

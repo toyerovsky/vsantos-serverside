@@ -15,31 +15,31 @@ using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Common.Corners.Models;
 using VRP.Serverside.Entities.Core.Item;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Common.Corners
 {
     public class CornerBotsScript : Script
     {
-        private void ClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.AddCornerBot)]
+        public void AddCornerBotHandler(Client sender, params object[] arguments)
         {
-            if (eventName == "AddCornerBot")
+            CornerBotModel bot = new CornerBotModel
             {
-                CornerBotModel bot = new CornerBotModel
-                {
-                    CreatorForumName = sender.GetAccountEntity().DbModel.Name,
-                    BotId = XmlHelper.GetXmlObjects<CornerBotModel>(Path.Combine(Utils.XmlDirectory, "CornerBots")).Count + 1,
-                    Name = Convert.ToString(arguments[0]),
-                    PedHash = (PedHash) arguments[1],
-                    MoneyCount = Convert.ToDecimal(arguments[2]),
-                    DrugType = (DrugType) Enum.Parse(typeof(DrugType), (string) arguments[3]),
-                    Greeting = (string) arguments[4],
-                    GoodFarewell = (string) arguments[5],
-                    BadFarewell = (string) arguments[6]
-                };
-                XmlHelper.AddXmlObject(bot, Path.Combine(Utils.XmlDirectory, "CornerBots"));
-                sender.SendInfo("Dodanie NPC zakończyło się pomyślnie.");
-            }
+                CreatorForumName = sender.GetAccountEntity().DbModel.Name,
+                BotId = XmlHelper.GetXmlObjects<CornerBotModel>(Path.Combine(Utils.XmlDirectory, "CornerBots")).Count + 1,
+                Name = Convert.ToString(arguments[0]),
+                PedHash = (PedHash)arguments[1],
+                MoneyCount = Convert.ToDecimal(arguments[2]),
+                DrugType = (DrugType)Enum.Parse(typeof(DrugType), (string)arguments[3]),
+                Greeting = (string)arguments[4],
+                GoodFarewell = (string)arguments[5],
+                BadFarewell = (string)arguments[6]
+            };
+            XmlHelper.AddXmlObject(bot, Path.Combine(Utils.XmlDirectory, "CornerBots"));
+            sender.SendInfo("Dodanie NPC zakończyło się pomyślnie.");
         }
+     
 
         [Command("dodajbotc")]
         public void AddCornerBot(Client sender)
