@@ -1,7 +1,7 @@
-/* Copyright (C) Przemys³aw Postrach - All Rights Reserved
+ï»¿/* Copyright (C) PrzemysÂ³aw Postrach - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Przemys³aw Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ * Written by PrzemysÂ³aw Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
 using System;
@@ -14,83 +14,97 @@ using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using ChatMessageType = VRP.Core.Enums.ChatMessageType;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Core.Vehicle
 {
     public class VehicleScript : Script
     {
-        private void API_OnClientEventTrigger(Client sender, string eventName, params object[] args)
+        [RemoteEvent(RemoteEvents.OnPlayerSelectedVehicle)]
+        public void OnPlayerSelectedVehicleHandler(Client sender, params object[] args)
         {
-            if (eventName == "OnPlayerSelectedVehicle")
-            {
-                sender.SetData("SelectedVehicleID", Convert.ToInt64(args[0]));
-            }
-            else if (eventName == "OnPlayerSpawnVehicle")
-            {
-                VehicleEntity vehicleEntity = EntityHelper.GetVehicle(
-                    (long)sender.GetData("SelectedVehicleID"));
-
-                if (vehicleEntity != null)
-                {
-                    // unspawn
-                    vehicleEntity.Dispose();
-                    sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} zosta³ odspawnowany");
-                }
-                else
-                {
-                    // spawn
-                    VehicleModel vehicleModel = sender.GetAccountEntity().CharacterEntity.DbModel.Vehicles
-                        .Single(v => v.Id == (int)sender.GetData("SelectedVehicleID"));
-
-                    vehicleEntity = new VehicleEntity(vehicleModel);
-
-                    sender.TriggerEvent("DrawVehicleComponents", vehicleEntity.GameVehicle.Position,
-                        GetVehicleBlip((VehicleClass)vehicleEntity.GameVehicle.Class), 24);
-
-                    sender.SendInfo($"Pojazd {vehicleModel.Name} zosta³ zespawnowany.");
-                }
-                sender.ResetData("SelectedVehicleID");
-            }
-            else if (eventName == "OnPlayerParkVehicle")
-            {
-                if (EntityHelper.GetVehicle(sender.Vehicle) == null)
-                    return;
-
-                VehicleEntity vehicleEntity = EntityHelper.GetVehicle(sender.Vehicle);
-                vehicleEntity.ChangeSpawnPosition();
-                sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} zosta³ zaparkowany.");
-            }
-            else if (eventName == "OnPlayerInformationsVehicle")
-            {
-                AccountEntity player = sender.GetAccountEntity();
-
-                if (player.CharacterEntity.DbModel.Vehicles.Any(v => v.Id == sender.GetData("SelectedVehicleID")))
-                    ShowVehiclesInformation(player.CharacterEntity, player.CharacterEntity.DbModel.Vehicles.Single(
-                        v => v.Id == sender.GetData("SelectedVehicleID")));
-            }
-            else if (eventName == "OnPlayerInformationsInVehicle")
-            {
-                VehicleEntity vehicle = EntityHelper.GetVehicle(sender.Vehicle);
-                if (vehicle == null) return;
-
-                float enginePower = (float)((vehicle.DbModel.EnginePowerMultiplier - 1.0) * 20.0 + 80);
-
-                sender.SendInfo($"Nazwa pojazdu: {vehicle.DbModel.Name}" +
-                              $"\nRejestracja pojazdu: {vehicle.DbModel.NumberPlate}" +
-                              $"\nMoc silnika: {enginePower}KM");
-
-            }
-            else if (eventName == "OnPlayerChangeLockVehicle")
-            {
-                ChangePlayerVehicleLockState(sender.GetAccountEntity().CharacterEntity);
-            }
-            else if (eventName == "OnPlayerEngineStateChangeVehicle")
-            {
-                sender.SendInfo(sender.Vehicle.EngineStatus ?
-                    "Pojazd zosta³ zgaszony." : "Pojazd zosta³ uruchomiony.");
-                sender.Vehicle.EngineStatus = !sender.Vehicle.EngineStatus;
-            }
+            sender.SetData("SelectedVehicleID", Convert.ToInt64(args[0]));
         }
+
+
+        [RemoteEvent(RemoteEvents.OnPlayerSpawnVehicle)]
+        public void OnPlayerSpawnVehicleHandler(Client sender, params object[] args)
+        {
+            VehicleEntity vehicleEntity = EntityHelper.GetVehicle(
+                (long)sender.GetData("SelectedVehicleID"));
+
+            if (vehicleEntity != null)
+            {
+                // unspawn
+                vehicleEntity.Dispose();
+                sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} zostaÂ³ odspawnowany");
+            }
+            else
+            {
+                // spawn
+                VehicleModel vehicleModel = sender.GetAccountEntity().CharacterEntity.DbModel.Vehicles
+                    .Single(v => v.Id == (int)sender.GetData("SelectedVehicleID"));
+
+                vehicleEntity = new VehicleEntity(vehicleModel);
+
+                sender.TriggerEvent("DrawVehicleComponents", vehicleEntity.GameVehicle.Position,
+                    GetVehicleBlip((VehicleClass)vehicleEntity.GameVehicle.Class), 24);
+
+                sender.SendInfo($"Pojazd {vehicleModel.Name} zostaÂ³ zespawnowany.");
+            }
+            sender.ResetData("SelectedVehicleID");
+        }
+
+
+        [RemoteEvent(RemoteEvents.OnPlayerParkVehicle)]
+        public void OnPlayerParkVehicleHandler(Client sender, params object[] args)
+        {
+            if (EntityHelper.GetVehicle(sender.Vehicle) == null)
+                return;
+
+            VehicleEntity vehicleEntity = EntityHelper.GetVehicle(sender.Vehicle);
+            vehicleEntity.ChangeSpawnPosition();
+            sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} zostaÅ‚ zaparkowany.");
+        }
+
+        [RemoteEvent(RemoteEvents.OnPlayerInformationsVehicle)]
+        public void OnPlayerInformationsVehicleHandler(Client sender, params object[] args)
+        {
+            AccountEntity player = sender.GetAccountEntity();
+
+            if (player.CharacterEntity.DbModel.Vehicles.Any(v => v.Id == sender.GetData("SelectedVehicleID")))
+                ShowVehiclesInformation(player.CharacterEntity, player.CharacterEntity.DbModel.Vehicles.Single(
+                    v => v.Id == sender.GetData("SelectedVehicleID")));
+        }
+
+        [RemoteEvent(RemoteEvents.OnPlayerInformationsInVehicle)]
+        public void OnPlayerInformationsInVehicleHandler(Client sender, params object[] args)
+        {
+            VehicleEntity vehicle = EntityHelper.GetVehicle(sender.Vehicle);
+            if (vehicle == null) return;
+
+            float enginePower = (float)((vehicle.DbModel.EnginePowerMultiplier - 1.0) * 20.0 + 80);
+
+            sender.SendInfo($"Nazwa pojazdu: {vehicle.DbModel.Name}" +
+                            $"\nRejestracja pojazdu: {vehicle.DbModel.NumberPlate}" +
+                            $"\nMoc silnika: {enginePower}KM");
+        }
+
+        [RemoteEvent(RemoteEvents.OnPlayerChangeLockVehicle)]
+        public void OnPlayerChangeLockVehicleHandler(Client sender, params object[] args)
+        {
+            ChangePlayerVehicleLockState(sender.GetAccountEntity().CharacterEntity);
+        }
+
+        [RemoteEvent(RemoteEvents.OnPlayerEngineStateChangeVehicle)]
+        public void OnPlayerEngineStateChangeVehicleHandler(Client sender, params object[] args)
+        {
+            sender.SendInfo(sender.Vehicle.EngineStatus ?
+                "Pojazd zostaÅ‚ zgaszony." : "Pojazd zostaÅ‚ uruchomiony.");
+            sender.Vehicle.EngineStatus = !sender.Vehicle.EngineStatus;
+        }
+
+       
 
         private void API_onPlayerEnterVehicle(Client player, NetHandle vehicle)
         {
@@ -101,7 +115,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             {
                 if (vehicleEntity.DbModel.Character == account.CharacterEntity.DbModel)
                 {
-                    player.SendInfo("Wsiad³eœ do swojego pojazdu.");
+                    player.SendInfo("WsiadÅ‚eÅ› do swojego pojazdu.");
                     player.TriggerEvent("DisposeVehicleComponents");
                 }
             }
@@ -109,7 +123,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         }
 
         #region Komendy
-        [Command("v", "~y~U¯YJ: ~w~ /v (z)")]
+        [Command("v", "~y~UÂ¯YJ: ~w~ /v (z)")]
         public void ShowVehiclesList(Client sender, string trigger = null)
         {
             AccountEntity player = sender.GetAccountEntity();
@@ -167,13 +181,13 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             if (NAPI.Vehicle.IsVehicleDoorBroken(vehicle, doorId))
             {
                 ChatScript.SendMessageToPlayer(sender,
-                    "Drzwi wygl¹daj¹ na zepsute, nie chc¹ nawet drgn¹æ.", ChatMessageType.ServerDo);
+                    "Drzwi wyglÄ…dajÄ… na zepsute, nie chcÄ… nawet drgnÄ…Ä‡.", ChatMessageType.ServerDo);
                 return;
             }
             NAPI.Vehicle.SetVehicleDoorState(vehicle, doorId, !NAPI.Vehicle.GetVehicleDoorState(vehicle, doorId));
         }
 
-        //Nie dajemy tutaj VehicleEntity, ¿eby gracz móg³ sprawdziæ te¿ informacje odspawnowanego auta
+        //Nie dajemy tutaj VehicleEntity, Â¿eby gracz mÃ³gÂ³ sprawdziÃ¦ teÂ¿ informacje odspawnowanego auta
         public static void ShowVehiclesInformation(CharacterEntity sender, VehicleModel model, bool shortInfo = false)
         {
             if (!shortInfo && model.Character.Id == sender.DbModel.Id)
@@ -189,7 +203,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         }
 
         /// <summary>
-        /// Metoda zamyka/otwiera pojazd nale¿¹cy do gracza który jest blisko niego
+        /// Metoda zamyka/otwiera pojazd naleÂ¿Â¹cy do gracza ktÃ³ry jest blisko niego
         /// </summary>
         /// <param name="senderCharacter"></param>
         public static void ChangePlayerVehicleLockState(CharacterEntity senderCharacter)
@@ -198,13 +212,13 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 .Where(v => v.DbModel.Id == senderCharacter.DbModel.Id)
                 .Where(x => x.GameVehicle.Position.DistanceTo(senderCharacter.Position) < 10).ToList();
 
-            //Jeœli jakiœ pomys³owy gracz zapragnie postawiæ 2 pojazdy obok siebie, ¿eby sprawdziæ dzia³anie to zamknie mu obydwa
+            //JeÅ“li jakiÅ“ pomysÂ³owy gracz zapragnie postawiÃ¦ 2 pojazdy obok siebie, Â¿eby sprawdziÃ¦ dziaÂ³anie to zamknie mu obydwa
             foreach (VehicleEntity vehicle in vehicles)
             {
                 if (!(vehicle.GameVehicle.Position.DistanceTo(senderCharacter.Position) <= 7)) continue;
                 senderCharacter.SendInfo(vehicle.GameVehicle.Locked 
-                    ? "Twój pojazd zosta³ zamkniêty." 
-                    : "Twój pojazd zosta³ otwarty.");
+                    ? "TwÃ³j pojazd zostaÅ‚ zamkniÄ™ty." 
+                    : "TwÃ³j pojazd zostaÅ‚ otwarty.");
                 vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
             }
         }

@@ -128,5 +128,59 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string OnPlayerBoughtMarketItem = "OnPlayerBoughtMarketItem";
 
         #endregion
+
+        #region ItemScript
+
+        public const string SelectedItem = "SelectedItem";
+
+        public const string UseItem = "UseItem";
+
+        public const string InformationsItem = "InformationsItem";
+
+        public const string UsingInformationsItem = "UsingInformationsItem";
+
+        public const string BackToItemList = "BackToItemList";
+
+        public const string OnPlayerTelephoneCall = "OnPlayerTelephoneCall";
+
+        public const string OnPlayerTelephoneTurnoff = "OnPlayerTelephoneTurnoff";
+
+        public const string OnPlayerPullCellphoneRequest = "OnPlayerPullCellphoneRequest";
+
+        public const string OnPlayerCellphonePickUp = "OnPlayerCellphonePickUp";
+
+        public const string OnPlayerCellphoneEnd = "OnPlayerCellphoneEnd";
+
+        public const string OnPlayerTelephoneContactAdded = "OnPlayerTelephoneContactAdded";
+
+        #endregion
+
+        #region VehicleIndicatorScript
+
+        public const string toggle_indicator_left = "toggle_indicator_left";
+
+        public const string toggle_indicator_right = "toggle_indicator_right";
+
+        #endregion
+
+        #region VehicleScript
+
+        public const string OnPlayerSelectedVehicle = "OnPlayerSelectedVehicle";
+
+        public const string OnPlayerSpawnVehicle = "OnPlayerSpawnVehicle";
+
+        public const string OnPlayerParkVehicle = "OnPlayerParkVehicle";
+
+        public const string OnPlayerInformationsVehicle = "OnPlayerInformationsVehicle";
+
+        public const string OnPlayerInformationsInVehicle = "OnPlayerInformationsInVehicle";
+
+        public const string OnPlayerChangeLockVehicle = "OnPlayerChangeLockVehicle";
+
+        public const string OnPlayerEngineStateChangeVehicle = "OnPlayerEngineStateChangeVehicle";
+
+
+
+        #endregion
     }
 }

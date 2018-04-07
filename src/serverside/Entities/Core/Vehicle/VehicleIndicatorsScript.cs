@@ -5,6 +5,7 @@
  */
 
 using GTANetworkAPI;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Entities.Core.Vehicle
 {
@@ -14,42 +15,44 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         {
         }
 
-        private void API_OnClientEventTrigger(Client player, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.toggle_indicator_left)]
+        public void toggle_indicator_leftHandler(Client player, params object[] arguments)
         {
-            if (eventName == "toggle_indicator_left")
-            {
-                GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
-                int indicator = 1;
-                Vector3 pos = NAPI.Entity.GetEntityPosition(player);
+            GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
+            int indicator = 1;
+            Vector3 pos = NAPI.Entity.GetEntityPosition(player);
 
-                if (NAPI.Data.HasEntitySharedData(veh, "indicator_left") && NAPI.Data.GetEntitySharedData(veh, "indicator_left") == true)
-                {
-                    NAPI.Data.ResetEntitySharedData(veh, "indicator_left");
-                    NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, false);
-                }
-                else
-                {
-                    NAPI.Data.SetEntitySharedData(veh, "indicator_left", true);
-                    NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, true);
-                }
+            if (NAPI.Data.HasEntitySharedData(veh, "indicator_left") && NAPI.Data.GetEntitySharedData(veh, "indicator_left") == true)
+            {
+                NAPI.Data.ResetEntitySharedData(veh, "indicator_left");
+                NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, false);
             }
-            else if (eventName == "toggle_indicator_right")
+            else
             {
-                GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
-                int indicator = 0;
-                Vector3 pos = NAPI.Entity.GetEntityPosition(player);
-
-                if (NAPI.Data.HasEntitySharedData(veh, "indicator_right") && NAPI.Data.GetEntitySharedData(veh, "indicator_right") == true)
-                {
-                    NAPI.Data.ResetEntitySharedData(veh, "indicator_right");
-                    NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, false);
-                }
-                else
-                {
-                    NAPI.Data.SetEntitySharedData(veh, "indicator_right", true);
-                    NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, true);
-                }
+                NAPI.Data.SetEntitySharedData(veh, "indicator_left", true);
+                NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, true);
             }
         }
+
+        [RemoteEvent(RemoteEvents.toggle_indicator_right)]
+        public void toggle_indicator_rightHandler(Client player, params object[] arguments)
+        {
+            GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
+            int indicator = 0;
+            Vector3 pos = NAPI.Entity.GetEntityPosition(player);
+
+            if (NAPI.Data.HasEntitySharedData(veh, "indicator_right") && NAPI.Data.GetEntitySharedData(veh, "indicator_right") == true)
+            {
+                NAPI.Data.ResetEntitySharedData(veh, "indicator_right");
+                NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, false);
+            }
+            else
+            {
+                NAPI.Data.SetEntitySharedData(veh, "indicator_right", true);
+                NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, true);
+            }
+        }
+
+       
     }
 }
