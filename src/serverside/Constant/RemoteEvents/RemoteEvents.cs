@@ -19,6 +19,8 @@ namespace VRP.Serverside.Constant.RemoteEvents
 
         public const string CharacterShowShardRequested = "characterShowShardRequested";
 
+        public const string PlayerFreeCamRequested = "playerFreeCamRequested";
+
         #region AdminListScript
 
         public const string OnPlayerSendReport = "OnPlayerSendReport";

@@ -32,7 +32,8 @@ namespace VRP.Serverside.Core.Animations
                 AnimName = arguments[2].ToString(),
             }, Path.Combine(Utils.XmlDirectory + "Animations"), arguments[2].ToString());
 
-            sender.Notify("Animacja została dodana pomyślnie.", NotificationType.Info);
+                sender.SendInfo("Animacja została dodana pomyślnie.");
+            }
         }
     
 

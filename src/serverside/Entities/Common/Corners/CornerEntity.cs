@@ -47,7 +47,7 @@ namespace VRP.Serverside.Entities.Common.Corners
         {
             if (DateTime.Now.Hour < 16 || DateTime.Now.Hour > 23)
             {
-                entity.Notify("Handel na rogu możliwy jest od 16 do 23.", NotificationType.Warning);
+                entity.SendWarning("Handel na rogu możliwy jest od 16 do 23.");
                 return;
             }
 

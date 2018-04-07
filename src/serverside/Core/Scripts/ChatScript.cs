@@ -96,13 +96,13 @@ namespace VRP.Serverside.Core.Scripts
         {
             if (!sender.GetAccountEntity().CharacterEntity.CanSendPrivateMessage)
             {
-                sender.Notify("Nie możesz teraz pisać wiadomości!", NotificationType.Error);
+                sender.SendError("Nie możesz teraz pisać wiadomości!");
                 return;
             }
 
             if (sender.GetAccountEntity().ServerId.Equals(id))
             {
-                sender.Notify("Nie możesz wysłać wiadomości samemu sobie.", NotificationType.Error);
+                sender.SendError("Nie możesz wysłać wiadomości samemu sobie.");
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace VRP.Serverside.Core.Scripts
 
             if (groupSlot != 0 && ValidationHelper.IsGroupSlotValid(groupSlot))
             {
-                sender.Notify("Podany slot grupy jest nieprawidłowy.", NotificationType.Error);
+                sender.SendError("Podany slot grupy jest nieprawidłowy.");
                 return;
             }
 
@@ -149,11 +149,11 @@ namespace VRP.Serverside.Core.Scripts
                         .Any(worker => worker.Character.Id.Equals(account.CharacterEntity.DbModel.Id)))
                         .Select(a => a.CharacterEntity).ToList();
                     CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-                    SendMessageToSpecifiedPlayers(character, characters, message, ChatMessageType.GroupOoc, $"~{group.DbModel.Color}~");
+                    SendMessageToSpecifiedPlayers(character, characters, message, ChatMessageType.GroupOoc, group.DbModel.Color);
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz uprawnień do czatu w tej grupie.", NotificationType.Warning);
+                    sender.SendWarning("Nie posiadasz uprawnień do czatu w tej grupie.");
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace VRP.Serverside.Core.Scripts
             }
             else
             {
-                sender.Notify("Twoja grupa, bądź postać nie posiada uprawnień do używania megafonu.", NotificationType.Warning);
+                sender.SendWarning("Twoja grupa, bądź postać nie posiada uprawnień do używania megafonu.");
             }
         }
 

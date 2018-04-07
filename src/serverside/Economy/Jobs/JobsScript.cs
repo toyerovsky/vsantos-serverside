@@ -91,7 +91,7 @@ namespace VRP.Serverside.Economy.Jobs
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania śmietnika.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do usuwania śmietnika.");
                 return;
             }
 
@@ -116,11 +116,11 @@ namespace VRP.Serverside.Economy.Jobs
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia śmietnika.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do tworzenia śmietnika.");
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\", użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\", użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
 
             void Handler(Client o, string command)
             {
@@ -136,7 +136,7 @@ namespace VRP.Serverside.Economy.Jobs
 
                     XmlHelper.AddXmlObject(garbage, Path.Combine(Utils.XmlDirectory, "JobGarbages"));
                     Garbages.Add(garbage);
-                    sender.Notify("Dodawanie śmietnika zakończyło się pomyślnie.", NotificationType.Info);
+                    sender.SendInfo("Dodawanie śmietnika zakończyło się pomyślnie.");
                 }
             }
         }
@@ -146,11 +146,11 @@ namespace VRP.Serverside.Economy.Jobs
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do dodawania auta do pracy.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do dodawania auta do pracy.");
                 return;
             }
 
-            sender.Notify("Wsiądź do pojazdu a następnie wpisz \"ok\".", NotificationType.Info);
+            sender.SendInfo("Wsiądź do pojazdu a następnie wpisz \"ok\".");
 
             void Handler(Client o, string command)
             {
@@ -158,15 +158,15 @@ namespace VRP.Serverside.Economy.Jobs
                 {
                     if (!o.IsInVehicle || o.Vehicle.GetVehicleEntity() == null)
                     {
-                        o.Notify("Musisz znajdować się w pojeździe.", NotificationType.Error);
-                        o.Notify("Dodawanie auta do pracy zakończyło się niepomyślnie.", NotificationType.Error);
+                        o.SendError("Musisz znajdować się w pojeździe.");
+                        o.SendError("Dodawanie auta do pracy zakończyło się niepomyślnie.");
                         return;
                     }
 
                     VehicleEntity vehicle = o.Vehicle.GetVehicleEntity();
                     AddVehicleToJob(vehicle.DbModel, type);
 
-                    o.Notify("Dodawanie auta do pracy zakończyło się pomyślnie.", NotificationType.Info);
+                    o.SendInfo("Dodawanie auta do pracy zakończyło się pomyślnie.");
                 }
             }
         }

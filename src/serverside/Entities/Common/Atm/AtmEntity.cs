@@ -46,7 +46,7 @@ namespace VRP.Serverside.Entities.Common.Atm
 
                     if (accountEntity.CharacterEntity.DbModel.BankAccountNumber == null)
                     {
-                        accountEntity.Client.Notify("Nie posiadasz karty bankomatowej, udaj się do banku, aby założyć konto.", NotificationType.Error);
+                        accountEntity.Client.SendError("Nie posiadasz karty bankomatowej, udaj się do banku, aby założyć konto.");
                         return;
                     }
 

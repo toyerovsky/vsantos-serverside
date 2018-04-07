@@ -54,6 +54,8 @@ namespace VRP.Serverside.Entities.Core
         public bool CanNarrate { get; set; }
         public bool CanPay { get; set; }
 
+        public bool FlyState { get; set; } = false;
+
         public int Health
         {
             get => DbModel.Health;

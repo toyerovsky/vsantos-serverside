@@ -49,10 +49,10 @@ namespace VRP.Serverside.Entities.Core
             string[] ip = DbModel.Ip.Split('.');
             string safeIp = $"{ip[0]}.{ip[1]}.***.***";
 
-            Client.Notify(
+            Client.SendInfo(
                 $"Witaj, {DbModel.Name} ~w~zostałeś pomyślnie zalogowany. Ostatnie logowanie:" +
                 $" {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()} " +
-                $"Z adresu IP: {safeIp}", NotificationType.Info);
+                $"Z adresu IP: {safeIp}");
 
             EntityHelper.Add(this);
 
@@ -123,11 +123,6 @@ namespace VRP.Serverside.Entities.Core
             //ContextFactory.Instance.Accounts.Attach(DbModel);
             //ContextFactory.Instance.Entry(DbModel).State = EntityState.Modified;
             //ContextFactory.Instance.SaveChanges();
-        }
-
-        public void Notify(string message, NotificationType notificationType)
-        {
-            Client.Notify(message, notificationType);
         }
 
         public void Dispose()

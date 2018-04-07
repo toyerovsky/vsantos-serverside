@@ -37,7 +37,7 @@ namespace VRP.Serverside.Entities.Common.Corners
                     BadFarewell = (string) arguments[6]
                 };
                 XmlHelper.AddXmlObject(bot, Path.Combine(Utils.XmlDirectory, "CornerBots"));
-                sender.Notify("Dodanie NPC zakończyło się pomyślnie.", NotificationType.Info);
+                sender.SendInfo("Dodanie NPC zakończyło się pomyślnie.");
             }
         }
 

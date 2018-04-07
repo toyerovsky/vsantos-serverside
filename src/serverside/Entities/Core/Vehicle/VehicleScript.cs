@@ -34,7 +34,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 {
                     // unspawn
                     vehicleEntity.Dispose();
-                    sender.Notify($"Pojazd {vehicleEntity.DbModel.Name} zosta³ odspawnowany", NotificationType.Info);
+                    sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} zosta³ odspawnowany");
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                     sender.TriggerEvent("DrawVehicleComponents", vehicleEntity.GameVehicle.Position,
                         GetVehicleBlip((VehicleClass)vehicleEntity.GameVehicle.Class), 24);
 
-                    sender.Notify($"Pojazd {vehicleModel.Name} zosta³ zespawnowany.", NotificationType.Info);
+                    sender.SendInfo($"Pojazd {vehicleModel.Name} zosta³ zespawnowany.");
                 }
                 sender.ResetData("SelectedVehicleID");
             }
@@ -58,7 +58,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
 
                 VehicleEntity vehicleEntity = EntityHelper.GetVehicle(sender.Vehicle);
                 vehicleEntity.ChangeSpawnPosition();
-                sender.Notify($"Pojazd {vehicleEntity.DbModel.Name} zosta³ zaparkowany.", NotificationType.Info);
+                sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} zosta³ zaparkowany.");
             }
             else if (eventName == "OnPlayerInformationsVehicle")
             {
@@ -75,9 +75,9 @@ namespace VRP.Serverside.Entities.Core.Vehicle
 
                 float enginePower = (float)((vehicle.DbModel.EnginePowerMultiplier - 1.0) * 20.0 + 80);
 
-                sender.Notify($"Nazwa pojazdu: {vehicle.DbModel.Name}" +
+                sender.SendInfo($"Nazwa pojazdu: {vehicle.DbModel.Name}" +
                               $"\nRejestracja pojazdu: {vehicle.DbModel.NumberPlate}" +
-                              $"\nMoc silnika: {enginePower}KM", NotificationType.Info);
+                              $"\nMoc silnika: {enginePower}KM");
 
             }
             else if (eventName == "OnPlayerChangeLockVehicle")
@@ -86,8 +86,8 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             }
             else if (eventName == "OnPlayerEngineStateChangeVehicle")
             {
-                sender.Notify(sender.Vehicle.EngineStatus ?
-                    "Pojazd zosta³ zgaszony." : "Pojazd zosta³ uruchomiony.", NotificationType.Info);
+                sender.SendInfo(sender.Vehicle.EngineStatus ?
+                    "Pojazd zosta³ zgaszony." : "Pojazd zosta³ uruchomiony.");
                 sender.Vehicle.EngineStatus = !sender.Vehicle.EngineStatus;
             }
         }
@@ -101,7 +101,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             {
                 if (vehicleEntity.DbModel.Character == account.CharacterEntity.DbModel)
                 {
-                    player.Notify("Wsiad³eœ do swojego pojazdu.", NotificationType.Info);
+                    player.SendInfo("Wsiad³eœ do swojego pojazdu.");
                     player.TriggerEvent("DisposeVehicleComponents");
                 }
             }

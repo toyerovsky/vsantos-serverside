@@ -11,6 +11,7 @@ using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Enums;
 using VRP.Core.Tools;
+using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
@@ -148,22 +149,21 @@ namespace VRP.Serverside.Admin
         [Command("fly")]
         public void StartFying(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support5)
+            AccountEntity senderAccount = sender.GetAccountEntity();
+            if (senderAccount.DbModel.ServerRank < ServerRank.Support5)
             {
                 sender.SendWarning("Nie posiadasz uprawnień do latania.");
                 return;
             }
 
-            if (sender.HasData("FlyState"))
+            NAPI.ClientEvent.TriggerClientEvent(sender, RemoteEvents.PlayerFreeCamRequested);
+
+            if (senderAccount.CharacterEntity.FlyState)
             {
-                sender.ResetData("FlyState");
-                NAPI.ClientEvent.TriggerClientEvent(sender, "FreeCamStop");
+                senderAccount.CharacterEntity.FlyState = false;
                 sender.SendInfo("Wyłączono latanie.");
                 return;
             }
-
-            sender.SetData("FlyState", true);
-            NAPI.ClientEvent.TriggerClientEvent(sender, "FreeCamStart", sender.Position);
             sender.SendInfo("Włączono latanie.");
         }
 

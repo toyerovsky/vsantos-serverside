@@ -123,14 +123,14 @@ namespace VRP.Serverside.Entities.Common.Market
             }
             else
             {
-                sender.Notify("Nie znajdujesz się w sklepie", NotificationType.Info);
+                sender.SendInfo("Nie znajdujesz się w sklepie");
             }
         }
 
         [Command("dodajsklep", "~y~UŻYJ ~w~ /dodajsklep [nazwa]")]
         public void AddMarket(Client sender, string name)
         {
-            sender.Notify("Ustaw się w pozycji NPC, a następnie wpisz /tu użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w pozycji NPC, a następnie wpisz /tu użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
             
             Vector3 center = null;
 
@@ -139,7 +139,7 @@ namespace VRP.Serverside.Entities.Common.Market
                 if (center == null && o == sender && message == "/tu")
                 {
                     center = o.Position;
-                    sender.Notify("Przejdź do pozycji końca promienia zasięgu i wpisz \"tu.\"", NotificationType.Info);
+                    sender.SendInfo("Przejdź do pozycji końca promienia zasięgu i wpisz \"tu.\"");
                 }
                 else
                 {
