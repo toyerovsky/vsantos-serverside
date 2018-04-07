@@ -126,7 +126,7 @@ namespace VRP.Serverside.Core.Scripts
             }
             else
             {
-                sender.Notify("Nie znaleziono gracza o podanym Id.", NotificationType.Error);
+                sender.SendError("Nie znaleziono gracza o podanym Id.");
             }
         }
         #endregion

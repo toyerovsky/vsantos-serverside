@@ -42,16 +42,16 @@ namespace VRP.Serverside.Entities.Peds.Employer
                 switch (player.CharacterEntity.DbModel.Job)
                 {
                     case JobType.Dustman:
-                        sender.Notify("Podjąłeś się pracy: Operator śmieciarki. Udaj się na wysypisko i wsiądź do śmieciarki.", NotificationType.Info);
+                        sender.SendInfo("Podjąłeś się pracy: Operator śmieciarki. Udaj się na wysypisko i wsiądź do śmieciarki.");
                         break;
                     case JobType.Greenkeeper:
-                        sender.Notify("Podjąłeś się pracy: Ogrodnik. Udaj się na pole golfowe i wsiądź do kosiarki.", NotificationType.Info);
+                        sender.SendInfo("Podjąłeś się pracy: Ogrodnik. Udaj się na pole golfowe i wsiądź do kosiarki.");
                         break;
                     case JobType.Thief:
-                        sender.Notify("Podjąłeś się pracy: Złodziej. Udaj się do portu i wsiądź do jednej z ciężarówek.", NotificationType.Info);
+                        sender.SendInfo("Podjąłeś się pracy: Złodziej. Udaj się do portu i wsiądź do jednej z ciężarówek.");
                         break;
                     case JobType.Courier:
-                        sender.Notify("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.", NotificationType.Info);
+                        sender.SendInfo("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.");
                         break;
                 }
             }

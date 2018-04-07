@@ -50,11 +50,11 @@ namespace VRP.Serverside.Entities.Common.Atm
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do dodawania bankomatu.", NotificationType.Error);
+                sender.SendWarning("Nie posiadasz uprawnień do dodawania bankomatu.");
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
 
             void Handler(Client o, string message)
             {
@@ -84,7 +84,7 @@ namespace VRP.Serverside.Entities.Common.Atm
                     AtmEntity atm = new AtmEntity(data);
                     atm.Spawn();
                     EntityHelper.Add(atm);
-                    sender.Notify("Dodawanie bankomatu zakończyło się pomyślnie.", NotificationType.Info);
+                    sender.SendInfo("Dodawanie bankomatu zakończyło się pomyślnie.");
 
                 }
             }
@@ -95,26 +95,26 @@ namespace VRP.Serverside.Entities.Common.Atm
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania bankomatu.", NotificationType.Error);
+                sender.SendWarning("Nie posiadasz uprawnień do usuwania bankomatu.");
                 return;
             }
 
             if (!EntityHelper.GetAtms().Any())
             {
-                sender.Notify("Nie znaleziono bankomatu który można usunąć.", NotificationType.Error);
+                sender.SendError("Nie znaleziono bankomatu który można usunąć.");
                 return;
             }
 
             AtmEntity atm = EntityHelper.GetAtms().First(a => a.ColShape.IsPointWithin(sender.Position));
             if (XmlHelper.TryDeleteXmlObject(atm.Data.FilePath))
             {
-                sender.Notify("Usuwanie bankomatu zakończyło się pomyślnie.", NotificationType.Info);
+                sender.SendInfo("Usuwanie bankomatu zakończyło się pomyślnie.");
                 EntityHelper.Remove(atm);
                 atm.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie bankomatu zakończyło się niepomyślnie.", NotificationType.Error);
+                sender.SendError("Usuwanie bankomatu zakończyło się niepomyślnie.");
             }
         }
         #endregion

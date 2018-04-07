@@ -32,24 +32,21 @@ namespace VRP.Serverside.Core.Extensions
         //    NAPI.Notification.SendNotificationToPlayer(client, message, flashing);
         // }
 
-        public static void Notify(this Client client, string message, NotificationType notificationType, string title = "")
-        {
-            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, notificationType, title);
-        }
-
         public static void SendWarning(this Client client, string message, string title = "")
         {
-            client.Notify(message, NotificationType.Warning, title);
+            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, NotificationType.Warning, title);
+            
         }
 
         public static void SendError(this Client client, string message, string title = "")
         {
-            client.Notify(message, NotificationType.Error, title);
+            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, title);
         }
 
         public static void SendInfo(this Client client, string message, string title = "")
         {
-            client.Notify(message, NotificationType.Info, title);
+            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, title);
+
         }
 
         public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group)

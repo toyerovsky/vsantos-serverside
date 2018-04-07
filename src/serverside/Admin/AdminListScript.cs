@@ -50,7 +50,7 @@ namespace VRP.Serverside.Admin
         {
             if (AdminsOnDuty.Count == 0)
             {
-                sender.Notify("Obecnie nie ma administratorów na służbie.", NotificationType.Info);
+                sender.SendInfo("Obecnie nie ma administratorów na służbie.");
                 return;
             }
 

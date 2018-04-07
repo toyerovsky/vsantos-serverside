@@ -125,7 +125,7 @@ namespace VRP.Serverside.Entities.Core.Building
         {
             if (!DbModel.Cost.HasValue)
             {
-                sender.Notify("Ten budynek nie jest na sprzedaż", NotificationType.Warning);
+                sender.SendWarning("Ten budynek nie jest na sprzedaż");
                 return;
             }
 
@@ -133,7 +133,7 @@ namespace VRP.Serverside.Entities.Core.Building
 
             if (!character.HasMoney(DbModel.Cost.Value))
             {
-                sender.Notify("Nie posiadasz wystarczającej ilości gotówki", NotificationType.Error);
+                sender.SendError("Nie posiadasz wystarczającej ilości gotówki");
                 return;
             }
 
@@ -177,7 +177,7 @@ namespace VRP.Serverside.Entities.Core.Building
                 {
                     p.Client.Dimension = (uint)Dimension.Global;
                     p.Client.Position = p.CharacterEntity.CurrentBuilding.BuildingMarker.Position;
-                    p.Client.Notify("Budynek w którym się znajdowałeś został usunięty.", NotificationType.Warning);
+                    p.Client.SendWarning("Budynek w którym się znajdowałeś został usunięty.");
                     p.CharacterEntity.CurrentBuilding = null;
                 }
             }
@@ -196,7 +196,7 @@ namespace VRP.Serverside.Entities.Core.Building
 
             if (buildingEntity.DoorsLocked)
             {
-                sender.Notify("Drzwi są zamknięte.", NotificationType.Warning);
+                sender.SendWarning("Drzwi są zamknięte.");
                 return;
             }
 
@@ -204,7 +204,7 @@ namespace VRP.Serverside.Entities.Core.Building
             if (buildingEntity.DbModel.EnterCharge.HasValue &&
                 !character.HasMoney(buildingEntity.DbModel.EnterCharge.Value))
             {
-                sender.Notify("Nie posiadasz wystarczającej ilości gotówki", NotificationType.Error);
+                sender.SendError("Nie posiadasz wystarczającej ilości gotówki");
                 return;
             }
 

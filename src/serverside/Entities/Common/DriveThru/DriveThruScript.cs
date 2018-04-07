@@ -32,7 +32,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                 CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
                 if (!character.HasMoney(money))
                 {
-                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Info);
+                    sender.SendInfo("Nie posiadasz wystarczającej ilości gotówki.");
                     return;
                 }
                 character.RemoveMoney(money);
@@ -53,7 +53,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                     repository.Insert(itemModel);
                     repository.Save();
                 }
-                sender.Notify($"Pomyślnie zakupiłeś {itemModel.Name} za ${money}.", NotificationType.Info);
+                sender.SendInfo($"Pomyślnie zakupiłeś {itemModel.Name} za ${money}.");
             }
         }
 
@@ -73,11 +73,11 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do dodawania DriveThru.", NotificationType.Error);
+                sender.SendWarning("Nie posiadasz uprawnień do dodawania DriveThru.");
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\" ctrl + alt + shift + d użyj /diag aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\" ctrl + alt + shift + d użyj /diag aby poznać swoją obecną pozycję.");
             
             Vector3 center = null;
 
@@ -93,7 +93,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                     };
                     XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, "DriveThrus"));
 
-                    sender.Notify("Dodawanie DriveThru zakończyło się pomyślnie.", NotificationType.Info);
+                    sender.SendInfo("Dodawanie DriveThru zakończyło się pomyślnie.");
                     DriveThruEntity driveThru = new DriveThruEntity(data);
                     driveThru.Spawn();
                     DriveThrus.Add(driveThru);                    
@@ -106,25 +106,25 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania przystanku DriveThru.", NotificationType.Error);
+                sender.SendWarning("Nie posiadasz uprawnień do usuwania przystanku DriveThru.");
                 return;
             }
 
             if (DriveThrus.Count == 0)
             {
-                sender.Notify("Nie znaleziono DriveThru które można usunąć.", NotificationType.Warning);
+                sender.SendWarning("Nie znaleziono DriveThru które można usunąć.");
                 return;
             }
             DriveThruEntity driveThru = DriveThrus.OrderBy(d => d.Data.Position.DistanceTo2D(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(driveThru.Data.FilePath))
             {
-                sender.Notify("Usuwanie DriveThru zakończyło się pomyślnie.", NotificationType.Info);
+                sender.SendInfo("Usuwanie DriveThru zakończyło się pomyślnie.");
                 DriveThrus.Remove(driveThru);
                 driveThru.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie DriveThru zakończyło się niepomyślnie.", NotificationType.Error);
+                sender.SendError("Usuwanie DriveThru zakończyło się niepomyślnie.");
             }
         }
     }

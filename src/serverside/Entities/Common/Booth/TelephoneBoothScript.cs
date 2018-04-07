@@ -72,7 +72,7 @@ namespace VRP.Serverside.Entities.Common.Booth
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Error);
+                    sender.SendError("Nie posiadasz wystarczającej ilości gotówki.");
                 }
 
             }
@@ -100,11 +100,11 @@ namespace VRP.Serverside.Entities.Common.Booth
         [Command("dodajbudke")]
         public void CreateAtm(Client sender, decimal cost, string number)
         {
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu.\" użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu.\" użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
 
             if (!ValidationHelper.IsMoneyValid(cost) || !ValidationHelper.IsCellphoneNumberValid(number))
             {
-                sender.Notify("Wprowadzono dane w nieprawidłowym formacie.", NotificationType.Error);
+                sender.SendError("Wprowadzono dane w nieprawidłowym formacie.");
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace VRP.Serverside.Entities.Common.Booth
                     TelephoneBoothEntity booth = new TelephoneBoothEntity(data);
                     booth.Spawn();
                     Booths.Add(booth);
-                    sender.Notify("Dodawanie budki zakończyło się pomyślnie.", NotificationType.Info);
+                    sender.SendInfo("Dodawanie budki zakończyło się pomyślnie.");
                 }
             }
         }
@@ -149,26 +149,26 @@ namespace VRP.Serverside.Entities.Common.Booth
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania budki.", NotificationType.Error);
+                sender.SendError("Nie posiadasz uprawnień do usuwania budki.");
                 return;
             }
 
             if (Booths.Count == 0)
             {
-                sender.Notify("Nie znaleziono budki telefonicznej którą można usunąć.", NotificationType.Warning);
+                sender.SendError("Nie znaleziono budki telefonicznej którą można usunąć.");
                 return;
             }
 
             TelephoneBoothEntity telephoneBooth = Booths.OrderBy(a => a.Data.Position.Position.DistanceTo(sender.Position)).First();
             if (XmlHelper.TryDeleteXmlObject(telephoneBooth.Data.FilePath))
             {
-                sender.Notify("Usuwanie budki telefonicznej zakończyło się pomyślnie.", NotificationType.Info);
+                sender.SendInfo("Usuwanie budki telefonicznej zakończyło się pomyślnie.");
                 Booths.Remove(telephoneBooth);
                 telephoneBooth.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie budki telefonicznej zakończyło się niepomyślnie.", NotificationType.Error);
+                sender.SendError("Usuwanie budki telefonicznej zakończyło się niepomyślnie.");
             }
         }
         #endregion

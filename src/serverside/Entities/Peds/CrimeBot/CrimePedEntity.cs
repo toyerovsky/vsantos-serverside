@@ -54,7 +54,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
 
             if (properties.Count % 3 != 1)
             {
-                player.Client.Notify($"Konfiguracja bota grupy {Group} jest nieporawna, skontaktuj się z administratorem.", NotificationType.Error);
+                player.Client.SendError($"Konfiguracja bota grupy {Group} jest nieporawna, skontaktuj się z administratorem.");
                 return;
             }
 

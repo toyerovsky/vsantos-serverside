@@ -112,7 +112,7 @@ namespace VRP.Serverside.Core.Login
             else
             {
                 sender.SendInfo("Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
-                //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.", NotificationType.Info);
+                //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Podane login lub hasło są nieprawidłowe, bądź takie konto nie istnieje.");
             }
         }
 
@@ -132,7 +132,7 @@ namespace VRP.Serverside.Core.Login
             if (account.DbModel.Characters.Count == 0)
             {
                 sender.SendInfo("Twoje konto nie posiada żadnych postaci!");
-                //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Twoje konto nie posiada żadnych postaci!", NotificationType.Info);
+                //sender.TriggerEvent(RemoteEvents.PlayerNotifyRequested, "Twoje konto nie posiada żadnych postaci!");
 
             }
             else

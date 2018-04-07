@@ -113,11 +113,11 @@ namespace VRP.Serverside.Entities.Common.Carshop
 
                     VehicleEntity.Create(new FullPosition(new Vector3(-50, -1680, 29.5), new Vector3(0, 0, 0)),
                         vehicleHash, "", 0, null, new Color().GetRandomColor(), new Color().GetRandomColor(), 0f, 0f, sender.GetAccountEntity().CharacterEntity.DbModel);
-                    sender.Notify($"Pojazd {vehicleHash.ToString()} zakupiony pomyślnie.", NotificationType.Info);
+                    sender.SendInfo($"Pojazd {vehicleHash.ToString()} zakupiony pomyślnie.");
                 }
                 else
                 {
-                    sender.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Error);
+                    sender.SendError("Nie posiadasz wystarczającej ilości gotówki.");
                 }
             }
         }
@@ -127,19 +127,19 @@ namespace VRP.Serverside.Entities.Common.Carshop
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia pojazdu w salonie.", NotificationType.Error);
+                sender.SendWarning("Nie posiadasz uprawnień do tworzenia pojazdu w salonie.");
                 return;
             }
 
             if (Vehicles.Any(v => v.Hash == hash))
             {
-                sender.Notify("Podany pojazd jest już dodany.", NotificationType.Warning);
+                sender.SendError("Podany pojazd jest już dodany.");
                 return;
             }
 
             if (!ValidationHelper.IsMoneyValid(cost))
             {
-                sender.Notify("Wprowadzona kwota gotówki jest nieprawidłowa.", NotificationType.Error);
+                sender.SendError("Wprowadzona kwota gotówki jest nieprawidłowa.");
                 return;
             }
 
@@ -149,7 +149,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
 
             if (carshopTypes.All(carshopType => carshopType.GetDescription() != type && carshopType.GetDescription() != type2)) ;
             {
-                sender.Notify("Wprowadzony typ salonu jest nieprawidłowy.", NotificationType.Error);
+                sender.SendError("Wprowadzony typ salonu jest nieprawidłowy.");
             }
 
             foreach (CarshopType item in carshopTypes)
@@ -178,11 +178,11 @@ namespace VRP.Serverside.Entities.Common.Carshop
 
             if (player.DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia salonu samochodowego.", NotificationType.Error);
+                sender.SendWarning("Nie posiadasz uprawnień do tworzenia salonu samochodowego.");
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
 
             player.HereHandler += client =>
             {
@@ -196,7 +196,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
 
                 XmlHelper.AddXmlObject(data, Path.Combine(Utils.XmlDirectory, "Carshops"));
                 Carshops.Add(new CarshopEntity(data));
-                sender.Notify("Dodawanie salonu zakończyło się pomyślnie.", NotificationType.Info);
+                sender.SendInfo("Dodawanie salonu zakończyło się pomyślnie.");
             };
         }
 
@@ -205,26 +205,26 @@ namespace VRP.Serverside.Entities.Common.Carshop
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania salonu samochodowego.", NotificationType.Error);
+                sender.SendWarning("Nie posiadasz uprawnień do usuwania salonu samochodowego.");
                 return;
             }
 
             if (Carshops.Count == 0)
             {
-                sender.Notify("Nie znaleziono salonu pojazdów który można usunąć.", NotificationType.Warning);
+                sender.SendWarning("Nie znaleziono salonu pojazdów który można usunąć.");
                 return;
             }
 
             CarshopEntity carshop = Carshops.First(x => x.ColShape.IsPointWithin(sender.Position));
             if (XmlHelper.TryDeleteXmlObject(carshop.Data.FilePath))
             {
-                sender.Notify("Usuwanie salonu zakończyło się pomyślnie", NotificationType.Info);
+                sender.SendInfo("Usuwanie salonu zakończyło się pomyślnie");
                 Carshops.Remove(carshop);
                 carshop.Dispose();
             }
             else
             {
-                sender.Notify("Usuwanie salonu zakończyło się niepomyślnie.", NotificationType.Error);
+                sender.SendError("Usuwanie salonu zakończyło się niepomyślnie.");
             }
         }
     }

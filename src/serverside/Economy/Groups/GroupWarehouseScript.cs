@@ -136,7 +136,7 @@ namespace VRP.Serverside.Economy.Groups
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster4)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia grupy.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do tworzenia grupy.");
                 return;
             }
 

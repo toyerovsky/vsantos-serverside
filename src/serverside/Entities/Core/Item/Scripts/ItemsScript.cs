@@ -89,7 +89,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
 
                 if (sender.GetAccountEntity().CharacterEntity.CurrentCellphone.CurrentCall != null)
                 {
-                    sender.Notify("Obecnie prowadzisz rozmowę telefoniczną. Zakończ ją klawiszem END.", NotificationType.Error);
+                    sender.SendInfo("Obecnie prowadzisz rozmowę telefoniczną. Zakończ ją klawiszem END.");
                     return;
                 }
                 // FixMe animka dzwonienia przez telefon
@@ -182,7 +182,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 Cellphone cellphone = sender.GetAccountEntity().CharacterEntity.CurrentCellphone;
                 if (cellphone == null)
                 {
-                    sender.Notify("Musisz mieć włączony telefon.", NotificationType.Error);
+                    sender.SendError("Musisz mieć włączony telefon.");
                     return;
                 }
 

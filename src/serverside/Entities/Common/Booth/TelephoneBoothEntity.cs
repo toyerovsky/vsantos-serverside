@@ -48,8 +48,8 @@ namespace VRP.Serverside.Entities.Common.Booth
             {
                 if (CurrentCall != null && CurrentCall.Accepted)
                 {
-                    //Budka jest używana
-                    entity.Notify("Ta budka obecnie jest używana.", NotificationType.Warning);
+                    // Budka jest używana
+                    entity.SendWarning("Ta budka obecnie jest używana.");
                 }
                 else if (CurrentCall != null)
                 {

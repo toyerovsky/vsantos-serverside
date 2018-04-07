@@ -30,12 +30,11 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia bota przestępczego.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do tworzenia bota przestępczego.");
                 return;
             }
 
-            sender.Notify("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".", NotificationType.Info);
-            sender.Notify("...użyj /diag aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\" użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
 
             FullPosition botPosition = null;
             VehicleEntity botVehicle = null;
@@ -67,7 +66,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                         "DrawAddingCrimeBotComponents",
                         new Vector3(botPosition.Position.X, botPosition.Position.Y, botPosition.Position.Z - 1));
 
-                    sender.Notify("Ustaw pojazd w wybranej pozycji następnie wpisz \"tu\".", NotificationType.Info);
+                    sender.SendInfo("Ustaw pojazd w wybranej pozycji następnie wpisz \"tu\".");
 
                     botVehicle = VehicleEntity.Create(
                         new FullPosition(new Vector3(
@@ -110,7 +109,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                         VehiclePosition = botVehiclePosition
                     }, Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"));
 
-                    sender.Notify("Dodawanie pozycji bota zakończyło się pomyślnie!", NotificationType.Info);
+                    sender.SendInfo("Dodawanie pozycji bota zakończyło się pomyślnie!");
                     NAPI.Player.WarpPlayerOutOfVehicle(sender);
                     botVehicle.Dispose();
                 }
@@ -138,11 +137,11 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
 
             if (position != null && XmlHelper.TryDeleteXmlObject(position.FilePath))
             {
-                sender.Notify("Usuwanie pozycji bota zakończyło się pomyślnie.", NotificationType.Info);
+                sender.SendInfo("Usuwanie pozycji bota zakończyło się pomyślnie.");
             }
             else
             {
-                sender.Notify("Usuwanie pozycji bota zakończyło się niepomyślnie.", NotificationType.Error);
+                sender.SendError("Usuwanie pozycji bota zakończyło się niepomyślnie.");
             }
         }
 
@@ -174,7 +173,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                 }
                 else
                 {
-                    sender.Notify("Aby wezwać sprzedawcę musisz znajdować się na służbie grupy.", NotificationType.Error);
+                    sender.SendError("Aby wezwać sprzedawcę musisz znajdować się na służbie grupy.");
                 }
             }
         }

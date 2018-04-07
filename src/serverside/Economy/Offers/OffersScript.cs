@@ -58,7 +58,7 @@ namespace VRP.Serverside.Economy.Offers
         {
             if (id.Equals(sender.GetAccountEntity().ServerId))
             {
-                sender.Notify("Nie możesz oferować przedmiotu samemu sobie.", NotificationType.Error);
+                sender.SendError("Nie możesz oferować przedmiotu samemu sobie.");
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace VRP.Serverside.Economy.Offers
                     //Tutaj sprawdzamy czy gracz posiada taki numer na liście. Numerujemy od 0 więc items.Count - 1
                     if (index > items.Count - 1 || index < 0)
                     {
-                        sender.Notify("Nie posiadasz przedmiotu o takim indeksie.", NotificationType.Error);
+                        sender.SendError("Nie posiadasz przedmiotu o takim indeksie.");
                         return;
                     }
 
@@ -84,7 +84,7 @@ namespace VRP.Serverside.Economy.Offers
 
                     if (sender.GetAccountEntity().CharacterEntity.ItemsInUse.Any(i => i.Id == item.Id))
                     {
-                        sender.Notify("Nie możesz używać przedmiotu podczas oferowania.", NotificationType.Error);
+                        sender.SendError("Nie możesz używać przedmiotu podczas oferowania.");
                         return;
                     }
 
@@ -107,14 +107,14 @@ namespace VRP.Serverside.Economy.Offers
 
                         if (building.DbModel.Group != null)
                         {
-                            sender.Notify("Nie można sprzedać budynku przepisanego pod grupę.", NotificationType.Error);
+                            sender.SendError("Nie można sprzedać budynku przepisanego pod grupę.");
                             return;
                         }
 
                         if (building.DbModel.Character.Id != sender.GetAccountEntity().CharacterEntity.DbModel
                                 .Id)
                         {
-                            sender.Notify("Nie jesteś właścicielem tego budynku.", NotificationType.Error);
+                            sender.SendError("Nie jesteś właścicielem tego budynku.");
                             return;
                         }
 
@@ -122,7 +122,7 @@ namespace VRP.Serverside.Economy.Offers
                     }
                     else
                     {
-                        sender.Notify("Aby oferować budynek musisz znajdować się w markerze bądź środku budynku", NotificationType.Error);
+                        sender.SendError("Aby oferować budynek musisz znajdować się w markerze bądź środku budynku");
                     }
                 }
                 //Tutaj są oferty wymagające uprawnień grupowych
@@ -132,7 +132,7 @@ namespace VRP.Serverside.Economy.Offers
                     if (group == null) return;
                     if (group.DbModel.GroupType != GroupType.CityHall || !((CityHall)group).CanPlayerGiveIdCard(sender.GetAccountEntity()))
                     {
-                        sender.Notify("Twoja grupa, bądź postać nie posiada uprawnień do wydawania dowodu osobistego.", NotificationType.Error);
+                        sender.SendWarning("Twoja grupa, bądź postać nie posiada uprawnień do wydawania dowodu osobistego.");
                         return;
                     }
                     offer = new Offer(senderCharacter, getterCharacter, safeMoneyCount, c => OfferActions.GiveIdCard(getterCharacter), true);
@@ -143,7 +143,7 @@ namespace VRP.Serverside.Economy.Offers
                     if (group == null) return;
                     if (group.DbModel.GroupType != GroupType.CityHall || !((CityHall)group).CanPlayerGiveDrivingLicense(sender.GetAccountEntity()))
                     {
-                        sender.Notify("Twoja grupa, bądź postać nie posiada uprawnień do wydawania prawa jazdy." ,NotificationType.Info);
+                        sender.SendInfo("Twoja grupa, bądź postać nie posiada uprawnień do wydawania prawa jazdy.");
                         return;
                     }
                     offer = new Offer(senderCharacter, getterCharacter, safeMoneyCount, c => OfferActions.GiveDrivingLicense(getterCharacter), true);
@@ -160,7 +160,7 @@ namespace VRP.Serverside.Economy.Offers
                     type.ToString(),
                     offer.Money.ToString(CultureInfo.InvariantCulture)
                 };
-                sender.Notify("Twoja oferta została wysłana.", NotificationType.Info);
+                sender.SendInfo("Twoja oferta została wysłana.");
                 offer.ShowWindow(cefList);
             }
         }

@@ -55,7 +55,7 @@ namespace VRP.Serverside.Entities.Core.Building
 
                         building.Save();
 
-                        sender.Notify("Dodawanie budynku zakończyło się pomyślnie.", NotificationType.Info);
+                        sender.SendInfo("Dodawanie budynku zakończyło się pomyślnie.");
                         sender.Position = externalPosition;
                         sender.Dimension = (uint)Dimension.Global;
                         break;
@@ -86,7 +86,7 @@ namespace VRP.Serverside.Entities.Core.Building
         {
             if (!sender.HasData("CurrentDoors"))
             {
-                sender.Notify("Nie znajdujesz się przy drzwiach.", NotificationType.Error);
+                sender.SendError("Nie znajdujesz się przy drzwiach.");
                 return;
             }
 
@@ -95,12 +95,12 @@ namespace VRP.Serverside.Entities.Core.Building
             //TODO: Dodanie zeby pracownicy mogli otwierać budynki grupowe zgodnie z uprawnieniami
             if (building.DbModel.Character == null || building.DbModel.Character.Id != sender.GetAccountEntity().CharacterEntity.DbModel.Id)
             {
-                sender.Notify("Nie jesteś właścicielem tego budynku.", NotificationType.Error);
+                sender.SendError("Nie jesteś właścicielem tego budynku.");
                 return;
             }
 
             string text = building.DoorsLocked ? "otwarte" : "zamknięte";
-            sender.Notify($"Drzwi zostały {text}", NotificationType.Info);
+            sender.SendInfo($"Drzwi zostały {text}");
             building.DoorsLocked = !building.DoorsLocked;
         }
 
@@ -124,7 +124,7 @@ namespace VRP.Serverside.Entities.Core.Building
                     sender.TriggerEvent("ShowBuildingManagePanel", adminInfo);
                     return;
                 }
-                sender.Notify("Budynek o podanym Id nie istnieje.", NotificationType.Error);
+                sender.SendError("Budynek o podanym Id nie istnieje.");
                 return;
             }
 
@@ -139,7 +139,7 @@ namespace VRP.Serverside.Entities.Core.Building
                 //TODO: Dodanie, żeby właściciel grupy mógł zarządzać budynkiem grupowym
                 if (building.DbModel.Character == null || building.DbModel.Character.Id != sender.GetAccountEntity().CharacterEntity.DbModel.Id)
                 {
-                    sender.Notify("Nie jesteś właścicielem tego budynku.", NotificationType.Error);
+                    sender.SendError("Nie jesteś właścicielem tego budynku.");
                     return;
                 }
 
@@ -155,7 +155,7 @@ namespace VRP.Serverside.Entities.Core.Building
             }
             else
             {
-                sender.Notify("Aby otworzyć panel zarządzania budynkiem musisz znajdować się w markerze bądź środku budynku.", NotificationType.Info);
+                sender.SendInfo("Aby otworzyć panel zarządzania budynkiem musisz znajdować się w markerze bądź środku budynku.");
             }
         }
 
@@ -168,13 +168,13 @@ namespace VRP.Serverside.Entities.Core.Building
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster4)
             {
-                sender.Notify("Nie posiadasz uprawnień do usuwania drzwi.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do usuwania drzwi.");
                 return;
             }
 
             if (id == -1 && !sender.HasData("CurrentDoors"))
             {
-                sender.Notify("Aby usunąć budynek musisz podać jego Id, lub znajdować się w jego drzwiach.", NotificationType.Error);
+                sender.SendError("Aby usunąć budynek musisz podać jego Id, lub znajdować się w jego drzwiach.");
             }
 
             if (sender.HasData("CurrentDoors"))
@@ -201,7 +201,7 @@ namespace VRP.Serverside.Entities.Core.Building
                 return;
             }
 
-            sender.Notify("Podany budynek nie istnieje.", NotificationType.Error);
+            sender.SendError("Podany budynek nie istnieje.");
         }
 
         [Command("dodajdrzwi")]
@@ -209,11 +209,11 @@ namespace VRP.Serverside.Entities.Core.Building
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster4)
             {
-                sender.Notify("Nie posiadasz uprawnień do tworzenia drzwi.", NotificationType.Warning);
+                sender.SendWarning("Nie posiadasz uprawnień do tworzenia drzwi.");
                 return;
             }
 
-            sender.Notify("Ustaw się w pozycji markera, a następnie wpisz /tu użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.", NotificationType.Info);
+            sender.SendInfo("Ustaw się w pozycji markera, a następnie wpisz /tu użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
 
             void Handler(Client o, string message)
             {
@@ -221,13 +221,13 @@ namespace VRP.Serverside.Entities.Core.Building
                 {
                     if (EntityHelper.GetBuildings().Any(b => b.BuildingMarker.Position.DistanceTo(o.Position) < 5))
                     {
-                        sender.Notify("W bliskim otoczeniu tego budynku znajduje się już inny budynek.", NotificationType.Info);
+                        sender.SendInfo("W bliskim otoczeniu tego budynku znajduje się już inny budynek.");
                         return;
                     }
 
                     o.SetData("AdminDoorPosition", o.Position);
                     sender.TriggerEvent("ShowAdminBuildingMenu", JsonConvert.SerializeObject(Constant.Items.DefaultInteriors));
-                    sender.Notify("Dodawanie budynku zakończyło się pomyślnie.", NotificationType.Info);
+                    sender.SendInfo("Dodawanie budynku zakończyło się pomyślnie.");
                 }
             }
         }
