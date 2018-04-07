@@ -13,8 +13,8 @@ using VRP.Core.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Core.Item;
-using VRP.Serverside.Entities.Interfaces;
 using VRP.Serverside.Entities.Misc.Description;
+using VRP.Serverside.Interfaces;
 using FullPosition = VRP.Serverside.Core.FullPosition;
 
 namespace VRP.Serverside.Entities.Core.Vehicle

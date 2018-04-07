@@ -136,11 +136,11 @@ namespace VRP.Serverside.Core.Telephone
         {
             if (Accepted && e.Character == Sender)
             {
-                ChatScript.SendMessageToPlayer(Getter.AccountEntity.Client, e.Message, ChatMessageType.Phone);
+                ChatScript.SendMessageToPlayer(Getter, e.Message, ChatMessageType.Phone);
             }
             else if (Accepted && e.Character == Getter)
             {
-                ChatScript.SendMessageToPlayer(Sender.AccountEntity.Client, e.Message, ChatMessageType.Phone);
+                ChatScript.SendMessageToPlayer(Sender, e.Message, ChatMessageType.Phone);
             }
         }
     }

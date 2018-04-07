@@ -12,7 +12,7 @@ using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.BusStop.Models;
 using VRP.Serverside.Entities.Core;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Common.BusStop
 {
@@ -50,7 +50,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
         {
             if (player.DbModel.PlayedTime.Hours > 5 && !player.HasMoney(cost))
             {
-                player.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Error);
+                player.SendError("Nie posiadasz wystarczającej ilości gotówki.");
                 return;
             }
 

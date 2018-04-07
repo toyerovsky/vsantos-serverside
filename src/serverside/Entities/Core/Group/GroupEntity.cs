@@ -11,7 +11,7 @@ using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Core.Group
 {

@@ -84,10 +84,10 @@ namespace VRP.Serverside.Entities.Common.Booth
                 {
                     if (boothEntity.CurrentCall != null && boothEntity.CurrentCall.CurrentlyTalking)
                     {
-                        boothEntity.CurrentCall.Sender.Notify(
-                            "Rozmowa zakończona.", NotificationType.Info);
-                        boothEntity.CurrentCall.Getter.Notify(
-                            "Rozmowa zakończona.", NotificationType.Info);
+                        boothEntity.CurrentCall.Sender.SendInfo(
+                            "Rozmowa zakończona.");
+                        boothEntity.CurrentCall.Getter.SendInfo(
+                            "Rozmowa zakończona.");
 
                         boothEntity.CurrentCall.Dispose();
                         boothEntity.CurrentCall = null;

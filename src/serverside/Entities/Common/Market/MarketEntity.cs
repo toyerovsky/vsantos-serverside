@@ -10,7 +10,7 @@ using System.Linq;
 using GTANetworkAPI;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Market.Models;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 using FullPosition = VRP.Serverside.Core.FullPosition;
 
 namespace VRP.Serverside.Entities.Common.Market

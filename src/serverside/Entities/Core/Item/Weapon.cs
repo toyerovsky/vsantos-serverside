@@ -26,7 +26,7 @@ namespace VRP.Serverside.Entities.Core.Item
         {
             if (Ammo <= 0)
             {
-                sender.Notify("Twoja broń nie ma amunicji.", NotificationType.Error);
+                sender.SendWarning("Twoja broń nie ma amunicji.");
                 return;
             }
 

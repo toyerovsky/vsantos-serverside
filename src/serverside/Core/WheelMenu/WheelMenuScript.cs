@@ -10,6 +10,7 @@ using GTANetworkAPI;
 using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
+using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Vehicle;
 
 namespace VRP.Serverside.Core.WheelMenu
@@ -51,16 +52,21 @@ namespace VRP.Serverside.Core.WheelMenu
             }
             else if (target is VehicleEntity vehicle)
             {
+                CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
                 if (VehicleScript.GetVehicleDoorCount((VehicleHash)vehicle.GameVehicle.Model) >= 4)
                 {
-                    menuItems.Add(new WheelMenuItem("Maska", sender, target, (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Hood)));
-                    menuItems.Add(new WheelMenuItem("Bagaznik", sender, target, (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Trunk)));
+                    menuItems.Add(new WheelMenuItem("Maska", senderCharacter, target, 
+                        (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Hood)));
+                    menuItems.Add(new WheelMenuItem("Bagaznik", senderCharacter, target, 
+                        (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Trunk)));
                 }
                 if (vehicle.DbModel.Character == sender.GetAccountEntity().CharacterEntity.DbModel)
                 {
-                    menuItems.Add(new WheelMenuItem("Zamek", sender, null, (s, e) => VehicleScript.ChangePlayerVehicleLockState(s)));
+                    menuItems.Add(new WheelMenuItem("Zamek", senderCharacter, null, 
+                        (s, e) => VehicleScript.ChangePlayerVehicleLockState(s)));
                 }
-                menuItems.Add(new WheelMenuItem("Rejestracja", sender, target, (s, e) => VehicleScript.ShowVehiclesInformation(s, ((VehicleEntity)e).DbModel, true)));
+                menuItems.Add(new WheelMenuItem("Rejestracja", senderCharacter, target, 
+                    (s, e) => VehicleScript.ShowVehiclesInformation(s, ((VehicleEntity)e).DbModel, true)));
             }
             return menuItems;
         }

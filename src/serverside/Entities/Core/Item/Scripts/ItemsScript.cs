@@ -51,7 +51,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
 
                 ItemEntity item = _itemFactory.Create(userItems[index]);
-                ChatScript.SendMessageToPlayer(sender, item.ItemInfo, ChatMessageType.ServerInfo);
+                sender.SendInfo(item.ItemInfo);
 
             }
             else if (eventName == "UsingInformationsItem")
@@ -62,7 +62,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
                 List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
 
                 ItemEntity item = _itemFactory.Create(userItems[index]);
-                ChatScript.SendMessageToPlayer(sender, item.UseInfo, ChatMessageType.ServerInfo);
+                sender.SendInfo(item.UseInfo);
 
             }
             else if (eventName == "BackToItemList")
@@ -152,7 +152,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
 
                 if (telephoneCall.Getter.CurrentCellphone.CurrentCall != null)
                 {
-                    telephoneCall.Getter.Notify("Aby odebrać musisz zakończyć bieżące połączenie.", NotificationType.Warning);
+                    telephoneCall.Getter.SendWarning("Aby odebrać musisz zakończyć bieżące połączenie.");
                     return;
                 }
 
@@ -161,8 +161,8 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
 
                 telephoneCall.Open();
 
-                telephoneCall.Getter.Notify("Odebrano telefon, aby zakończyć rozmowę naciśnij klawisz END.", NotificationType.Info);
-                telephoneCall.Sender.Notify("Rozmówca odebrał telefon, aby zakończyć rozmowę naciśnij klawisz END.", NotificationType.Info);
+                telephoneCall.Getter.SendInfo("Odebrano telefon, aby zakończyć rozmowę naciśnij klawisz END.");
+                telephoneCall.Sender.SendInfo("Rozmówca odebrał telefon, aby zakończyć rozmowę naciśnij klawisz END.");
             }
             else if (eventName == "OnPlayerCellphoneEnd")
             {
@@ -170,8 +170,8 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
 
                 if (cellphone?.CurrentCall != null)
                 {
-                    cellphone.CurrentCall.Sender.Notify("Rozmowa zakończona.", NotificationType.Info);
-                    cellphone.CurrentCall.Getter.Notify("Rozmowa zakończona.", NotificationType.Info);
+                    cellphone.CurrentCall.Sender.SendInfo("Rozmowa zakończona.");
+                    cellphone.CurrentCall.Getter.SendInfo("Rozmowa zakończona.");
 
                     cellphone.CurrentCall = null;
                 }

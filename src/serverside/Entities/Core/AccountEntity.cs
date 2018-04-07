@@ -12,7 +12,7 @@ using VRP.Core.Repositories;
 using VRP.Core.Tools;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Core
 {

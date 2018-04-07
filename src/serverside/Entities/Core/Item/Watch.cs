@@ -23,7 +23,7 @@ namespace VRP.Serverside.Entities.Core.Item
         public override void UseItem(CharacterEntity sender)
         {
             ChatScript.SendMessageToNearbyPlayers(sender, $"spogląda na zegarek {DbModel.Name}", ChatMessageType.Me);
-            sender.Notify($"Godzina: {DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}", NotificationType.Info);
+            sender.SendInfo($"Godzina: {DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}");
         }
 
         public override string UseInfo => "Ten przedmiot pokazuje bieżącą godzinę.";

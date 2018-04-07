@@ -11,7 +11,7 @@ using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Carshop.Models;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Common.Carshop
 {

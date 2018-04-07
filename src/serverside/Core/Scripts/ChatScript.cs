@@ -29,7 +29,9 @@ namespace VRP.Serverside.Core.Scripts
             if (sender.CanTalk) return;
 
             if (sender.CurrentCellphone != null)
-                SendMessageToNearbyPlayers(sender, message, sender.CurrentCellphone.CurrentCall != null ? ChatMessageType.PhoneOthers : ChatMessageType.Normal);
+                SendMessageToNearbyPlayers(sender, message, sender.CurrentCellphone.CurrentCall != null
+                    ? ChatMessageType.PhoneOthers
+                    : ChatMessageType.Normal);
 
             SendMessageToNearbyPlayers(sender, message, ChatMessageType.Normal);
 
@@ -43,7 +45,10 @@ namespace VRP.Serverside.Core.Scripts
         public void Try(Client sender, string message)
         {
             CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-            SendMessageToNearbyPlayers(character, Utils.RandomRange(100) <= 49 ? "zawiódł próbując " + message : "odniósł sukces próbując " + message, ChatMessageType.ServerMe);
+            SendMessageToNearbyPlayers(character, Utils.RandomRange(100) <= 49
+                ? "zawiódł próbując " + message
+                : "odniósł sukces próbując " + message,
+                ChatMessageType.ServerMe);
 
             SaidEventHandler handler = OnPlayerSaid;
             SaidEventArgs eventArgs = new SaidEventArgs(character, message, ChatMessageType.ServerMe);
@@ -101,25 +106,16 @@ namespace VRP.Serverside.Core.Scripts
                 return;
             }
 
-            try
-            {
-                Client getter = EntityHelper.GetAccountByServerId(id).Client;
-                sender.SendChatMessage($"~o~ [{getter.GetAccountEntity().ServerId}] {getter.Name}: {message}");
-                getter.SendChatMessage($"~o~ [{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}");
-            }
-            catch (Exception e)
-            {
-                //Client getter = null;
-               // if (getter == null)
-                //{
-                    sender.SendError("Nie znaleziono gracza o podanym Id.");
-                    return;
-               // }
-            }
-           
+            Client getter = EntityHelper.GetAccountByServerId(id)?.Client;
 
-            //sender.SendChatMessage($"~o~ [{getter.GetAccountEntity().ServerId}] {getter.Name}: {message}");
-           // getter.SendChatMessage($"~o~ [{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}");
+            if (getter == null)
+            {
+                sender.SendError("Nie znaleziono gracza o podanym Id.");
+                return;
+            }
+
+            sender.SendChatMessage($"[{getter.GetAccountEntity().ServerId}] {getter.Name}: {message}");
+            getter.SendChatMessage($"[{sender.GetAccountEntity().ServerId}] {sender.Name}: {message}");
         }
 
         [Command("b", GreedyArg = true)]
@@ -133,7 +129,10 @@ namespace VRP.Serverside.Core.Scripts
         public void SendMessageOnGroupChat(Client sender, string message)
         {
             string slot = message.Split(' ')[0];
-            byte groupSlot = slot.All(char.IsDigit) ? Convert.ToByte(slot) : (byte)0;
+            byte groupSlot = slot.All(char.IsDigit)
+                ? Convert.ToByte(slot)
+                : (byte)0;
+
             if (groupSlot != 0 && ValidationHelper.IsGroupSlotValid(groupSlot))
             {
                 sender.Notify("Podany slot grupy jest nieprawidłowy.", NotificationType.Error);
@@ -180,113 +179,40 @@ namespace VRP.Serverside.Core.Scripts
         [Command("ado", GreedyArg = true)]
         public void SendAdministratorDoMessage(Client player, string message)
         {
-            message = PrepareMessage(player.Name, message, ChatMessageType.ServerDo, out string color);
-            NAPI.Chat.SendChatMessageToAll(color, message);
+            ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
+            chatMessageFormatter.Format(player.GetAccountEntity().CharacterEntity, message, ChatMessageType.ServerDo);
+            NAPI.Chat.SendChatMessageToAll(message);
         }
 
         #endregion
 
-        public static void SendMessageToSpecifiedPlayers(CharacterEntity sender, IEnumerable<CharacterEntity> players, string message, ChatMessageType chatMessageType, string color = "")
+        public static void SendMessageToSpecifiedPlayers(CharacterEntity sender, IEnumerable<CharacterEntity> players,
+            string message, ChatMessageType chatMessageType, string color = "")
         {
-            message = PrepareMessage(sender.FormatName, message, chatMessageType, out string messageColor);
-            if (color != "") messageColor = color;
-            if (chatMessageType == ChatMessageType.GroupOoc)
-            {
-                message = $"[{sender.AccountEntity.ServerId}] {sender.FormatName}: {message}";
-            }
+            ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
+            chatMessageFormatter.Format(sender, message, chatMessageType);
 
             foreach (CharacterEntity p in players)
-            {
-                p.AccountEntity.Client.SendChatMessage(messageColor, message);
-            }
+                p.AccountEntity.Client.SendChatMessage(message);
+
         }
 
-        public static void SendMessageToNearbyPlayers(CharacterEntity sender, string message, ChatMessageType chatMessageType, string color = "")
+        public static void SendMessageToNearbyPlayers(CharacterEntity sender, string message, ChatMessageType chatMessageType)
         {
-            message = PrepareMessage(sender.FormatName, message, chatMessageType, out string messageColor);
-            if (color != "") messageColor = color;
-            switch (chatMessageType)
-            {
-                case ChatMessageType.Ooc:
-                    message = $"(( [{sender.AccountEntity.ServerId}] {sender.FormatName} {message} ))";
-                    messageColor = "~#CCCCCC~";
-                    break;
-            }
+            ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
+            chatMessageFormatter.Format(sender, message, chatMessageType);
 
-            //Dla każdego klienta w zasięgu wyświetl wiadomość, zasięg jest pobierany przez rzutowanie enuma do floata
+            // Dla każdego klienta w zasięgu wyświetl wiadomość, zasięg jest pobierany przez rzutowanie enuma do floata
             NAPI.Player.GetPlayersInRadiusOfPlayer((float)chatMessageType, sender.AccountEntity.Client)
-                .ForEach(c => c.SendChatMessage(messageColor, message));
+                .ForEach(c => c.SendChatMessage(message));
         }
 
-        public static void SendMessageToPlayer(Client player, string message, ChatMessageType chatMessageType)
+        public static void SendMessageToPlayer(CharacterEntity sender, string message, ChatMessageType chatMessageType)
         {
-            message = PrepareMessage(player.Name, message, chatMessageType, out string color);
+            ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
+            message = chatMessageFormatter.Format(sender, message, chatMessageType);
 
-            if (chatMessageType == ChatMessageType.Phone)
-            {
-                color = "~#FFDB00~";
-                message = player.GetAccountEntity().CharacterEntity.DbModel.Gender
-                    ? $"Głos z telefonu (Mężczyzna): {message}"
-                    : $"Głos z telefonu (Kobieta): {message}";
-            }
-            player.SendChatMessage(color, message);
-        }
-
-        private static string PrepareMessage(string name, string message, ChatMessageType chatMessageType, out string color)
-        {
-            color = string.Empty;
-
-            if (char.IsLower(message.First()))
-                message = $"{char.ToUpper(message[0])}{message.Substring(1)}";
-
-            switch (chatMessageType)
-            {
-                case ChatMessageType.Normal:
-                    message = $"{name} mówi: {message}";
-                    color = "~#FFFFFF~";
-                    break;
-                case ChatMessageType.Quiet:
-                    message = $"{name} szepcze: {message}";
-                    color = "~#FFFFFF~";
-                    break;
-                case ChatMessageType.Loud:
-                    message = $"{name} krzyczy: {message}!";
-                    color = "~#FFFFFF~";
-                    break;
-                case ChatMessageType.Me:
-                    message = $"** {name} {message}";
-                    color = "~#C2A2DA~";
-                    break;
-                case ChatMessageType.ServerMe:
-                    message = $"* {name} {message}";
-                    color = "~#C2A2DA~";
-                    break;
-                case ChatMessageType.Do:
-                    message = $"** {message} (( {name} )) **";
-                    color = "~#847DB7~";
-                    break;
-                case ChatMessageType.PhoneOthers:
-                    message = $"{name} mówi(telefon): {message}";
-                    color = "~#FFFFFF~";
-                    break;
-                case ChatMessageType.ServerInfo:
-                    message = $"[INFO] ~w~ {message}";
-                    color = "~#6A9828~";
-                    break;
-                case ChatMessageType.ServerDo:
-                    message = $"** {message} **";
-                    color = "~#847DB7~";
-                    break;
-                case ChatMessageType.Megaphone:
-                    message = $"{name} \U0001F4E3 {message}";
-                    color = "~#FFDB00~";
-                    break;
-            }
-
-            if (message.Last() != '.' && message.Last() != '!' && message.Last() != '?')
-                message += '.';
-
-            return message;
+            sender.AccountEntity.Client.SendChatMessage(message);
         }
     }
 }

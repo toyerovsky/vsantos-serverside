@@ -28,8 +28,8 @@ namespace VRP.Serverside.Economy.Offers
             {
                 Offer offer = sender.GetData("Offer");
 
-                offer.Sender.Notify($"Gracz {offer.Getter.FormatName} odrzucił twoją ofertę.", NotificationType.Warning);
-                offer.Getter.Notify($"Odrzuciłeś ofertę gracza { offer.Sender.FormatName}", NotificationType.Warning);
+                offer.Sender.SendWarning($"Gracz {offer.Getter.FormatName} odrzucił twoją ofertę.");
+                offer.Getter.SendWarning($"Odrzuciłeś ofertę gracza { offer.Sender.FormatName}");
                 offer.Dispose();
             }
             else if (eventName == "OnPlayerPayOffer")
@@ -45,8 +45,8 @@ namespace VRP.Serverside.Economy.Offers
                 }
                 else
                 {
-                    offer.Sender.Notify("Osoba do której wysyłasz ofertę znajduje się za daleko.", NotificationType.Error);
-                    offer.Getter.Notify("Znajdujesz się za daleko od osoby która wysłała ofertę.", NotificationType.Error);
+                    offer.Sender.SendError("Osoba do której wysyłasz ofertę znajduje się za daleko.");
+                    offer.Getter.SendError("Znajdujesz się za daleko od osoby która wysłała ofertę.");
                 }
                 offer.Dispose();
             }

@@ -7,7 +7,7 @@
 using GTANetworkAPI;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.DriveThru.Models;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Common.DriveThru
 {

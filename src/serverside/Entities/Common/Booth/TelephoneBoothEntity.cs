@@ -11,7 +11,7 @@ using VRP.Serverside.Core.Telephone;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Booth.Models;
 using VRP.Serverside.Entities.Core;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Common.Booth
 {

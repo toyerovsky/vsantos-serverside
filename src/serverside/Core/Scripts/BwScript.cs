@@ -28,7 +28,7 @@ namespace VRP.Serverside.Core.Scripts
 
             NAPI.ClientEvent.TriggerClientEvent(sender, "ToggleHud", false);
 
-            ChatScript.SendMessageToPlayer(sender, "Zosta³eœ brutalnie zraniony, aby uœmierciæ swoj¹ postaæ wpisz: /akceptujsmierc", ChatMessageType.ServerInfo);
+            sender.SendWarning("Zosta³eœ brutalnie zraniony, aby uœmierciæ swoj¹ postaæ wpisz: /akceptujsmierc");
 
             player.CharacterEntity.CanTalk = false;
             sender.SetData("CharacterBW", GetTimeToRespawn(reason));
@@ -60,7 +60,7 @@ namespace VRP.Serverside.Core.Scripts
                     NAPI.Player.SpawnPlayer(player.Client, new Vector3(sender.Position.X, sender.Position.Y, sender.Rotation.Z));
                     NAPI.ClientEvent.TriggerClientEvent(sender, "ToggleHud", true);
 
-                    ChatScript.SendMessageToPlayer(sender, "Twoje BW zosta³o anulowane.", ChatMessageType.ServerInfo);
+                    sender.SendInfo("Twoje BW zosta³o anulowane.");
                     player.CharacterEntity.CanTalk = true;
                     timer.Dispose();
                 }

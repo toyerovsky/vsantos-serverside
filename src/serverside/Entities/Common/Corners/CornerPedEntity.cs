@@ -102,7 +102,7 @@ namespace VRP.Serverside.Entities.Common.Corners
                      && !e.Message.All(char.IsDigit))
             {
                 //Jeśli gracz nie napisze zadnej liczby
-                Seller.Notify("Aby podać cenę kupującemu NPC musisz używać liczb np. 70.", NotificationType.Info);
+                Seller.SendInfo("Aby podać cenę kupującemu NPC musisz używać liczb np. 70.");
             }
             //Jeśli gracz powie tak
             else if (!BotHandle.HasData("TransactionLevel") && e.Character == Seller && (e.ChatMessageType == ChatMessageType.Normal || e.ChatMessageType == ChatMessageType.Quiet || e.ChatMessageType == ChatMessageType.Loud) && Messages.YesMessagesList.Any(e.Message.Contains))

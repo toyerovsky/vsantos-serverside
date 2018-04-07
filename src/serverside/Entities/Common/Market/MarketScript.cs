@@ -69,7 +69,7 @@ namespace VRP.Serverside.Entities.Common.Market
 
                     if (!character.HasMoney(item.Cost))
                     {
-                        character.Notify("Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Info);
+                        character.SendInfo("Nie posiadasz wystarczającej ilości gotówki.");
                         return;
                     }
                     character.RemoveMoney(item.Cost);

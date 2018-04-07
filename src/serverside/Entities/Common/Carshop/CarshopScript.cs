@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Enums;
+using VRP.Core.Extensions;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;

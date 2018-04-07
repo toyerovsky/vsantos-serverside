@@ -6,17 +6,18 @@
 
 using System;
 using GTANetworkAPI;
+using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Core.WheelMenu
 {
     public class WheelMenuItem
     {
         public string Name { get; }
-        private Client Sender { get; }
+        private CharacterEntity Sender { get; }
         private object Target { get; }
-        private Action<Client, object> WheelAction { get; }
+        private Action<CharacterEntity, object> WheelAction { get; }
 
-        public WheelMenuItem(string name, Client sender, object target, Action<Client, object> wheelAction)
+        public WheelMenuItem(string name, CharacterEntity sender, object target, Action<CharacterEntity, object> wheelAction)
         {
             Name = name;
             Sender = sender;

@@ -65,7 +65,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 AccountEntity player = sender.GetAccountEntity();
 
                 if (player.CharacterEntity.DbModel.Vehicles.Any(v => v.Id == sender.GetData("SelectedVehicleID")))
-                    ShowVehiclesInformation(sender, player.CharacterEntity.DbModel.Vehicles.Single(
+                    ShowVehiclesInformation(player.CharacterEntity, player.CharacterEntity.DbModel.Vehicles.Single(
                         v => v.Id == sender.GetData("SelectedVehicleID")));
             }
             else if (eventName == "OnPlayerInformationsInVehicle")
@@ -82,7 +82,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             }
             else if (eventName == "OnPlayerChangeLockVehicle")
             {
-                ChangePlayerVehicleLockState(sender);
+                ChangePlayerVehicleLockState(sender.GetAccountEntity().CharacterEntity);
             }
             else if (eventName == "OnPlayerEngineStateChangeVehicle")
             {
@@ -157,12 +157,12 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             //v zamknij
             else if (trigger == "z")
             {
-                ChangePlayerVehicleLockState(sender);
+                ChangePlayerVehicleLockState(player.CharacterEntity);
             }
         }
         #endregion
 
-        public static void ChangeDoorState(Client sender, NetHandle vehicle, int doorId)
+        public static void ChangeDoorState(CharacterEntity sender, NetHandle vehicle, int doorId)
         {
             if (NAPI.Vehicle.IsVehicleDoorBroken(vehicle, doorId))
             {
@@ -174,38 +174,37 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         }
 
         //Nie dajemy tutaj VehicleEntity, ¿eby gracz móg³ sprawdziæ te¿ informacje odspawnowanego auta
-        public static void ShowVehiclesInformation(Client sender, VehicleModel model, bool shortInfo = false)
+        public static void ShowVehiclesInformation(CharacterEntity sender, VehicleModel model, bool shortInfo = false)
         {
-            if (!shortInfo && model.Character.Id == sender.GetAccountEntity().CharacterEntity.DbModel.Id)
+            if (!shortInfo && model.Character.Id == sender.DbModel.Id)
             {
                 float enginePower = (float)((model.EnginePowerMultiplier - 1.0) * 20.0 + 80);
 
-                sender.Notify($"Nazwa pojazdu: {model.VehicleHash.ToString()} " +
+                sender.SendInfo($"Nazwa pojazdu: {model.VehicleHash} " +
                               $"\nRejestracja pojazdu: {model.NumberPlate} " +
-                              $"\nMoc silnika: {enginePower}KM", NotificationType.Info);
+                              $"\nMoc silnika: {enginePower}KM");
             }
             else
-                sender.Notify($"\nRejestracja pojazdu: {model.NumberPlate}", NotificationType.Info);
+                sender.SendInfo($"\nRejestracja pojazdu: {model.NumberPlate}");
         }
 
         /// <summary>
         /// Metoda zamyka/otwiera pojazd nale¿¹cy do gracza który jest blisko niego
         /// </summary>
-        /// <param name="player"></param>
-        public static void ChangePlayerVehicleLockState(Client player)
+        /// <param name="senderCharacter"></param>
+        public static void ChangePlayerVehicleLockState(CharacterEntity senderCharacter)
         {
-            AccountEntity accountEntity = player.GetAccountEntity();
-
             List<VehicleEntity> vehicles = EntityHelper.GetVehicles()
-                .Where(v => v.DbModel.Id == accountEntity.CharacterEntity.DbModel.Id)
-                .Where(x => x.GameVehicle.Position.DistanceTo(player.Position) < 10).ToList();
+                .Where(v => v.DbModel.Id == senderCharacter.DbModel.Id)
+                .Where(x => x.GameVehicle.Position.DistanceTo(senderCharacter.Position) < 10).ToList();
 
             //Jeœli jakiœ pomys³owy gracz zapragnie postawiæ 2 pojazdy obok siebie, ¿eby sprawdziæ dzia³anie to zamknie mu obydwa
             foreach (VehicleEntity vehicle in vehicles)
             {
-                if (!(vehicle.GameVehicle.Position.DistanceTo(player.Position) <= 7)) continue;
-                player.Notify(vehicle.GameVehicle.Locked ?
-                    "Twój pojazd zosta³ zamkniêty." : "Twój pojazd zosta³ otwarty.", NotificationType.Info);
+                if (!(vehicle.GameVehicle.Position.DistanceTo(senderCharacter.Position) <= 7)) continue;
+                senderCharacter.SendInfo(vehicle.GameVehicle.Locked 
+                    ? "Twój pojazd zosta³ zamkniêty." 
+                    : "Twój pojazd zosta³ otwarty.");
                 vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
             }
         }

@@ -4,12 +4,11 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using System;
-
-namespace VRP.Serverside.Entities.Interfaces
+namespace VRP.Serverside.Interfaces
 {
-    public interface IGameEntity : IDisposable
+    public interface IDbEntity<T>
     {
-        void Spawn();
+        T DbModel { get; set; }
+        void Save();
     }
 }

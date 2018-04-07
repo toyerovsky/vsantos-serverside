@@ -6,7 +6,7 @@
 
 using System;
 using System.Drawing;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Base
 {

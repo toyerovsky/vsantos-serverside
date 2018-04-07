@@ -1,4 +1,4 @@
-﻿namespace VRP.Serverside.Entities.Interfaces
+﻿namespace VRP.Serverside.Interfaces
 {
     public interface IEntityFactory<TEntity, TModel>
     {

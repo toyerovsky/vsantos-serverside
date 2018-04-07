@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using GTANetworkAPI;
 using VRP.Core.Enums;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 using FullPosition = VRP.Serverside.Core.FullPosition;
 
 namespace VRP.Serverside.Entities.Base

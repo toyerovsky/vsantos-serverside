@@ -14,7 +14,7 @@ using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Corners.Models;
 using VRP.Serverside.Entities.Core;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Common.Corners
 {
@@ -58,7 +58,7 @@ namespace VRP.Serverside.Entities.Common.Corners
                 CornerBusy = true;
                 SellingCharacter.CurrentInteractive = this;
 
-                SellingCharacter.Notify("Rozpocząłeś proces sprzedaży, pozostań w znaczniku.", NotificationType.Info);
+                SellingCharacter.SendInfo("Rozpocząłeś proces sprzedaży, pozostań w znaczniku.");
 
                 StartProcess();
                 SellingCharacter.AccountEntity.Client.PlayAnimation("amb@world_human_drug_dealer_hard@male@idle_a", "idle_a", (int)AnimationFlags.Loop | (int)AnimationFlags.AllowPlayerControl | (int)AnimationFlags.Cancellable);

@@ -4,12 +4,12 @@
  * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
-using GTANetworkAPI;
+using VRP.Serverside.Entities.Core;
 
-namespace VRP.Serverside.Entities.Interfaces
+namespace VRP.Serverside.Interfaces
 {
-    public interface IInteractive
+    public interface IOfferable
     {
-        ColShape ColShape { get; }
+        void Offer(CharacterEntity seller, CharacterEntity getter, decimal money);
     }
 }

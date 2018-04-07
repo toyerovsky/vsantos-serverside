@@ -16,7 +16,7 @@ using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities.Base;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Core.Building
 {

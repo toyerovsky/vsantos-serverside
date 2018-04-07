@@ -55,13 +55,13 @@ namespace VRP.Serverside.Entities.Core.Item
                 character.ItemsInUse.Remove(this);
                 Save();
                 ChatScript.SendMessageToNearbyPlayers(character, $"wyłącza {DbModel.Name}", ChatMessageType.ServerMe);
-                character.Notify($"Telefon {DbModel.Name} został wyłączony.", NotificationType.Info);
+                character.SendInfo($"Telefon {DbModel.Name} został wyłączony.");
             }
             else if (character.ItemsInUse.All(item => !(item is Cellphone)))
             {
                 character.ItemsInUse.Add(this);
                 ChatScript.SendMessageToNearbyPlayers(character, $"włącza {DbModel.Name}", ChatMessageType.ServerMe);
-                character.Notify($"Telefon {DbModel.Name} został włączony naciśnij klawisz END, aby go używać.", NotificationType.Info);
+                character.SendInfo($"Telefon {DbModel.Name} został włączony naciśnij klawisz END, aby go używać.");
             }
         }
 

@@ -1,7 +1,7 @@
-﻿/* Copyright (C) Przemys³aw Postrach - All Rights Reserved
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Przemys³aw Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
  */
 
 using System;
@@ -22,8 +22,8 @@ using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Core.Building;
 using VRP.Serverside.Entities.Core.Group;
 using VRP.Serverside.Entities.Core.Item;
-using VRP.Serverside.Entities.Interfaces;
 using VRP.Serverside.Entities.Misc.Description;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Core
 {
@@ -191,11 +191,6 @@ namespace VRP.Serverside.Entities.Core
             MoneyManager.RemoveMoney(this, count, bank);
         }
 
-        public void Notify(string message, NotificationType notificationType)
-        {
-            AccountEntity.Client.Notify(message, notificationType);
-        }
-
         public void SetSharedData(string key, object value)
         {
             AccountEntity.Client.SetSharedData(key, value);
@@ -209,6 +204,21 @@ namespace VRP.Serverside.Entities.Core
         public bool HasSharedData(string key)
         {
             return AccountEntity.Client.HasSharedData(key);
+        }
+
+        public void SendInfo(string message, string title = "")
+        { 
+            AccountEntity.Client.SendInfo(message, title);
+        }
+
+        public void SendWarning(string message, string title = "")
+        {
+            AccountEntity.Client.SendWarning(message, title);
+        }
+
+        public void SendError(string message, string title = "")
+        {
+            AccountEntity.Client.SendError(message, title);
         }
     }
 }

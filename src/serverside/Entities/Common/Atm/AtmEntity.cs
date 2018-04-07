@@ -12,7 +12,7 @@ using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.Atm.Models;
 using VRP.Serverside.Entities.Core;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Common.Atm
 {

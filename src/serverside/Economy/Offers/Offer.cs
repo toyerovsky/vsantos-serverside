@@ -77,7 +77,7 @@ namespace VRP.Serverside.Economy.Offers
             {
                 if (_moneyToGroup && Sender.OnDutyGroup == null)
                 {
-                    Sender.Notify("Musisz znajdować się na służbie grupy.", NotificationType.Info);
+                    Sender.SendInfo("Musisz znajdować się na służbie grupy.");
                     return;
                 }
 
@@ -140,10 +140,10 @@ namespace VRP.Serverside.Economy.Offers
             else
             {
                 
-                Getter.Notify(bank
+                Getter.SendWarning(bank
                     ? "Nie posiadasz wystarczającej ilości środków na karcie"
-                    : "Nie posiadasz wystarczającej ilości gotówki.", NotificationType.Warning);
-                Sender.Notify("Wymiana zakończona niepowodzeniem.", NotificationType.Error);
+                    : "Nie posiadasz wystarczającej ilości gotówki.");
+                Sender.SendError("Wymiana zakończona niepowodzeniem.");
             }
         }
 

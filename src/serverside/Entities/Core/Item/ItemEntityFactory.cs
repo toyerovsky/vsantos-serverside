@@ -1,7 +1,7 @@
 ﻿using System;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
-using VRP.Serverside.Entities.Interfaces;
+using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Core.Item
 {

@@ -32,4 +32,8 @@
     <ProjectReference Include="..\core\core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\Interfaces\" />
+  </ItemGroup>
+
 </Project>
