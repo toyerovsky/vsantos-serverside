@@ -13,6 +13,7 @@ using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Building;
 using VRP.Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Core.Scripts
 {
@@ -64,27 +65,29 @@ namespace VRP.Serverside.Core.Scripts
                     new Vector3(building.BuildingMarker.Rotation.X, building.BuildingMarker.Rotation.Y, _currentRotation);
             }
         }
-
-        private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.ChangePosition)]
+        public void ChangePositionHandler(Client sender, params object[] arguments)
         {
             //args[0] float X
             //args[1] float Y
             //args[2] float Z
             //Jak przesyłamy Vector3 to nie działa
-            if (eventName == "ChangePosition")
-            {
-                sender.Position = new Vector3((float)arguments[0], (float)arguments[1], (float)arguments[2]);
-            }
+
+            sender.Position = new Vector3((float)arguments[0], (float)arguments[1], (float)arguments[2]);
+        }
+
+        [RemoteEvent(RemoteEvents.InvokeWaypointVector)]
+        public void InvokeWaypointVectorHandler(Client sender, params object[] arguments)
+        {
+
             //To zdarzenie musi mieć tylko jedną subskrypcę
-            else if (eventName == "InvokeWaypointVector")
+            if (sender.HasData("WaypointVectorHandler"))
             {
-                if (sender.HasData("WaypointVectorHandler"))
-                {
-                    Action<Vector3> waypointAction = (Action<Vector3>)sender.GetData("WaypointPositionHandler");
-                    waypointAction.Invoke(new Vector3((float)arguments[0], (float)arguments[1], (float)arguments[2]));
-                }
+                Action<Vector3> waypointAction = (Action<Vector3>)sender.GetData("WaypointPositionHandler");
+                waypointAction.Invoke(new Vector3((float)arguments[0], (float)arguments[1], (float)arguments[2]));
             }
         }
+
 
         [ServerEvent(Event.ResourceStop)]
         public void OnResourceStop()

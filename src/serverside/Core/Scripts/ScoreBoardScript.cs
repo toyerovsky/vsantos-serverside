@@ -10,6 +10,7 @@ using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Core.Scripts
 {
@@ -51,23 +52,21 @@ namespace VRP.Serverside.Core.Scripts
             NAPI.ClientEvent.TriggerClientEventForAll("playerlist_join", sender.SocialClubName, character.FormatName);
         }
 
-        private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.playerlist_pings)]
+        public void playerlist_pingsHandler(Client sender, string eventName, params object[] arguments)
         {
-            if (eventName == "playerlist_pings")
+            List<string> list = new List<string>();
+            foreach (AccountEntity player in EntityHelper.GetAccounts())
             {
-                List<string> list = new List<string>();
-                foreach (AccountEntity player in EntityHelper.GetAccounts())
+                Dictionary<string, object> dic = new Dictionary<string, object>
                 {
-                    Dictionary<string, object> dic = new Dictionary<string, object>
-                    {
-                        {"socialClubName", player.Client.SocialClubName},
-                        {"serverId", player.ServerId},
-                        {"ping", player.Client.Ping}
-                    };
-                    list.Add(JsonConvert.SerializeObject(dic));
-                }
-                NAPI.ClientEvent.TriggerClientEvent(sender, "playerlist_pings", list);
+                    {"socialClubName", player.Client.SocialClubName},
+                    {"serverId", player.ServerId},
+                    {"ping", player.Client.Ping}
+                };
+                list.Add(JsonConvert.SerializeObject(dic));
             }
+            NAPI.ClientEvent.TriggerClientEvent(sender, "playerlist_pings", list);
         }
 
         private void API_onUpdate()

@@ -18,5 +18,48 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string CharacterMoneyChangeRequested = "characterMoneyChangeRequested";
 
         public const string CharacterShowShardRequested = "characterShowShardRequested";
+
+        #region AdminListScript
+
+        public const string OnPlayerSendReport = "OnPlayerSendReport";
+
+        #endregion
+
+        #region AnimationsScript
+
+        public const string OnPlayerAddAnim = "OnPlayerAddAnim";
+
+        #endregion
+
+        #region CoreScript
+
+        public const string ChangePosition = "ChangePosition";
+
+        public const string InvokeWaypointVector = "InvokeWaypointVector";
+
+        #endregion
+
+        #region ScoreBoardScript
+
+        public const string playerlist_pings = "playerlist_pings";
+
+        #endregion
+
+        #region WheelMenuScript
+
+        public const string RequestWheelMenu = "RequestWheelMenu";
+
+        public const string UseWheelMenuItem = "UseWheelMenuItem";
+
+        #endregion
+
+        #region GroupWarehouseScript
+
+        public const string OnPlayerAddWarehouseItem = "OnPlayerAddWarehouseItem";
+
+        public const string OnPlayerPlaceOrder = "OnPlayerPlaceOrder";
+
+        #endregion
+
     }
 }

@@ -16,6 +16,7 @@ using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Structs;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Group;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Economy.Groups
 {
@@ -23,11 +24,10 @@ namespace VRP.Serverside.Economy.Groups
     {
         public static List<WarehouseOrderInfo> CurrentOrders { get; set; } = new List<WarehouseOrderInfo>();
 
-        private void API_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.OnPlayerAddWarehouseItem)]
+        public void OnPlayerAddWarehouseItemHandler(Client sender, string eventName, params object[] arguments)
         {
-            if (eventName == "OnPlayerAddWarehouseItem")
-            {
-                /* Argumenty
+            /* Argumenty
                  * args[0] string nameResult,
                  * args[1] string itemTypeResult,
                  * args[2] int costResult, 
@@ -39,89 +39,90 @@ namespace VRP.Serverside.Economy.Groups
                  * args[8] int thirdParameterResult = null
                  */
 
-                if (Enum.TryParse(arguments[3].ToString(), out GroupType groupType) &&
-                    Enum.TryParse(arguments[1].ToString(), out ItemEntityType itemType))
-                {
-                    GroupWarehouseItemModel groupWarehouseItem = new GroupWarehouseItemModel
-                    {
-                        ItemModel = new ItemModel
-                        {
-                            Creator = sender.GetAccountEntity().DbModel,
-                            Name = arguments[0].ToString(),
-                            ItemEntityType = itemType,
-                        },
-                        Cost = Convert.ToDecimal(arguments[2]),
-                        MinimalCost = Convert.ToDecimal(arguments[4]),
-                        ResetCount = Convert.ToInt32(arguments[5]),
-                        GroupType = groupType
-                    };
-
-                    if ((int?)arguments[6] != null)
-                        groupWarehouseItem.ItemModel.FirstParameter = (int)arguments[6];
-                    if ((int?)arguments[6] != null)
-                        groupWarehouseItem.ItemModel.SecondParameter = (int)arguments[7];
-                    if ((int?)arguments[6] != null)
-                        groupWarehouseItem.ItemModel.ThirdParameter = (int)arguments[8];
-
-                    using (GroupWarehouseItemsRepository repository = new GroupWarehouseItemsRepository())
-                    {
-                        repository.Insert(groupWarehouseItem);
-                        repository.Save();
-                    }
-                    sender.SendInfo("Dodawanie przedmiotu zakończyło się pomyślnie.");
-                }
-                else
-                {
-                    sender.SendError("Dodawanie przedmiotu zakończone niepowodzeniem.");
-                }
-
-            }
-            else if (eventName == "OnPlayerPlaceOrder")
+            if (Enum.TryParse(arguments[3].ToString(), out GroupType groupType) &&
+                Enum.TryParse(arguments[1].ToString(), out ItemEntityType itemType))
             {
-                /* Argumenty
+                GroupWarehouseItemModel groupWarehouseItem = new GroupWarehouseItemModel
+                {
+                    ItemModel = new ItemModel
+                    {
+                        Creator = sender.GetAccountEntity().DbModel,
+                        Name = arguments[0].ToString(),
+                        ItemEntityType = itemType,
+                    },
+                    Cost = Convert.ToDecimal(arguments[2]),
+                    MinimalCost = Convert.ToDecimal(arguments[4]),
+                    ResetCount = Convert.ToInt32(arguments[5]),
+                    GroupType = groupType
+                };
+
+                if ((int?)arguments[6] != null)
+                    groupWarehouseItem.ItemModel.FirstParameter = (int)arguments[6];
+                if ((int?)arguments[6] != null)
+                    groupWarehouseItem.ItemModel.SecondParameter = (int)arguments[7];
+                if ((int?)arguments[6] != null)
+                    groupWarehouseItem.ItemModel.ThirdParameter = (int)arguments[8];
+
+                using (GroupWarehouseItemsRepository repository = new GroupWarehouseItemsRepository())
+                {
+                    repository.Insert(groupWarehouseItem);
+                    repository.Save();
+                }
+                sender.SendInfo("Dodawanie przedmiotu zakończyło się pomyślnie.");
+            }
+            else
+            {
+                sender.SendError("Dodawanie przedmiotu zakończone niepowodzeniem.");
+            }
+        }
+
+        [RemoteEvent(RemoteEvents.OnPlayerPlaceOrder)]
+        public void OnPlayerPlaceOrderHandler(Client sender, string eventName, params object[] arguments)
+        {
+            /* Argumenty
                  * args[0] - List<WarehouseItemInfo> JSON
                  */
 
-                AccountEntity player = sender.GetAccountEntity();
-                GroupEntity group = player.CharacterEntity.OnDutyGroup;
-                if (group != null)
+            AccountEntity player = sender.GetAccountEntity();
+            GroupEntity group = player.CharacterEntity.OnDutyGroup;
+            if (group != null)
+            {
+                List<WarehouseItemInfo> items =
+                    JsonConvert.DeserializeObject<List<WarehouseItemInfo>>(arguments[0].ToString());
+
+                decimal sum = items.Sum(x => x.ItemModelInfo.Cost * x.Count);
+                if (group.HasMoney(sum))
                 {
-                    List<WarehouseItemInfo> items =
-                        JsonConvert.DeserializeObject<List<WarehouseItemInfo>>(arguments[0].ToString());
-
-                    decimal sum = items.Sum(x => x.ItemModelInfo.Cost * x.Count);
-                    if (group.HasMoney(sum))
+                    GroupWarehouseOrderModel shipment = new GroupWarehouseOrderModel
                     {
-                        GroupWarehouseOrderModel shipment = new GroupWarehouseOrderModel
-                        {
-                            Getter = group.DbModel,
-                            OrderItemsJson = JsonConvert.SerializeObject(items),
-                            ShipmentLog = $"[{DateTime.Now}] Złożenie zamówienia w magazynie. \n"
-                        };
+                        Getter = group.DbModel,
+                        OrderItemsJson = JsonConvert.SerializeObject(items),
+                        ShipmentLog = $"[{DateTime.Now}] Złożenie zamówienia w magazynie. \n"
+                    };
 
-                        using (GroupWarehouseOrdersRepository repository = new GroupWarehouseOrdersRepository())
-                        {
-                            repository.Insert(shipment);
-                            repository.Save();
-                        }
-                        group.RemoveMoney(sum);
-
-                        CurrentOrders.Add(new WarehouseOrderInfo
-                        {
-                            Data = shipment
-                        });
-
-
-                        sender.SendInfo("Zamawianie przesyłki zakończyło się pomyślnie.");
-
-                    }
-                    else
+                    using (GroupWarehouseOrdersRepository repository = new GroupWarehouseOrdersRepository())
                     {
-                        sender.SendError($"Grupa {group.GetColoredName()} nie posiada wystarczającej ilości środków.");
+                        repository.Insert(shipment);
+                        repository.Save();
                     }
+                    group.RemoveMoney(sum);
+
+                    CurrentOrders.Add(new WarehouseOrderInfo
+                    {
+                        Data = shipment
+                    });
+
+
+                    sender.SendInfo("Zamawianie przesyłki zakończyło się pomyślnie.");
+
+                }
+                else
+                {
+                    sender.SendError($"Grupa {group.GetColoredName()} nie posiada wystarczającej ilości środków.");
                 }
             }
         }
+     
 
         private void API_onResourceStart()
         {

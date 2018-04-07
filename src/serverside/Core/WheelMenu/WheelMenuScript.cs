@@ -12,36 +12,38 @@ using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Vehicle;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Core.WheelMenu
 {
     public class WheelMenuScript : Script
     {
-        private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.RequestWheelMenu)]
+        public void RequestWheelMenuHandler(Client sender, string eventName, params object[] arguments)
         {
-            if (eventName == "RequestWheelMenu")
+            //args[0] to NetHandle które przyszło z RayCast
+            //nie używam as ponieważ do struktury nie wolno
+            if (!(arguments[0] is NetHandle)) return;
+            if (NAPI.Player.GetPlayerFromHandle((NetHandle)arguments[0]) != null)
             {
-                //args[0] to NetHandle które przyszło z RayCast
-                //nie używam as ponieważ do struktury nie wolno
-                if (!(arguments[0] is NetHandle)) return;
-                if (NAPI.Player.GetPlayerFromHandle((NetHandle)arguments[0]) != null)
-                {
 
-                }
-                else if (EntityHelper.GetVehicle((NetHandle)arguments[0]) != null)
-                {
-                    WheelMenu wheel = new WheelMenu(PrepareDataSource(sender, EntityHelper.GetVehicle((NetHandle)arguments[0])), sender);
-                    sender.SetData("WheelMenu", wheel);
-                }
             }
-            else if (eventName == "UseWheelMenuItem")
+            else if (EntityHelper.GetVehicle((NetHandle)arguments[0]) != null)
             {
-                //args[0] to nazwa opcji
-                WheelMenu wheel = (WheelMenu)sender.GetData("WheelMenu");
-                wheel.WheelMenuItems.First(x => x.Name == (string)arguments[0]).Use();
-                wheel.Dispose();
+                WheelMenu wheel = new WheelMenu(PrepareDataSource(sender, EntityHelper.GetVehicle((NetHandle)arguments[0])), sender);
+                sender.SetData("WheelMenu", wheel);
             }
         }
+
+        [RemoteEvent(RemoteEvents.UseWheelMenuItem)]
+        public void UseWheelMenuItemHandler(Client sender, string eventName, params object[] arguments)
+        {
+            //args[0] to nazwa opcji
+            WheelMenu wheel = (WheelMenu)sender.GetData("WheelMenu");
+            wheel.WheelMenuItems.First(x => x.Name == (string)arguments[0]).Use();
+            wheel.Dispose();
+        }
+      
 
         private List<WheelMenuItem> PrepareDataSource(Client sender, object target, params object[] args)
         {

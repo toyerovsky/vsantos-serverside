@@ -14,6 +14,7 @@ using VRP.Serverside.Admin.Structs;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Admin
 {
@@ -22,28 +23,28 @@ namespace VRP.Serverside.Admin
         private List<AccountEntity> AdminsOnDuty { get; set; } = new List<AccountEntity>();
         private List<ReportData> CurrentReports { get; set; } = new List<ReportData>();
 
-        private void OnClientEventTriggerHandler(Client sender, string eventName, params object[] arguments)
+        [RemoteEvent(RemoteEvents.OnPlayerSendReport)]
+        public void OnPlayerSendReportHandler(Client sender, params object[] arguments)
         {
             /* Arguments
              * args[0] string reportType
              * args[1] string content
              * args[2] string accusedId = ""
              */
-            if (eventName == "OnPlayerSendReport")
-            {
-                ReportData data = new ReportData
-                {
-                    Type = (ReportType)Enum.Parse(typeof(ReportType), arguments[0].ToString().Replace(' ', '_')),
-                    Content = arguments[1].ToString(),
-                    Accused = arguments[2].ToString() != ""
-                        ? EntityHelper.GetAccountByServerId(Convert.ToInt32(arguments[2]))
-                        : null,
-                    Sender = sender.GetAccountEntity()
-                };
 
-                CurrentReports.Add(data);
-            }
+            ReportData data = new ReportData
+            {
+                Type = (ReportType)Enum.Parse(typeof(ReportType), arguments[0].ToString().Replace(' ', '_')),
+                Content = arguments[1].ToString(),
+                Accused = arguments[2].ToString() != ""
+                    ? EntityHelper.GetAccountByServerId(Convert.ToInt32(arguments[2]))
+                    : null,
+                Sender = sender.GetAccountEntity()
+            };
+
+            CurrentReports.Add(data);
         }
+     
 
         [Command("a")]
         public void ShowAdministratorsList(Client sender)
