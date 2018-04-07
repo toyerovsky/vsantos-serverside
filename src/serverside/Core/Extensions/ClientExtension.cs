@@ -40,12 +40,12 @@ namespace VRP.Serverside.Core.Extensions
 
         public static void SendError(this Client client, string message, string title = "")
         {
-            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, title);
+            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, NotificationType.Error, title);
         }
 
         public static void SendInfo(this Client client, string message, string title = "")
         {
-            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, title);
+            client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, NotificationType.Info, title);
 
         }
 
