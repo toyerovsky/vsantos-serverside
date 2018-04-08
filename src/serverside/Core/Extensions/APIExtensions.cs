@@ -59,7 +59,7 @@ namespace VRP.Serverside.Core.Extensions
                 throw new ColorConvertException();
             if (hex.StartsWith("#"))
                 hex = hex.Substring(1);
-            if (hex.All(c => !char.IsDigit(c) || !(c > 'A' && c < 'F')))
+            if (!hex.All(c => char.IsDigit(c) || (c >= 'A' && c <= 'F')))
                 throw new ColorConvertException("Podany kolor zawiera niedozwolone znaki.");
 
             if (hex.Length != 6 || hex.Length != 8)
