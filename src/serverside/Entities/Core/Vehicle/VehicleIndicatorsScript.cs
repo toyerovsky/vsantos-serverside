@@ -11,12 +11,8 @@ namespace VRP.Serverside.Entities.Core.Vehicle
 {
     public class VehicleIndicatorsScript : Script
     {
-        public VehicleIndicatorsScript()
-        {
-        }
-
-        [RemoteEvent(RemoteEvents.toggle_indicator_left)]
-        public void toggle_indicator_leftHandler(Client player, params object[] arguments)
+        [RemoteEvent(RemoteEvents.ToggleIndicatorLeft)]
+        public void ToggleIndicatorLeftHandler(Client player, params object[] arguments)
         {
             GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
             int indicator = 1;
@@ -34,8 +30,8 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             }
         }
 
-        [RemoteEvent(RemoteEvents.toggle_indicator_right)]
-        public void toggle_indicator_rightHandler(Client player, params object[] arguments)
+        [RemoteEvent(RemoteEvents.ToggleIndicatorRight)]
+        public void ToggleIndicatorRightHandler(Client player, params object[] arguments)
         {
             GTANetworkAPI.Vehicle veh = NAPI.Player.GetPlayerVehicle(player);
             int indicator = 0;
@@ -52,7 +48,5 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 NAPI.Native.SendNativeToPlayersInRange(pos, 500f, 0xB5D45264751B7DF0, veh, indicator, true);
             }
         }
-
-       
     }
 }

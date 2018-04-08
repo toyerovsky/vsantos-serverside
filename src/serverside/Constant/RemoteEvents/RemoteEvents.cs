@@ -12,7 +12,7 @@ namespace VRP.Serverside.Constant.RemoteEvents
     {
         public const string PlayerLoginRequested = "playerLoginRequested";
         public const string PlayerLoginPassed = "playerLoginPassed";
-        
+
         public const string PlayerNotifyRequested = "playerNotifyRequested";
 
         public const string CharacterSelectRequested = "characterSelectRequested";
@@ -25,161 +25,157 @@ namespace VRP.Serverside.Constant.RemoteEvents
 
         #region AdminListScript
 
-        public const string OnPlayerSendReport = "OnPlayerSendReport";
+        public const string OnPlayerSendReport = "onPlayerSendReport";
 
         #endregion
 
         #region AnimationsScript
 
-        public const string OnPlayerAddAnim = "OnPlayerAddAnim";
+        public const string OnPlayerAddAnim = "onPlayerAddAnim";
 
         #endregion
 
         #region CoreScript
 
-        public const string ChangePosition = "ChangePosition";
+        public const string ChangePosition = "changePosition";
 
-        public const string InvokeWaypointVector = "InvokeWaypointVector";
+        public const string InvokeWaypointVector = "invokeWaypointVector";
 
         #endregion
 
         #region ScoreBoardScript
 
-        public const string playerlist_pings = "playerlist_pings";
+        public const string PlayerListPings = "playerListPings";
 
         #endregion
 
         #region WheelMenuScript
 
-        public const string RequestWheelMenu = "RequestWheelMenu";
+        public const string RequestWheelMenu = "requestWheelMenu";
 
-        public const string UseWheelMenuItem = "UseWheelMenuItem";
+        public const string UseWheelMenuItem = "useWheelMenuItem";
 
         #endregion
 
         #region GroupWarehouseScript
 
-        public const string OnPlayerAddWarehouseItem = "OnPlayerAddWarehouseItem";
+        public const string OnPlayerAddWarehouseItem = "onPlayerAddWarehouseItem";
 
-        public const string OnPlayerPlaceOrder = "OnPlayerPlaceOrder";
+        public const string OnPlayerPlaceOrder = "onPlayerPlaceOrder";
 
         #endregion
 
         #region CourierWarehouseScript
 
-        public const string OnPlayerTakePackage = "OnPlayerTakePackage";
-
-
+        public const string OnPlayerTakePackage = "onPlayerTakePackage";
 
         #endregion
 
         #region OffersScript
 
-        public const string OnPlayerCancelOffer = "OnPlayerCancelOffer";
+        public const string OnPlayerCancelOffer = "onPlayerCancelOffer";
 
-        public const string OnPlayerPayOffer = "OnPlayerPayOffer";
+        public const string OnPlayerPayOffer = "onPlayerPayOffer";
 
         #endregion
 
         #region AtmScript
 
-        public const string OnPlayerAtmTake = "OnPlayerAtmTake";
+        public const string OnPlayerAtmTake = "onPlayerAtmTake";
 
-        public const string OnPlayerAtmGive = "OnPlayerAtmGive";
+        public const string OnPlayerAtmGive = "onPlayerAtmGive";
 
         #endregion
 
         #region TelephoneBoothScript
 
-        public const string OnPlayerTelephoneBoothCall = "OnPlayerTelephoneBoothCall";
+        public const string OnPlayerTelephoneBoothCall = "onPlayerTelephoneBoothCall";
 
-        public const string OnPlayerTelephoneBoothEnd = "OnPlayerTelephoneBoothEnd";
+        public const string OnPlayerTelephoneBoothEnd = "onPlayerTelephoneBoothEnd";
 
         #endregion
 
         #region BusStopScript
 
-        public const string RequestBus = "RequestBus";
+        public const string RequestBus = "requestBus";
 
         #endregion
 
         #region CarshopScript
 
-        public const string OnPlayerBoughtVehicle = "OnPlayerBoughtVehicle";
+        public const string OnPlayerBoughtVehicle = "onPlayerBoughtVehicle";
 
         #endregion
 
         #region CornerBotsScript
 
-        public const string AddCornerBot = "AddCornerBot";
+        public const string AddCornerBot = "addCornerBot";
 
         #endregion
 
         #region DriveThruScript
 
-        public const string OnPlayerDriveThruBought = "OnPlayerDriveThruBought";
+        public const string OnPlayerDriveThruBought = "onPlayerDriveThruBought";
 
         #endregion
 
         #region MarketScript
 
-        public const string AddMarketItem = "AddMarketItem";
+        public const string AddMarketItem = "addMarketItem";
 
-        public const string OnPlayerBoughtMarketItem = "OnPlayerBoughtMarketItem";
+        public const string OnPlayerBoughtMarketItem = "onPlayerBoughtMarketItem";
 
         #endregion
 
         #region ItemScript
 
-        public const string SelectedItem = "SelectedItem";
+        public const string SelectedItem = "selectedItem";
 
-        public const string UseItem = "UseItem";
+        public const string UseItem = "useItem";
 
-        public const string InformationsItem = "InformationsItem";
+        public const string InformationsItem = "informationsItem";
 
-        public const string UsingInformationsItem = "UsingInformationsItem";
+        public const string UsingInformationsItem = "usingInformationsItem";
 
-        public const string BackToItemList = "BackToItemList";
+        public const string BackToItemList = "backToItemList";
 
-        public const string OnPlayerTelephoneCall = "OnPlayerTelephoneCall";
+        public const string OnPlayerTelephoneCall = "onPlayerTelephoneCall";
 
-        public const string OnPlayerTelephoneTurnoff = "OnPlayerTelephoneTurnoff";
+        public const string OnPlayerTelephoneTurnoff = "onPlayerTelephoneTurnoff";
 
-        public const string OnPlayerPullCellphoneRequest = "OnPlayerPullCellphoneRequest";
+        public const string OnPlayerPullCellphoneRequest = "onPlayerPullCellphoneRequest";
 
-        public const string OnPlayerCellphonePickUp = "OnPlayerCellphonePickUp";
+        public const string OnPlayerCellphonePickUp = "onPlayerCellphonePickUp";
 
-        public const string OnPlayerCellphoneEnd = "OnPlayerCellphoneEnd";
+        public const string OnPlayerCellphoneEnd = "onPlayerCellphoneEnd";
 
-        public const string OnPlayerTelephoneContactAdded = "OnPlayerTelephoneContactAdded";
+        public const string OnPlayerTelephoneContactAdded = "onPlayerTelephoneContactAdded";
 
         #endregion
 
         #region VehicleIndicatorScript
 
-        public const string toggle_indicator_left = "toggle_indicator_left";
+        public const string ToggleIndicatorLeft = "toggleIndicatorLeft";
 
-        public const string toggle_indicator_right = "toggle_indicator_right";
+        public const string ToggleIndicatorRight = "toggleIndicatorRight";
 
         #endregion
 
         #region VehicleScript
 
-        public const string OnPlayerSelectedVehicle = "OnPlayerSelectedVehicle";
+        public const string OnPlayerSelectedVehicle = "onPlayerSelectedVehicle";
 
-        public const string OnPlayerSpawnVehicle = "OnPlayerSpawnVehicle";
+        public const string OnPlayerSpawnVehicle = "onPlayerSpawnVehicle";
 
-        public const string OnPlayerParkVehicle = "OnPlayerParkVehicle";
+        public const string OnPlayerParkVehicle = "onPlayerParkVehicle";
 
-        public const string OnPlayerInformationsVehicle = "OnPlayerInformationsVehicle";
+        public const string OnPlayerInformationsVehicle = "onPlayerInformationsVehicle";
 
-        public const string OnPlayerInformationsInVehicle = "OnPlayerInformationsInVehicle";
+        public const string OnPlayerInformationsInVehicle = "onPlayerInformationsInVehicle";
 
-        public const string OnPlayerChangeLockVehicle = "OnPlayerChangeLockVehicle";
+        public const string OnPlayerChangeLockVehicle = "onPlayerChangeLockVehicle";
 
-        public const string OnPlayerEngineStateChangeVehicle = "OnPlayerEngineStateChangeVehicle";
-
-
+        public const string OnPlayerEngineStateChangeVehicle = "onPlayerEngineStateChangeVehicle";
 
         #endregion
     }

@@ -28,7 +28,6 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             sender.SetData("SelectedVehicleID", Convert.ToInt64(args[0]));
         }
 
-
         [RemoteEvent(RemoteEvents.OnPlayerSpawnVehicle)]
         public void OnPlayerSpawnVehicleHandler(Client sender, params object[] args)
         {
@@ -107,7 +106,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         }
 
         [ServerEvent(Event.PlayerEnterVehicle)]
-        public void EnterVehicleHandler(Client sender)
+        public void EnterVehicleHandler(Client sender, GTANetworkAPI.Vehicle vehicle, sbyte seatID)
         {
             VehicleEntity vehicleEntity = sender.Vehicle.GetVehicleEntity();
             int seatId = sender.VehicleSeat;
@@ -144,8 +143,6 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             }
             //NAPI.TriggerClientEvent(player, "show_vehicle_hud"); // sprawdzanie po stronie klienta
         }
-
-
 
         #region Komendy
         [Command("v", "~y~UŻYJ: ~w~ /v (z)")]
@@ -246,7 +243,6 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 ? "Twój pojazd został otwarty."
                 : "Twój pojazd został zamknięty.");
             vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
-
         }
 
         public static int GetVehicleDoorCount(VehicleHash vehicle)

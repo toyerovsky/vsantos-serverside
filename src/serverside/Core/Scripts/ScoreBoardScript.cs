@@ -52,7 +52,7 @@ namespace VRP.Serverside.Core.Scripts
             NAPI.ClientEvent.TriggerClientEventForAll("playerlist_join", sender.SocialClubName, character.FormatName);
         }
 
-        [RemoteEvent(RemoteEvents.playerlist_pings)]
+        [RemoteEvent(RemoteEvents.PlayerListPings)]
         public void playerlist_pingsHandler(Client sender, params object[] arguments)
         {
             List<string> list = new List<string>();
