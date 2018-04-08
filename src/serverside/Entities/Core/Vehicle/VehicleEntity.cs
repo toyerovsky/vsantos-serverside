@@ -1,7 +1,7 @@
 ﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
 using System;
@@ -74,13 +74,15 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             Save();
         }
 
-        public static VehicleEntity Create(FullPosition spawnPosition, VehicleHash hash, string numberplate, int numberplatestyle, AccountModel creator, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0f, float engineTorqueMultiplier = 0f, CharacterModel character = null, GroupModel groupModel = null)
+        public static VehicleEntity Create(FullPosition spawnPosition, VehicleHash hash, string numberPlate, int numberPlateStyle,
+            AccountModel creator, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0f, float engineTorqueMultiplier = 0f,
+            CharacterModel character = null, GroupModel groupModel = null)
         {
             VehicleModel vehicleModel = new VehicleModel
             {
                 VehicleHash = hash.ToString(),
-                NumberPlate = numberplate,
-                NumberPlateStyle = numberplatestyle,
+                NumberPlate = numberPlate,
+                NumberPlateStyle = numberPlateStyle,
                 Character = character,
                 Group = groupModel,
                 Creator = creator,

@@ -1,7 +1,7 @@
-﻿/* Copyright (C) Przemys³aw Postrach - All Rights Reserved
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Przemys³aw Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
 using System;
@@ -104,8 +104,6 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             sender.Vehicle.EngineStatus = !sender.Vehicle.EngineStatus;
         }
 
-       
-
         private void API_onPlayerEnterVehicle(Client player, NetHandle vehicle)
         {
             AccountEntity account = player.GetAccountEntity();
@@ -159,11 +157,11 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 {
                     string vehiclesJson = JsonConvert.SerializeObject(
                         player.CharacterEntity.DbModel.Vehicles.Select(v => new
-                    {
-                        Id = v.Id,
-                        Name = v.VehicleHash.ToString(),
-                        Plate = v.NumberPlate
-                    }));
+                        {
+                            Id = v.Id,
+                            Name = v.VehicleHash.ToString(),
+                            Plate = v.NumberPlate
+                        }));
 
                     sender.TriggerEvent("OnPlayerShowVehicles", vehiclesJson);
                 }
@@ -203,7 +201,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         }
 
         /// <summary>
-        /// Metoda zamyka/otwiera pojazd nale¿¹cy do gracza który jest blisko niego
+        /// Metoda zamyka/otwiera pojazd należący do gracza który jest blisko niego
         /// </summary>
         /// <param name="senderCharacter"></param>
         public static void ChangePlayerVehicleLockState(CharacterEntity senderCharacter)
@@ -216,8 +214,8 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             foreach (VehicleEntity vehicle in vehicles)
             {
                 if (!(vehicle.GameVehicle.Position.DistanceTo(senderCharacter.Position) <= 7)) continue;
-                senderCharacter.SendInfo(vehicle.GameVehicle.Locked 
-                    ? "Twój pojazd został zamknięty." 
+                senderCharacter.SendInfo(vehicle.GameVehicle.Locked
+                    ? "Twój pojazd został zamknięty."
                     : "Twój pojazd został otwarty.");
                 vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
             }

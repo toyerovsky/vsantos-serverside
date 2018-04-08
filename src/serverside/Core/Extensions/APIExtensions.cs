@@ -1,7 +1,7 @@
 ﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Przemysław Postrach <przemyslaw.postrach@hotmail.com> December 2017
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
 using System;
@@ -22,7 +22,6 @@ namespace VRP.Serverside.Core.Extensions
         public static Client GetNearestPlayer(this Vector3 position) =>
             position.GetNearestPlayers()[0];
 
-        
         private static Dictionary<string, string> _rocstarColors = new Dictionary<string, string>()
         {
             {"~r~", "DE3232"},
@@ -60,7 +59,7 @@ namespace VRP.Serverside.Core.Extensions
                 throw new ColorConvertException();
             if (hex.StartsWith("#"))
                 hex = hex.Substring(1);
-            if (hex.All(c => !char.IsDigit(c)))
+            if (hex.All(c => !char.IsDigit(c) || !(c > 'A' && c < 'F')))
                 throw new ColorConvertException("Podany kolor zawiera niedozwolone znaki.");
 
             if (hex.Length != 6 || hex.Length != 8)
@@ -79,7 +78,5 @@ namespace VRP.Serverside.Core.Extensions
                 int.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber),
                 int.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber));
         }
-
-        public static string GetColoredString(this string text, string color) => $"~{color}~{text}";
     }
 }
