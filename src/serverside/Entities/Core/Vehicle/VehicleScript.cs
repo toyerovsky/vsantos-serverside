@@ -105,13 +105,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             sender.Vehicle.EngineStatus = !sender.Vehicle.EngineStatus;
         }
 
-        [ServerEvent(Event.PlayerEnterVehicle)]
-        public void EnterVehicleHandler(Client sender, GTANetworkAPI.Vehicle vehicle, sbyte seatID)
-        {
-            VehicleEntity vehicleEntity = sender.Vehicle.GetVehicleEntity();
-            int seatId = sender.VehicleSeat;
-            NAPI.Player.GetPlayerVehicleSeat(sender);
-        }
+  
 
         [Command("vspawn", "~y~UŻYJ ~w~ /vspawn [model]")]
         public void SpawnCarCommand(Client sender, VehicleHash model)
@@ -237,12 +231,21 @@ namespace VRP.Serverside.Entities.Core.Vehicle
 
             VehicleEntity vehicle = EntityHelper.GetVehicles()
                 .Where(v => v.DbModel.Character.Id == senderCharacter.DbModel.Id)
-                .First(x => x.GameVehicle.Position.DistanceTo(senderCharacter.Position) < 10);
+                .FirstOrDefault(x => x.GameVehicle.Position.DistanceTo(senderCharacter.Position) < 100f);
 
-            senderCharacter.SendInfo(vehicle.GameVehicle.Locked
-                ? "Twój pojazd został otwarty."
-                : "Twój pojazd został zamknięty.");
-            vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
+            if (vehicle == null)
+            {
+                senderCharacter.SendInfo("W pobliżu nie ma żadnego pojazdu należącego do Ciebie.");
+            }
+            else
+            {
+                senderCharacter.SendInfo(vehicle.GameVehicle.Locked
+                    ? "Twój pojazd został otwarty."
+                    : "Twój pojazd został zamknięty.");
+                vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
+
+            }
+        
         }
 
         public static int GetVehicleDoorCount(VehicleHash vehicle)
