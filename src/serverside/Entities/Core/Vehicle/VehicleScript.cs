@@ -39,7 +39,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             {
                 // unspawn
                 vehicleEntity.Dispose();
-                sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} zosta³ odspawnowany");
+                sender.SendInfo($"Pojazd {vehicleEntity.DbModel.Name} został odspawnowany");
             }
             else
             {
@@ -52,7 +52,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 sender.TriggerEvent("DrawVehicleComponents", vehicleEntity.GameVehicle.Position,
                     GetVehicleBlip((VehicleClass)vehicleEntity.GameVehicle.Class), 24);
 
-                sender.SendInfo($"Pojazd {vehicleModel.Name} zosta³ zespawnowany.");
+                sender.SendInfo($"Pojazd {vehicleModel.Name} został zespawnowany.");
             }
             sender.ResetData("SelectedVehicleID");
         }
@@ -148,7 +148,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
 
 
         #region Komendy
-        [Command("v", "~y~U¯YJ: ~w~ /v (z)")]
+        [Command("v", "~y~UŻYJ: ~w~ /v (z)")]
         public void ShowVehiclesList(Client sender, string trigger = null)
         {
             AccountEntity player = sender.GetAccountEntity();
@@ -212,7 +212,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             NAPI.Vehicle.SetVehicleDoorState(vehicle, doorId, !NAPI.Vehicle.GetVehicleDoorState(vehicle, doorId));
         }
 
-        //Nie dajemy tutaj VehicleEntity, ¿eby gracz móg³ sprawdziæ te¿ informacje odspawnowanego auta
+        //Nie dajemy tutaj VehicleEntity, żeby gracz mógł sprawdziæ też informacje odspawnowanego auta
         public static void ShowVehiclesInformation(CharacterEntity sender, VehicleModel model, bool shortInfo = false)
         {
             if (!shortInfo && model.Character.Id == sender.DbModel.Id)
@@ -233,19 +233,20 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         /// <param name="senderCharacter"></param>
         public static void ChangePlayerVehicleLockState(CharacterEntity senderCharacter)
         {
-            List<VehicleEntity> vehicles = EntityHelper.GetVehicles()
-                .Where(v => v.DbModel.Id == senderCharacter.DbModel.Id)
-                .Where(x => x.GameVehicle.Position.DistanceTo(senderCharacter.Position) < 10).ToList();
-
-            //Jeœli jakiœ pomys³owy gracz zapragnie postawiæ 2 pojazdy obok siebie, ¿eby sprawdziæ dzia³anie to zamknie mu obydwa
-            foreach (VehicleEntity vehicle in vehicles)
+            foreach (var vehicleEntity in EntityHelper.GetVehicles())
             {
-                if (!(vehicle.GameVehicle.Position.DistanceTo(senderCharacter.Position) <= 7)) continue;
-                senderCharacter.SendInfo(vehicle.GameVehicle.Locked
-                    ? "Twój pojazd został zamknięty."
-                    : "Twój pojazd został otwarty.");
-                vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
+                senderCharacter.SendInfo(vehicleEntity.DbModel.Name);
             }
+
+            VehicleEntity vehicle = EntityHelper.GetVehicles()
+                .Where(v => v.DbModel.Character.Id == senderCharacter.DbModel.Id)
+                .First(x => x.GameVehicle.Position.DistanceTo(senderCharacter.Position) < 10);
+
+            senderCharacter.SendInfo(vehicle.GameVehicle.Locked
+                ? "Twój pojazd został otwarty."
+                : "Twój pojazd został zamknięty.");
+            vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
+
         }
 
         public static int GetVehicleDoorCount(VehicleHash vehicle)
