@@ -107,39 +107,25 @@ namespace VRP.Serverside.Entities.Core
             }
         }
 
-        public CharacterEntity(AccountEntity accountEntity, CharacterModel dbModel)
+        public CharacterEntity(CharacterModel dbModel)
         {
             DbModel = dbModel;
-            AccountEntity = accountEntity;
-            AccountEntity.CharacterEntity = this;
-            DbModel.Account = accountEntity.DbModel;
-            DbModel.LastLoginTime = DateTime.Now;
-            DbModel.Online = true;
-
-            using (CharactersRepository repository = new CharactersRepository())
-            {
-                repository.Update(dbModel);
-                repository.Save();
-            }
-
-            if (DbModel.Freemode)
-                CharacterCreator = new CharacterCreator(this);
-            Description = new Description(AccountEntity);
         }
 
         public void Save()
         {
             using (CharactersRepository repository = new CharactersRepository())
-            {
-                repository.Update(DbModel);
                 repository.Save();
-            }
         }
 
         public void LoginCharacter(AccountEntity accountEntity)
         {
+            DbModel.LastLoginTime = DateTime.Now;
+            DbModel.Online = true;
+            Save();
+
             AccountEntity = accountEntity;
-            accountEntity.CharacterEntity = this;
+            AccountEntity.CharacterEntity = this;
             Spawn();
         }
 
@@ -148,7 +134,7 @@ namespace VRP.Serverside.Entities.Core
             AccountEntity.Client.Nametag = $"({AccountEntity.ServerId}) {AccountEntity.CharacterEntity.FormatName}";
             AccountEntity.Client.Name = AccountEntity.CharacterEntity.FormatName;
 
-            // FixMe obs³uga kreatora postaci
+            // FixMe obsługa kreatora postaci
             AccountEntity.Client.SetSkin(NAPI.Util.PedNameToModel(DbModel.Model));
 
             // FixMe spawn w domu
@@ -171,6 +157,10 @@ namespace VRP.Serverside.Entities.Core
                 $"Twoja postać {FormatName} została pomyślnie załadowana życzymy miłej gry!");
 
             CharacterSelected?.Invoke(AccountEntity.Client, this);
+
+            if (DbModel.Freemode)
+                CharacterCreator = new CharacterCreator(this);
+            Description = new Description(AccountEntity);
         }
 
         public override void Dispose()
@@ -209,7 +199,7 @@ namespace VRP.Serverside.Entities.Core
         }
 
         public void SendInfo(string message, string title = "")
-        { 
+        {
             AccountEntity.Client.SendInfo(message, title);
         }
 

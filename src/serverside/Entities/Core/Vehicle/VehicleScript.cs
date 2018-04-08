@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
+using VRP.Core.Database;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
@@ -111,42 +112,25 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             VehicleEntity vehicleEntity = sender.Vehicle.GetVehicleEntity();
             int seatId = sender.VehicleSeat;
             NAPI.Player.GetPlayerVehicleSeat(sender);
-
-
-
-
         }
 
-        [Command("vspawn")]
+        [Command("vspawn", "~y~UŻYJ ~w~ /vspawn [model]")]
         public void SpawnCarCommand(Client sender, VehicleHash model)
         {
-            //VehicleHash vhash = Enum.Parse<VehicleHash>(model.ToUpper());
-            if (Enum.IsDefined(typeof(VehicleHash), model))
-            {
-                AccountModel acc = sender.GetAccountEntity().DbModel;
-                CharacterModel ch = sender.GetAccountEntity().CharacterEntity.DbModel;
+            AccountModel acc = sender.GetAccountEntity().DbModel;
+            CharacterModel ch = sender.GetAccountEntity().CharacterEntity.DbModel;
 
-                FullPosition position = new FullPosition(sender.Position, sender.Rotation);
-                VehicleEntity.Create(position, model, "Test", 1, acc, new Color(255, 255, 255),
-                    new Color(255, 255, 255), 0F, 0F, ch);
-                //VehicleEntity.Create(position, vhash, "Dupa", 1, acc new Color(1, 1, 1),new Color(1, 1, 1));
-                sender.SendInfo($"Utworzono pojazd :{model}!");
+            FullPosition position = new FullPosition(sender.Position, sender.Rotation);
 
-            }
-            else
-            {
-                sender.SendError("Taki model pojazdu nie istnieje!");
+            VehicleEntity.Create(position, model, "Test", 1, acc, new Color(255, 255, 255),
+               new Color(255, 255, 255), 0F, 0F, ch);
 
-            }
-
-
+            sender.SendInfo($"Utworzono pojazd: {model}!");
         }
-
 
         private void API_onPlayerEnterVehicle(Client player, NetHandle vehicle)
         {
             AccountEntity account = player.GetAccountEntity();
-           
 
             VehicleEntity vehicleEntity = EntityHelper.GetVehicle(vehicle);
 

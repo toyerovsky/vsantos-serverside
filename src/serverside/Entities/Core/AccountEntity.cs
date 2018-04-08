@@ -6,6 +6,7 @@
 
 using System;
 using GTANetworkAPI;
+using VRP.Core.Database;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
@@ -33,9 +34,9 @@ namespace VRP.Serverside.Entities.Core
         public int ServerId { get; set; }
         public Guid WebApiToken { get; set; }
 
-        public AccountEntity(AccountModel data, Client client)
+        public AccountEntity(AccountModel dbModel, Client client)
         {
-            DbModel = data;
+            DbModel = dbModel;
             Client = client;
         }
 
@@ -50,7 +51,7 @@ namespace VRP.Serverside.Entities.Core
             string safeIp = $"{ip[0]}.{ip[1]}.***.***";
 
             Client.SendInfo(
-                $"Witaj, {DbModel.Name} ~w~zostałeś pomyślnie zalogowany. Ostatnie logowanie:" +
+                $"Witaj, {DbModel.Name} zostałeś pomyślnie zalogowany. Ostatnie logowanie:" +
                 $" {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()} " +
                 $"Z adresu IP: {safeIp}");
 

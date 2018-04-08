@@ -28,14 +28,30 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(VehicleModel model) => _context.Vehicles.Add(model);
+        public void Insert(VehicleModel model)
+        {
+            if ((model.Character?.Id ?? 0) != 0)
+                _context.Attach(model.Character);
+
+            foreach (var item in model.ItemsInVehicle)
+                if ((item?.Id ?? 0) != 0)
+                    _context.Attach(item);
+
+            if ((model.Group?.Id ?? 0) != 0)
+                _context.Attach(model.Group);
+
+            _context.Vehicles.Add(model);
+        }
 
         public bool Contains(VehicleModel model)
         {
             return _context.Vehicles.Any(vehicle => vehicle.Id == model.Id);
         }
 
-        public void Update(VehicleModel model) => _context.Entry(model).State = EntityState.Modified;
+        public void Update(VehicleModel model)
+        {
+            _context.Attach(model).State = EntityState.Modified;
+        }
 
         public void Delete(int id)
         {
@@ -62,6 +78,6 @@ namespace VRP.Core.Repositories
 
         public void Save() => _context.SaveChanges();
 
-        public void Dispose() => _context?.Dispose();
+        public void Dispose() => _context.Dispose();
     }
 }

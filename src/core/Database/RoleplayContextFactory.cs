@@ -50,6 +50,7 @@ namespace VRP.Core.Database
             }
 
             DbContextOptionsBuilder<RoleplayContext> options = new DbContextOptionsBuilder<RoleplayContext>();
+            options.EnableSensitiveDataLogging();
             options.UseMySql(Singletons.Configuration.GetConnectionString("gameConnectionString"));
             
             return new RoleplayContext(options.Options);

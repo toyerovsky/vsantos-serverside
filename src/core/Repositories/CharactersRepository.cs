@@ -35,7 +35,10 @@ namespace VRP.Core.Repositories
             return _context.Characters.Any(character => character.Id == model.Id);
         }
 
-        public void Update(CharacterModel model) => _context.Entry(model).State = EntityState.Modified;
+        public void Update(CharacterModel model)
+        {
+            _context.Entry(model).State = EntityState.Modified;
+        }
 
         public void Delete(int id)
         {
@@ -71,6 +74,6 @@ namespace VRP.Core.Repositories
 
         public void Save() => _context.SaveChanges();
 
-        public void Dispose() => _context?.Dispose();
+        public void Dispose() => _context.Dispose();
     }
 }
