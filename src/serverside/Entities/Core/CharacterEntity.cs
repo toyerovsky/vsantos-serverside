@@ -37,8 +37,8 @@ namespace VRP.Serverside.Entities.Core
         public CharacterCreator CharacterCreator { get; set; }
         public BuildingEntity CurrentBuilding { get; set; }
 
-        internal List<ItemEntity> ItemsInUse { get; set; } = new List<Item.ItemEntity>();
-        internal Cellphone CurrentCellphone => ItemsInUse.Single(x => x is Cellphone) as Cellphone;
+        internal List<ItemEntity> ItemsInUse { get; set; } = new List<ItemEntity>();
+        internal Cellphone CurrentCellphone => ItemsInUse.SingleOrDefault(x => x is Cellphone) as Cellphone;
 
         public string FormatName => $"{DbModel.Name} {DbModel.Surname}";
 
@@ -54,7 +54,7 @@ namespace VRP.Serverside.Entities.Core
         public bool CanNarrate { get; set; }
         public bool CanPay { get; set; }
 
-        public bool FlyState { get; set; } = false;
+        public bool IsFlying { get; set; }
 
         public int Health
         {

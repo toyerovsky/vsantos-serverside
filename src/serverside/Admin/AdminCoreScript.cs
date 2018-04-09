@@ -158,12 +158,14 @@ namespace VRP.Serverside.Admin
 
             NAPI.ClientEvent.TriggerClientEvent(sender, RemoteEvents.PlayerFreeCamRequested);
 
-            if (senderAccount.CharacterEntity.FlyState)
+            if (senderAccount.CharacterEntity.IsFlying)
             {
-                senderAccount.CharacterEntity.FlyState = false;
+                senderAccount.CharacterEntity.IsFlying = false;
                 sender.SendInfo("Wyłączono latanie.");
                 return;
             }
+
+            senderAccount.CharacterEntity.IsFlying = true;
             sender.SendInfo("Włączono latanie.");
         }
 
