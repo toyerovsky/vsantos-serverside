@@ -24,7 +24,7 @@ namespace VRP.Serverside.Admin
         [Command("ustawrange", "~y~ UŻYJ ~w~ /ustawrange [id] [nazwa]")]
         public void SetRank(Client sender, int id, ServerRank rank)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Adminadministrator3)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorTechniczny3)
             {
                 sender.SendWarning("Nie posiadasz uprawnień do ustawiania rang.");
                 return;
@@ -172,7 +172,7 @@ namespace VRP.Serverside.Admin
         [Command("god")]
         public void SetPlayerInvicible(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Administrator)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorTechniczny)
             {
                 sender.SendWarning("Nie posiadasz uprawnień do ustawienia nieśmiertelności.");
                 return;
@@ -192,7 +192,7 @@ namespace VRP.Serverside.Admin
         [Command("inv")]
         public void SetPlayerInvisible(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Administrator)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorTechniczny)
             {
                 sender.SendInfo("Nie posiadasz uprawnień do ustawienia niewidzialności.");
                 return;

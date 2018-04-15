@@ -29,7 +29,7 @@ namespace VRP.Serverside.Entities.Core.Item
 
     public enum CellphoneVisibleType
     {
-        iFriut,
+        IFriut,
         Casual
     }
 }

@@ -72,7 +72,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         [Command("dodajdrivethru", GreedyArg = true)]
         public void AddDriveThru(Client sender, string name)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
             {
                 sender.SendWarning("Nie posiadasz uprawnień do dodawania DriveThru.");
                 return;
@@ -105,7 +105,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         [Command("usundrivethru")]
         public void DeleteDriveThru(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.GameMaster)
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania przystanku DriveThru.");
                 return;

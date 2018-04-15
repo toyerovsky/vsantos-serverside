@@ -26,7 +26,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
 {
     public class ItemsScript : Script
     {
-        private ItemEntityFactory _itemFactory { get; } = new ItemEntityFactory();
+        private ItemEntityFactory ItemFactory { get; } = new ItemEntityFactory();
 
         [RemoteEvent(RemoteEvents.SelectedItem)]
         public void SelectedItemHandler(Client sender, params object[] args)
@@ -42,7 +42,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
             CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
             int index = Convert.ToInt32(sender.GetData("SelectedItem"));
 
-            ItemEntity item = _itemFactory.Create(character.DbModel.Items.ToList()[index]);
+            ItemEntity item = ItemFactory.Create(character.DbModel.Items.ToList()[index]);
             item.UseItem(character);
         }
 
@@ -54,7 +54,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
             int index = Convert.ToInt32(sender.GetData("SelectedItem"));
             List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
 
-            ItemEntity item = _itemFactory.Create(userItems[index]);
+            ItemEntity item = ItemFactory.Create(userItems[index]);
             sender.SendInfo(item.ItemInfo);
         }
 
@@ -66,7 +66,7 @@ namespace VRP.Serverside.Entities.Core.Item.Scripts
             int index = Convert.ToInt32(sender.GetData("SelectedItem"));
             List<ItemModel> userItems = player.CharacterEntity.DbModel.Items.ToList();
 
-            ItemEntity item = _itemFactory.Create(userItems[index]);
+            ItemEntity item = ItemFactory.Create(userItems[index]);
             sender.SendInfo(item.UseInfo);
         }
 

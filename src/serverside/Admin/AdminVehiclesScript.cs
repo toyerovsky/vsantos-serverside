@@ -15,7 +15,6 @@ namespace VRP.Serverside.Admin
 {
     public class AdminVehiclesScript : Script
     {
-
         [Command("kolor", "~y~ UŻYJ ~w~ /kolor [hexPodstawowy] [hexDodatkowy]")]
         public void ChangeVehicleColor(Client sender, string primaryHex, string secondaryHex, long vehicleId = -1)
         {

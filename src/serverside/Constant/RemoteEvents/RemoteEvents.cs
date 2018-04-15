@@ -23,6 +23,11 @@ namespace VRP.Serverside.Constant.RemoteEvents
 
         public const string PlayerFreeCamRequested = "playerFreeCamRequested";
 
+        public const string PlayerZoneManagerRequested = "playerZoneManagerRequested";
+
+        public const string PlayerMugshotRequested = "playerMugshotRequested";
+        public const string PlayerMugshotDestroyRequested = "playerMugshotDestroyRequested";
+
         #region AdminListScript
 
         public const string OnPlayerSendReport = "onPlayerSendReport";
