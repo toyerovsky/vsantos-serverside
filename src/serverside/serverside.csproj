@@ -18,6 +18,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Entities\Interfaces\**" />
+    <EmbeddedResource Remove="Entities\Interfaces\**" />
+    <None Remove="Entities\Interfaces\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="gtanetwork.api" Version="0.3.5" />
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.6" />
   </ItemGroup>
@@ -30,10 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\core\core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Entities\Interfaces\" />
   </ItemGroup>
 
 </Project>

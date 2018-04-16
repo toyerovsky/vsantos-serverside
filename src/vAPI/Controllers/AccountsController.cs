@@ -6,6 +6,8 @@
 
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using VRP.Core.Database.Models;
 using VRP.Core.Repositories;
 
 namespace VRP.vAPI.Controllers
@@ -17,11 +19,38 @@ namespace VRP.vAPI.Controllers
     {
         private readonly AccountsRepository _accountsRepository = new AccountsRepository();
 
-        //[HttpPost("login/{email}/{passwordHash}")]
-        //public JsonResult Login(string email, string passwordHash)
-        //{
+        [HttpGet]
+        public JsonResult Get()
+        {
+            IEnumerable<AccountModel> accounts = _accountsRepository.GetAll();
+            return Json(accounts);
+        }
+        
+        [HttpGet("{id}")]
+        public JsonResult Get(int id)
+        {
+            AccountModel account = _accountsRepository.Get(id);
+            return Json(account);
+        }
 
-        //}
+        // POST api/values
+        [HttpPost]
+        public void Post([FromBody]AccountModel value)
+        {
+
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
 
         protected override void Dispose(bool disposing)
         {

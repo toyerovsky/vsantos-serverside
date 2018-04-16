@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
@@ -34,6 +35,7 @@ namespace VRP.vAPI.Controllers
             Stopwatch sw = new Stopwatch();
             sw.Reset();
             sw.Start();
+
             AccountModel account = _roleplayContext.Accounts
                 .Single(a => a.Id == accountId);
 
@@ -44,16 +46,18 @@ namespace VRP.vAPI.Controllers
                 .Where(character => character.IsAlive)
                 .Load();
 
-            sw.Stop();
-            Debug.WriteLine($"[RP DEBUG] {sw.ElapsedMilliseconds}");
-            return Json(account.Characters.Select(character => new
+            var characters = account.Characters.Select(character => new
             {
                 name = character.Name,
                 surname = character.Surname,
                 money = character.Money
-            }));
-        }
+            });
 
+            sw.Stop();
+            Debug.WriteLine($"[RP Benchmark] {sw.ElapsedMilliseconds}");
+
+            return Json(characters);
+        }
 
         protected override void Dispose(bool disposing)
         {

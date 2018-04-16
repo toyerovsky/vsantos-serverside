@@ -38,7 +38,8 @@ namespace VRP.vAPI.Services
 
         private void Watch()
         {
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Loopback, Startup.Configuration.GetValue<int>("UserListenPort"));
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Loopback,
+                Startup.Configuration.GetValue<int>("UserListenPort"));
             Socket socketListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             try
