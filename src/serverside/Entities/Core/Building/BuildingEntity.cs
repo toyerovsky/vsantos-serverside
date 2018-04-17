@@ -239,7 +239,8 @@ namespace VRP.Serverside.Entities.Core.Building
             building._spamProtector = true;
             CharacterEntity character = player.GetAccountEntity().CharacterEntity;
             ChatScript.SendMessageToNearbyPlayers(character, "unosi dłoń i puka do drzwi budynku", ChatMessageType.ServerMe);
-            ChatScript.SendMessageToSpecifiedPlayers(character, building.PlayersInBuilding.Select(x => x.CharacterEntity), "Słychać pukanie do drzwi.", ChatMessageType.ServerDo);
+            ChatScript.SendMessageToSpecifiedPlayers(character, building.PlayersInBuilding.Select(x => x.CharacterEntity),
+                "Słychać pukanie do drzwi.", ChatMessageType.ServerDo);
 
             // Ochrona przed spamem w pukaniu do drzwi
             Timer timer = new Timer(4000);
@@ -261,7 +262,8 @@ namespace VRP.Serverside.Entities.Core.Building
                 }
         }
 
-        public static BuildingEntity Create(AccountModel creator, string name, decimal cost, Vector3 internalPosition, Vector3 externalPosition, bool spawnPossible, CharacterModel characterModel = null, GroupModel groupModel = null)
+        public static BuildingEntity Create(AccountModel creator, string name, decimal cost, Vector3 internalPosition,
+            Vector3 externalPosition, bool spawnPossible, CharacterModel characterModel = null, GroupModel groupModel = null)
         {
             BuildingModel buildingModel = new BuildingModel()
             {
@@ -279,7 +281,7 @@ namespace VRP.Serverside.Entities.Core.Building
                 ExternalPickupPositionZ = externalPosition.Z,
                 Items = new List<ItemModel>(),
                 SpawnPossible = spawnPossible,
-                Creator = creator,
+                CreatorId = creator.Id,
                 HasCctv = false,
                 HasSafe = false,
                 MaxObjectCount = 10,

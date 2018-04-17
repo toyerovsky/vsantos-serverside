@@ -43,7 +43,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
             {
                 Name = (string)arguments[0],
                 Character = player.CharacterEntity.DbModel,
-                Creator = null,
+                CreatorId = null,
                 ItemEntityType = ItemEntityType.Food,
                 FirstParameter = (int)arguments[1],
             };

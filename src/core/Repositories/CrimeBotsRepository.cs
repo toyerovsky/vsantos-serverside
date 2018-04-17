@@ -54,7 +54,6 @@ namespace VRP.Core.Repositories
                 _context.CrimeBots;
 
             return crimeBots
-                .Include(cb => cb.Creator)
                 .Include(crimeBot => crimeBot.GroupModel)
                     .ThenInclude(group => group.BossCharacter)
                 .Include(crimeBot => crimeBot.GroupModel)

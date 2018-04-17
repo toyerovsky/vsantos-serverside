@@ -68,12 +68,10 @@ namespace VRP.Core.Repositories
                 _context.Vehicles;
 
             return vehicles
-                .Include(vehicle => vehicle.Creator)
                 .Include(vehicle => vehicle.Character)
                     .ThenInclude(character => character.Account)
                 .Include(vehicle => vehicle.Group)
-                .Include(vehicle => vehicle.ItemsInVehicle)
-                    .ThenInclude(item => item.Creator);
+                .Include(vehicle => vehicle.ItemsInVehicle);
         }
 
         public void Save() => _context.SaveChanges();

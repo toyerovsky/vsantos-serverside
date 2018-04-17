@@ -73,7 +73,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                                 sender.Position.X + 2,
                                 sender.Position.Y + 2,
                                 sender.Position.Z), sender.Rotation),
-                        VehicleHash.Sentinel, name, 0, sender.GetAccountEntity().DbModel, new Color(0, 0, 0), new Color(0, 0, 0));
+                        VehicleHash.Sentinel, name, 0, sender.GetAccountEntity().DbModel.Id, new Color(0, 0, 0), new Color(0, 0, 0));
 
                     NAPI.Player.SetPlayerIntoVehicle(sender, botVehicle.GameVehicle, -1);
 

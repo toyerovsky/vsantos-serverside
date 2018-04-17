@@ -74,7 +74,8 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
         {
             base.Spawn();
 
-            Vehicle = VehicleEntity.Create(VehiclePosition, NAPI.Util.VehicleNameToModel(DbModel.Vehicle), DbModel.Name, 0, DbModel.Creator, new Color(0, 0, 0), new Color(0, 0, 0));
+            Vehicle = VehicleEntity.Create(VehiclePosition, 
+                NAPI.Util.VehicleNameToModel(DbModel.Vehicle), DbModel.Name, 0, DbModel.CreatorId, new Color(0, 0, 0), new Color(0, 0, 0));
             Vehicle.GameVehicle.OpenDoor(5);
             BotHandle.PlayScenario("WORLD_HUMAN_SMOKING");
 
@@ -132,7 +133,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                             Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
-                            item.Creator = null;
+                            item.CreatorId = null;
                             item.Name = i.Name;
                             item.ItemEntityType = i.Type;
                             item.FirstParameter = (int)data.Item1;
@@ -143,7 +144,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                             Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
-                            item.Creator = null;
+                            item.CreatorId = null;
                             item.Name = i.Name;
                             item.ItemEntityType = i.Type;
                             item.FirstParameter = (int)data.Item1;
@@ -152,7 +153,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                         else if (i.Type == ItemEntityType.Drug)
                         {
                             item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
-                            item.Creator = null;
+                            item.CreatorId = null;
                             item.Name = i.Name;
                             item.ItemEntityType = i.Type;
                             item.FirstParameter = (int)Enum.Parse(typeof(DrugType), i.Name);

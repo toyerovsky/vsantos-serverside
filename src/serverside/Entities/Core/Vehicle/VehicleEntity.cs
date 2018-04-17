@@ -14,6 +14,7 @@ using VRP.Core.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Core.Item;
+using VRP.Serverside.Entities.EventArgs;
 using VRP.Serverside.Entities.Misc.Description;
 using VRP.Serverside.Interfaces;
 using FullPosition = VRP.Serverside.Core.FullPosition;
@@ -26,57 +27,15 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         public VehicleModel DbModel { get; set; }
         public Description Description;
 
+        public event EventHandler<PlayerEnterVehicleEventArgs> PlayerEnterVehicle;
+
         public VehicleEntity(VehicleModel model)
         {
             DbModel = model;
-            Initialize();
-
-            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 1, DbModel.Door1Damage);
-            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 2, DbModel.Door2Damage);
-            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 3, DbModel.Door3Damage);
-            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 4, DbModel.Door4Damage);
-            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 1, DbModel.Window1Damage);
-            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 2, DbModel.Window2Damage);
-            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 3, DbModel.Window3Damage);
-            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 4, DbModel.Window4Damage);
-
-            //Dodajemy tuning do pojazdu
-            float engineMultipier = 0f;
-            float torqueMultipier = 0f;
-
-            foreach (ItemModel tuning in DbModel.ItemsInVehicle)
-            {
-                if (tuning.ItemEntityType == ItemEntityType.Tuning && tuning.FourthParameter.HasValue)
-                {
-                    if (tuning.FirstParameter != null && (TuningType)tuning.FirstParameter == TuningType.Speed)
-                    {
-                        if (tuning.SecondParameter != null)
-                            engineMultipier += (float)tuning.SecondParameter;
-                        if (tuning.ThirdParameter != null)
-                            torqueMultipier += (float)tuning.ThirdParameter;
-                    }
-                }
-            }
-
-            //Te metody działają tak, że ujemny mnożnik zmniejsza | 0 to normalnie | a dodatni poprawia
-            //Pola są potrzebne, ponieważ w salonie będą dostępne 3 wersje pojazdu
-            //TODO: tańsza o 10% zmniejszone osiągi o -5f
-            //TODO: normalna
-            //TODO: droższa o 25% zwiększone osiągi o 5f
-            NAPI.Vehicle.SetVehicleEnginePowerMultiplier(GameVehicle, engineMultipier);
-            NAPI.Vehicle.SetVehicleEngineTorqueMultiplier(GameVehicle, torqueMultipier);
-
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_maxfuel", DbModel.Fuel);
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuel", DbModel.Fuel);
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuelConsumption", DbModel.FuelConsumption);
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_milage", DbModel.Milage);
-            GameVehicle.SetData("VehicleEntity", this);
-            EntityHelper.Add(this);
-            Save();
         }
 
         public static VehicleEntity Create(FullPosition spawnPosition, VehicleHash hash, string numberPlate, int numberPlateStyle,
-            AccountModel creator, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0f, float engineTorqueMultiplier = 0f,
+            int? creatorId, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0f, float engineTorqueMultiplier = 0f,
             CharacterModel character = null, GroupModel groupModel = null)
         {
             VehicleModel vehicleModel = new VehicleModel
@@ -86,7 +45,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                 NumberPlateStyle = numberPlateStyle,
                 Character = character,
                 Group = groupModel,
-                Creator = creator,
+                CreatorId = creatorId,
                 SpawnPositionX = spawnPosition.Position.X,
                 SpawnPositionY = spawnPosition.Position.Y,
                 SpawnPositionZ = spawnPosition.Position.Z,
@@ -120,25 +79,6 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             {
                 _nonDbVehicle = nonDbVehicle
             };
-        }
-
-        private void Initialize()
-        {
-            GameVehicle = NAPI.Vehicle.CreateVehicle(NAPI.Util.VehicleNameToModel(DbModel.VehicleHash),
-                new Vector3(DbModel.SpawnPositionX, DbModel.SpawnPositionY, DbModel.SpawnPositionZ),
-                DbModel.SpawnPositionX, DbModel.PrimaryColor.ToColor(),
-                DbModel.SecondaryColor.ToColor(),
-                DbModel.NumberPlate, 255, true);
-            GameVehicle.Rotation = new Vector3(DbModel.SpawnRotationX,
-                DbModel.SpawnRotationY,
-                DbModel.SpawnRotationZ);
-            GameVehicle.NumberPlateStyle = DbModel.NumberPlateStyle;
-            GameVehicle.EnginePowerMultiplier = DbModel.EnginePowerMultiplier;
-            GameVehicle.EngineTorqueMultiplier = DbModel.EngineTorqueMultiplier;
-            GameVehicle.WheelType = DbModel.WheelType;
-            GameVehicle.WheelColor = DbModel.WheelColor;
-            GameVehicle.EngineStatus = false;
-            DbModel.IsSpawned = true;
         }
 
         //Pojazdy z prac nie są trzymane w bazie danych
@@ -296,7 +236,64 @@ namespace VRP.Serverside.Entities.Core.Vehicle
 
         public override void Spawn()
         {
-            throw new NotImplementedException();
+            GameVehicle = NAPI.Vehicle.CreateVehicle(NAPI.Util.VehicleNameToModel(DbModel.VehicleHash),
+                new Vector3(DbModel.SpawnPositionX, DbModel.SpawnPositionY, DbModel.SpawnPositionZ),
+                DbModel.SpawnPositionX, DbModel.PrimaryColor.ToColor(),
+                DbModel.SecondaryColor.ToColor(),
+                DbModel.NumberPlate, 255, true);
+            GameVehicle.Rotation = new Vector3(DbModel.SpawnRotationX,
+                DbModel.SpawnRotationY,
+                DbModel.SpawnRotationZ);
+            GameVehicle.NumberPlateStyle = DbModel.NumberPlateStyle;
+            GameVehicle.EnginePowerMultiplier = DbModel.EnginePowerMultiplier;
+            GameVehicle.EngineTorqueMultiplier = DbModel.EngineTorqueMultiplier;
+            GameVehicle.WheelType = DbModel.WheelType;
+            GameVehicle.WheelColor = DbModel.WheelColor;
+            GameVehicle.EngineStatus = false;
+            DbModel.IsSpawned = true;
+            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 1, DbModel.Door1Damage);
+            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 2, DbModel.Door2Damage);
+            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 3, DbModel.Door3Damage);
+            NAPI.Vehicle.BreakVehicleDoor(GameVehicle, 4, DbModel.Door4Damage);
+            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 1, DbModel.Window1Damage);
+            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 2, DbModel.Window2Damage);
+            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 3, DbModel.Window3Damage);
+            NAPI.Vehicle.BreakVehicleWindow(GameVehicle, 4, DbModel.Window4Damage);
+
+            //Dodajemy tuning do pojazdu
+            float engineMultipier = 0f;
+            float torqueMultipier = 0f;
+
+            foreach (ItemModel tuning in DbModel.ItemsInVehicle)
+            {
+                if (tuning.ItemEntityType == ItemEntityType.Tuning && tuning.FourthParameter.HasValue)
+                {
+                    if (tuning.FirstParameter != null && (TuningType)tuning.FirstParameter == TuningType.Speed)
+                    {
+                        if (tuning.SecondParameter != null)
+                            engineMultipier += (float)tuning.SecondParameter;
+                        if (tuning.ThirdParameter != null)
+                            torqueMultipier += (float)tuning.ThirdParameter;
+                    }
+                }
+            }
+
+            //Te metody działają tak, że ujemny mnożnik zmniejsza | 0 to normalnie | a dodatni poprawia
+            //Pola są potrzebne, ponieważ w salonie będą dostępne 3 wersje pojazdu
+            //TODO: tańsza o 10% zmniejszone osiągi o -5f
+            //TODO: normalna
+            //TODO: droższa o 25% zwiększone osiągi o 5f
+            NAPI.Vehicle.SetVehicleEnginePowerMultiplier(GameVehicle, engineMultipier);
+            NAPI.Vehicle.SetVehicleEngineTorqueMultiplier(GameVehicle, torqueMultipier);
+
+            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_maxfuel", DbModel.Fuel);
+            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuel", DbModel.Fuel);
+            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuelConsumption", DbModel.FuelConsumption);
+            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_milage", DbModel.Milage);
+            GameVehicle.SetData("VehicleEntity", this);
+            GameVehicle.SetSharedData("Id", DbModel.Id);
+            EntityHelper.Add(this);
+            Save();
         }
 
         ~VehicleEntity()
@@ -307,6 +304,11 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         public void Offer(CharacterEntity seller, CharacterEntity getter, decimal money)
         {
             throw new NotImplementedException();
+        }
+
+        public void InvokePlayerEnterVehicle(CharacterEntity sender, PlayerEnterVehicleEventArgs eventArgs)
+        {
+            PlayerEnterVehicle?.Invoke(sender, eventArgs);
         }
     }
 }

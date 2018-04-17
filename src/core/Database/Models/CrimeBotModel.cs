@@ -10,7 +10,7 @@ namespace VRP.Core.Database.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual AccountModel Creator { get; set; }
+        public int? CreatorId { get; set; }
         public virtual GroupModel GroupModel { get; set; }
         public virtual string Vehicle { get; set; }
         public string Model { get; set; }

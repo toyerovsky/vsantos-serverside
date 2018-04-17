@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
+using VRP.Serverside.Constant.RemoteEvents;
 
 namespace VRP.Serverside.Core.WheelMenu
 {
@@ -26,10 +27,11 @@ namespace VRP.Serverside.Core.WheelMenu
 
         private void Show()
         {
-            Sender.TriggerEvent("ShowWheelMenu", JsonConvert.SerializeObject(WheelMenuItems.Select(a => new
-            {
-                a.Name               
-            })));
+            Sender.TriggerEvent(RemoteEvents.ShowWheelMenu,
+                JsonConvert.SerializeObject(WheelMenuItems.Select(a => new
+                {
+                    name = a.Name
+                })));
         }
 
         public void Dispose()

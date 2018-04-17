@@ -161,6 +161,7 @@ namespace VRP.Serverside.Entities.Core
             if (DbModel.Freemode)
                 CharacterCreator = new CharacterCreator(this);
             Description = new Description(AccountEntity);
+            AccountEntity.Client.SetSharedData("Id", DbModel.Id);
         }
 
         public override void Dispose()

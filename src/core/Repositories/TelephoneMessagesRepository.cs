@@ -53,7 +53,6 @@ namespace VRP.Core.Repositories
 
             return telephoneMessages
                 .Include(message => message.Cellphone)
-                    .ThenInclude(cellphone => cellphone.Creator)
                 .Include(message => message.Cellphone)
                     .ThenInclude(cellphone => cellphone.Character);
         }

@@ -78,7 +78,7 @@ namespace VRP.Serverside.Entities.Common.Market
                 AccountEntity controller = sender.GetAccountEntity();
                 controller.CharacterEntity.DbModel.Items.Add(new ItemModel
                 {
-                    Creator = null,
+                    CreatorId = null,
                     ItemEntityType = item.ItemEntityType,
                     Name = item.Name,
                     Character = controller.CharacterEntity.DbModel,

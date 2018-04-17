@@ -50,8 +50,8 @@ namespace VRP.Serverside.Core.Extensions
             return "~w~";
         }
 
-        public static Color GetRandomColor(this Color color) =>
-            new Color(Utils.RandomRange(256), Utils.RandomRange(256), Utils.RandomRange(256), Utils.RandomRange(256));
+        public static Color GetRandomColor() =>
+            new Color(Utils.RandomRange(0, 256), Utils.RandomRange(0, 256), Utils.RandomRange(0, 256));
 
         public static Color ToColor(this string hex)
         {

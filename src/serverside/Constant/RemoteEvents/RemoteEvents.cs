@@ -28,6 +28,8 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string PlayerMugshotRequested = "playerMugshotRequested";
         public const string PlayerMugshotDestroyRequested = "playerMugshotDestroyRequested";
 
+        public const string PlayerWheelMenuRequested = "playerWheelMenuRequested";
+
         #region AdminListScript
 
         public const string OnPlayerSendReport = "onPlayerSendReport";
@@ -59,6 +61,8 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string RequestWheelMenu = "requestWheelMenu";
 
         public const string UseWheelMenuItem = "useWheelMenuItem";
+
+        public const string ShowWheelMenu = "showWheelMenu";
 
         #endregion
 

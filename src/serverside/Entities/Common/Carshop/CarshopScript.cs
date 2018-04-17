@@ -112,7 +112,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
                 character.RemoveMoney(vehicle.Cost);
 
                 VehicleEntity.Create(new FullPosition(new Vector3(-50, -1680, 29.5), new Vector3(0, 0, 0)),
-                    vehicleHash, "", 0, null, new Color().GetRandomColor(), new Color().GetRandomColor(), 0f, 0f, sender.GetAccountEntity().CharacterEntity.DbModel);
+                    vehicleHash, "", 0, null, ApiExtensions.GetRandomColor(), ApiExtensions.GetRandomColor(), 0f, 0f, sender.GetAccountEntity().CharacterEntity.DbModel);
                 sender.SendInfo($"Pojazd {vehicleHash.ToString()} zakupiony pomyślnie.");
             }
             else
@@ -120,8 +120,6 @@ namespace VRP.Serverside.Entities.Common.Carshop
                 sender.SendError("Nie posiadasz wystarczającej ilości gotówki.");
             }
         }
-
-       
 
         [Command("dodajautosalon", "~y~ UŻYJ ~w~ /dodajautosalon [model] [koszt] [typ salonu]")]
         public void AddVehicleToCarshop(Client sender, VehicleHash hash, VehicleClass vehicleClass, decimal cost, string type, string type2 = "Empty")

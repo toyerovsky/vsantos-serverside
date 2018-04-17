@@ -46,7 +46,7 @@ namespace VRP.Serverside.Economy.Groups
                 {
                     ItemModel = new ItemModel
                     {
-                        Creator = sender.GetAccountEntity().DbModel,
+                        CreatorId = sender.GetAccountEntity().DbModel.Id,
                         Name = arguments[0].ToString(),
                         ItemEntityType = itemType,
                     },

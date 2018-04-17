@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
@@ -21,29 +22,30 @@ namespace VRP.Serverside.Core.WheelMenu
         [RemoteEvent(RemoteEvents.RequestWheelMenu)]
         public void RequestWheelMenuHandler(Client sender, params object[] arguments)
         {
-            //args[0] to NetHandle które przyszło z RayCast
-            //nie używam as ponieważ do struktury nie wolno
-            if (!(arguments[0] is NetHandle)) return;
-            if (NAPI.Player.GetPlayerFromHandle((NetHandle)arguments[0]) != null)
+            int entityId = Convert.ToInt32(arguments[0]);
+            if (Enum.TryParse(typeof(EntityType), arguments[1].ToString(), true, out var entityType))
             {
-
-            }
-            else if (EntityHelper.GetVehicle((NetHandle)arguments[0]) != null)
-            {
-                WheelMenu wheel = new WheelMenu(PrepareDataSource(sender, EntityHelper.GetVehicle((NetHandle)arguments[0])), sender);
-                sender.SetData("WheelMenu", wheel);
+                if ((EntityType)entityType == EntityType.Player)
+                {
+                    var character = EntityHelper.GetAccountByCharacterId(entityId);
+                }
+                else if ((EntityType)entityType == EntityType.Vehicle)
+                {
+                    var vehicle = EntityHelper.GetVehicle(entityId);
+                    WheelMenu wheel = new WheelMenu(PrepareDataSource(sender, vehicle), sender);
+                    sender.SetData("WheelMenu", wheel);
+                }
             }
         }
 
         [RemoteEvent(RemoteEvents.UseWheelMenuItem)]
-        public void UseWheelMenuItemHandler(Client sender , params object[] arguments)
+        public void UseWheelMenuItemHandler(Client sender, params object[] arguments)
         {
             //args[0] to nazwa opcji
             WheelMenu wheel = (WheelMenu)sender.GetData("WheelMenu");
             wheel.WheelMenuItems.First(x => x.Name == (string)arguments[0]).Use();
             wheel.Dispose();
         }
-      
 
         private List<WheelMenuItem> PrepareDataSource(Client sender, object target, params object[] args)
         {
@@ -57,17 +59,17 @@ namespace VRP.Serverside.Core.WheelMenu
                 CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
                 if (VehicleScript.GetVehicleDoorCount((VehicleHash)vehicle.GameVehicle.Model) >= 4)
                 {
-                    menuItems.Add(new WheelMenuItem("Maska", senderCharacter, target, 
+                    menuItems.Add(new WheelMenuItem("hood", senderCharacter, target,
                         (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Hood)));
-                    menuItems.Add(new WheelMenuItem("Bagaznik", senderCharacter, target, 
+                    menuItems.Add(new WheelMenuItem("trunk", senderCharacter, target,
                         (s, e) => VehicleScript.ChangeDoorState(s, ((VehicleEntity)e).GameVehicle.Handle, (int)Doors.Trunk)));
                 }
                 if (vehicle.DbModel.Character == sender.GetAccountEntity().CharacterEntity.DbModel)
                 {
-                    menuItems.Add(new WheelMenuItem("Zamek", senderCharacter, null, 
+                    menuItems.Add(new WheelMenuItem("lock", senderCharacter, null,
                         (s, e) => VehicleScript.ChangePlayerVehicleLockState(s)));
                 }
-                menuItems.Add(new WheelMenuItem("Rejestracja", senderCharacter, target, 
+                menuItems.Add(new WheelMenuItem("numberplate", senderCharacter, target,
                     (s, e) => VehicleScript.ShowVehiclesInformation(s, ((VehicleEntity)e).DbModel, true)));
             }
             return menuItems;

@@ -52,11 +52,9 @@ namespace VRP.Core.Repositories
                 _context.Buildings;
 
             return buildings
-                .Include(building => building.Creator)
                 .Include(building => building.Character)
                 .Include(building => building.Group)
-                .Include(building => building.Items)
-                    .ThenInclude(item => item.Creator);
+                .Include(building => building.Items);
         }
 
         public void Save() => _context.SaveChanges();

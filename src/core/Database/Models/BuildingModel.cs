@@ -16,8 +16,7 @@ namespace VRP.Core.Database.Models
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
         public ICollection<ItemModel> Items { get; set; }
-        [Required]
-        public virtual AccountModel Creator { get; set; }
+        public int? CreatorId { get; set; }
         public decimal? EnterCharge { get; set; }
         [Required]
         public float ExternalPickupPositionX { get; set; }

@@ -19,7 +19,7 @@ namespace VRP.Core.Database.Models
         public virtual VehicleModel Vehicle { get; set; }
         public virtual GroupModel Group { get; set; }
 
-        public virtual AccountModel Creator { get; set; }
+        public int? CreatorId { get; set; }
 
         public int Weight { get; set; }
         public string ItemHash { get; set; }

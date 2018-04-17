@@ -17,6 +17,7 @@ using VRP.Serverside.Core.Scripts;
 using ChatMessageType = VRP.Core.Enums.ChatMessageType;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core;
+using VRP.Serverside.Entities.EventArgs;
 
 namespace VRP.Serverside.Entities.Core.Vehicle
 {
@@ -105,18 +106,17 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             sender.Vehicle.EngineStatus = !sender.Vehicle.EngineStatus;
         }
 
-  
-
         [Command("vspawn", "~y~UŻYJ ~w~ /vspawn [model]")]
         public void SpawnCarCommand(Client sender, VehicleHash model)
         {
-            AccountModel acc = sender.GetAccountEntity().DbModel;
-            CharacterModel ch = sender.GetAccountEntity().CharacterEntity.DbModel;
+            AccountModel accountModel = sender.GetAccountEntity().DbModel;
+            CharacterModel characterModel = sender.GetAccountEntity().CharacterEntity.DbModel;
 
             FullPosition position = new FullPosition(sender.Position, sender.Rotation);
 
-            VehicleEntity.Create(position, model, "Test", 1, acc, new Color(255, 255, 255),
-               new Color(255, 255, 255), 0F, 0F, ch);
+            var vehicle = VehicleEntity.Create(position, model, "Test", 1, accountModel.Id, ApiExtensions.GetRandomColor(),
+                ApiExtensions.GetRandomColor(), 0F, 0F, characterModel);
+            vehicle.Spawn();
 
             sender.SendInfo($"Utworzono pojazd: {model}!");
         }
@@ -243,9 +243,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
                     ? "Twój pojazd został otwarty."
                     : "Twój pojazd został zamknięty.");
                 vehicle.GameVehicle.Locked = !vehicle.GameVehicle.Locked;
-
             }
-        
         }
 
         public static int GetVehicleDoorCount(VehicleHash vehicle)
@@ -282,5 +280,14 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             return 225;
         }
 
+        [ServerEvent(Event.PlayerEnterVehicle)]
+        public void OnPlayerEnterVehicle(Client player, GTANetworkAPI.Vehicle vehicle, sbyte seatId)
+        {
+            if (vehicle.GetVehicleEntity() is VehicleEntity vehicleEntity)
+            {
+                PlayerEnterVehicleEventArgs eventArgs = new PlayerEnterVehicleEventArgs(vehicleEntity, seatId);
+                vehicleEntity.InvokePlayerEnterVehicle(player.GetAccountEntity().CharacterEntity, eventArgs);
+            }
+        }
     }
 }

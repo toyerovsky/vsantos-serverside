@@ -15,7 +15,7 @@ namespace VRP.Core.Database.Models
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
 
-        public virtual AccountModel Creator { get; set; }
+        public int? CreatorId { get; set; }
 
         public string NumberPlate { get; set; }
         public int NumberPlateStyle { get; set; }

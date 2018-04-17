@@ -23,7 +23,6 @@ namespace VRP.Serverside.Core.WheelMenu
             Sender = sender;
             Target = target;
             WheelAction = wheelAction;
-
         }
 
         public void Use()

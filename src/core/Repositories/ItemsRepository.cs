@@ -52,9 +52,7 @@ namespace VRP.Core.Repositories
                 _context.Items;
 
             return items
-                .Include(item => item.Creator)
                 .Include(item => item.Building)
-                    .ThenInclude(building => building.Creator)
                 .Include(item => item.Character)
                     .ThenInclude(character => character.Account)
                 .Include(item => item.Group)
