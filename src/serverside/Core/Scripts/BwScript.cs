@@ -59,7 +59,7 @@ namespace VRP.Serverside.Core.Scripts
                 else // Koniec BW
                 {
                     playerCharacter.SetBw(0);
-                    NAPI.Player.SpawnPlayer(player.Client, new Vector3(sender.Position.X, sender.Position.Y, sender.Rotation.Z));
+                    NAPI.Player.SpawnPlayer(sender, new Vector3(sender.Position.X, sender.Position.Y, sender.Rotation.Z));
                     NAPI.ClientEvent.TriggerClientEvent(sender, "ToggleHud", true);
                     sender.ResetData("CharacterBW");
                     timer.Dispose();
