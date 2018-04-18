@@ -210,6 +210,19 @@ namespace VRP.Serverside.Admin
             }
         }
 
+        [Command("hp")]
+        public void SetPlayerHealth(Client sender, int health, int id = -1)
+        {
+            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            {
+                sender.SendInfo("Nie posiadasz uprawnień do ustawienia poziomu zdrowia.");
+                return;
+            }
+
+            var getter = EntityHelper.GetAccountByServerId(id) ?? sender.GetAccountEntity();
+            getter.CharacterEntity.Health = health;
+        }
+
         [Command("savepos", "~y~ UŻYJ ~w~ /savepos [nazwa]", GreedyArg = true)]
         public void SaveCustomPosition(Client sender, string name)
         {

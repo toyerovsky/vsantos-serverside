@@ -9,6 +9,7 @@ using System.Timers;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
+using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
@@ -19,22 +20,20 @@ namespace VRP.Serverside.Core.Scripts
     {
         public void Event_OnPlayerDeath(Client sender, Client killer, WeaponHash reason)
         {
-            AccountEntity player = sender.GetAccountEntity();
-
-            CharacterModel playerCharacter = player.CharacterEntity.DbModel;
+            CharacterEntity playerCharacter = sender.GetAccountEntity().CharacterEntity;
 
             DateTime reviveDate = DateTime.Now.AddMinutes(
-                playerCharacter.MinutesToRespawn > 0 ? playerCharacter.MinutesToRespawn : GetTimeToRespawn(reason));
-
-            NAPI.ClientEvent.TriggerClientEvent(sender, "ToggleHud", false);
+                playerCharacter.DbModel.MinutesToRespawn > 0 ? playerCharacter.DbModel.MinutesToRespawn : GetTimeToRespawn(reason));
 
             sender.SendWarning("Zosta³eœ brutalnie zraniony, aby uœmierciæ swoj¹ postaæ wpisz: /akceptujsmierc");
 
-            player.CharacterEntity.CanTalk = false;
+            playerCharacter.CanTalk = false;
             sender.SetData("CharacterBW", GetTimeToRespawn(reason));
 
             Timer timer = new Timer(1000);
             timer.Start();
+
+            sender.TriggerEvent(RemoteEvents.PlayerBwTimerRequested, 1000, reviveDate);
 
             AccountEntity.AccountLoggedOut += (client, account) =>
             {
@@ -44,54 +43,28 @@ namespace VRP.Serverside.Core.Scripts
 
             timer.Elapsed += (s, e) =>
             {
-                if (sender.IsNull || !sender.Exists || !playerCharacter.IsAlive)
+                if (!sender.HasData("CharacterBW")) // Zdejmowanie BW
                 {
-                    timer.Dispose();
-                }
-
-                //Zdejmowanie BW
-                if (!sender.HasData("CharacterBW"))
-                {
-                    playerCharacter.MinutesToRespawn = 0;
-
-                    playerCharacter.Health = 20;
-                    NAPI.Player.SetPlayerHealth(sender, 20);
-
-                    NAPI.Player.SpawnPlayer(player.Client, new Vector3(sender.Position.X, sender.Position.Y, sender.Rotation.Z));
-                    NAPI.ClientEvent.TriggerClientEvent(sender, "ToggleHud", true);
-
+                    NAPI.Player.SpawnPlayer(sender, playerCharacter.Position);
+                    playerCharacter.SetBw(0);
+                    sender.TriggerEvent(RemoteEvents.PlayerBwTimerDestroyRequested);
                     sender.SendInfo("Twoje BW zosta³o anulowane.");
-                    player.CharacterEntity.CanTalk = true;
                     timer.Dispose();
                 }
-                //Odliczanie
-                else if (reviveDate.CompareTo(DateTime.Now) > 0)
+                else if (reviveDate.CompareTo(DateTime.Now) > 0) // Odliczanie
                 {
                     if (DateTime.Now.Second == 0)
                         sender.SetData("CharacterBW", (reviveDate - DateTime.Now).Minutes);
-
-                    string secondsToShow = (reviveDate - DateTime.Now).Seconds.ToString();
-                    secondsToShow = secondsToShow.PadLeft(2, '0');
-
-                    NAPI.ClientEvent.TriggerClientEvent(sender, "BWTimerTick", $"{(reviveDate - DateTime.Now).Minutes}: {secondsToShow}");
                 }
-                //Koniec BW
-                else
+                else // Koniec BW
                 {
-                    playerCharacter.Health = 20;
-                    NAPI.Player.SetPlayerHealth(sender, 20);
-
+                    playerCharacter.SetBw(0);
                     NAPI.Player.SpawnPlayer(player.Client, new Vector3(sender.Position.X, sender.Position.Y, sender.Rotation.Z));
                     NAPI.ClientEvent.TriggerClientEvent(sender, "ToggleHud", true);
-
-                    playerCharacter.MinutesToRespawn = 0;
-
-                    player.CharacterEntity.CanTalk = true;
                     sender.ResetData("CharacterBW");
-
                     timer.Dispose();
                 }
-                player.CharacterEntity.Save();
+                playerCharacter.Save();
             };
         }
 

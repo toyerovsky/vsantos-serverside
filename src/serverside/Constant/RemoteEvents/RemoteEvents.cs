@@ -28,7 +28,14 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string PlayerMugshotRequested = "playerMugshotRequested";
         public const string PlayerMugshotDestroyRequested = "playerMugshotDestroyRequested";
 
-        public const string PlayerWheelMenuRequested = "playerWheelMenuRequested";
+        /// <summary>
+        /// interval: number, end: Date = null
+        /// </summary>
+        public const string PlayerBwTimerRequested = "playerBwTimerRequested";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string PlayerBwTimerDestroyRequested = "playerBwTimerDestroyRequested";
 
         #region AdminListScript
 

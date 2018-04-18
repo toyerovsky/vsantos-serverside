@@ -44,6 +44,7 @@ namespace VRP.Serverside.Core.Scripts
         public void Event_OnResourceStart()
         {
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
+            NAPI.Server.SetAutoRespawnAfterDeath(false);
             EntityHelper.LoadEntities();
         }
 
@@ -65,6 +66,7 @@ namespace VRP.Serverside.Core.Scripts
                     new Vector3(building.BuildingMarker.Rotation.X, building.BuildingMarker.Rotation.Y, _currentRotation);
             }
         }
+
         [RemoteEvent(RemoteEvents.ChangePosition)]
         public void ChangePositionHandler(Client sender, params object[] arguments)
         {
