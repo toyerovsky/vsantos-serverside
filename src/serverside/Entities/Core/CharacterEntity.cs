@@ -107,6 +107,16 @@ namespace VRP.Serverside.Entities.Core
             }
         }
 
+        public void SetBw(int minutes)
+        {
+            DbModel.MinutesToRespawn = minutes;
+            if (minutes == 0)
+                Health = 5;
+            else
+                Health = -1;
+            CanTalk = minutes == 0;
+        }
+
         public CharacterEntity(CharacterModel dbModel)
         {
             DbModel = dbModel;
