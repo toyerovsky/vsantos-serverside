@@ -186,6 +186,8 @@ namespace VRP.Serverside.Constant.RemoteEvents
 
         public const string OnPlayerEngineStateChangeVehicle = "onPlayerEngineStateChangeVehicle";
 
+        public const string OnPlayerEnterVehicle = "onPlayerEnterVehicle";
+
         #endregion
     }
 }
