@@ -77,7 +77,7 @@ namespace VRP.Core.Database.Forum
 
         public bool UserExists(string login)
         {
-            using (MySqlConnection connection = new MySqlConnection(Singletons.Configuration.GetConnectionString("forumConnectionString")))
+            using (MySqlConnection connection = new MySqlConnection(/*Singletons.Configuration.GetConnectionString("forumConnectionString")*/_connectionString))
             using (MySqlCommand command = new MySqlCommand())
             {
                 connection.Open();
