@@ -25,7 +25,16 @@ namespace VRP.Serverside.Core.Login
 {
     public class LoginScript : Script
     {
+        private readonly UserBroadcaster _userBroadcaster = new UserBroadcaster();
         private readonly ForumDatabaseHelper _forumDatabaseHelper = new ForumDatabaseHelper();
+
+        public LoginScript()
+        {
+            AccountEntity.AccountLoggedOut += (sender, account) =>
+            {
+                _userBroadcaster.Broadcast(-1, -1, account.WebApiToken.ToString(), BroadcasterActionType.SignOut);
+            };
+        }
 
         [ServerEvent(Event.PlayerConnected)]
         public void OnPlayerConnected(Client client)
@@ -103,7 +112,6 @@ namespace VRP.Serverside.Core.Login
                             charactersRepository.Save();
                         }
                     }
-
                     account = new AccountEntity(accountModel, sender);
                     account.Login();
                 }
@@ -138,7 +146,8 @@ namespace VRP.Serverside.Core.Login
                     CharacterModel characterModel = repository.Get(characterId);
                     CharacterEntity characterEntity = new CharacterEntity(characterModel);
                     characterEntity.LoginCharacter(account);
-                    Singletons.UserBroadcaster.Broadcast(account.DbModel.Id, characterEntity.DbModel.Id, account.WebApiToken.ToString(), BroadcasterActionType.SignIn);
+                    _userBroadcaster.Broadcast(account.DbModel.Id, characterEntity.DbModel.Id,
+                        account.WebApiToken.ToString(), BroadcasterActionType.SignIn);
                 }
             }
         }

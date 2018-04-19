@@ -128,7 +128,6 @@ namespace VRP.Serverside.Entities.Core
 
         public void Dispose()
         {
-            Singletons.UserBroadcaster.Broadcast(-1, -1, WebApiToken.ToString(), BroadcasterActionType.SignOut);
             EntityHelper.Remove(this);
             DbModel.Online = false;
             Save();

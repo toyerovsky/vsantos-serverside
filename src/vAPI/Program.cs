@@ -6,6 +6,7 @@
 
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using VRP.vAPI.Services;
 
 namespace VRP.vAPI
 {

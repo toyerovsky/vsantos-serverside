@@ -18,7 +18,6 @@ namespace VRP.vAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
         }
 
         public static IConfiguration Configuration { get; private set; }
@@ -26,10 +25,9 @@ namespace VRP.vAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IUsersWatcher, UsersWatcher>();
+            services.AddSingleton(new UsersWatcher());
 
-            services.AddMvc()
-                .AddJsonOptions(option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddMvc();
 
             services.AddCors(options =>
             {

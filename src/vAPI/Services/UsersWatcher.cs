@@ -84,8 +84,6 @@ namespace VRP.vAPI.Services
                 // Check for end-of-file tag. If it is not there, read more data. 
                 if (content.IndexOf("<EOF>", StringComparison.Ordinal) > -1)
                 {
-                    Console.WriteLine($"Read: {bytesRead} from socket. \n Data: {content}");
-
                     UserData data = JsonConvert.DeserializeObject<UserData>(content);
 
                     if (data.ActionType == BroadcasterActionType.SignIn)

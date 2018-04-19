@@ -23,7 +23,8 @@ namespace VRP.Core.Tools
             IPAddress ip = IPAddress.Loopback;
             int port = Convert.ToInt32(Singletons.Configuration.GetSection("UserBroadcastPort").Value);
             _workingSocket.Connect(new IPEndPoint(ip, port));
-            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}] Prepared socket: {ip}:{port}.", Color.CornflowerBlue);
+            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}] Prepared socket: {ip}:{port}.",
+                Color.CornflowerBlue);
         }
 
         /// <summary>
@@ -60,13 +61,10 @@ namespace VRP.Core.Tools
             {
                 // Retrieve the socket from the state object.  
                 Socket handler = (Socket)asyncResult.AsyncState;
-
                 // Complete sending the data to the remote device.  
                 handler.EndSend(asyncResult);
 
                 Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}][{DateTime.Now.ToShortTimeString()}] Data send successfully completed.", Color.DarkGreen);
-                handler.Shutdown(SocketShutdown.Both);
-                handler.Close();
 
             }
             catch (Exception e)

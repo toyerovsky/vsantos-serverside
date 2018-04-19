@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by V Role Play team <contact@v-rp.pl> December 2017
- */
+/* Copyright (C) Przemysław Postrach - All Rights Reserved
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by V Role Play team <contact@v-rp.pl> December 2017
+*/
 
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
@@ -33,10 +33,6 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{accountId}/account")]
         public JsonResult GetByAccountId(int accountId)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Reset();
-            sw.Start();
-
             AccountModel account = _roleplayContext.Accounts
                 .Single(a => a.Id == accountId);
 
@@ -53,9 +49,6 @@ namespace VRP.vAPI.Controllers
                 surname = character.Surname,
                 money = character.Money
             });
-
-            sw.Stop();
-            Debug.WriteLine($"[RP Benchmark] {sw.ElapsedMilliseconds}");
 
             return Json(characters);
         }

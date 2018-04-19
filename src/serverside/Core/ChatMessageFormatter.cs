@@ -81,7 +81,7 @@ namespace VRP.Serverside.Core
                 message += '.';
             }
 
-            return $"<p style=\"color:{color}\">{message}</p>";
+            return $"<p style=\"color: {color};\">{message}</p>";
         }
     }
 }
