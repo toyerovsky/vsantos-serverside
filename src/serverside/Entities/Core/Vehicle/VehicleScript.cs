@@ -287,7 +287,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             {
                 PlayerEnterVehicleEventArgs eventArgs = new PlayerEnterVehicleEventArgs(vehicleEntity, seatId);
                 vehicleEntity.InvokePlayerEnterVehicle(player.GetAccountEntity().CharacterEntity, eventArgs);
-                player.TriggerEvent(RemoteEvents.OnPlayerEnterVehicle,seatId);
+               // player.TriggerEvent(RemoteEvents.OnPlayerEnterVehicle,seatId);
             }
         }
     }
