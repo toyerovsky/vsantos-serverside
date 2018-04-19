@@ -10,7 +10,6 @@ using System.Linq;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
-using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Core.Telephone;
 

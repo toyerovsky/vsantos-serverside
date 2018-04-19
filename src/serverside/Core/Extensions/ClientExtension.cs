@@ -7,10 +7,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Serverside.Constant.RemoteEvents;
-using VRP.Serverside.Economy.Money;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Group;

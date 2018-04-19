@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Jobs.Base;
 using VRP.Serverside.Economy.Jobs.Dustman.Models;

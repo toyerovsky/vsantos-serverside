@@ -28,7 +28,16 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(PenaltyModel model) => _context.Penaltlies.Add(model);
+        public void Insert(PenaltyModel model)
+        {
+            if ((model.Account?.Id ?? 0) != 0)
+                _context.Attach(model.Account);
+
+            if ((model.Creator?.Id ?? 0) != 0)
+                _context.Attach(model.Creator);
+
+            _context.Penaltlies.Add(model);
+        }
 
         public bool Contains(PenaltyModel model)
         {

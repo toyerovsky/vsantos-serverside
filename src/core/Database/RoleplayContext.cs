@@ -29,6 +29,7 @@ namespace VRP.Core.Database
         public virtual DbSet<WorkerModel> Workers { get; set; }
         public virtual DbSet<GroupWarehouseItemModel> GroupWarehouseItems { get; set; }
         public virtual DbSet<GroupWarehouseOrderModel> GroupWarehouseOrders { get; set; }
+        public virtual DbSet<ZoneModel> Zones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

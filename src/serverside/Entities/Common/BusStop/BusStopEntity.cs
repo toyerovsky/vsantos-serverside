@@ -7,7 +7,6 @@
 using System.Timers;
 using GTANetworkAPI;
 using VRP.Core.Enums;
-using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Common.BusStop.Models;

@@ -8,7 +8,6 @@ using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Interfaces;
-using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core.Vehicle;
 
 namespace VRP.Serverside.Economy.Jobs.Base

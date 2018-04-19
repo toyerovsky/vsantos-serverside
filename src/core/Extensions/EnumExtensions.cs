@@ -6,10 +6,7 @@
 
 using System;
 using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using VRP.Core.Enums;
 
 namespace VRP.Core.Extensions
 {

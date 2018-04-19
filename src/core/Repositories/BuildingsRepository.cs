@@ -28,7 +28,20 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(BuildingModel model) => _context.Buildings.Add(model);
+        public void Insert(BuildingModel model)
+        {
+            if ((model.Character?.Id ?? 0) != 0)
+                _context.Attach(model.Character);
+
+            foreach (var item in model.Items)
+                if ((item?.Id ?? 0) != 0)
+                    _context.Attach(item);
+
+            if ((model.Group?.Id ?? 0) != 0)
+                _context.Attach(model.Group);
+
+            _context.Buildings.Add(model);
+        }
 
         public bool Contains(BuildingModel model)
         {

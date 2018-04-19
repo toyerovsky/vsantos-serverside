@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;
 

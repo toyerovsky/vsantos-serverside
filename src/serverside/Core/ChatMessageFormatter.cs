@@ -17,7 +17,7 @@ namespace VRP.Serverside.Core
         {
             if (char.IsLower(message.First()))
                 message = $"{char.ToUpper(message[0])}{message.Substring(1)}";
-            
+
             switch (chatMessageType)
             {
                 case ChatMessageType.Normal:
@@ -81,7 +81,7 @@ namespace VRP.Serverside.Core
                 message += '.';
             }
 
-            return $"<p style=\"color: {color};\">{message}</p>";
+            return $"!{{{color}}} {message}";
         }
     }
 }

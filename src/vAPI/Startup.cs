@@ -6,9 +6,10 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+using VRP.Core.Database;
 using VRP.vAPI.Services;
 
 namespace VRP.vAPI
@@ -25,7 +26,12 @@ namespace VRP.vAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new UsersWatcher());
+            services.AddDbContext<RoleplayContext>(options =>
+            {
+                options.UseMySql(Configuration.GetConnectionString("gameConnectionString"));
+            });
+
+            services.AddSingleton<IUsersWatcher>(new UsersWatcher());
 
             services.AddMvc();
 

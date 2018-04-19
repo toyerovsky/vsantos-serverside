@@ -10,7 +10,6 @@ using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Core.Database.Models;
-using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;
 

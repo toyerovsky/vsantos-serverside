@@ -28,7 +28,33 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(CharacterModel model) => _context.Characters.Add(model);
+        public void Insert(CharacterModel model)
+        {
+            foreach (var vehicle in model.Vehicles)
+                if ((vehicle?.Id ?? 0) != 0)
+                    _context.Attach(vehicle);
+
+            foreach (var item in model.Items)
+                if ((item?.Id ?? 0) != 0)
+                    _context.Attach(item);
+
+            if ((model.Account?.Id ?? 0) != 0)
+                _context.Attach(model.Account);
+
+            foreach (var building in model.Buildings)
+                if ((building?.Id ?? 0) != 0)
+                    _context.Attach(building);
+
+            foreach (var description in model.Descriptions)
+                if ((description?.Id ?? 0) != 0)
+                    _context.Attach(description);
+
+            foreach (var worker in model.Workers)
+                if ((worker?.Id ?? 0) != 0)
+                    _context.Attach(worker);
+
+            _context.Characters.Add(model);
+        }
 
         public bool Contains(CharacterModel model)
         {

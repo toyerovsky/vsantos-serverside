@@ -28,7 +28,16 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(WorkerModel model) => _context.Workers.Add(model);
+        public void Insert(WorkerModel model)
+        {
+            if ((model.Character?.Id ?? 0) != 0)
+                _context.Attach(model.Character);
+
+            if ((model.Group?.Id ?? 0) != 0)
+                _context.Attach(model.Group);
+
+            _context.Workers.Add(model);
+        }
 
         public bool Contains(WorkerModel model)
         {

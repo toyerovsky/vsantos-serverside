@@ -8,9 +8,7 @@ using System;
 using System.Drawing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using VRP.Core.Tools;
 
 namespace VRP.Core.Database
 {
@@ -52,7 +50,6 @@ namespace VRP.Core.Database
             }
 
             DbContextOptionsBuilder<RoleplayContext> options = new DbContextOptionsBuilder<RoleplayContext>();
-            options.EnableSensitiveDataLogging();
             options.UseMySql(/*Singletons.Configuration.GetConnectionString("gameConnectionString")*/_connectionString);
 
             return new RoleplayContext(options.Options);

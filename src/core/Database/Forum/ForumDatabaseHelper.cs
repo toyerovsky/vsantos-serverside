@@ -6,9 +6,7 @@
 
 using System;
 using System.Data;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using VRP.Core.Tools;
 
 namespace VRP.Core.Database.Forum
 {

@@ -5,7 +5,6 @@
  */
 
 using System;
-using GTANetworkAPI;
 using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Core.WheelMenu

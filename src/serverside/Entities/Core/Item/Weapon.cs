@@ -8,7 +8,6 @@ using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
-using VRP.Serverside.Core.Extensions;
 
 namespace VRP.Serverside.Entities.Core.Item
 {

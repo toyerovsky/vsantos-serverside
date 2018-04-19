@@ -1,5 +1,4 @@
-﻿using VRP.Serverside.Entities.Core;
-using VRP.Serverside.Entities.Core.Vehicle;
+﻿using VRP.Serverside.Entities.Core.Vehicle;
 
 namespace VRP.Serverside.Entities.EventArgs
 {

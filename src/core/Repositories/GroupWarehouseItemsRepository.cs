@@ -28,7 +28,10 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(GroupWarehouseItemModel model) => _context.GroupWarehouseItems.Add(model);
+        public void Insert(GroupWarehouseItemModel model)
+        {
+            _context.GroupWarehouseItems.Add(model);
+        }
 
         public bool Contains(GroupWarehouseItemModel model)
         {

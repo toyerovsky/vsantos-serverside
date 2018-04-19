@@ -5,9 +5,7 @@
  */
 
 using System.Globalization;
-using GTANetworkAPI;
 using VRP.Serverside.Constant.RemoteEvents;
-using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Money

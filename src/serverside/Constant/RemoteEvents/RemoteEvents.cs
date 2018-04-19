@@ -4,8 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System.Security.Authentication.ExtendedProtection;
-
 namespace VRP.Serverside.Constant.RemoteEvents
 {
     public static class RemoteEvents

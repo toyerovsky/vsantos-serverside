@@ -9,13 +9,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
-using Microsoft.CodeAnalysis.Emit;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities.Core;
-using VRP.Serverside.Entities.Core.Item;
 
 namespace VRP.Serverside.Core.Telephone
 {

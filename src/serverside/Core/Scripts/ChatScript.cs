@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Enums;
 using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
@@ -180,7 +179,7 @@ namespace VRP.Serverside.Core.Scripts
         public void SendAdministratorDoMessage(Client player, string message)
         {
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
-            chatMessageFormatter.Format(player.GetAccountEntity().CharacterEntity, message, ChatMessageType.ServerDo);
+            message = chatMessageFormatter.Format(player.GetAccountEntity().CharacterEntity, message, ChatMessageType.ServerDo);
             NAPI.Chat.SendChatMessageToAll(message);
         }
 
@@ -190,7 +189,7 @@ namespace VRP.Serverside.Core.Scripts
             string message, ChatMessageType chatMessageType, string color = "")
         {
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
-            chatMessageFormatter.Format(sender, message, chatMessageType);
+            message = chatMessageFormatter.Format(sender, message, chatMessageType);
 
             foreach (CharacterEntity p in players)
                 p.AccountEntity.Client.SendChatMessage(message);
@@ -200,11 +199,11 @@ namespace VRP.Serverside.Core.Scripts
         public static void SendMessageToNearbyPlayers(CharacterEntity sender, string message, ChatMessageType chatMessageType)
         {
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
-            chatMessageFormatter.Format(sender, message, chatMessageType);
+            message = chatMessageFormatter.Format(sender, message, chatMessageType);
 
             // Dla każdego klienta w zasięgu wyświetl wiadomość, zasięg jest pobierany przez rzutowanie enuma do floata
             NAPI.Player.GetPlayersInRadiusOfPlayer((float)chatMessageType, sender.AccountEntity.Client)
-                .ForEach(c => c.SendChatMessage(message));
+                .ForEach(c => NAPI.Chat.SendChatMessageToPlayer(c, message, true));
         }
 
         public static void SendMessageToPlayer(CharacterEntity sender, string message, ChatMessageType chatMessageType)

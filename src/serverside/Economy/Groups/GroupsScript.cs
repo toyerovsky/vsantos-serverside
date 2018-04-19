@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Tools;
-using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities;

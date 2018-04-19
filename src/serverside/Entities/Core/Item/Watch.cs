@@ -7,7 +7,6 @@
 using System;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
-using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 
 namespace VRP.Serverside.Entities.Core.Item

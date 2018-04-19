@@ -28,7 +28,13 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(TelephoneContactModel model) => _context.TelephoneContacts.Add(model);
+        public void Insert(TelephoneContactModel model)
+        {
+            if ((model.Cellphone?.Id ?? 0) != 0)
+                _context.Attach(model.Cellphone);
+
+            _context.TelephoneContacts.Add(model);
+        }
 
         public bool Contains(TelephoneContactModel model)
         {

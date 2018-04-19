@@ -28,7 +28,13 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(CrimeBotModel model) => _context.CrimeBots.Add(model);
+        public void Insert(CrimeBotModel model)
+        {
+            if ((model.GroupModel?.Id ?? 0) != 0)
+                _context.Attach(model.GroupModel);
+
+            _context.CrimeBots.Add(model);
+        }
 
         public bool Contains(CrimeBotModel model)
         {
