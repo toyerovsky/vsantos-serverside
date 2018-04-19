@@ -18,10 +18,7 @@ namespace VRP.Core.Tools
     {
         private readonly Socket _workingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        /// <summary>
-        /// Prepare the socket
-        /// </summary>
-        private void Connect()
+        public UserBroadcaster()
         {
             IPAddress ip = IPAddress.Loopback;
             int port = Convert.ToInt32(Singletons.Configuration.GetSection("UserBroadcastPort").Value);
@@ -45,9 +42,6 @@ namespace VRP.Core.Tools
                 CharacterId = characterId,
                 Token = token,
             }).ToCharArray());
-
-            if (!_workingSocket.Connected)
-                Connect();
 
             Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}][{DateTime.Now.ToShortTimeString()}] Sending data to WebAPI. " +
                                        $"{{token: {token} accountId: {accountId}, characterId: {characterId}, actionType: {actionType}", Color.CornflowerBlue);

@@ -14,7 +14,7 @@ namespace VRP.Core.Tools
 
         public static readonly IConfiguration Configuration = new ConfigurationBuilder()
             .SetBasePath(Utils.WorkingDirectory)
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("rpsettings.json")
             .Build();
     }
 }

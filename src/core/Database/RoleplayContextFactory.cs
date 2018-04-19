@@ -20,12 +20,14 @@ namespace VRP.Core.Database
 
         public static RoleplayContext NewContext() => Instance.CreateDbContext(new string[] { });
 
+        private string _connectionString = "server=77.55.212.185;database=vrpsrv;Uid=vrp;Pwd=kR6BNDBDNsX5yhJU;";
+
         private bool _firstAttempt = true;
         public RoleplayContext CreateDbContext(string[] args)
         {
             if (_firstAttempt)
             {
-                using (MySqlConnection testConnection = new MySqlConnection(Singletons.Configuration.GetConnectionString("gameConnectionString")))
+                using (MySqlConnection testConnection = new MySqlConnection(/*Singletons.Configuration.GetConnectionString("gameConnectionString")*/_connectionString))
                 {
                     testConnection.Open();
                     string query = "select 1";
@@ -51,8 +53,8 @@ namespace VRP.Core.Database
 
             DbContextOptionsBuilder<RoleplayContext> options = new DbContextOptionsBuilder<RoleplayContext>();
             options.EnableSensitiveDataLogging();
-            options.UseMySql(Singletons.Configuration.GetConnectionString("gameConnectionString"));
-            
+            options.UseMySql(/*Singletons.Configuration.GetConnectionString("gameConnectionString")*/_connectionString);
+
             return new RoleplayContext(options.Options);
         }
     }

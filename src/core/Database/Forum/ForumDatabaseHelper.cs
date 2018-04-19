@@ -14,12 +14,15 @@ namespace VRP.Core.Database.Forum
 {
     public class ForumDatabaseHelper
     {
+        private string _connectionString =
+            "server=77.55.212.185;database=vrpforum;uid=vrp;pwd=kR6BNDBDNsX5yhJU;SslMode=None";
+
         public bool CheckPasswordMatch(string email, string password, out ForumLoginData forumLoginData)
         {
             forumLoginData = null;
             if (UserExists(email))
             {
-                using (MySqlConnection connection = new MySqlConnection(Singletons.Configuration.GetConnectionString("forumConnectionString")))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString/*Singletons.Configuration.GetConnectionString("forumConnectionString")*/))
                 using (MySqlCommand command = new MySqlCommand())
                 {
                     connection.Open();
