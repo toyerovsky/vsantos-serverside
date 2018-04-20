@@ -11,6 +11,7 @@ using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Repositories;
+using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.CharacterCreator;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Money;
@@ -121,8 +122,17 @@ namespace VRP.Serverside.Entities.Core
 
         public void Save()
         {
+            if (AccountEntity != null)
+            {
+                Position = AccountEntity.Client.Position;
+                Rotation = AccountEntity.Client.Rotation;
+            }
+
             using (CharactersRepository repository = new CharactersRepository())
+            {
+                repository.Update(DbModel);
                 repository.Save();
+            }
         }
 
         public void LoginCharacter(AccountEntity accountEntity)
@@ -138,14 +148,16 @@ namespace VRP.Serverside.Entities.Core
 
         public override void Spawn()
         {
-            AccountEntity.Client.Nametag = $"({AccountEntity.ServerId}) {AccountEntity.CharacterEntity.FormatName}";
+            AccountEntity.Client.Nametag =
+                $"({AccountEntity.ServerId}) {AccountEntity.CharacterEntity.FormatName}";
             AccountEntity.Client.Name = AccountEntity.CharacterEntity.FormatName;
 
             // FixMe obsługa kreatora postaci
             AccountEntity.Client.SetSkin(NAPI.Util.PedNameToModel(DbModel.Model));
 
             // FixMe spawn w domu
-            AccountEntity.Client.Position = new Vector3(DbModel.LastPositionX, DbModel.LastPositionY, DbModel.LastPositionZ);
+            AccountEntity.Client.Position =
+                new Vector3(DbModel.LastPositionX, DbModel.LastPositionY, DbModel.LastPositionZ);
             AccountEntity.Client.Dimension = 0;
 
             if (DbModel.MinutesToRespawn > 0)

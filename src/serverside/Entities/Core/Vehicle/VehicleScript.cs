@@ -222,14 +222,10 @@ namespace VRP.Serverside.Entities.Core.Vehicle
         /// <param name="senderCharacter"></param>
         public static void ChangePlayerVehicleLockState(CharacterEntity senderCharacter)
         {
-            foreach (var vehicleEntity in EntityHelper.GetVehicles())
-            {
-                senderCharacter.SendInfo(vehicleEntity.DbModel.Name);
-            }
-
             VehicleEntity vehicle = EntityHelper.GetVehicles()
-                .Where(v => v.DbModel.Character.Id == senderCharacter.DbModel.Id)
-                .FirstOrDefault(x => x.GameVehicle.Position.DistanceTo(senderCharacter.Position) < 100f);
+                .FirstOrDefault(v =>
+                    v.DbModel.Character.Id == senderCharacter.DbModel.Id &&
+                    v.GameVehicle.Position.DistanceTo(senderCharacter.AccountEntity.Client.Position) < 2.2f);
 
             if (vehicle == null)
             {
@@ -285,7 +281,7 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             {
                 PlayerEnterVehicleEventArgs eventArgs = new PlayerEnterVehicleEventArgs(vehicleEntity, seatId);
                 vehicleEntity.InvokePlayerEnterVehicle(player.GetAccountEntity().CharacterEntity, eventArgs);
-               // player.TriggerEvent(RemoteEvents.OnPlayerEnterVehicle,seatId);
+                player.TriggerEvent(RemoteEvents.OnPlayerEnterVehicle, vehicle, seatId);
             }
         }
     }
