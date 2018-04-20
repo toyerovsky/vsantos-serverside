@@ -217,7 +217,6 @@ namespace VRP.Serverside.Entities
 
         public static IEnumerable<CornerEntity> GetCorners() => Corners;
 
-
         #endregion
 
         #region Account

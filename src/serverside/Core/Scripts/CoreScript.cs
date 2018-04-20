@@ -30,13 +30,6 @@ namespace VRP.Serverside.Core.Scripts
             }
         }
 
-        [ServerEvent(Event.PlayerDisconnected)]
-        private void OnOnPlayerDisconnected(Client client, byte type, string reason)
-        {
-            AccountEntity account = client.GetAccountEntity();
-            account?.Dispose();
-        }
-
         /// <summary>
         /// Server stuff initialization
         /// </summary>
@@ -52,18 +45,19 @@ namespace VRP.Serverside.Core.Scripts
         [ServerEvent(Event.Update)]
         private void Event_OnUpdate()
         {
-            if (!EntityHelper.GetBuildings().Any())
-                return;
-            //Kręcące się markery od budynków
-            if (Math.Abs(_currentRotation - 360f) < 0.4)
-                _currentRotation = 0;
-
-            _currentRotation += 0.4f;
-
-            foreach (BuildingEntity building in EntityHelper.GetBuildings())
+            if (EntityHelper.GetBuildings().Any())
             {
-                building.BuildingMarker.Rotation =
-                    new Vector3(building.BuildingMarker.Rotation.X, building.BuildingMarker.Rotation.Y, _currentRotation);
+                //Kręcące się markery od budynków
+                if (Math.Abs(_currentRotation - 360f) < 0.4)
+                    _currentRotation = 0;
+
+                _currentRotation += 0.4f;
+
+                foreach (BuildingEntity building in EntityHelper.GetBuildings())
+                {
+                    building.BuildingMarker.Rotation =
+                        new Vector3(building.BuildingMarker.Rotation.X, building.BuildingMarker.Rotation.Y, _currentRotation);
+                }
             }
         }
 
@@ -94,19 +88,15 @@ namespace VRP.Serverside.Core.Scripts
         [ServerEvent(Event.ResourceStop)]
         public void OnResourceStop()
         {
-            Task dbStop = Task.Run(() =>
-            {
-                foreach (AccountEntity account in EntityHelper.GetAccounts()
-                    .Where(x => x.CharacterEntity != null))
-                    account.Dispose();
+            foreach (AccountEntity account in EntityHelper.GetAccounts()
+                .Where(x => x.CharacterEntity != null))
+                account.Dispose();
 
-                foreach (VehicleEntity vehicle in EntityHelper.GetVehicles())
-                {
-                    vehicle.Save();
-                    vehicle.Dispose();
-                }
-            });
-            dbStop.Wait();
+            foreach (VehicleEntity vehicle in EntityHelper.GetVehicles())
+            {
+                vehicle.Save();
+                vehicle.Dispose();
+            }
         }
     }
 }

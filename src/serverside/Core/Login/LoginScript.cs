@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Core.Database;
@@ -34,6 +36,13 @@ namespace VRP.Serverside.Core.Login
             {
                 _userBroadcaster.Broadcast(-1, -1, account.WebApiToken.ToString(), BroadcasterActionType.SignOut);
             };
+        }
+
+        [ServerEvent(Event.PlayerDisconnected)]
+        public void OnOnPlayerDisconnected(Client client, DisconnectionType type, string reason)
+        {
+            AccountEntity account = client.GetAccountEntity();
+            account?.Dispose();
         }
 
         [ServerEvent(Event.PlayerConnected)]
