@@ -32,6 +32,7 @@ namespace VRP.vAPI
             });
 
             services.AddSingleton<IUsersWatcher>(new UsersWatcher());
+            services.AddScoped((factory) => Configuration);
 
             services.AddMvc();
 
