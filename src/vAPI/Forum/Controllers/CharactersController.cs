@@ -11,7 +11,7 @@ using VRP.Core.Repositories;
 namespace VRP.vAPI.Forum.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Characters")]
+    [Route("api/forum/Characters")]
     public class CharactersController : Controller
     {
         private readonly IRepository<CharacterModel> _repository;
