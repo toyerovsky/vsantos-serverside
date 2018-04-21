@@ -4,13 +4,13 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using VRP.Core.Database.Models;
 using VRP.Core.Repositories;
 
-namespace VRP.vAPI.Controllers
+namespace VRP.vAPI.Game.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]

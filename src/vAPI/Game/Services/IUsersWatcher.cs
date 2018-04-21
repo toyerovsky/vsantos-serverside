@@ -5,9 +5,9 @@
  */
 
 using System;
-using VRP.vAPI.Model;
+using VRP.vAPI.Game.Model;
 
-namespace VRP.vAPI.Services
+namespace VRP.vAPI.Game.Services
 {
     public interface IUsersWatcher
     {

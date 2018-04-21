@@ -5,19 +5,16 @@
 */
 
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using Dapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
-using VRP.vAPI.Services;
+using VRP.vAPI.Game.Services;
 
-namespace VRP.vAPI.Controllers
+namespace VRP.vAPI.Game.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]

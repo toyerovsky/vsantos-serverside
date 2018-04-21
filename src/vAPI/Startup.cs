@@ -10,7 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VRP.Core.Database;
-using VRP.vAPI.Services;
+using VRP.Core.Database.Models;
+using VRP.Core.Interfaces;
+using VRP.Core.Repositories;
+using VRP.vAPI.Game.Services;
 
 namespace VRP.vAPI
 {
@@ -33,6 +36,7 @@ namespace VRP.vAPI
 
             services.AddSingleton<IUsersWatcher>(new UsersWatcher());
             services.AddScoped((factory) => Configuration);
+            services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
 
             services.AddMvc();
 

@@ -6,7 +6,7 @@
 
 using VRP.Core.Enums;
 
-namespace VRP.vAPI.Services.Model
+namespace VRP.vAPI.Game.Services.Model
 {
     public class UserData
     {

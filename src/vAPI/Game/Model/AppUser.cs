@@ -6,7 +6,7 @@
 
 using VRP.Core.Database.Models;
 
-namespace VRP.vAPI.Model
+namespace VRP.vAPI.Game.Model
 {
     public class AppUser
     {

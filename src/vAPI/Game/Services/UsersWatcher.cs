@@ -16,10 +16,10 @@ using Newtonsoft.Json;
 using VRP.Core.Database;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
-using VRP.vAPI.Model;
-using VRP.vAPI.Services.Model;
+using VRP.vAPI.Game.Model;
+using VRP.vAPI.Game.Services.Model;
 
-namespace VRP.vAPI.Services
+namespace VRP.vAPI.Game.Services
 {
     public class UsersWatcher : IUsersWatcher, IDisposable
     {

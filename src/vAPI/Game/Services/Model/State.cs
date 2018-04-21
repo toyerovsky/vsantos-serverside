@@ -7,7 +7,7 @@
 using System.Net.Sockets;
 using System.Text;
 
-namespace VRP.vAPI.Services.Model
+namespace VRP.vAPI.Game.Services.Model
 {
     public class State
     {
