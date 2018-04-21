@@ -16,7 +16,7 @@ namespace VRP.vAPI.Forum.Controllers
     {
         private readonly IRepository<CharacterModel> _repository;
 
-        public CharactersController(CharactersRepository repository)
+        public CharactersController(IRepository<CharacterModel> repository)
         {
             _repository = repository;
         }
