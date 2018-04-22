@@ -42,6 +42,8 @@ namespace VRP.Core.Repositories
 
         public ZoneModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
 
+        public ZoneModel GetNoRelated(int id) => Get(id);
+
         public IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
         {
             IQueryable<ZoneModel> zones = expression != null ?

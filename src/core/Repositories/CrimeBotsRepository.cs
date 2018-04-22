@@ -51,7 +51,11 @@ namespace VRP.Core.Repositories
 
         public CrimeBotModel Get(int id) => GetAll(c => c.Id == id).SingleOrDefault();
 
+        public CrimeBotModel GetNoRelated(int id) => GetNoRelated(c => c.Id == id).SingleOrDefault();
+
         public CrimeBotModel Get(GroupModel model) => GetAll(c => c.GroupModel.Id == model.Id).Single();
+
+
 
         public IEnumerable<CrimeBotModel> GetAll(Expression<Func<CrimeBotModel, bool>> expression = null)
         {
@@ -64,6 +68,16 @@ namespace VRP.Core.Repositories
                     .ThenInclude(group => group.BossCharacter)
                 .Include(crimeBot => crimeBot.GroupModel)
                     .ThenInclude(group => group.Workers);
+        }
+
+        public IEnumerable<CrimeBotModel> GetNoRelated(Expression<Func<CrimeBotModel, bool>> expression = null)
+        {
+            IQueryable<CrimeBotModel> crimeBots = expression != null ?
+                _context.CrimeBots.Where(expression) :
+                _context.CrimeBots;
+
+            return crimeBots;
+
         }
 
         public void Save() => _context.SaveChanges();

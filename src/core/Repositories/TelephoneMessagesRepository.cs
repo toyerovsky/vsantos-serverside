@@ -51,6 +51,8 @@ namespace VRP.Core.Repositories
 
         public TelephoneMessageModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
+        public TelephoneMessageModel GetNoRelated(int id) => GetNoRelated(b => b.Id == id).SingleOrDefault();
+
         public IEnumerable<TelephoneMessageModel> GetAll(Expression<Func<TelephoneMessageModel, bool>> expression = null)
         {
             IQueryable<TelephoneMessageModel> telephoneMessages = expression != null ?
@@ -61,6 +63,15 @@ namespace VRP.Core.Repositories
                 .Include(message => message.Cellphone)
                 .Include(message => message.Cellphone)
                     .ThenInclude(cellphone => cellphone.Character);
+        }
+
+        public IEnumerable<TelephoneMessageModel> GetNoRelated(Expression<Func<TelephoneMessageModel, bool>> expression = null)
+        {
+            IQueryable<TelephoneMessageModel> telephoneMessages = expression != null ?
+                _context.TelephoneMessages.Where(expression) :
+                _context.TelephoneMessages;
+
+            return telephoneMessages;
         }
 
         public void Save() => _context.SaveChanges();

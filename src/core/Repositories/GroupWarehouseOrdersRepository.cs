@@ -48,6 +48,8 @@ namespace VRP.Core.Repositories
 
         public GroupWarehouseOrderModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
+        public GroupWarehouseOrderModel GetNoRelated(int id) => GetNoRelated(b => b.Id == id).SingleOrDefault();
+
         public IEnumerable<GroupWarehouseOrderModel> GetAll(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
         {
             IQueryable<GroupWarehouseOrderModel> groupWarehouseOrders = expression != null ?
@@ -56,6 +58,15 @@ namespace VRP.Core.Repositories
 
             return groupWarehouseOrders
                 .Include(order => order.Getter);
+        }
+
+        public IEnumerable<GroupWarehouseOrderModel> GetNoRelated(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
+        {
+            IQueryable<GroupWarehouseOrderModel> groupWarehouseOrders = expression != null ?
+                _context.GroupWarehouseOrders.Where(expression) :
+                _context.GroupWarehouseOrders;
+
+            return groupWarehouseOrders;
         }
 
         public void Save() => _context.SaveChanges();

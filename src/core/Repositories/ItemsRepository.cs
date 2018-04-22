@@ -60,6 +60,8 @@ namespace VRP.Core.Repositories
 
         public ItemModel Get(int id) => GetAll(i => i.Id == id).SingleOrDefault();
 
+        public ItemModel GetNoRelated(int id) => GetNoRelated(i => i.Id == id).SingleOrDefault();
+
         public IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> expression = null)
         {
             IQueryable<ItemModel> items = expression != null ?
@@ -73,6 +75,15 @@ namespace VRP.Core.Repositories
                 .Include(item => item.Group)
                     .ThenInclude(group => group.BossCharacter)
                         .ThenInclude(bossCharacter => bossCharacter.Account);
+        }
+
+        public IEnumerable<ItemModel> GetNoRelated(Expression<Func<ItemModel, bool>> expression = null)
+        {
+            IQueryable<ItemModel> items = expression != null ?
+                _context.Items.Where(expression) :
+                _context.Items;
+
+            return items;
         }
 
         public void Save() => _context.SaveChanges();

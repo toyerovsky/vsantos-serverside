@@ -54,6 +54,8 @@ namespace VRP.Core.Repositories
 
         public PenaltyModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
+        public PenaltyModel GetNoRelated(int id) => GetNoRelated(b => b.Id == id).SingleOrDefault();
+
         public IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {
             IQueryable<PenaltyModel> penatlies = expression != null ?
@@ -63,6 +65,16 @@ namespace VRP.Core.Repositories
             return penatlies
                 .Include(penatly => penatly.Account)
                 .Include(penatly => penatly.Creator);
+        }
+
+        public IEnumerable<PenaltyModel> GetNoRelated(Expression<Func<PenaltyModel, bool>> expression = null)
+        {
+            IQueryable<PenaltyModel> penatlies = expression != null ?
+                _context.Penaltlies.Where(expression) :
+                _context.Penaltlies;
+
+            return penatlies;
+
         }
 
         public void Save() => _context.SaveChanges();

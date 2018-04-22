@@ -61,6 +61,8 @@ namespace VRP.Core.Repositories
 
         public VehicleModel Get(int id) => GetAll(v => v.Id == id).SingleOrDefault();
 
+        public VehicleModel GetNoRelated(int id) => GetNoRelated(v => v.Id == id).SingleOrDefault();
+
         public IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
         {
             IQueryable<VehicleModel> vehicles = expression != null ?
@@ -73,6 +75,16 @@ namespace VRP.Core.Repositories
                 .Include(vehicle => vehicle.Group)
                 .Include(vehicle => vehicle.ItemsInVehicle);
         }
+
+        public IEnumerable<VehicleModel> GetNoRelated(Expression<Func<VehicleModel, bool>> expression = null)
+        {
+            IQueryable<VehicleModel> vehicles = expression != null ?
+                _context.Vehicles.Where(expression) :
+                _context.Vehicles;
+
+            return vehicles;
+        }
+
 
         public void Save() => _context.SaveChanges();
 

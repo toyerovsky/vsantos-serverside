@@ -74,6 +74,8 @@ namespace VRP.Core.Repositories
 
         public CharacterModel Get(int id) => GetAll(c => c.Id == id).SingleOrDefault();
 
+        public CharacterModel GetNoRelated(int id) => GetNoRelated(c => c.Id == id).SingleOrDefault();
+
         public IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {
             IQueryable<CharacterModel> characters = expression != null ?
@@ -92,6 +94,15 @@ namespace VRP.Core.Repositories
                 .Include(character => character.Workers)
                     .ThenInclude(group => group.Group)
                 .Include(character => character.Account);
+        }
+
+        public IEnumerable<CharacterModel> GetNoRelated(Expression<Func<CharacterModel, bool>> expression = null)
+        {
+            IQueryable<CharacterModel> characters = expression != null ?
+                _context.Characters.Where(expression) :
+                _context.Characters;
+
+            return characters;
         }
 
         public void Save() => _context.SaveChanges();

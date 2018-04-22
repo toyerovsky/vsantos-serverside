@@ -48,6 +48,8 @@ namespace VRP.Core.Repositories
 
         public GroupWarehouseItemModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
+        public GroupWarehouseItemModel GetNoRelated(int id) => Get(id);
+
         public IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
         {
             IQueryable<GroupWarehouseItemModel> groupWarehouseItems = expression != null ?
@@ -56,6 +58,8 @@ namespace VRP.Core.Repositories
 
             return groupWarehouseItems;
         }
+
+      
 
         public void Save() => _context.SaveChanges();
 
