@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
 using VRP.Core.Interfaces;
@@ -38,7 +39,9 @@ namespace VRP.vAPI
             services.AddScoped((factory) => Configuration);
             services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             services.AddCors(options =>
             {

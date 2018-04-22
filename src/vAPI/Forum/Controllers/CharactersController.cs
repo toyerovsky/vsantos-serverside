@@ -38,7 +38,7 @@ namespace VRP.vAPI.Forum.Controllers
             }
 
 
-            var characterModel = _repository.GetNoRelated(id);
+            var characterModel = _repository.Get(id);
 
             if (characterModel == null)
             {
