@@ -56,7 +56,7 @@ namespace VRP.Core.Repositories
             _context.Buildings.Remove(building);
         }
 
-        public BuildingModel Get(int id) => GetAll(b => b.Id == id).Single();
+        public BuildingModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
         public IEnumerable<BuildingModel> GetAll(Expression<Func<BuildingModel, bool>> expression = null)
         {

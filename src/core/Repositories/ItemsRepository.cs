@@ -58,7 +58,7 @@ namespace VRP.Core.Repositories
             _context.Items.Remove(item);
         }
 
-        public ItemModel Get(int id) => GetAll(i => i.Id == id).Single();
+        public ItemModel Get(int id) => GetAll(i => i.Id == id).SingleOrDefault();
 
         public IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> expression = null)
         {

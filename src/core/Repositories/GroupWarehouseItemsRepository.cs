@@ -46,7 +46,7 @@ namespace VRP.Core.Repositories
             _context.GroupWarehouseItems.Remove(warehouseItem);
         }
 
-        public GroupWarehouseItemModel Get(int id) => GetAll(b => b.Id == id).Single();
+        public GroupWarehouseItemModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
         public IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
         {

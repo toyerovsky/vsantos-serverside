@@ -49,7 +49,7 @@ namespace VRP.Core.Repositories
             _context.TelephoneContacts.Remove(contact);
         }
 
-        public TelephoneContactModel Get(int id) => GetAll(b => b.Id == id).Single();
+        public TelephoneContactModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
         public IEnumerable<TelephoneContactModel> GetAll(Expression<Func<TelephoneContactModel, bool>> expression = null)
         {

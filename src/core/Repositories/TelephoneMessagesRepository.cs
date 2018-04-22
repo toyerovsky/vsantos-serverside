@@ -49,7 +49,7 @@ namespace VRP.Core.Repositories
             _context.TelephoneMessages.Remove(message);
         }
 
-        public TelephoneMessageModel Get(int id) => GetAll(b => b.Id == id).Single();
+        public TelephoneMessageModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
         public IEnumerable<TelephoneMessageModel> GetAll(Expression<Func<TelephoneMessageModel, bool>> expression = null)
         {

@@ -72,7 +72,7 @@ namespace VRP.Core.Repositories
             _context.Characters.Remove(character);
         }
 
-        public CharacterModel Get(int id) => GetAll(c => c.Id == id).Single();
+        public CharacterModel Get(int id) => GetAll(c => c.Id == id).SingleOrDefault();
 
         public IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {

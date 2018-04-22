@@ -52,7 +52,7 @@ namespace VRP.Core.Repositories
             _context.Workers.Remove(worker);
         }
 
-        public WorkerModel Get(int id) => GetAll(g => g.Id == id).Single();
+        public WorkerModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
 
         public IEnumerable<WorkerModel> GetAll(Expression<Func<WorkerModel, bool>> expression = null)
         {

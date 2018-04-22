@@ -53,7 +53,7 @@ namespace VRP.Core.Repositories
             _context.Groups.Remove(group);
         }
 
-        public GroupModel Get(int id) => GetAll(g => g.Id == id).Single();
+        public GroupModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
 
         public IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> expression = null)
         {

@@ -40,7 +40,7 @@ namespace VRP.Core.Repositories
             _context.Zones.Remove(zone);
         }
 
-        public ZoneModel Get(int id) => GetAll(g => g.Id == id).Single();
+        public ZoneModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
 
         public IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
         {

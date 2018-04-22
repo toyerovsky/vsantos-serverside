@@ -59,7 +59,7 @@ namespace VRP.Core.Repositories
             _context.Vehicles.Remove(vehicle);
         }
 
-        public VehicleModel Get(int id) => GetAll(v => v.Id == id).Single();
+        public VehicleModel Get(int id) => GetAll(v => v.Id == id).SingleOrDefault();
 
         public IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
         {

@@ -52,7 +52,7 @@ namespace VRP.Core.Repositories
             _context.Penaltlies.Remove(penatly);
         }
 
-        public PenaltyModel Get(int id) => GetAll(b => b.Id == id).Single();
+        public PenaltyModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
 
         public IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {

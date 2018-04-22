@@ -43,9 +43,9 @@ namespace VRP.Core.Repositories
             _context.Accounts.Remove(account);
         }
 
-        public AccountModel Get(int id) => GetAll(account => account.Id == id).Single();
+        public AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
 
-        public AccountModel GetByUserId(long userId) => GetAll(account => account.ForumUserId == userId).Single();
+        public AccountModel GetByUserId(long userId) => GetAll(account => account.ForumUserId == userId).SingleOrDefault();
 
         public IEnumerable<AccountModel> GetAll(Expression<Func<AccountModel, bool>> expression = null)
         {
