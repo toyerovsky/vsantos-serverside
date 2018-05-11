@@ -99,9 +99,12 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             DbModel.EnginePowerMultiplier = GameVehicle.EnginePowerMultiplier;
             DbModel.NumberPlateStyle = GameVehicle.NumberPlateStyle;
             DbModel.NumberPlate = GameVehicle.NumberPlate;
-            DbModel.Fuel = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_fuel");
-            DbModel.FuelConsumption = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_fuelConsumption");
-            DbModel.Milage = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_milage");
+            //DbModel.Fuel = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_fuel");
+            DbModel.Fuel = GameVehicle.GetSharedData("fuel");
+            //DbModel.FuelConsumption = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_fuelConsumption");
+            DbModel.FuelConsumption = GameVehicle.GetSharedData("fuelConsumption");
+            //DbModel.Milage = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_milage");
+            DbModel.Milage = GameVehicle.GetSharedData("milage");
 
             if (_nonDbVehicle) return;
             using (VehiclesRepository repository = new VehiclesRepository())
@@ -285,12 +288,16 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             NAPI.Vehicle.SetVehicleEnginePowerMultiplier(GameVehicle, engineMultipier);
             NAPI.Vehicle.SetVehicleEngineTorqueMultiplier(GameVehicle, torqueMultipier);
 
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_maxfuel", DbModel.Fuel);
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuel", DbModel.Fuel);
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuelConsumption", DbModel.FuelConsumption);
-            NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_milage", DbModel.Milage);
+            //NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_maxfuel", DbModel.Fuel);
+            //NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuel", DbModel.Fuel);
+            //NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_fuelConsumption", DbModel.FuelConsumption);
+            //NAPI.Data.SetEntitySharedData(GameVehicle.Handle, "_milage", DbModel.Milage);
             GameVehicle.SetData("VehicleEntity", this);
             GameVehicle.SetSharedData("Id", DbModel.Id);
+            GameVehicle.SetSharedData("milage",DbModel.Milage);
+            GameVehicle.SetSharedData("fuel",DbModel.Fuel);
+            GameVehicle.SetSharedData("fuelConsumption",DbModel.FuelConsumption);
+            GameVehicle.SetSharedData("maxFuel",DbModel.FuelTank);
             EntityHelper.Add(this);
             Save();
         }
