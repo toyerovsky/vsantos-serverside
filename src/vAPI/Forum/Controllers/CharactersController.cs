@@ -37,7 +37,6 @@ namespace VRP.vAPI.Forum.Controllers
                 return BadRequest(ModelState);
             }
 
-
             var characterModel = _repository.Get(id);
 
             if (characterModel == null)

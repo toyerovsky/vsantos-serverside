@@ -33,8 +33,8 @@ namespace VRP.vAPI.Game.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{accountId}/account")]
-        public JsonResult GetByAccountId(int accountId)
+        [HttpGet("account/{accountId}")]
+        public IActionResult GetByAccountId(int accountId)
         {
             var query = "SELECT Name, Surname, Money FROM vrpsrv.Characters WHERE AccountId = @id;";
 

@@ -7,8 +7,10 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
 using VRP.Core.Repositories;
+using VRP.vAPI.Game.Model;
 
 namespace VRP.vAPI.Game.Controllers
 {
@@ -19,15 +21,37 @@ namespace VRP.vAPI.Game.Controllers
     {
         private readonly AccountsRepository _accountsRepository = new AccountsRepository();
 
+        [HttpPost]
+        public IActionResult Login([FromBody] LoginModel loginModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (ForumDatabaseHelper.UserExists(loginModel.Email))
+            {
+                return NotFound();
+            }
+
+            if (ForumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password,
+                out ForumLoginData forumLoginData))
+            {
+                return Json(forumLoginData.Id);
+            }
+
+            return NotFound();
+        }
+
         [HttpGet]
-        public JsonResult Get()
+        public IActionResult Get()
         {
             IEnumerable<AccountModel> accounts = _accountsRepository.GetAll();
             return Json(accounts);
         }
-        
+
         [HttpGet("{id}")]
-        public JsonResult Get(int id)
+        public IActionResult Get(int id)
         {
             AccountModel account = _accountsRepository.Get(id);
             return Json(account);
@@ -50,11 +74,6 @@ namespace VRP.vAPI.Game.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
         }
     }
 }
