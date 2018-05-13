@@ -14,6 +14,8 @@ namespace VRP.Core.Database.Models
         public DateTime BornDate { get; set; }
         public string Address { get; set; }
         public bool Gender { get; set; }
+        public byte[] Outfit { get; set; }
+
         [EnumDataType(typeof(Race))]
         public Race Race { get; set; }
         //jednoLiteroweString starcz¹?
@@ -23,7 +25,7 @@ namespace VRP.Core.Database.Models
         public string DNACode { get; set; }
 
         public bool Wanted { get; set; }
-        public virtual ICollection<VehicleModel> Vehicles { get; set; }
+        public virtual ICollection<VehicleRecord> Vehicles { get; set; }
         public virtual ICollection<CriminalCase> CriminalCases{ get; set; }
 
 
