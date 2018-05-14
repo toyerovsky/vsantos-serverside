@@ -53,8 +53,7 @@ namespace VRP.vAPI.Game.Controllers
                     using (AccountsRepository accountsRepository = new AccountsRepository())
                         _usersStorageService.Login(userGuid, accountsRepository.Get(account => account.ForumUserId == forumUser.Id));
                 });
-
-                return Json(new { userGuid, forumUser.Id });
+                return Json(new { userGuid, accountId = _accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id).Id });
             }
 
             return NotFound();
