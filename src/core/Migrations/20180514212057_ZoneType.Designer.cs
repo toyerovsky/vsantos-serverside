@@ -12,9 +12,10 @@ using VRP.Core.Enums;
 namespace VRP.Core.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    partial class RoleplayContextModelSnapshot : ModelSnapshot
+    [Migration("20180514212057_ZoneType")]
+    partial class ZoneType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
