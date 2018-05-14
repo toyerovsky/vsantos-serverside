@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.Core.Database;
+using VRP.Core.Database.Models;
 using VRP.vAPI.Game.Services;
 
 namespace VRP.vAPI.Game.Controllers
@@ -19,16 +20,13 @@ namespace VRP.vAPI.Game.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("AllowAnyOrigin")]
-    public class CharactersController : Controller
+    public class CharacterController : Controller
     {
-        private readonly RoleplayContext _roleplayContext;
         private readonly IUsersWatcher _usersWatcher;
         private readonly IConfiguration _configuration;
 
-        public CharactersController(RoleplayContext roleplayContext, IUsersWatcher usersWatcher,
-            IConfiguration configuration)
+        public CharacterController(IUsersWatcher usersWatcher, IConfiguration configuration)
         {
-            _roleplayContext = roleplayContext;
             _usersWatcher = usersWatcher;
             _configuration = configuration;
         }
@@ -43,11 +41,12 @@ namespace VRP.vAPI.Game.Controllers
             {
                 using (var multiple = connection.QueryMultiple(query, new { id = accountId }))
                 {
-                    var characters = multiple.Read().ToList().Select(character => new
+                    var characters = multiple.Read<CharacterModel>().Select(character => new
                     {
                         name = character.Name,
                         surname = character.Surname,
-                        money = character.Money
+                        money = character.Money,
+                        lastLoginTime = character.LastLoginTime
                     });
                     return Json(characters);
                 }
