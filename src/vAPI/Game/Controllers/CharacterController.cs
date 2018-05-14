@@ -19,29 +19,29 @@ namespace VRP.vAPI.Game.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("AllowAnyOrigin")]
-    public class CharactersController : Controller
+    public class CharacterController : Controller
     {
         private readonly RoleplayContext _roleplayContext;
-        private readonly IUsersWatcher _usersWatcher;
+        private readonly IUsersWatcherService _usersWatcherService;
         private readonly IConfiguration _configuration;
 
-        public CharactersController(RoleplayContext roleplayContext, IUsersWatcher usersWatcher,
+        public CharacterController(RoleplayContext roleplayContext, IUsersWatcherService usersWatcherService,
             IConfiguration configuration)
         {
             _roleplayContext = roleplayContext;
-            _usersWatcher = usersWatcher;
+            _usersWatcherService = usersWatcherService;
             _configuration = configuration;
         }
 
         [HttpGet("account/{accountId}")]
         public IActionResult GetByAccountId(int accountId)
         {
-            var query = "SELECT Name, Surname, Money FROM vrpsrv.Characters WHERE AccountId = @id;";
+            var query = "SELECT Name, Surname, Money FROM vrpsrv.Characters WHERE AccountId = @accountId;";
 
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, new { id = accountId }))
+                using (var multiple = connection.QueryMultiple(query, accountId))
                 {
                     var characters = multiple.Read().ToList().Select(character => new
                     {

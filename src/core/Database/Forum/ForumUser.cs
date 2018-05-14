@@ -6,19 +6,13 @@
 
 namespace VRP.Core.Database.Forum
 {
-    public class ForumLoginData
+    public class ForumUser
     {
         public long Id { get; set; }
         public string UserName { get; set; }
         public short GroupId { get; set; }
         public string OtherGroups { get; set; }
-
-        public ForumLoginData(long id, string userName, short groupId, string otherGroups)
-        {
-            Id = id;
-            UserName = userName;
-            GroupId = groupId;
-            OtherGroups = otherGroups;
-        }
+        public string PasswordHash { get; set; }
+        public string PasswordSalt { get; set; }
     }
 }

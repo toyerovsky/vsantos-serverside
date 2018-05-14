@@ -4,24 +4,35 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
 using VRP.vAPI.Game.Model;
+using VRP.vAPI.Game.Services;
 
 namespace VRP.vAPI.Game.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("AllowAnyOrigin")]
-    public class AccountsController : Controller
+    public class AccountController : Controller
     {
-        private readonly AccountsRepository _accountsRepository = new AccountsRepository();
+        private readonly IRepository<AccountModel> _accountsRepository;
+        private readonly IUsersStorageService _usersStorageService;
 
-        [HttpPost]
+        public AccountController(IRepository<AccountModel> accountsRepository, IUsersStorageService usersStorageService)
+        {
+            _accountsRepository = accountsRepository;
+            _usersStorageService = usersStorageService;
+        }
+
+        [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
@@ -29,15 +40,21 @@ namespace VRP.vAPI.Game.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (ForumDatabaseHelper.UserExists(loginModel.Email))
+            if (_usersStorageService.IsUserOnline(loginModel.Email))
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            if (ForumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password,
-                out ForumLoginData forumLoginData))
+            if (ForumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
             {
-                return Json(forumLoginData.Id);
+                Guid userGuid = Guid.NewGuid();
+                Task.Run(() =>
+                {
+                    using (AccountsRepository accountsRepository = new AccountsRepository())
+                        _usersStorageService.Login(userGuid, accountsRepository.Get(account => account.ForumUserId == forumUser.Id));
+                });
+
+                return Json(new { userGuid, forumUser.Id });
             }
 
             return NotFound();

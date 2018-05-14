@@ -43,11 +43,15 @@ namespace VRP.Core.Repositories
             _context.Accounts.Remove(account);
         }
 
-        public AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
-        public AccountModel GetNoRelated(int id) => GetNoRelated(account => account.Id == id).SingleOrDefault();
-   
+        public AccountModel Get(int id)
+        {
+            AccountModel account = _context.Accounts.Find(id);
+            return account;
+        }
 
-        public AccountModel GetByUserId(long userId) => GetAll(account => account.ForumUserId == userId).SingleOrDefault();
+        public AccountModel Get(Expression<Func<AccountModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public AccountModel GetNoRelated(Expression<Func<AccountModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<AccountModel> GetAll(Expression<Func<AccountModel, bool>> expression = null)
         {
@@ -81,14 +85,13 @@ namespace VRP.Core.Repositories
                 .Include(account => account.Penalties);
         }
 
-        public IEnumerable<AccountModel> GetNoRelated(Expression<Func<AccountModel, bool>> expression = null)
+        public IEnumerable<AccountModel> GetAllNoRelated(Expression<Func<AccountModel, bool>> expression = null)
         {
             IQueryable<AccountModel> accounts = expression != null ?
                 _context.Accounts.Where(expression) :
                 _context.Accounts;
 
             return accounts;
-
         }
 
         public void Save() => _context.SaveChanges();

@@ -52,9 +52,15 @@ namespace VRP.Core.Repositories
             _context.Workers.Remove(worker);
         }
 
-        public WorkerModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
+        public WorkerModel Get(int id)
+        {
+            WorkerModel worker = _context.Workers.Find(id);
+            return worker;
+        }
 
-        public WorkerModel GetNoRelated(int id) => GetNoRelated(g => g.Id == id).SingleOrDefault();
+        public WorkerModel Get(Expression<Func<WorkerModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public WorkerModel GetNoRelated(Expression<Func<WorkerModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<WorkerModel> GetAll(Expression<Func<WorkerModel, bool>> expression = null)
         {
@@ -72,7 +78,7 @@ namespace VRP.Core.Repositories
                         .ThenInclude(group => group.Character);
         }
 
-        public IEnumerable<WorkerModel> GetNoRelated(Expression<Func<WorkerModel, bool>> expression = null)
+        public IEnumerable<WorkerModel> GetAllNoRelated(Expression<Func<WorkerModel, bool>> expression = null)
         {
             IQueryable<WorkerModel> workers = expression != null ?
                 _context.Workers.Where(expression) :

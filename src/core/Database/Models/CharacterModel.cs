@@ -22,30 +22,20 @@ namespace VRP.Core.Database.Models
         public TimeSpan PlayedTime { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-
         public string Model { get; set; }
-
-        public virtual ICollection<VehicleModel> Vehicles { get; set; }
-        public virtual ICollection<ItemModel> Items { get; set; }
-        public virtual ICollection<BuildingModel> Buildings { get; set; }
-        public virtual ICollection<DescriptionModel> Descriptions { get; set; }
-        public virtual ICollection<WorkerModel> Workers { get; set; }
         public decimal Money { get; set; }
         public int? BankAccountNumber { get; set; }
         public decimal BankMoney { get; set; }
         public bool Gender { get; set; }
-        public short Weight { get; set; }
+        public byte Weight { get; set; }
         public DateTime BornDate { get; set; }
-        public short Height { get; set; }
-        public short Force { get; set; }
-        public short RunningEfficiency { get; set; }
-        public short DivingEfficiency { get; set; }
+        public byte Height { get; set; }
         public bool HasIdCard { get; set; }
         public bool HasDrivingLicense { get; set; }
         public string ForumDescription { get; set; }
         public string Story { get; set; }
         public bool IsAlive { get; set; }
-        public int Health { get; set; }
+        public byte Health { get; set; }
         public float LastPositionX { get; set; }
         public float LastPositionY { get; set; }
         public float LastPositionZ { get; set; }
@@ -60,7 +50,7 @@ namespace VRP.Core.Database.Models
         public virtual JobType Job { get; set; }
         public decimal? MoneyJob { get; set; }
         public decimal? JobLimit { get; set; }
-        public DateTime JobReleaseDate { get; set; }
+        public DateTime? JobReleaseDate { get; set; }
         //Kreator postaci
         public byte? AccessoryId { get; set; }
         public byte? AccessoryTexture { get; set; }
@@ -95,5 +85,12 @@ namespace VRP.Core.Database.Models
         public byte? TopTexture { get; set; }
         public byte? TorsoId { get; set; }
         public byte? UndershirtId { get; set; }
+
+        // navigation properties
+        public virtual ICollection<VehicleModel> Vehicles { get; set; }
+        public virtual ICollection<ItemModel> Items { get; set; }
+        public virtual ICollection<BuildingModel> Buildings { get; set; }
+        public virtual ICollection<DescriptionModel> Descriptions { get; set; }
+        public virtual ICollection<WorkerModel> Workers { get; set; }
     }
 }

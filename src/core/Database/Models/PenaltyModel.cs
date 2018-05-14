@@ -13,8 +13,7 @@ namespace VRP.Core.Database.Models
     public class PenaltyModel
     {
         public int Id { get; set; }
-
-        public virtual AccountModel Creator { get; set; }
+        public int? CreatorId { get; set; }
 
         public virtual AccountModel Account { get; set; }
 

@@ -43,15 +43,10 @@ namespace VRP.Serverside.Entities.Core
             Client.SetData("RP_ACCOUNT", this);
 
             DbModel.LastLogin = DateTime.Now;
-            DbModel.Online = true;
-
-            string[] ip = DbModel.Ip.Split('.');
-            string safeIp = $"{ip[0]}.{ip[1]}.***.***";
 
             Client.SendInfo(
                 $"Witaj, {DbModel.Name} zostałeś pomyślnie zalogowany. Ostatnie logowanie:" +
-                $" {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()} " +
-                $"Z adresu IP: {safeIp}");
+                $" {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()} ");
 
             EntityHelper.Add(this);
 
@@ -71,7 +66,7 @@ namespace VRP.Serverside.Entities.Core
             {
                 PenaltyModel model = new PenaltyModel()
                 {
-                    Creator = creator?.DbModel,
+                    CreatorId = creator?.DbModel.Id,
                     Account = DbModel,
                     Date = DateTime.Now,
                     PenaltyType = PenaltyType.Kick,
@@ -92,7 +87,7 @@ namespace VRP.Serverside.Entities.Core
             {
                 PenaltyModel model = new PenaltyModel()
                 {
-                    Creator = creator.DbModel,
+                    CreatorId = creator?.DbModel.Id,
                     Account = DbModel,
                     Date = DateTime.Now,
                     PenaltyType = PenaltyType.Ban,
@@ -127,7 +122,6 @@ namespace VRP.Serverside.Entities.Core
         public void Dispose()
         {
             EntityHelper.Remove(this);
-            DbModel.Online = false;
             Save();
             CharacterEntity?.Dispose();
             AccountLoggedOut?.Invoke(Client, this);

@@ -33,9 +33,6 @@ namespace VRP.Core.Repositories
             if ((model.Account?.Id ?? 0) != 0)
                 _context.Attach(model.Account);
 
-            if ((model.Creator?.Id ?? 0) != 0)
-                _context.Attach(model.Creator);
-
             _context.Penaltlies.Add(model);
         }
 
@@ -52,9 +49,15 @@ namespace VRP.Core.Repositories
             _context.Penaltlies.Remove(penatly);
         }
 
-        public PenaltyModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
+        public PenaltyModel Get(int id)
+        {
+            PenaltyModel penatly = _context.Penaltlies.Find(id);
+            return penatly;
+        }
 
-        public PenaltyModel GetNoRelated(int id) => GetNoRelated(b => b.Id == id).SingleOrDefault();
+        public PenaltyModel Get(Expression<Func<PenaltyModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public PenaltyModel GetNoRelated(Expression<Func<PenaltyModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {
@@ -63,11 +66,10 @@ namespace VRP.Core.Repositories
                 _context.Penaltlies;
 
             return penatlies
-                .Include(penatly => penatly.Account)
-                .Include(penatly => penatly.Creator);
+                .Include(penatly => penatly.Account);
         }
 
-        public IEnumerable<PenaltyModel> GetNoRelated(Expression<Func<PenaltyModel, bool>> expression = null)
+        public IEnumerable<PenaltyModel> GetAllNoRelated(Expression<Func<PenaltyModel, bool>> expression = null)
         {
             IQueryable<PenaltyModel> penatlies = expression != null ?
                 _context.Penaltlies.Where(expression) :

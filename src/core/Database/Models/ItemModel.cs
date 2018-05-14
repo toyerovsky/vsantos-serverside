@@ -21,7 +21,7 @@ namespace VRP.Core.Database.Models
 
         public int? CreatorId { get; set; }
 
-        public int Weight { get; set; }
+        public short Weight { get; set; }
         public string ItemHash { get; set; }
 
         public int? FirstParameter { get; set; }

@@ -39,14 +39,15 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
         private VehicleEntity Vehicle { get; set; }
         private FullPosition VehiclePosition { get; }
 
-        public CrimePedEntity(AccountEntity player, CrimeGroup group, FullPosition vehiclePosition, string name, PedHash hash, FullPosition position) : base(name, hash, position)
+        public CrimePedEntity(AccountEntity player, CrimeGroup group, FullPosition vehiclePosition,
+            string name, PedHash hash, FullPosition position) : base(name, hash, position)
         {
             Player = player;
             Group = group;
             VehiclePosition = vehiclePosition;
 
             using (CrimeBotsRepository repository = new CrimeBotsRepository())
-                DbModel = repository.Get(group.DbModel);
+                DbModel = repository.Get(crimeBot => crimeBot.GroupModel.Id == group.Id);
 
             List<PropertyInfo> properties = new List<PropertyInfo> { null };
             properties.AddRange(typeof(CrimeBotModel).GetProperties()
@@ -74,7 +75,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
         {
             base.Spawn();
 
-            Vehicle = VehicleEntity.Create(VehiclePosition, 
+            Vehicle = VehicleEntity.Create(VehiclePosition,
                 NAPI.Util.VehicleNameToModel(DbModel.Vehicle), DbModel.Name, 0, DbModel.CreatorId, new Color(0, 0, 0), new Color(0, 0, 0));
             Vehicle.GameVehicle.OpenDoor(5);
             BotHandle.PlayScenario("WORLD_HUMAN_SMOKING");

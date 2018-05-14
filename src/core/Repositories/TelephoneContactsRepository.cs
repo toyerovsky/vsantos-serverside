@@ -49,9 +49,15 @@ namespace VRP.Core.Repositories
             _context.TelephoneContacts.Remove(contact);
         }
 
-        public TelephoneContactModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
+        public TelephoneContactModel Get(int id)
+        {
+            TelephoneContactModel contact = _context.TelephoneContacts.Find(id);
+            return contact;
+        }
 
-        public TelephoneContactModel GetNoRelated(int id) => GetNoRelated(b => b.Id == id).SingleOrDefault();
+        public TelephoneContactModel Get(Expression<Func<TelephoneContactModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public TelephoneContactModel GetNoRelated(Expression<Func<TelephoneContactModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<TelephoneContactModel> GetAll(Expression<Func<TelephoneContactModel, bool>> expression = null)
         {
@@ -65,7 +71,7 @@ namespace VRP.Core.Repositories
                     .ThenInclude(cellphone => cellphone.Character);
         }
 
-        public IEnumerable<TelephoneContactModel> GetNoRelated(Expression<Func<TelephoneContactModel, bool>> expression = null)
+        public IEnumerable<TelephoneContactModel> GetAllNoRelated(Expression<Func<TelephoneContactModel, bool>> expression = null)
         {
             IQueryable<TelephoneContactModel> telephoneContacts = expression != null ?
                 _context.TelephoneContacts.Where(expression) :

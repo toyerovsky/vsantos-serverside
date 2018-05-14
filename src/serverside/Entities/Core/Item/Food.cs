@@ -26,7 +26,7 @@ namespace VRP.Serverside.Entities.Core.Item
         public override void UseItem(CharacterEntity sender)
         {
             ChatScript.SendMessageToNearbyPlayers(sender, $"zjada {DbModel.Name}", ChatMessageType.ServerMe);
-            sender.Health += Convert.ToInt32(HealthToRestore);
+            sender.Health += Convert.ToByte(HealthToRestore);
             Delete();
         }
 

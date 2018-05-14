@@ -54,7 +54,7 @@ namespace VRP.Serverside.Entities.Core
 
         public bool IsFlying { get; set; }
 
-        public int Health
+        public byte Health
         {
             get => DbModel.Health;
             set
@@ -108,10 +108,7 @@ namespace VRP.Serverside.Entities.Core
         public void SetBw(int minutes)
         {
             DbModel.MinutesToRespawn = minutes;
-            if (minutes == 0)
-                Health = 5;
-            else
-                Health = -1;
+            Health = minutes == 0 ? (byte) 5 : (byte) 0;
             CanTalk = minutes == 0;
         }
 
@@ -135,7 +132,7 @@ namespace VRP.Serverside.Entities.Core
             }
         }
 
-        public void LoginCharacter(AccountEntity accountEntity)
+        public void SelectCharacter(AccountEntity accountEntity)
         {
             DbModel.LastLoginTime = DateTime.Now;
             DbModel.Online = true;

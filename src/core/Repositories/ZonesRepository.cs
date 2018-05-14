@@ -40,11 +40,26 @@ namespace VRP.Core.Repositories
             _context.Zones.Remove(zone);
         }
 
-        public ZoneModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
+        public ZoneModel Get(int id)
+        {
+            ZoneModel zone = _context.Zones.Find(id);
+            return zone;
+        }
 
-        public ZoneModel GetNoRelated(int id) => Get(id);
+        public ZoneModel Get(Expression<Func<ZoneModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public ZoneModel GetNoRelated(Expression<Func<ZoneModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
+        {
+            IQueryable<ZoneModel> zones = expression != null ?
+                _context.Zones.Where(expression) :
+                _context.Zones;
+
+            return zones;
+        }
+
+        public IEnumerable<ZoneModel> GetAllNoRelated(Expression<Func<ZoneModel, bool>> expression = null)
         {
             IQueryable<ZoneModel> zones = expression != null ?
                 _context.Zones.Where(expression) :

@@ -12,11 +12,11 @@ namespace VRP.vAPI.Forum.Controllers
 {
     [Produces("application/json")]
     [Route("api/forum/Characters")]
-    public class CharactersController : Controller
+    public class CharacterController : Controller
     {
         private readonly IRepository<CharacterModel> _repository;
 
-        public CharactersController(IRepository<CharacterModel> repository)
+        public CharacterController(IRepository<CharacterModel> repository)
         {
             _repository = repository;
         }

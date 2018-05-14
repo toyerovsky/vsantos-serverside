@@ -56,9 +56,15 @@ namespace VRP.Core.Repositories
             _context.Buildings.Remove(building);
         }
 
-        public BuildingModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
+        public BuildingModel Get(int id)
+        {
+            BuildingModel building = _context.Buildings.Find(id);
+            return building;
+        }
 
-        public BuildingModel GetNoRelated(int id) => GetNoRelated(b => b.Id == id).SingleOrDefault();
+        public BuildingModel Get(Expression<Func<BuildingModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public BuildingModel GetNoRelated(Expression<Func<BuildingModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<BuildingModel> GetAll(Expression<Func<BuildingModel, bool>> expression = null)
         {
@@ -71,17 +77,15 @@ namespace VRP.Core.Repositories
                 .Include(building => building.Group)
                 .Include(building => building.Items);
         }
-        public IEnumerable<BuildingModel> GetNoRelated(Expression<Func<BuildingModel, bool>> expression = null)
+
+        public IEnumerable<BuildingModel> GetAllNoRelated(Expression<Func<BuildingModel, bool>> expression = null)
         {
             IQueryable<BuildingModel> buildings = expression != null ?
                 _context.Buildings.Where(expression) :
                 _context.Buildings;
 
             return buildings;
-
         }
-
-
 
         public void Save() => _context.SaveChanges();
 
