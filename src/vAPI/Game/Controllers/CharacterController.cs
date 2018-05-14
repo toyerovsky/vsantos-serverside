@@ -1,8 +1,8 @@
 ﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
-* Unauthorized copying of this file, via any medium is strictly prohibited
-* Proprietary and confidential
-* Written by V Role Play team <contact@v-rp.pl> December 2017
-*/
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
+ */
 
 using System.Data;
 using System.Linq;
@@ -22,14 +22,11 @@ namespace VRP.vAPI.Game.Controllers
     public class CharacterController : Controller
     {
         private readonly RoleplayContext _roleplayContext;
-        private readonly IUsersWatcherService _usersWatcherService;
         private readonly IConfiguration _configuration;
 
-        public CharacterController(RoleplayContext roleplayContext, IUsersWatcherService usersWatcherService,
-            IConfiguration configuration)
+        public CharacterController(RoleplayContext roleplayContext, IConfiguration configuration)
         {
             _roleplayContext = roleplayContext;
-            _usersWatcherService = usersWatcherService;
             _configuration = configuration;
         }
 
@@ -41,7 +38,7 @@ namespace VRP.vAPI.Game.Controllers
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, accountId))
+                using (var multiple = connection.QueryMultiple(query, new { accountId }))
                 {
                     var characters = multiple.Read().ToList().Select(character => new
                     {
