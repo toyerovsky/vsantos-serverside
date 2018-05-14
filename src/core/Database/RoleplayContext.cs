@@ -33,15 +33,6 @@ namespace VRP.Core.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PenaltyModel>(p =>
-            {
-                p.HasOne(a => a.Account)
-                    .WithMany(b => b.Penalties)
-                    .HasForeignKey("AccountId");
-
-                p.HasOne(a => a.Creator);
-            });
-
         }
     }
 }

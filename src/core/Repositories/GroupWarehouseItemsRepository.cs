@@ -46,9 +46,15 @@ namespace VRP.Core.Repositories
             _context.GroupWarehouseItems.Remove(warehouseItem);
         }
 
-        public GroupWarehouseItemModel Get(int id) => GetAll(b => b.Id == id).SingleOrDefault();
+        public GroupWarehouseItemModel Get(int id) => GetAll(groupWarehouseItem => groupWarehouseItem.Id == id).SingleOrDefault();
 
-        public GroupWarehouseItemModel GetNoRelated(int id) => Get(id);
+        public GroupWarehouseItemModel GetNoRelated(int id)
+        {
+            GroupWarehouseItemModel warehouseItem = _context.GroupWarehouseItems.Find(id);
+            return warehouseItem;
+        }
+
+        public GroupWarehouseItemModel Get(Expression<Func<GroupWarehouseItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
         public IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
         {
@@ -59,7 +65,7 @@ namespace VRP.Core.Repositories
             return groupWarehouseItems;
         }
 
-      
+        public GroupWarehouseItemModel GetNoRelated(Expression<Func<GroupWarehouseItemModel, bool>> expression) => Get(expression);
 
         public void Save() => _context.SaveChanges();
 

@@ -9,9 +9,8 @@ using VRP.vAPI.Game.Model;
 
 namespace VRP.vAPI.Game.Services
 {
-    public interface IUsersWatcher
+    public interface IUsersWatcherService
     {
-        bool IsUserOnline(Guid token);
-        bool TryGetUser(Guid token, out AppUser appUser);
+        void Watch();
     }
 }

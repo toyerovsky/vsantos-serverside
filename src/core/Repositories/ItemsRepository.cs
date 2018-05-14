@@ -58,9 +58,17 @@ namespace VRP.Core.Repositories
             _context.Items.Remove(item);
         }
 
-        public ItemModel Get(int id) => GetAll(i => i.Id == id).SingleOrDefault();
+        public ItemModel Get(int id) => GetAll(item => item.Id == id).SingleOrDefault();
 
-        public ItemModel GetNoRelated(int id) => GetNoRelated(i => i.Id == id).SingleOrDefault();
+        public ItemModel GetNoRelated(int id)
+        {
+            ItemModel item = _context.Items.Find(id);
+            return item;
+        }
+
+        public ItemModel Get(Expression<Func<ItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public ItemModel GetNoRelated(Expression<Func<ItemModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> expression = null)
         {
@@ -77,7 +85,7 @@ namespace VRP.Core.Repositories
                         .ThenInclude(bossCharacter => bossCharacter.Account);
         }
 
-        public IEnumerable<ItemModel> GetNoRelated(Expression<Func<ItemModel, bool>> expression = null)
+        public IEnumerable<ItemModel> GetAllNoRelated(Expression<Func<ItemModel, bool>> expression = null)
         {
             IQueryable<ItemModel> items = expression != null ?
                 _context.Items.Where(expression) :

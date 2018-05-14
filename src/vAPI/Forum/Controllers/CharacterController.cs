@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
+ */
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +18,11 @@ namespace VRP.vAPI.Forum.Controllers
 {
     [Produces("application/json")]
     [Route("api/forum/Characters")]
-    public class CharactersController : Controller
+    public class CharacterController : Controller
     {
         private readonly IRepository<CharacterModel> _repository;
 
-        public CharactersController(IRepository<CharacterModel> repository)
+        public CharacterController(IRepository<CharacterModel> repository)
         {
             _repository = repository;
         }

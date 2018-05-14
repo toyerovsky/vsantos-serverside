@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -40,11 +46,28 @@ namespace VRP.Core.Repositories
             _context.Zones.Remove(zone);
         }
 
-        public ZoneModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
+        public ZoneModel Get(int id) => GetAll(zone => zone.Id == id).SingleOrDefault();
 
-        public ZoneModel GetNoRelated(int id) => Get(id);
+        public ZoneModel GetNoRelated(int id)
+        {
+            ZoneModel zone = _context.Zones.Find(id);
+            return zone;
+        }
+
+        public ZoneModel Get(Expression<Func<ZoneModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public ZoneModel GetNoRelated(Expression<Func<ZoneModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
+        {
+            IQueryable<ZoneModel> zones = expression != null ?
+                _context.Zones.Where(expression) :
+                _context.Zones;
+
+            return zones;
+        }
+
+        public IEnumerable<ZoneModel> GetAllNoRelated(Expression<Func<ZoneModel, bool>> expression = null)
         {
             IQueryable<ZoneModel> zones = expression != null ?
                 _context.Zones.Where(expression) :

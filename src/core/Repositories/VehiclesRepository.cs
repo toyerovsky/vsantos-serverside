@@ -59,9 +59,17 @@ namespace VRP.Core.Repositories
             _context.Vehicles.Remove(vehicle);
         }
 
-        public VehicleModel Get(int id) => GetAll(v => v.Id == id).SingleOrDefault();
+        public VehicleModel Get(int id) => GetAll(vehicle => vehicle.Id == id).SingleOrDefault();
 
-        public VehicleModel GetNoRelated(int id) => GetNoRelated(v => v.Id == id).SingleOrDefault();
+        public VehicleModel GetNoRelated(int id)
+        {
+            VehicleModel vehicle = _context.Vehicles.Find(id);
+            return vehicle;
+        }
+
+        public VehicleModel Get(Expression<Func<VehicleModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public VehicleModel GetNoRelated(Expression<Func<VehicleModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
         {
@@ -76,7 +84,7 @@ namespace VRP.Core.Repositories
                 .Include(vehicle => vehicle.ItemsInVehicle);
         }
 
-        public IEnumerable<VehicleModel> GetNoRelated(Expression<Func<VehicleModel, bool>> expression = null)
+        public IEnumerable<VehicleModel> GetAllNoRelated(Expression<Func<VehicleModel, bool>> expression = null)
         {
             IQueryable<VehicleModel> vehicles = expression != null ?
                 _context.Vehicles.Where(expression) :

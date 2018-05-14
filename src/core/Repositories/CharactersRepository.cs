@@ -72,9 +72,17 @@ namespace VRP.Core.Repositories
             _context.Characters.Remove(character);
         }
 
-        public CharacterModel Get(int id) => GetAll(c => c.Id == id).SingleOrDefault();
+        public CharacterModel Get(int id) => GetAll(character => character.Id == id).SingleOrDefault();
 
-        public CharacterModel GetNoRelated(int id) => GetNoRelated(c => c.Id == id).SingleOrDefault();
+        public CharacterModel GetNoRelated(int id)
+        {
+            CharacterModel character = _context.Characters.Find(id);
+            return character;
+        }
+
+        public CharacterModel Get(Expression<Func<CharacterModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public CharacterModel GetNoRelated(Expression<Func<CharacterModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {
@@ -96,7 +104,7 @@ namespace VRP.Core.Repositories
                 .Include(character => character.Account);
         }
 
-        public IEnumerable<CharacterModel> GetNoRelated(Expression<Func<CharacterModel, bool>> expression = null)
+        public IEnumerable<CharacterModel> GetAllNoRelated(Expression<Func<CharacterModel, bool>> expression = null)
         {
             IQueryable<CharacterModel> characters = expression != null ?
                 _context.Characters.Where(expression) :

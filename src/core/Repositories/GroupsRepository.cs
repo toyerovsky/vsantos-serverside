@@ -53,9 +53,17 @@ namespace VRP.Core.Repositories
             _context.Groups.Remove(group);
         }
 
-        public GroupModel Get(int id) => GetAll(g => g.Id == id).SingleOrDefault();
+        public GroupModel Get(int id) => GetAll(group => group.Id == id).SingleOrDefault();
 
-        public GroupModel GetNoRelated(int id) => GetNoRelated(g => g.Id == id).SingleOrDefault();
+        public GroupModel GetNoRelated(int id)
+        {
+            GroupModel group = _context.Groups.Find(id);
+            return group;
+        }
+
+        public GroupModel Get(Expression<Func<GroupModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+
+        public GroupModel GetNoRelated(Expression<Func<GroupModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
         public IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> expression = null)
         {
@@ -72,7 +80,7 @@ namespace VRP.Core.Repositories
                         .ThenInclude(character => character.Account);
         }
 
-        public IEnumerable<GroupModel> GetNoRelated(Expression<Func<GroupModel, bool>> expression = null)
+        public IEnumerable<GroupModel> GetAllNoRelated(Expression<Func<GroupModel, bool>> expression = null)
         {
             IQueryable<GroupModel> groups = expression != null ?
                 _context.Groups.Where(expression) :

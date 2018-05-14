@@ -151,10 +151,11 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
             if (eventName == "OnPlayerSelectedCrimeBotDiscrict")
             {
                 AccountEntity player = sender.GetAccountEntity();
-                if (player.CharacterEntity.OnDutyGroup is CrimeGroup group)
+                if (player.CharacterEntity.OnDutyGroup is CrimeGroup group && group.CanPlayerCallCrimeBot(player))
                 {
                     if (group.CrimePedEntity != null)
                     {
+                        // crime bot already spawned
                         sender.SendChatMessage("~#ffdb00~",
                             "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
                         return;
@@ -162,18 +163,20 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
 
                     using (CrimeBotsRepository repository = new CrimeBotsRepository())
                     {
-                        CrimeBotModel crimeBotData = repository.Get(group.DbModel);
+                        CrimeBotModel crimeBotData = repository.Get(crimeBot => crimeBot.GroupModel.Id == group.Id);
                         CrimeBotPosition position = XmlHelper.GetXmlObjects<CrimeBotPosition>(
                             Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"))[Convert.ToInt32(arguments[0])];
 
-                        group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition, crimeBotData.Name, NAPI.Util.PedNameToModel(crimeBotData.Model), position.BotPosition);
+                        group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition,
+                            crimeBotData.Name, NAPI.Util.PedNameToModel(crimeBotData.Model), position.BotPosition);
                         group.CrimePedEntity.Spawn();
                         sender.TriggerEvent("DrawCrimeBotComponents", position.BotPosition.Position, 500, 2);
                     }
                 }
                 else
                 {
-                    sender.SendError("Aby wezwać sprzedawcę musisz znajdować się na służbie grupy.");
+                    sender.SendChatMessage("~#ffdb00~",
+                        "Wybrany abonent ma wyłączony telefon, bądź znajduje się poza zasięgiem, spróbuj później.");
                 }
             }
         }

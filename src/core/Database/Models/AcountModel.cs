@@ -20,19 +20,15 @@ namespace VRP.Core.Database.Models
         [EmailAddress]
         [StringLength(50)]
         public string Email { get; set; }
-        public long ForumGroup { get; set; }
-        public string OtherForumGroups { get; set; }
+        public long PrimaryForumGroup { get; set; }
+        public string SecondaryForumGroups { get; set; }
         [StringLength(50)]
         public string SocialClub { get; set; }
-        [StringLength(16)]
-        public string Ip { get; set; }
-        public bool Online { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime LastLogin { get; set; }
         [EnumDataType(typeof(ServerRank))]
         public ServerRank ServerRank { get; set; }
-        public string Serial { get; set; }
-
+        public string SerialsJson { get; set; }
         public virtual ICollection<CharacterModel> Characters { get; set; }
         public virtual ICollection<PenaltyModel> Penalties { get; set; }
     }

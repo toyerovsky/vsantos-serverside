@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using VRP.Core.Database;
+using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
@@ -26,20 +27,36 @@ namespace VRP.vAPI
         }
 
         public static IConfiguration Configuration { get; private set; }
+        public static IUsersWatcherService UsersWatcher { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // decreases time of first usage by 2000 ms
+            ForumDatabaseHelper.CheckPasswordMatch("admin@v-santos.pl", "qweqwe", out ForumUser forumUser);
+
             services.AddDbContext<RoleplayContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("gameConnectionString"));
             });
 
-            services.AddSingleton<IUsersWatcher>(new UsersWatcher());
-            services.AddScoped((factory) => Configuration);
-            services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
+            UsersStorageService storageService;
 
-            services.AddMvc().AddJsonOptions(options => {
+            // singleton
+            services.AddSingleton<IUsersStorageService>(storageService = new UsersStorageService());
+
+            // users watcher
+            UsersWatcher = new UsersWatcherService(storageService);
+            UsersWatcher.Watch();
+
+            // scoped
+            services.AddScoped(factory => Configuration);
+            services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
+            services.AddScoped<IRepository<AccountModel>, AccountsRepository>();
+
+
+            services.AddMvc().AddJsonOptions(options =>
+            {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
@@ -48,6 +65,8 @@ namespace VRP.vAPI
                 options.AddPolicy("AllowAnyOrigin", builder =>
                 {
                     builder.AllowAnyOrigin();
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
                 });
             });
         }

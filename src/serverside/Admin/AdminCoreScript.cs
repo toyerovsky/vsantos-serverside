@@ -211,7 +211,7 @@ namespace VRP.Serverside.Admin
         }
 
         [Command("hp")]
-        public void SetPlayerHealth(Client sender, int health, int id = -1)
+        public void SetPlayerHealth(Client sender, byte health, int id = -1)
         {
             if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
             {

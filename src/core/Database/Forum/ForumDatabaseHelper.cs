@@ -6,101 +6,53 @@
 
 using System;
 using System.Data;
+using System.Threading.Tasks;
+using Dapper;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using VRP.Core.Tools;
 
 namespace VRP.Core.Database.Forum
 {
-    public class ForumDatabaseHelper
+    public static class ForumDatabaseHelper
     {
-        private static string _connectionString =
-            "server=77.55.212.185;database=vrpforum;uid=vrp;pwd=kR6BNDBDNsX5yhJU;SslMode=None";
-
-        public static bool CheckPasswordMatch(string email, string password, out ForumLoginData forumLoginData)
+        public static bool CheckPasswordMatch(string email, string password, out ForumUser forumUser)
         {
-            forumLoginData = null;
-            using (MySqlConnection connection = new MySqlConnection(_connectionString/*Singletons.Configuration.GetConnectionString("forumConnectionString")*/))
-            using (MySqlCommand command = new MySqlCommand())
+            forumUser = null;
+
+            if (!email.Contains("@"))
+                return false;
+
+
+            using (IDbConnection connection =
+                new MySqlConnection(Singletons.Configuration.GetConnectionString("forumConnectionString")))
             {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandType = CommandType.Text;
-                command.CommandText = "SELECT member_id, Name, members_pass_hash, members_pass_salt, member_group_id, mgroup_others FROM core_members WHERE email = @P0";
+                var doesUserExistQuery = "SELECT COUNT(member_id) FROM core_members WHERE email = @email";
+                int count = connection.QueryFirst<int>(doesUserExistQuery, new { email });
 
-                command.Parameters.Add(new MySqlParameter("@P0", email));
-
-                using (MySqlDataReader reader = command.ExecuteReader())
+                if (count > 0)
                 {
-                    try
-                    {
-                        if (reader.Read())
-                        {
-                            long id = reader.GetInt64(0);
-                            string name = reader.GetString(1);
-                            string hash = reader.GetString(2);
-                            string salt = reader.GetString(3);
-                            short groupId = reader.GetInt16(4);
-                            string otherGroups = reader.GetString(5);
+                    var query = "SELECT member_id as Id," +
+                                " Name as UserName," +
+                                " members_pass_hash as PasswordHash," +
+                                " members_pass_salt as PasswordSalt," +
+                                " member_group_id as GroupId," +
+                                " mgroup_others as OtherGroups FROM core_members WHERE email = @email";
 
-                            if (hash != "" && salt != "")
-                            {
-                                if (hash.Equals(GenerateIpbHash(password, salt)))
-                                    forumLoginData = new ForumLoginData(id, name, groupId, otherGroups);
-                            }
-                        }
-                    }
-                    catch (MySqlException ex)
-                    {
-                        throw new Exception(ex.Message);
-                    }
-                    finally
-                    {
-                        reader.Close();
-                        connection.Close();
-                    }
-                }
+                    forumUser = connection.QueryFirst<ForumUser>(query, new { email });
 
-            }
+                    string hash = GenerateIpbHash(password, forumUser.PasswordSalt);
 
-            return forumLoginData != null;
-        }
-
-        public static string GenerateIpbHash(string plaintext, string salt)
-        {
-            //return CalculateMD5Hash(CalculateMD5Hash(salt) + CalculateMD5Hash(plaintext));
-            return BCrypt.Net.BCrypt.HashPassword(plaintext, "$2a$13$" + salt);
-            //return CreateMD5(CreateMD5(plaintext) + "$2a$13$" + salt);
-        }
-
-        public static bool UserExists(string login)
-        {
-            using (MySqlConnection connection = new MySqlConnection(/*Singletons.Configuration.GetConnectionString("forumConnectionString")*/_connectionString))
-            using (MySqlCommand command = new MySqlCommand())
-            {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandType = CommandType.Text;
-
-                command.CommandText =
-                    "SELECT COUNT(member_id) FROM core_members WHERE email = @P0";
-                command.Parameters.Add(new MySqlParameter("@P0", login));
-
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    try
-                    {
-                        return reader.Read() && reader.GetInt32(0) != 0;
-                    }
-                    catch (MySqlException ex)
-                    {
-                        throw new Exception(ex.Message);
-                    }
-                    finally
-                    {
-                        reader.Close();
-                        connection.Close();
-                    }
+                    return hash == forumUser.PasswordHash;
                 }
             }
+
+            return false;
+        }
+
+        private static string GenerateIpbHash(string plainText, string salt)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(plainText, "$2a$13$" + salt);
         }
     }
 }

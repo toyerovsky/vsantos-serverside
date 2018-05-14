@@ -18,8 +18,8 @@ using VRP.Core.Enums;
 namespace VRP.Core.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180417154017_CreatorIdChange")]
-    partial class CreatorIdChange
+    [Migration("20180514135648_Optimization")]
+    partial class Optimization
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,23 +36,18 @@ namespace VRP.Core.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(50);
 
-                    b.Property<long>("ForumGroup");
-
                     b.Property<long>("ForumUserId");
-
-                    b.Property<string>("Ip")
-                        .HasMaxLength(16);
 
                     b.Property<DateTime>("LastLogin");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("Online");
+                    b.Property<long>("PrimaryForumGroup");
 
-                    b.Property<string>("OtherForumGroups");
+                    b.Property<string>("SecondaryForumGroups");
 
-                    b.Property<string>("Serial");
+                    b.Property<string>("SerialsJson");
 
                     b.Property<int>("ServerRank");
 
@@ -137,8 +132,6 @@ namespace VRP.Core.Migrations
 
                     b.Property<uint>("CurrentDimension");
 
-                    b.Property<short>("DivingEfficiency");
-
                     b.Property<byte?>("EarsId");
 
                     b.Property<byte?>("EarsTexture");
@@ -154,8 +147,6 @@ namespace VRP.Core.Migrations
                     b.Property<byte?>("FirstLipstickColor");
 
                     b.Property<byte?>("FirstMakeupColor");
-
-                    b.Property<short>("Force");
 
                     b.Property<string>("ForumDescription");
 
@@ -181,9 +172,9 @@ namespace VRP.Core.Migrations
 
                     b.Property<byte?>("HatTexture");
 
-                    b.Property<int>("Health");
+                    b.Property<byte>("Health");
 
-                    b.Property<short>("Height");
+                    b.Property<byte>("Height");
 
                     b.Property<bool>("IsAlive");
 
@@ -193,7 +184,7 @@ namespace VRP.Core.Migrations
 
                     b.Property<decimal?>("JobLimit");
 
-                    b.Property<DateTime>("JobReleaseDate");
+                    b.Property<DateTime?>("JobReleaseDate");
 
                     b.Property<DateTime?>("LastLoginTime");
 
@@ -235,8 +226,6 @@ namespace VRP.Core.Migrations
 
                     b.Property<TimeSpan>("PlayedTime");
 
-                    b.Property<short>("RunningEfficiency");
-
                     b.Property<byte?>("SecondEyebrowsColor");
 
                     b.Property<byte?>("SecondLipstickColor");
@@ -263,7 +252,7 @@ namespace VRP.Core.Migrations
 
                     b.Property<byte?>("UndershirtId");
 
-                    b.Property<short>("Weight");
+                    b.Property<byte>("Weight");
 
                     b.HasKey("Id");
 
@@ -669,7 +658,7 @@ namespace VRP.Core.Migrations
 
                     b.Property<int?>("VehicleId");
 
-                    b.Property<int>("Weight");
+                    b.Property<short>("Weight");
 
                     b.HasKey("Id");
 
@@ -705,8 +694,6 @@ namespace VRP.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("CreatorId");
 
                     b.ToTable("Penaltlies");
                 });
@@ -878,6 +865,22 @@ namespace VRP.Core.Migrations
                     b.ToTable("Workers");
                 });
 
+            modelBuilder.Entity("VRP.Core.Database.Models.ZoneModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CreatorId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("ZonePropertiesJson");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Zones");
+                });
+
             modelBuilder.Entity("VRP.Core.Database.Models.BuildingModel", b =>
                 {
                     b.HasOne("VRP.Core.Database.Models.CharacterModel", "Character")
@@ -955,10 +958,6 @@ namespace VRP.Core.Migrations
                     b.HasOne("VRP.Core.Database.Models.AccountModel", "Account")
                         .WithMany("Penalties")
                         .HasForeignKey("AccountId");
-
-                    b.HasOne("VRP.Core.Database.Models.AccountModel", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorId");
                 });
 
             modelBuilder.Entity("VRP.Core.Database.Models.TelephoneContactModel", b =>
