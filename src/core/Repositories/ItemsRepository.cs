@@ -58,7 +58,9 @@ namespace VRP.Core.Repositories
             _context.Items.Remove(item);
         }
 
-        public ItemModel Get(int id)
+        public ItemModel Get(int id) => GetAll(item => item.Id == id).SingleOrDefault();
+
+        public ItemModel GetNoRelated(int id)
         {
             ItemModel item = _context.Items.Find(id);
             return item;

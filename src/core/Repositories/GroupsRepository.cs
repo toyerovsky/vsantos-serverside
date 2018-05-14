@@ -53,7 +53,9 @@ namespace VRP.Core.Repositories
             _context.Groups.Remove(group);
         }
 
-        public GroupModel Get(int id)
+        public GroupModel Get(int id) => GetAll(group => group.Id == id).SingleOrDefault();
+
+        public GroupModel GetNoRelated(int id)
         {
             GroupModel group = _context.Groups.Find(id);
             return group;

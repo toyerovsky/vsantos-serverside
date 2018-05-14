@@ -59,7 +59,9 @@ namespace VRP.Core.Repositories
             _context.Vehicles.Remove(vehicle);
         }
 
-        public VehicleModel Get(int id)
+        public VehicleModel Get(int id) => GetAll(vehicle => vehicle.Id == id).SingleOrDefault();
+
+        public VehicleModel GetNoRelated(int id)
         {
             VehicleModel vehicle = _context.Vehicles.Find(id);
             return vehicle;

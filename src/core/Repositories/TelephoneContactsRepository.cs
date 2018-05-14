@@ -49,7 +49,9 @@ namespace VRP.Core.Repositories
             _context.TelephoneContacts.Remove(contact);
         }
 
-        public TelephoneContactModel Get(int id)
+        public TelephoneContactModel Get(int id) => GetAll(telephoneContact => telephoneContact.Id == id).SingleOrDefault();
+
+        public TelephoneContactModel GetNoRelated(int id)
         {
             TelephoneContactModel contact = _context.TelephoneContacts.Find(id);
             return contact;

@@ -56,7 +56,9 @@ namespace VRP.Core.Repositories
             _context.Buildings.Remove(building);
         }
 
-        public BuildingModel Get(int id)
+        public BuildingModel Get(int id) => GetAll(building => building.Id == id).SingleOrDefault();
+
+        public BuildingModel GetNoRelated(int id)
         {
             BuildingModel building = _context.Buildings.Find(id);
             return building;

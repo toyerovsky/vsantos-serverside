@@ -52,7 +52,9 @@ namespace VRP.Core.Repositories
             _context.Workers.Remove(worker);
         }
 
-        public WorkerModel Get(int id)
+        public WorkerModel Get(int id) => GetAll(worker => worker.Id == id).SingleOrDefault();
+
+        public WorkerModel GetNoRelated(int id)
         {
             WorkerModel worker = _context.Workers.Find(id);
             return worker;

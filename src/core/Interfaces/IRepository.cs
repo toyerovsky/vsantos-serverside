@@ -19,6 +19,7 @@ namespace VRP.Core.Interfaces
         T Get(int id);
         T Get(Expression<Func<T, bool>> expression);
         T GetNoRelated(Expression<Func<T, bool>> expression);
+        T GetNoRelated(int id);
         IEnumerable<T> GetAll(Expression<Func<T, bool>> expression = null);
         void Save();
     }

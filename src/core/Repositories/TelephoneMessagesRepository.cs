@@ -49,7 +49,9 @@ namespace VRP.Core.Repositories
             _context.TelephoneMessages.Remove(message);
         }
 
-        public TelephoneMessageModel Get(int id)
+        public TelephoneMessageModel Get(int id) => GetAll(telephoneMessage => telephoneMessage.Id == id).SingleOrDefault();
+
+        public TelephoneMessageModel GetNoRelated(int id)
         {
             TelephoneMessageModel message = _context.TelephoneMessages.Find(id);
             return message;

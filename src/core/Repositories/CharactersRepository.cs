@@ -72,7 +72,9 @@ namespace VRP.Core.Repositories
             _context.Characters.Remove(character);
         }
 
-        public CharacterModel Get(int id)
+        public CharacterModel Get(int id) => GetAll(character => character.Id == id).SingleOrDefault();
+
+        public CharacterModel GetNoRelated(int id)
         {
             CharacterModel character = _context.Characters.Find(id);
             return character;

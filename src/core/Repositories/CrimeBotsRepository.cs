@@ -49,7 +49,9 @@ namespace VRP.Core.Repositories
             _context.CrimeBots.Remove(crimeBot);
         }
 
-        public CrimeBotModel Get(int id)
+        public CrimeBotModel Get(int id) => GetAll(crimeBot => crimeBot.Id == id).SingleOrDefault();
+
+        public CrimeBotModel GetNoRelated(int id)
         {
             CrimeBotModel crimeBot = _context.CrimeBots.Find(id);
             return crimeBot;

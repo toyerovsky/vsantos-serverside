@@ -43,7 +43,9 @@ namespace VRP.Core.Repositories
             _context.Accounts.Remove(account);
         }
 
-        public AccountModel Get(int id)
+        public AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
+
+        public AccountModel GetNoRelated(int id)
         {
             AccountModel account = _context.Accounts.Find(id);
             return account;

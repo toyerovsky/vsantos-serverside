@@ -49,7 +49,9 @@ namespace VRP.Core.Repositories
             _context.Penaltlies.Remove(penatly);
         }
 
-        public PenaltyModel Get(int id)
+        public PenaltyModel Get(int id) => GetAll(penalty => penalty.Id == id).SingleOrDefault();
+
+        public PenaltyModel GetNoRelated(int id)
         {
             PenaltyModel penatly = _context.Penaltlies.Find(id);
             return penatly;

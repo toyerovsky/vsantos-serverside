@@ -46,7 +46,9 @@ namespace VRP.Core.Repositories
             _context.GroupWarehouseItems.Remove(warehouseItem);
         }
 
-        public GroupWarehouseItemModel Get(int id)
+        public GroupWarehouseItemModel Get(int id) => GetAll(groupWarehouseItem => groupWarehouseItem.Id == id).SingleOrDefault();
+
+        public GroupWarehouseItemModel GetNoRelated(int id)
         {
             GroupWarehouseItemModel warehouseItem = _context.GroupWarehouseItems.Find(id);
             return warehouseItem;

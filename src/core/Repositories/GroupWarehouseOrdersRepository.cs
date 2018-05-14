@@ -46,7 +46,9 @@ namespace VRP.Core.Repositories
             _context.GroupWarehouseOrders.Remove(order);
         }
 
-        public GroupWarehouseOrderModel Get(int id)
+        public GroupWarehouseOrderModel Get(int id) => GetAll(groupWarehouseOrder => groupWarehouseOrder.Id == id).SingleOrDefault();
+
+        public GroupWarehouseOrderModel GetNoRelated(int id)
         {
             GroupWarehouseOrderModel order = _context.GroupWarehouseOrders.Find(id);
             return order;
