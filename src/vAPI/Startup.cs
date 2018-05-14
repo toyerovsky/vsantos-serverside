@@ -47,6 +47,7 @@ namespace VRP.vAPI
 
             // users watcher
             UsersWatcher = new UsersWatcherService(storageService);
+            UsersWatcher.Watch();
 
             // scoped
             services.AddScoped(factory => Configuration);
