@@ -9,22 +9,32 @@ using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using VRP.Core.Enums;
+using VRP.Core.Interfaces;
 
 namespace VRP.Core.Tools
 {
-    public class UserBroadcaster
+    public class UsersBroadcasterService : IUserBroadcasterService, IDisposable
     {
         private readonly Socket _workingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
-        public UserBroadcaster()
+        public UsersBroadcasterService(IConfiguration configuration, ILogger logger)
+        {
+            _configuration = configuration;
+            _logger = logger;
+        }
+
+        public void Prepare()
         {
             IPAddress ip = IPAddress.Loopback;
-            int port = Convert.ToInt32(Singletons.Configuration.GetSection("UserBroadcastPort").Value);
-            _workingSocket.Connect(new IPEndPoint(ip, port));
-            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}] Prepared socket: {ip}:{port}.",
-                Color.CornflowerBlue);
+            int port = Convert.ToInt32(_configuration.GetSection("UserBroadcastPort").Value);
+            IPEndPoint endPoint = new IPEndPoint(ip, port);
+            _workingSocket.Connect(endPoint);
+            _logger.LogInfo($"[{nameof(UsersBroadcasterService)}] Prepared socket: {ip}:{port}.");
         }
 
         /// <summary>
@@ -34,18 +44,18 @@ namespace VRP.Core.Tools
         /// <param name="characterId"></param>
         /// <param name="token"></param>
         /// <param name="actionType"></param>
-        public void Broadcast(int accountId, int characterId, string token, BroadcasterActionType actionType)
+        public void Broadcast(int accountId, int characterId, Guid token, BroadcasterActionType actionType)
         {
             // Convert the string data to byte array using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new
             {
                 AccountId = accountId,
-                CharacterId = characterId,
                 Token = token,
+                BroadcasterActionType = actionType
             }).ToCharArray());
 
-            Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}][{DateTime.Now.ToShortTimeString()}] Sending data to WebAPI. " +
-                                       $"{{token: {token} accountId: {accountId}, characterId: {characterId}, actionType: {actionType}", Color.CornflowerBlue);
+            _logger.LogInfo($"[{nameof(UsersBroadcasterService)}][{DateTime.Now.ToShortTimeString()}] Sending data. " +
+                            $"{{ token: {token} accountId: {accountId}, characterId: {characterId}, actionType: {actionType} }}");
 
             // Begin sending the data WebAPI  
             _workingSocket.BeginSend(byteData, 0, byteData.Length, 0, SendCallback, _workingSocket);
@@ -64,14 +74,19 @@ namespace VRP.Core.Tools
                 // Complete sending the data to the remote device.  
                 handler.EndSend(asyncResult);
 
-                Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}][{DateTime.Now.ToShortTimeString()}] Data send successfully completed.", Color.DarkGreen);
+                _logger.LogInfo($"[{nameof(UsersBroadcasterService)}][{DateTime.Now.ToShortTimeString()}] Data send successfully completed.");
 
             }
             catch (Exception e)
             {
-                Colorful.Console.WriteLine($"[Info][{nameof(UserBroadcaster)}][{DateTime.Now.ToShortTimeString()}] Data send unsuccessfully completed.", Color.DarkRed);
+                _logger.LogError($"[{nameof(UsersBroadcasterService)}][{DateTime.Now.ToShortTimeString()}] Data send unsuccessfully completed.");
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        public void Dispose()
+        {
+            _workingSocket?.Dispose();
         }
     }
 }

@@ -6,22 +6,23 @@
 
 using System;
 using VRP.Core.Database.Models;
-using VRP.vAPI.Game.Model;
+using VRP.Core.Services.Model;
 
-namespace VRP.vAPI.Game.Services
+namespace VRP.Core.Services
 {
     public interface IUsersStorageService
     {
         bool IsUserOnline(string email);
         bool IsUserOnline(Guid token);
         bool TryGetUser(Guid token, out AppUser appUser);
-        void Login(Guid userGuid, AccountModel accountModel);
+        void Login(Guid userGuid, int accountModel);
         /// <summary>
         /// Method returns true if character selection ended successfully or false if not
         /// </summary>
-        /// <param name="characterModel"></param>
+        /// <param name="userGuid"></param>
+        /// <param name="characterId"></param>
         /// <returns></returns>
-        bool SelectCharacter(CharacterModel characterModel);
+        bool SelectCharacter(Guid userGuid, int characterId);
         void LogOut(Guid token);
     }
 }

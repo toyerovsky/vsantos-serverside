@@ -6,11 +6,12 @@
 
 using VRP.Core.Database.Models;
 
-namespace VRP.vAPI.Game.Model
+namespace VRP.Core.Services.Model
 {
     public class AppUser
     {
-        public AccountModel UserAccount { get; set; }
-        public CharacterModel SelectedCharacter { get; set; }
+        public int UserAccountId { get; set; }
+        public int SelectedCharacterId { get; set; } = -1;
+        public string Email { get; set; }
     }
 }

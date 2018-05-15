@@ -4,15 +4,16 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
+using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 
-namespace VRP.vAPI.Game.Services.Model
+namespace VRP.Core.Services.Model
 {
-    public class UserData
+    public class ActionData
     {
         public int AccountId { get; set; }
-        public int CharacterId { get; set; }
-        public string Token { get; set; }
+        public Guid Token { get; set; }
         public BroadcasterActionType ActionType { get; set; }
     }
 }

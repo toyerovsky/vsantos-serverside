@@ -5,12 +5,15 @@
  */
 
 using System;
-using VRP.vAPI.Game.Model;
+using VRP.Core.Services.Model;
 
-namespace VRP.vAPI.Game.Services
+namespace VRP.Core.Services
 {
-    public interface IUsersWatcherService
+    public interface IUsersWatcherService : IDisposable
     {
+        event EventHandler<ActionData> AccountLoggedOut;
+        event EventHandler<ActionData> AccountLoggedIn;
+        event EventHandler ConnectionEstablished;
         void Watch();
     }
 }

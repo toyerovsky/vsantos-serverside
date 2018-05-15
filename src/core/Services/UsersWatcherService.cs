@@ -5,8 +5,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -14,25 +12,42 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using VRP.Core.Database;
+using VRP.Core.Database.Models;
 using VRP.Core.Enums;
-using VRP.Core.Repositories;
-using VRP.vAPI.Game.Model;
-using VRP.vAPI.Game.Services.Model;
+using VRP.Core.Interfaces;
+using VRP.Core.Services.Model;
+using VRP.Core.Tools;
 
-namespace VRP.vAPI.Game.Services
+namespace VRP.Core.Services
 {
-    public class UsersWatcherService : IUsersWatcherService, IDisposable
+    public class UsersWatcherService : IUsersWatcherService
     {
         private readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
+        private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
         private Task WatcherTask { get; set; }
 
-        private IUsersStorageService _usersStorageService;
+        public event EventHandler<ActionData> AccountLoggedOut;
+        public event EventHandler<ActionData> AccountLoggedIn;
 
-        public UsersWatcherService(IUsersStorageService usersStorageService)
+        public event EventHandler ConnectionEstablished;
+
+        public UsersWatcherService(IConfiguration configuration, ILogger logger)
         {
-            _usersStorageService = usersStorageService;
+            _logger = logger;
+            _configuration = configuration;
+        }
+
+        public UsersWatcherService(IConfiguration configuration, ILogger logger,
+            EventHandler<ActionData> logInAction, EventHandler<ActionData> logOutAction)
+        {
+            _logger = logger;
+            _configuration = configuration;
+
+            AccountLoggedIn += logInAction;
+            AccountLoggedOut += logOutAction;
+            Watch();
         }
 
         public void Watch()
@@ -40,7 +55,7 @@ namespace VRP.vAPI.Game.Services
             WatcherTask = Task.Run(() =>
             {
                 IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Loopback,
-                    Startup.Configuration.GetValue<int>("UserListenPort"));
+                    _configuration.GetValue<int>("UserWatchPort"));
                 Socket socketListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 try
@@ -83,21 +98,24 @@ namespace VRP.vAPI.Game.Services
                 state.RecievedData.Append(Encoding.ASCII.GetString(state.Buffer, 0, bytesRead));
 
                 string content = state.RecievedData.ToString();
-                // Check for end-of-file tag. If it is not there, read more data. 
-                if (content.IndexOf("<EOF>", StringComparison.Ordinal) > -1)
-                {
-                    UserData data = JsonConvert.DeserializeObject<UserData>(content);
 
-                    if (data.ActionType == BroadcasterActionType.SignOut)
-                    {
-                        // log out user
-                        _usersStorageService.LogOut(Guid.Parse(data.Token));
-                    }
-                }
-                else
+                ActionData data = JsonConvert.DeserializeObject<ActionData>(content);
+
+                if (data.ActionType == BroadcasterActionType.LogOut)
                 {
-                    state.WorkSocket.BeginReceive(state.Buffer, 0, 1024, 0, ReadCallback, state);
+                    // handle user log out 
+                    AccountLoggedOut?.Invoke(this, data);
                 }
+                else if (data.ActionType == BroadcasterActionType.LogIn)
+                {
+                    // handle user log in
+                    AccountLoggedIn?.Invoke(this, data);
+                }
+                else if (data.ActionType == BroadcasterActionType.Ready)
+                {
+                    ConnectionEstablished?.Invoke(this, new EventArgs());
+                }
+
             }
         }
 
