@@ -146,7 +146,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
             CarshopType endType2 = CarshopType.Empty;
             var carshopTypes = ((CarshopType[])Enum.GetValues(typeof(CarshopType))).ToList();
 
-            if (carshopTypes.All(carshopType => carshopType.GetDescription() != type && carshopType.GetDescription() != type2)) ;
+            if (carshopTypes.All(carshopType => carshopType.GetDescription() != type && carshopType.GetDescription() != type2))
             {
                 sender.SendError("Wprowadzony typ salonu jest nieprawidłowy.");
             }

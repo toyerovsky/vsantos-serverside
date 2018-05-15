@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.Core.Database;
-using VRP.vAPI.Game.Services;
 
 namespace VRP.vAPI.Game.Controllers
 {
