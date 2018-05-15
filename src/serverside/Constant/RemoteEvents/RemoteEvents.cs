@@ -9,7 +9,6 @@ namespace VRP.Serverside.Constant.RemoteEvents
     public static class RemoteEvents
     {
         public const string PlayerLoginRequested = "playerLoginRequested";
-        public const string PlayerLoginPassed = "playerLoginPassed";
 
         public const string PlayerNotifyRequested = "playerNotifyRequested";
 
