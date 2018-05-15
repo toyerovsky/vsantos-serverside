@@ -5,14 +5,21 @@
  */
 
 using Microsoft.Extensions.Configuration;
+using VRP.Core.Interfaces;
+using VRP.Core.Services;
+using VRP.Core.Tools;
 
-namespace VRP.Core.Tools
+namespace VRP.Serverside
 {
     public static class Singletons
     {
         public static readonly IConfiguration Configuration = new ConfigurationBuilder()
             .SetBasePath(Utils.WorkingDirectory)
-            .AddJsonFile("rpsettings.json")
+            .AddJsonFile("appsettings.json")
             .Build();
+
+        private static readonly ILogger Logger = new ConsoleLogger();
+        public static readonly IUserBroadcasterService UserBroadcasterService = new UsersBroadcasterService(Configuration, Logger);
+        public static readonly IUsersWatcherService UsersWatcherService = new UsersWatcherService(Configuration, Logger);
     }
 }
