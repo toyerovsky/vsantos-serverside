@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using VRP.Core.Database.Models;
 using VRP.Core.Services.Model;
 
 namespace VRP.Core.Services

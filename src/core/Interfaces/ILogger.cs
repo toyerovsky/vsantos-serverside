@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace VRP.Core.Interfaces
+﻿namespace VRP.Core.Interfaces
 {
     public interface ILogger
     {

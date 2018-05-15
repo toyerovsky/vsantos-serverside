@@ -5,14 +5,10 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using VRP.Core.Database;
 using VRP.Core.Database.Models;
 using VRP.Core.Interfaces;
-using VRP.Core.Repositories;
 
 namespace VRP.vAPI.Forum.Controllers
 {

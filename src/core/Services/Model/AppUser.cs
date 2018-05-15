@@ -4,8 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.Core.Database.Models;
-
 namespace VRP.Core.Services.Model
 {
     public class AppUser

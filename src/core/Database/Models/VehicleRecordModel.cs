@@ -4,10 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using VRP.Core.Enums;
 
 namespace VRP.Core.Database.Models
 {

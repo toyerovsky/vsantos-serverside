@@ -12,11 +12,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Interfaces;
 using VRP.Core.Services.Model;
-using VRP.Core.Tools;
 
 namespace VRP.Core.Services
 {

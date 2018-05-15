@@ -5,7 +5,6 @@
  */
 
 using System;
-using VRP.Core.Database.Models;
 using VRP.Core.Services.Model;
 
 namespace VRP.Core.Services

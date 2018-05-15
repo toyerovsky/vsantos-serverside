@@ -5,7 +5,6 @@
  */
 
 using System;
-using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 
 namespace VRP.Core.Services.Model

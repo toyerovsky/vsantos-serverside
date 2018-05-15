@@ -11,7 +11,6 @@ using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Repositories;
-using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.CharacterCreator;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Money;
