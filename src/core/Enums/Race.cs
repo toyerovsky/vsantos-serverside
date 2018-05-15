@@ -4,8 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-
-
 namespace VRP.Core.Enums
 {
 public enum Race
