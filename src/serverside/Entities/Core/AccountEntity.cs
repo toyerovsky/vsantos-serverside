@@ -38,7 +38,7 @@ namespace VRP.Serverside.Entities.Core
             Client = client;
         }
 
-        public void Login()
+        public void Login(Guid webApiToken)
         {
             Client.SetData("RP_ACCOUNT", this);
 
@@ -49,15 +49,11 @@ namespace VRP.Serverside.Entities.Core
                 $" {DbModel.LastLogin.ToShortDateString()} {DbModel.LastLogin.ToShortTimeString()} ");
 
             EntityHelper.Add(this);
-
-            // setting webapi token
-            WebApiToken = Guid.NewGuid();
+            
+            WebApiToken = webApiToken;
 
             // calling static event telling that player logged in
             AccountLoggedIn?.Invoke(Client, this);
-
-            // calling login pass on clientside
-            Client.TriggerEvent(RemoteEvents.PlayerLoginPassed, WebApiToken, DbModel.Id);
         }
 
         public void Kick(AccountEntity creator, string reason)

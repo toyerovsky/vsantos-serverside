@@ -8,6 +8,8 @@ namespace VRP.Core.Enums
 {
     public enum BroadcasterActionType
     {
-        SignOut
+        Ready,
+        LogIn,
+        LogOut
     }
 }

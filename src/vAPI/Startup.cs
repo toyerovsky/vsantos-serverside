@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,11 @@ using Newtonsoft.Json;
 using VRP.Core.Database;
 using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
-using VRP.vAPI.Game.Services;
+using VRP.Core.Services;
+using VRP.Core.Tools;
 
 namespace VRP.vAPI
 {
@@ -27,13 +30,12 @@ namespace VRP.vAPI
         }
 
         public static IConfiguration Configuration { get; private set; }
-        public static IUsersWatcherService UsersWatcher { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // decreases time of first usage by 2000 ms
-            ForumDatabaseHelper.CheckPasswordMatch("admin@v-santos.pl", "qweqwe", out ForumUser forumUser);
+            //// decreases time of first usage by 2000 ms
+            //ForumDatabaseHelper.CheckPasswordMatch("admin@v-santos.pl", "qweqwe", out ForumUser forumUser);
 
             services.AddDbContext<RoleplayContext>(options =>
             {
@@ -41,19 +43,30 @@ namespace VRP.vAPI
             });
 
             UsersStorageService storageService;
+            UsersWatcherService usersWatcherService;
+            UsersBroadcasterService usersBroadcasterService = null;
 
-            // singleton
+            // singletons
             services.AddSingleton<IUsersStorageService>(storageService = new UsersStorageService());
+            services.AddSingleton<IUsersWatcherService>(usersWatcherService = new UsersWatcherService(Configuration, new DebugLogger(),
+                (o, e) => storageService.Login(e.Token, e.AccountId),
+                (o, e) => storageService.LogOut(e.Token)));
+            services.AddSingleton<IUserBroadcasterService>(usersBroadcasterService = new UsersBroadcasterService(Configuration, new DebugLogger()));
 
-            // users watcher
-            UsersWatcher = new UsersWatcherService(storageService);
-            UsersWatcher.Watch();
+            // prevents socket exceptions
+            // connect to socked after connection with game server is established
+            void OnConnectionEstablished(object sender, EventArgs e)
+            {
+                usersBroadcasterService.Prepare();
+                usersWatcherService.ConnectionEstablished -= OnConnectionEstablished;
+            }
+
+            usersWatcherService.ConnectionEstablished += OnConnectionEstablished;
 
             // scoped
             services.AddScoped(factory => Configuration);
             services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
             services.AddScoped<IRepository<AccountModel>, AccountsRepository>();
-
 
             services.AddMvc().AddJsonOptions(options =>
             {

@@ -7,33 +7,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
 using GTANetworkAPI;
-using Newtonsoft.Json;
-using VRP.Core.Database;
-using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
+using VRP.Core.Services;
 using VRP.Core.Tools;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Core.Login.RemoteData;
-using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Core.Login
 {
     public class LoginScript : Script
     {
-        private readonly UserBroadcaster _userBroadcaster = new UserBroadcaster();
-
+        private readonly IDictionary<Guid, int> _usersInLogin = new Dictionary<Guid, int>();
+        
         public LoginScript()
         {
+            Singletons.UsersWatcherService.AccountLoggedIn += (sender, data) =>
+            {
+                _usersInLogin.Add(data.Token, data.AccountId);
+            };
+
             AccountEntity.AccountLoggedOut += (sender, account) =>
             {
-                _userBroadcaster.Broadcast(-1, -1, account.WebApiToken.ToString(), BroadcasterActionType.SignOut);
+                Singletons.UserBroadcasterService.Broadcast(-1, -1, account.WebApiToken, BroadcasterActionType.LogOut);
             };
         }
 
@@ -58,7 +58,7 @@ namespace VRP.Serverside.Core.Login
             AccountEntity account = sender.GetAccountEntity();
             if (account == null)
             {
-                sender.SendWarning("Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!");
+                sender.SendError("Nie udało się załadować Twojego konta... Skontaktuj się z Administratorem!");
                 return;
             }
 
@@ -76,13 +76,20 @@ namespace VRP.Serverside.Core.Login
         [RemoteEvent(RemoteEvents.PlayerLoginRequested)]
         public void OnLoginRequested(Client sender, params object[] args)
         {
-            int userId = (int)args[0];
-
-            using (AccountsRepository repository = new AccountsRepository())
+            Guid userGuid = Guid.Parse(args[0].ToString());
+            if (_usersInLogin.ContainsKey(userGuid))
             {
-                AccountModel accountModel = repository.Get(userId);
-                AccountEntity account = new AccountEntity(accountModel, sender);
-                account.Login();
+                using (AccountsRepository repository = new AccountsRepository())
+                {
+                    AccountModel accountModel = repository.Get(_usersInLogin[userGuid]);
+                    AccountEntity account = new AccountEntity(accountModel, sender);
+                    account.Login(userGuid);
+                    _usersInLogin.Remove(userGuid);
+                }
+            }
+            else
+            {
+                sender.Kick("Nie udało się zalogować. Skontaktuj się z administratorem.");
             }
         }
 

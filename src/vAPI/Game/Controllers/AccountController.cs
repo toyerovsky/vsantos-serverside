@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
+using VRP.Core.Services;
 using VRP.vAPI.Game.Model;
-using VRP.vAPI.Game.Services;
 
 namespace VRP.vAPI.Game.Controllers
 {
@@ -25,11 +26,14 @@ namespace VRP.vAPI.Game.Controllers
     {
         private readonly IRepository<AccountModel> _accountsRepository;
         private readonly IUsersStorageService _usersStorageService;
+        private readonly IUserBroadcasterService _userBroadcasterService;
 
-        public AccountController(IRepository<AccountModel> accountsRepository, IUsersStorageService usersStorageService)
+        public AccountController(IRepository<AccountModel> accountsRepository, IUsersStorageService usersStorageService,
+            IUserBroadcasterService userBroadcasterService)
         {
             _accountsRepository = accountsRepository;
             _usersStorageService = usersStorageService;
+            _userBroadcasterService = userBroadcasterService;
         }
 
         [HttpPost("login")]
@@ -45,13 +49,18 @@ namespace VRP.vAPI.Game.Controllers
                 return Unauthorized();
             }
 
-            if (ForumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
+            ForumDatabaseHelper forumDatabaseHelper = new ForumDatabaseHelper(Startup.Configuration);
+            if (forumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
             {
                 Guid userGuid = Guid.NewGuid();
                 Task.Run(() =>
                 {
                     using (AccountsRepository accountsRepository = new AccountsRepository())
-                        _usersStorageService.Login(userGuid, accountsRepository.Get(account => account.ForumUserId == forumUser.Id));
+                    {
+                        AccountModel accountModel = accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id);
+                        _usersStorageService.Login(userGuid, accountModel.Id);
+                        _userBroadcasterService.Broadcast(accountModel.Id, -1, userGuid, BroadcasterActionType.LogIn);
+                    }
                 });
                 return Json(new { userGuid, accountId = _accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id).Id });
             }

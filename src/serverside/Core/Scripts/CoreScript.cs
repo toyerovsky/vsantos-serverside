@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
 using VRP.Core.Database.Forum;
+using VRP.Core.Enums;
+using VRP.Core.Tools;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
@@ -31,20 +33,37 @@ namespace VRP.Serverside.Core.Scripts
             }
         }
 
-        /// <summary>
-        /// Server stuff initialization
-        /// </summary>
         [ServerEvent(Event.ResourceStart)]
-        public void Event_OnResourceStart()
+        public void OnResourceStart()
         {
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
             NAPI.Server.SetAutoRespawnAfterDeath(false);
             EntityHelper.LoadEntities();
+            Singletons.UsersWatcherService.Watch();
+            Singletons.UserBroadcasterService.Prepare();
+            Singletons.UserBroadcasterService.Broadcast(-1, -1, Guid.Empty, BroadcasterActionType.Ready);
+        }
+
+        [ServerEvent(Event.ResourceStop)]
+        public void OnResourceStop()
+        {
+            Singletons.UserBroadcasterService.Dispose();
+            Singletons.UsersWatcherService.Dispose();
+
+            foreach (AccountEntity account in EntityHelper.GetAccounts()
+                .Where(x => x.CharacterEntity != null))
+                account.Dispose();
+
+            foreach (VehicleEntity vehicle in EntityHelper.GetVehicles())
+            {
+                vehicle.Save();
+                vehicle.Dispose();
+            }
         }
 
         private float _currentRotation = 0f;
         [ServerEvent(Event.Update)]
-        private void Event_OnUpdate()
+        public void OnUpdate()
         {
             if (EntityHelper.GetBuildings().Any())
             {
@@ -82,21 +101,6 @@ namespace VRP.Serverside.Core.Scripts
             {
                 Action<Vector3> waypointAction = (Action<Vector3>)sender.GetData("WaypointPositionHandler");
                 waypointAction.Invoke(new Vector3((float)arguments[0], (float)arguments[1], (float)arguments[2]));
-            }
-        }
-
-
-        [ServerEvent(Event.ResourceStop)]
-        public void OnResourceStop()
-        {
-            foreach (AccountEntity account in EntityHelper.GetAccounts()
-                .Where(x => x.CharacterEntity != null))
-                account.Dispose();
-
-            foreach (VehicleEntity vehicle in EntityHelper.GetVehicles())
-            {
-                vehicle.Save();
-                vehicle.Dispose();
             }
         }
     }
