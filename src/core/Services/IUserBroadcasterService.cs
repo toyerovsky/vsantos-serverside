@@ -7,7 +7,7 @@
 using System;
 using VRP.Core.Enums;
 
-namespace VRP.Core.Interfaces
+namespace VRP.Core.Services
 {
     public interface IUserBroadcasterService : IDisposable
     {

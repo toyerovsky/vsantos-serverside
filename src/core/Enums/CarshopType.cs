@@ -14,10 +14,10 @@ namespace VRP.Core.Enums
     {
         Empty = 0,
         [Description("biedny")]
-        Poor = 1 << 1,
+        Poor = 1 << 0,
         [Description("sredni")]
-        Medium = 1 << 2,
+        Medium = 1 << 1,
         [Description("bogaty")]
-        Luxury = 1 << 3,
+        Luxury = 1 << 2,
     }
 }

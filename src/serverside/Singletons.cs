@@ -18,7 +18,7 @@ namespace VRP.Serverside
             .AddJsonFile("appsettings.json")
             .Build();
 
-        private static readonly ILogger Logger = new ConsoleLogger();
+        public static readonly ILogger Logger = new ConsoleLogger();
         public static readonly IUserBroadcasterService UserBroadcasterService = new UsersBroadcasterService(Configuration, Logger);
         public static readonly IUsersWatcherService UsersWatcherService = new UsersWatcherService(Configuration, Logger);
     }

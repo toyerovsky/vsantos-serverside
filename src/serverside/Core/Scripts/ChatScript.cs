@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Tools;
+using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities;
@@ -132,7 +133,8 @@ namespace VRP.Serverside.Core.Scripts
                 ? Convert.ToByte(slot)
                 : (byte)0;
 
-            if (groupSlot != 0 && ValidationHelper.IsGroupSlotValid(groupSlot))
+            GroupSlotValidator validator = new GroupSlotValidator();
+            if (groupSlot != 0 && validator.IsValid(groupSlot))
             {
                 sender.SendError("Podany slot grupy jest nieprawidłowy.");
                 return;

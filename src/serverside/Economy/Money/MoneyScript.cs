@@ -6,6 +6,7 @@
 
 using GTANetworkAPI;
 using VRP.Core.Tools;
+using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;
 
@@ -16,7 +17,8 @@ namespace VRP.Serverside.Economy.Money
         [Command("plac", "~y~UŻYJ: ~w~ /plac [id] [kwota]", Alias = "pay")]
         public void TransferWalletMoney(Client sender, int id, decimal safeMoneyCount)
         {
-            if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
+            MoneyValidator validator = new MoneyValidator();
+            if (!validator.IsValid(safeMoneyCount))
             {
                 sender.SendError("Podano kwotę gotówki w nieprawidłowym formacie.");
             }

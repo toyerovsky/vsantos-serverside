@@ -12,6 +12,7 @@ using GTANetworkAPI;
 using VRP.Core.Enums;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
+using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Core.Telephone;
@@ -109,7 +110,9 @@ namespace VRP.Serverside.Entities.Common.Booth
         {
             sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu.\" użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
 
-            if (!ValidationHelper.IsMoneyValid(cost) || !ValidationHelper.IsCellphoneNumberValid(number))
+            MoneyValidator moneyValidator = new MoneyValidator();
+            CellphoneNumberValidator cellphoneNumberValidator = new CellphoneNumberValidator();
+            if (!moneyValidator.IsValid(cost) || !cellphoneNumberValidator.IsValid(number))
             {
                 sender.SendError("Wprowadzono dane w nieprawidłowym formacie.");
                 return;

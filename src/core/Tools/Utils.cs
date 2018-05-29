@@ -25,7 +25,7 @@ namespace VRP.Core.Tools
             {
                 //Do pierwszego budynku tak trzeba zrobić
                 if (!ctx.Buildings.Any()) return 1;
-                uint last = ctx.Buildings.OrderByDescending(x => x.InternalDimension).Select(x => x.InternalDimension).First();
+                uint last = ctx.Buildings.Max(x => x.InternalDimension);
                 do
                     ++last; while (Enum.GetValues(typeof(Dimension)).Cast<uint>().Any(x => x == last));
                 return last;

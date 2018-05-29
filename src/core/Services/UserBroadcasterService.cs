@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using VRP.Core.Enums;
 using VRP.Core.Interfaces;
 
-namespace VRP.Core.Tools
+namespace VRP.Core.Services
 {
     public class UsersBroadcasterService : IUserBroadcasterService, IDisposable
     {

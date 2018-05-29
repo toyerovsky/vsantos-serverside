@@ -13,6 +13,7 @@ using VRP.Core.Enums;
 using VRP.Core.Extensions;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
+using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Common.Carshop.Models;
 using VRP.Serverside.Entities.Core;
@@ -136,7 +137,8 @@ namespace VRP.Serverside.Entities.Common.Carshop
                 return;
             }
 
-            if (!ValidationHelper.IsMoneyValid(cost))
+            MoneyValidator validator = new MoneyValidator();
+            if (!validator.IsValid(cost))
             {
                 sender.SendError("Wprowadzona kwota gotówki jest nieprawidłowa.");
                 return;

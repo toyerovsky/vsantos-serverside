@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Tools;
+using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities;
@@ -143,7 +144,8 @@ namespace VRP.Serverside.Economy.Groups
             }
             else
             {
-                if (!ValidationHelper.IsGroupSlotValid(slot))
+                GroupSlotValidator validator = new GroupSlotValidator();
+                if (!validator.IsValid(slot))
                 {
                     sender.SendError("Podany slot grupy nie jest poprawny.");
                     return;
@@ -184,7 +186,8 @@ namespace VRP.Serverside.Economy.Groups
         [Command("gwyplac")]
         public void TakeMoneyFromGroup(Client sender, short slot, decimal safeMoneyCount)
         {
-            if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
+            MoneyValidator validator = new MoneyValidator();
+            if (!validator.IsValid(safeMoneyCount))
             {
                 sender.SendError("Podano kwotę gotówki w nieprawidłowym formacie.");
             }
@@ -220,7 +223,8 @@ namespace VRP.Serverside.Economy.Groups
         [Command("gwplac")]
         public void PutMoneyIntoGroup(Client sender, short groupSlot, decimal safeMoneyCount)
         {
-            if (!ValidationHelper.IsMoneyValid(safeMoneyCount))
+            MoneyValidator validator = new MoneyValidator();
+            if (!validator.IsValid(safeMoneyCount))
             {
                 sender.SendError("Podano kwotę gotówki w nieprawidłowym formacie.");
             }
@@ -256,7 +260,8 @@ namespace VRP.Serverside.Economy.Groups
                 return;
             }
 
-            if (!ValidationHelper.IsGroupSlotValid(slot))
+            GroupSlotValidator validator = new GroupSlotValidator();
+            if (!validator.IsValid(slot))
             {
                 sender.SendError("Podano dane w nieprawidłowym formacie.");
                 return;
@@ -270,7 +275,7 @@ namespace VRP.Serverside.Economy.Groups
                     group.DbModel.Tag,
                     group.DbModel.Money,
                     Color = group.DbModel.Color,
-                    //To jest raczej kosztowne, ale nie widzę innej opcji
+                    // To jest raczej kosztowne, ale nie widzę innej opcji
                     PlayersOnLine = JsonConvert.SerializeObject(group.GetWorkers().Where(x => x.Character.Online).Select(w => new
                     {
                         ServerId = EntityHelper.GetAccountByCharacterId(w.Character.Id).ServerId,
