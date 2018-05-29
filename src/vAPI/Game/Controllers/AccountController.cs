@@ -46,7 +46,7 @@ namespace VRP.vAPI.Game.Controllers
 
             if (_usersStorageService.IsUserOnline(loginModel.Email))
             {
-                return Unauthorized();
+                return Forbid("User is already on-line.");
             }
 
             ForumDatabaseHelper forumDatabaseHelper = new ForumDatabaseHelper(Startup.Configuration);
@@ -68,6 +68,23 @@ namespace VRP.vAPI.Game.Controllers
             return NotFound();
         }
 
+        [HttpPost("logout")]
+        public IActionResult LogOut([FromBody] Guid userGuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (_usersStorageService.IsUserOnline(userGuid))
+            {
+                _usersStorageService.LogOut(userGuid);
+                return Ok();
+            }
+
+            return SignOut();
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -80,25 +97,6 @@ namespace VRP.vAPI.Game.Controllers
         {
             AccountModel account = _accountsRepository.Get(id);
             return Json(account);
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]AccountModel value)
-        {
-
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
