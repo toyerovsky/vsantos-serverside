@@ -26,14 +26,11 @@ namespace VRP.vAPI.Game.Controllers
     {
         private readonly IRepository<AccountModel> _accountsRepository;
         private readonly IUsersStorageService _usersStorageService;
-        private readonly ILogInBroadcasterService _logInBroadcasterService;
 
-        public AccountController(IRepository<AccountModel> accountsRepository, IUsersStorageService usersStorageService,
-            ILogInBroadcasterService logInBroadcasterService)
+        public AccountController(IRepository<AccountModel> accountsRepository, IUsersStorageService usersStorageService)
         {
             _accountsRepository = accountsRepository;
             _usersStorageService = usersStorageService;
-            _logInBroadcasterService = logInBroadcasterService;
         }
 
         [HttpPost("login")]
@@ -47,7 +44,7 @@ namespace VRP.vAPI.Game.Controllers
             if (_usersStorageService.IsUserOnline(loginModel.Email))
             {
                 return Forbid("User is already on-line.");
-            }
+            } 
 
             ForumDatabaseHelper forumDatabaseHelper = new ForumDatabaseHelper(Startup.Configuration);
             if (forumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
@@ -59,7 +56,6 @@ namespace VRP.vAPI.Game.Controllers
                     {
                         AccountModel accountModel = accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id);
                         _usersStorageService.Login(userGuid, accountModel.Id);
-                        _logInBroadcasterService.BroadcastLogin(accountModel.Id, -1, userGuid);
                     }
                 });
                 return Json(new { userGuid, accountId = _accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id).Id });

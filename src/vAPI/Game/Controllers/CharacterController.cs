@@ -32,14 +32,14 @@ namespace VRP.vAPI.Game.Controllers
         [HttpGet("account/{accountId}")]
         public IActionResult GetByAccountId(int accountId)
         {
-            var query = "SELECT Name, Surname, Money FROM vrpsrv.Characters WHERE AccountId = @accountId";
+            var query = "SELECT Name, Surname, Money FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
 
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
                 using (var multiple = connection.QueryMultiple(query, new { accountId }))
                 {
-                    var characters = multiple.Read().ToList().Select(character => new
+                    var characters = multiple.Read().Select(character => new
                     {
                         name = character.Name,
                         surname = character.Surname,

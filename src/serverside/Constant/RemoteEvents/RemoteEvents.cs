@@ -8,8 +8,6 @@ namespace VRP.Serverside.Constant.RemoteEvents
 {
     public static class RemoteEvents
     {
-        public const string PlayerLoginRequested = "playerLoginRequested";
-
         public const string PlayerNotifyRequested = "playerNotifyRequested";
 
         public const string CharacterSelectRequested = "characterSelectRequested";

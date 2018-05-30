@@ -44,18 +44,8 @@ namespace VRP.vAPI
                 options.UseMySql(Configuration.GetConnectionString("gameConnectionString"));
             });
 
-            IBroadcaster broadcaster;
-            ILogInBroadcasterService logInBroadcasterService;
-
             // singletons
             services.AddSingleton<IUsersStorageService>(new UsersStorageService());
-            services.AddSingleton<IBroadcaster>(broadcaster = new SocketBroadcaster(
-                IPAddress.Parse(Configuration.GetValue<string>("GameServerIp")),
-                Configuration.GetValue<int>("UserBroadcastPort"),
-                new DebugLogger()
-            ));
-
-            services.AddSingleton<ILogInBroadcasterService>(logInBroadcasterService = new LogInBroadcasterService(broadcaster));
 
             // scoped
             services.AddScoped(factory => Configuration);

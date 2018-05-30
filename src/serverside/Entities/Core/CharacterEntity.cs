@@ -132,17 +132,6 @@ namespace VRP.Serverside.Entities.Core
             }
         }
 
-        public void SelectCharacter(AccountEntity accountEntity)
-        {
-            DbModel.LastLoginTime = DateTime.Now;
-            DbModel.Online = true;
-            Save();
-
-            AccountEntity = accountEntity;
-            AccountEntity.CharacterEntity = this;
-            Spawn();
-        }
-
         public override void Spawn()
         {
             AccountEntity.Client.Nametag =

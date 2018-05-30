@@ -55,6 +55,17 @@ namespace VRP.Serverside.Entities.Core
             AccountLoggedIn?.Invoke(Client, this);
         }
 
+        public void SelectCharacter(CharacterEntity characterEntity)
+        {
+            this.CharacterEntity = characterEntity;
+
+            characterEntity.DbModel.LastLoginTime = DateTime.Now;
+            characterEntity.DbModel.Online = true;
+            characterEntity.Save();
+
+            characterEntity.Spawn();
+        }
+
         public void Kick(AccountEntity creator, string reason)
         {
             using (PenaltiesRepository repository = new PenaltiesRepository())

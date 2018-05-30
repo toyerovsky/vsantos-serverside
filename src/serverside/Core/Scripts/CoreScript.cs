@@ -35,13 +35,11 @@ namespace VRP.Serverside.Core.Scripts
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
             NAPI.Server.SetAutoRespawnAfterDeath(false);
             EntityHelper.LoadEntities();
-            Singletons.Watcher.StartWatching();
         }
 
         [ServerEvent(Event.ResourceStop)]
         public void OnResourceStop()
         {
-            Singletons.Watcher.Dispose();
 
             foreach (AccountEntity account in EntityHelper.GetAccounts()
                 .Where(x => x.CharacterEntity != null))
