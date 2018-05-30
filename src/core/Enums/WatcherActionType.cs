@@ -4,15 +4,12 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
-using VRP.Core.Enums;
-
-namespace VRP.Core.Services.Model
+namespace VRP.Core.Enums
 {
-    public class ActionData
+    public enum WatcherActionType
     {
-        public int AccountId { get; set; }
-        public Guid Token { get; set; }
-        public BroadcasterActionType ActionType { get; set; }
+        Ready,
+        LogIn,
+        LogOut
     }
 }

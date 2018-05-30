@@ -7,7 +7,7 @@
 using System;
 using VRP.Core.Services.Model;
 
-namespace VRP.Core.Services
+namespace VRP.Core.Services.UserStorage
 {
     public interface IUsersStorageService
     {
@@ -21,7 +21,7 @@ namespace VRP.Core.Services
         /// <param name="userGuid"></param>
         /// <param name="characterId"></param>
         /// <returns></returns>
-        bool SelectCharacter(Guid userGuid, int characterId);
+        bool TrySelectCharacter(Guid userGuid, int characterId);
         void LogOut(Guid token);
     }
 }

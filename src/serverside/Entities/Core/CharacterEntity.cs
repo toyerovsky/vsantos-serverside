@@ -11,6 +11,7 @@ using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
 using VRP.Core.Repositories;
+using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.CharacterCreator;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Money;
@@ -167,7 +168,8 @@ namespace VRP.Serverside.Entities.Core
             CanCommand = true;
             CanPay = true;
 
-            AccountEntity.Client.TriggerEvent(Constant.RemoteEvents.RemoteEvents.CharacterMoneyChangeRequested, DbModel.Money.ToString(CultureInfo.InvariantCulture));
+            AccountEntity.Client.TriggerEvent(
+                RemoteEvents.CharacterMoneyChangeRequested, DbModel.Money.ToString(CultureInfo.InvariantCulture));
             AccountEntity.Client.SendInfo(
                 $"Twoja postać {FormatName} została pomyślnie załadowana życzymy miłej gry!");
 

@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
-using VRP.Core.Enums;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
-using VRP.Core.Services;
+using VRP.Core.Services.LogInBroadcaster;
+using VRP.Core.Services.UserStorage;
 using VRP.vAPI.Game.Model;
 
 namespace VRP.vAPI.Game.Controllers
@@ -26,14 +26,14 @@ namespace VRP.vAPI.Game.Controllers
     {
         private readonly IRepository<AccountModel> _accountsRepository;
         private readonly IUsersStorageService _usersStorageService;
-        private readonly IUserBroadcasterService _userBroadcasterService;
+        private readonly ILogInBroadcasterService _logInBroadcasterService;
 
         public AccountController(IRepository<AccountModel> accountsRepository, IUsersStorageService usersStorageService,
-            IUserBroadcasterService userBroadcasterService)
+            ILogInBroadcasterService logInBroadcasterService)
         {
             _accountsRepository = accountsRepository;
             _usersStorageService = usersStorageService;
-            _userBroadcasterService = userBroadcasterService;
+            _logInBroadcasterService = logInBroadcasterService;
         }
 
         [HttpPost("login")]
@@ -59,7 +59,7 @@ namespace VRP.vAPI.Game.Controllers
                     {
                         AccountModel accountModel = accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id);
                         _usersStorageService.Login(userGuid, accountModel.Id);
-                        _userBroadcasterService.Broadcast(accountModel.Id, -1, userGuid, BroadcasterActionType.LogIn);
+                        _logInBroadcasterService.BroadcastLogin(accountModel.Id, -1, userGuid);
                     }
                 });
                 return Json(new { userGuid, accountId = _accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id).Id });

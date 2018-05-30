@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,9 @@ using VRP.Core.Database.Models;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
 using VRP.Core.Services;
+using VRP.Core.Services.LogInBroadcaster;
+using VRP.Core.Services.LogInWatcher;
+using VRP.Core.Services.UserStorage;
 using VRP.Core.Tools;
 
 namespace VRP.vAPI
@@ -40,31 +44,37 @@ namespace VRP.vAPI
                 options.UseMySql(Configuration.GetConnectionString("gameConnectionString"));
             });
 
-            UsersStorageService storageService;
-            UsersWatcherService usersWatcherService;
-            UsersBroadcasterService usersBroadcasterService = null;
+            IBroadcaster broadcaster;
+            ILogInBroadcasterService logInBroadcasterService;
 
             // singletons
-            services.AddSingleton<IUsersStorageService>(storageService = new UsersStorageService());
-            services.AddSingleton<IUsersWatcherService>(usersWatcherService = new UsersWatcherService(Configuration, new DebugLogger(),
-                (o, e) => storageService.Login(e.Token, e.AccountId),
-                (o, e) => storageService.LogOut(e.Token)));
-            services.AddSingleton<IUserBroadcasterService>(usersBroadcasterService = new UsersBroadcasterService(Configuration, new DebugLogger()));
+            services.AddSingleton<IUsersStorageService>(new UsersStorageService());
+            services.AddSingleton<IBroadcaster>(broadcaster = new SocketBroadcaster(
+                IPAddress.Parse(Configuration.GetValue<string>("GameServerIp")),
+                Configuration.GetValue<int>("UserBroadcastPort"),
+                new DebugLogger()
+            ));
 
-            // prevents socket exceptions
-            // connect to socked after connection with game server is established
-            void OnConnectionEstablished(object sender, EventArgs e)
-            {
-                usersBroadcasterService.Prepare();
-                usersWatcherService.ConnectionEstablished -= OnConnectionEstablished;
-            }
-
-            usersWatcherService.ConnectionEstablished += OnConnectionEstablished;
+            services.AddSingleton<ILogInBroadcasterService>(logInBroadcasterService = new LogInBroadcasterService(broadcaster));
 
             // scoped
             services.AddScoped(factory => Configuration);
-            services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
+
+            // scoped repositories
             services.AddScoped<IRepository<AccountModel>, AccountsRepository>();
+            services.AddScoped<IRepository<BuildingModel>, BuildingsRepository>();
+            services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
+            services.AddScoped<IRepository<CrimeBotModel>, CrimeBotsRepository>();
+            services.AddScoped<IRepository<GroupModel>, GroupsRepository>();
+            services.AddScoped<IRepository<GroupWarehouseItemModel>, GroupWarehouseItemsRepository>();
+            services.AddScoped<IRepository<GroupWarehouseOrderModel>, GroupWarehouseOrdersRepository>();
+            services.AddScoped<IRepository<ItemModel>, ItemsRepository>();
+            services.AddScoped<IRepository<PenaltyModel>, PenaltiesRepository>();
+            services.AddScoped<IRepository<TelephoneContactModel>, TelephoneContactsRepository>();
+            services.AddScoped<IRepository<TelephoneMessageModel>, TelephoneMessagesRepository>();
+            services.AddScoped<IRepository<VehicleModel>, VehiclesRepository>();
+            services.AddScoped<IRepository<WorkerModel>, WorkersRepository>();
+            services.AddScoped<IRepository<ZoneModel>, ZonesRepository>();
 
             services.AddMvc().AddJsonOptions(options =>
             {

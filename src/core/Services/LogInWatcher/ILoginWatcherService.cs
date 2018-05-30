@@ -5,15 +5,13 @@
  */
 
 using System;
+using VRP.Core.Services.EventArgs;
 using VRP.Core.Services.Model;
 
-namespace VRP.Core.Services
+namespace VRP.Core.Services.LogInWatcher
 {
-    public interface IUsersWatcherService : IDisposable
+    public interface ILoginWatcherService
     {
-        event EventHandler<ActionData> AccountLoggedOut;
-        event EventHandler<ActionData> AccountLoggedIn;
-        event EventHandler ConnectionEstablished;
-        void Watch();
+        event EventHandler<LoginWatcherEventArgs> AccountLoggedIn;
     }
 }

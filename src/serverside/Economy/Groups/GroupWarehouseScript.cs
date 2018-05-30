@@ -122,15 +122,6 @@ namespace VRP.Serverside.Economy.Groups
                 }
             }
         }
-     
-
-        private void API_onResourceStart()
-        {
-            //foreach (var order in ContextFactory.Instance.GroupWarehouseOrders)
-            //{
-            //    CurrentOrders.Add(order);
-            //}
-        }
 
         [Command("dodajprzedmiotmag")]
         public void AddWarehouseItem(Client sender)

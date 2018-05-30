@@ -23,14 +23,9 @@ namespace VRP.Serverside.Core.Login
         
         public LoginScript()
         {
-            Singletons.UsersWatcherService.AccountLoggedIn += (sender, data) =>
+            Singletons.LogInWatcher.AccountLoggedIn += (sender, data) =>
             {
-                _usersInLogin.Add(data.Token, data.AccountId);
-            };
-
-            AccountEntity.AccountLoggedOut += (sender, account) =>
-            {
-                Singletons.UserBroadcasterService.Broadcast(-1, -1, account.WebApiToken, BroadcasterActionType.LogOut);
+                _usersInLogin.Add(data.TempUserToken, data.AccountId);
             };
         }
 

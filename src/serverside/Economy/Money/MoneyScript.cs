@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using VRP.Core.Tools;
 using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;

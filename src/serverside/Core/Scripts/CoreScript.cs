@@ -7,7 +7,6 @@
 using System;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
@@ -36,16 +35,13 @@ namespace VRP.Serverside.Core.Scripts
             NAPI.Server.SetDefaultSpawnLocation(new Vector3(-1666f, -1020f, 12f));
             NAPI.Server.SetAutoRespawnAfterDeath(false);
             EntityHelper.LoadEntities();
-            Singletons.UsersWatcherService.Watch();
-            Singletons.UserBroadcasterService.Prepare();
-            Singletons.UserBroadcasterService.Broadcast(-1, -1, Guid.Empty, BroadcasterActionType.Ready);
+            Singletons.Watcher.StartWatching();
         }
 
         [ServerEvent(Event.ResourceStop)]
         public void OnResourceStop()
         {
-            Singletons.UserBroadcasterService.Dispose();
-            Singletons.UsersWatcherService.Dispose();
+            Singletons.Watcher.Dispose();
 
             foreach (AccountEntity account in EntityHelper.GetAccounts()
                 .Where(x => x.CharacterEntity != null))

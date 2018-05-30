@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using VRP.Core.Services.Model;
 
-namespace VRP.Core.Services
+namespace VRP.Core.Services.UserStorage
 {
     public class UsersStorageService : IUsersStorageService
     {
@@ -30,7 +30,6 @@ namespace VRP.Core.Services
 
         public void Login(Guid userGuid, int accountId)
         {
-
             AppUser appUser = new AppUser
             {
                 UserAccountId = accountId,
@@ -39,7 +38,7 @@ namespace VRP.Core.Services
             _onlineUsers.Add(userGuid, appUser);
         }
 
-        public bool SelectCharacter(Guid userId, int characterId)
+        public bool TrySelectCharacter(Guid userId, int characterId)
         {
             if (_onlineUsers.TryGetValue(userId, out AppUser appUser) && appUser.SelectedCharacterId == -1)
                 appUser.SelectedCharacterId = characterId;
