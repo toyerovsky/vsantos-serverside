@@ -23,6 +23,8 @@ namespace VRP.Serverside.Constant.RemoteEvents
         public const string PlayerMugshotRequested = "playerMugshotRequested";
         public const string PlayerMugshotDestroyRequested = "playerMugshotDestroyRequested";
 
+        public const string RequestDefaultCamera = "requestDefaultCamera";
+
         /// <summary>
         /// interval: number, end: Date = null
         /// </summary>

@@ -46,14 +46,14 @@ namespace VRP.Serverside.Core.Login
                     using (CharactersRepository charactersRepository = new CharactersRepository())
                     {
                         AccountModel accountModel = accountsRepository.Get(accountId);
-                        AccountEntity account = new AccountEntity(accountModel, sender);
-                        account.Login(userGuid);
+                        AccountEntity accountEntity = new AccountEntity(accountModel, sender);
+                        accountEntity.Login(userGuid);
 
-                        int characterId = account.DbModel.Characters.Where(character => character.IsAlive).ToList()[characterIndex].Id;
+                        int characterId = accountEntity.DbModel.Characters.Where(character => character.IsAlive).ToList()[characterIndex].Id;
 
                         CharacterModel characterModel = charactersRepository.Get(characterId);
-                        CharacterEntity characterEntity = new CharacterEntity(characterModel);
-                        account.SelectCharacter(characterEntity);
+                        CharacterEntity characterEntity = new CharacterEntity(accountEntity, characterModel);
+                        accountEntity.SelectCharacter(characterEntity);
                     }
                 }
             }

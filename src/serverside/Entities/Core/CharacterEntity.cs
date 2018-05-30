@@ -74,20 +74,18 @@ namespace VRP.Serverside.Entities.Core
                 DbModel.LastPositionX = value.X;
                 DbModel.LastPositionY = value.Y;
                 DbModel.LastPositionZ = value.Z;
-                Save();
             }
         }
 
         public Vector3 Rotation
         {
-            get => new Vector3(DbModel.LastPositionRotX, DbModel.LastPositionRotY, DbModel.LastPositionRotZ);
+            get => new Vector3(DbModel.LastRotationX, DbModel.LastRotationY, DbModel.LastRotationZ);
             set
             {
                 AccountEntity.Client.Rotation = value;
-                DbModel.LastPositionRotX = value.X;
-                DbModel.LastPositionRotY = value.Y;
-                DbModel.LastPositionRotZ = value.Z;
-                Save();
+                DbModel.LastRotationX = value.X;
+                DbModel.LastRotationY = value.Y;
+                DbModel.LastRotationZ = value.Z;
             }
         }
 
@@ -112,8 +110,9 @@ namespace VRP.Serverside.Entities.Core
             CanTalk = minutes == 0;
         }
 
-        public CharacterEntity(CharacterModel dbModel)
+        public CharacterEntity(AccountEntity acconutEntity, CharacterModel dbModel)
         {
+            AccountEntity = acconutEntity;
             DbModel = dbModel;
         }
 

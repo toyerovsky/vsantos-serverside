@@ -39,9 +39,9 @@ namespace VRP.Core.Database.Models
         public float LastPositionX { get; set; }
         public float LastPositionY { get; set; }
         public float LastPositionZ { get; set; }
-        public float LastPositionRotX { get; set; }
-        public float LastPositionRotY { get; set; }
-        public float LastPositionRotZ { get; set; }
+        public float LastRotationX { get; set; }
+        public float LastRotationY { get; set; }
+        public float LastRotationZ { get; set; }
         public uint CurrentDimension { get; set; }
         public int MinutesToRespawn { get; set; }
         public bool? IsCreated { get; set; }

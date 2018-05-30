@@ -78,7 +78,7 @@ namespace VRP.vAPI.Game.Controllers
                 return Ok();
             }
 
-            return SignOut();
+            return BadRequest();
         }
 
         [HttpGet]
