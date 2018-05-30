@@ -167,6 +167,8 @@ namespace VRP.Serverside.Entities.Core
                 CharacterCreator = new CharacterCreator(this);
             Description = new Description(AccountEntity);
             AccountEntity.Client.SetSharedData("Id", DbModel.Id);
+
+            AccountEntity.Client.TriggerEvent(RemoteEvents.RequestDefaultCamera);
         }
 
         public override void Dispose()
