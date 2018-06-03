@@ -52,10 +52,9 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
 
                     player.Client.TriggerEvent("ShowCourierMenu", JsonConvert.SerializeObject(
                         GroupWarehouseScript.CurrentOrders.Select(x => new
-                    {
-                        Id = x.Data.Id,
-                        Getter = x.Data.Getter.Name,
-                    })));
+                        {
+                            Id = x.Data.Id
+                        })));
                 }
             };
 

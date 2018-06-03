@@ -25,7 +25,7 @@ namespace VRP.Serverside.Economy.Groups
         public static List<WarehouseOrderInfo> CurrentOrders { get; set; } = new List<WarehouseOrderInfo>();
 
         [RemoteEvent(RemoteEvents.OnPlayerAddWarehouseItem)]
-        public void OnPlayerAddWarehouseItemHandler(Client sender , params object[] arguments)
+        public void OnPlayerAddWarehouseItemHandler(Client sender, params object[] arguments)
         {
             /* Argumenty
                  * args[0] string nameResult,
@@ -44,24 +44,22 @@ namespace VRP.Serverside.Economy.Groups
             {
                 GroupWarehouseItemModel groupWarehouseItem = new GroupWarehouseItemModel
                 {
-                    ItemModel = new ItemModel
+                    ItemTemplateModel = new ItemTemplateModel
                     {
-                        CreatorId = sender.GetAccountEntity().DbModel.Id,
                         Name = arguments[0].ToString(),
                         ItemEntityType = itemType,
                     },
                     Cost = Convert.ToDecimal(arguments[2]),
-                    MinimalCost = Convert.ToDecimal(arguments[4]),
                     ResetCount = Convert.ToInt32(arguments[5]),
                     GroupType = groupType
                 };
 
-                if ((int?)arguments[6] != null)
-                    groupWarehouseItem.ItemModel.FirstParameter = (int)arguments[6];
-                if ((int?)arguments[6] != null)
-                    groupWarehouseItem.ItemModel.SecondParameter = (int)arguments[7];
-                if ((int?)arguments[6] != null)
-                    groupWarehouseItem.ItemModel.ThirdParameter = (int)arguments[8];
+                if (arguments[6] != null)
+                    groupWarehouseItem.ItemTemplateModel.FirstParameter = (int)arguments[6];
+                if (arguments[7] != null)
+                    groupWarehouseItem.ItemTemplateModel.SecondParameter = (int)arguments[7];
+                if (arguments[8] != null)
+                    groupWarehouseItem.ItemTemplateModel.ThirdParameter = (int)arguments[8];
 
                 using (GroupWarehouseItemsRepository repository = new GroupWarehouseItemsRepository())
                 {
@@ -95,9 +93,9 @@ namespace VRP.Serverside.Economy.Groups
                 {
                     GroupWarehouseOrderModel shipment = new GroupWarehouseOrderModel
                     {
-                        Getter = group.DbModel,
-                        OrderItemsJson = JsonConvert.SerializeObject(items),
-                        ShipmentLog = $"[{DateTime.Now}] Złożenie zamówienia w magazynie. \n"
+                        //Getter = group.DbModel,
+                        //OrderItemsJson = JsonConvert.SerializeObject(items),
+                        //ShipmentLog = $"[{DateTime.Now}] Złożenie zamówienia w magazynie. \n"
                     };
 
                     using (GroupWarehouseOrdersRepository repository = new GroupWarehouseOrdersRepository())

@@ -150,7 +150,7 @@ namespace VRP.Serverside.Economy.Groups
                     return;
                 }
 
-                if (sender.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group))
+                if (sender.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group, out WorkerModel worker))
                 {
                     WorkerModel worker =
                         group.GetWorkers().Single(x => x.Character.Id == player.CharacterEntity.DbModel.Id);
@@ -191,9 +191,9 @@ namespace VRP.Serverside.Economy.Groups
                 sender.SendError("Podano kwotę gotówki w nieprawidłowym formacie.");
             }
 
-            if (sender.TryGetGroupByUnsafeSlot(slot, out GroupEntity group))
+            if (sender.TryGetGroupByUnsafeSlot(slot, out GroupEntity group, out WorkerModel worker))
             {
-                if (group.CanPlayerTakeMoney(sender.GetAccountEntity()))
+                if (group.CanPlayerTakeMoney(worker))
                 {
                     if (group.HasMoney(safeMoneyCount))
                     {
@@ -228,7 +228,7 @@ namespace VRP.Serverside.Economy.Groups
                 sender.SendError("Podano kwotę gotówki w nieprawidłowym formacie.");
             }
 
-            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group))
+            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group, out WorkerModel worker))
             {
                 CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
                 if (character.HasMoney(safeMoneyCount))
@@ -266,7 +266,7 @@ namespace VRP.Serverside.Economy.Groups
                 return;
             }
 
-            if (sender.TryGetGroupByUnsafeSlot(slot, out GroupEntity group))
+            if (sender.TryGetGroupByUnsafeSlot(slot, out GroupEntity group, out WorkerModel worker))
             {
                 sender.TriggerEvent("ShowGroupMenu", JsonConvert.SerializeObject(new
                 {
@@ -283,7 +283,7 @@ namespace VRP.Serverside.Economy.Groups
                         DutyTime = w.DutyMinutes,
                         OnDuty = group.PlayersOnDuty.Contains(EntityHelper.GetAccountByCharacterId(w.Character.Id))
                     }))
-                }), group.CanPlayerManageWorkers(player));
+                }), group.CanPlayerManageWorkers(worker));
             }
             else
             {
@@ -294,9 +294,9 @@ namespace VRP.Serverside.Economy.Groups
         [Command("gzapros")]
         public void InvitePlayerToGroup(Client sender, short groupSlot, int id)
         {
-            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group))
+            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group, out WorkerModel worker))
             {
-                if (group.CanPlayerManageWorkers(sender.GetAccountEntity()))
+                if (group.CanPlayerManageWorkers(worker))
                 {
                     AccountEntity getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)
@@ -328,9 +328,9 @@ namespace VRP.Serverside.Economy.Groups
         [Command("gwypros")]
         public void RemovePlayerFromGroup(Client sender, short groupSlot, int id)
         {
-            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group))
+            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group, out WorkerModel worker))
             {
-                if (group.CanPlayerManageWorkers(sender.GetAccountEntity()))
+                if (group.CanPlayerManageWorkers(worker))
                 {
                     AccountEntity getter = EntityHelper.GetAccountByServerId(id);
                     if (getter == null)

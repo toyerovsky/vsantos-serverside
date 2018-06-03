@@ -6,6 +6,7 @@
 
 using System.Linq;
 using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Group;
 
@@ -28,28 +29,28 @@ namespace VRP.Serverside.Economy.Groups.Base
         {
             if (!ContainsWorker(account)) return false;
             WorkerModel workerModel = DbModel.Workers.First(w => w.Character.Id == account.CharacterEntity.DbModel.Id);
-            return workerModel.FirstRight.HasValue && workerModel.FirstRight.Value;
+            return workerModel.Rights.HasFlag(GroupRights.First);
         }
 
         public bool CanPlayerDoPolice(AccountEntity account)
         {
             if (!ContainsWorker(account)) return false;
             WorkerModel workerModel = DbModel.Workers.First(w => w.Character.Id == account.CharacterEntity.DbModel.Id);
-            return workerModel.SecondRight.HasValue && workerModel.SecondRight.Value;
+            return workerModel.Rights.HasFlag(GroupRights.Second);
         }
 
         public bool CanPlayerPlaceRoadblocks(AccountEntity account)
         {
             if (!ContainsWorker(account)) return false;
             WorkerModel workerModel = DbModel.Workers.First(w => w.Character.Id == account.CharacterEntity.DbModel.Id);
-            return workerModel.SecondRight.HasValue && workerModel.SecondRight.Value;
+            return workerModel.Rights.HasFlag(GroupRights.Third);
         }
 
         public bool CanPlayerPlaceSpike(AccountEntity account)
         {
             if (!ContainsWorker(account)) return false;
             WorkerModel workerModel = DbModel.Workers.First(w => w.Character.Id == account.CharacterEntity.DbModel.Id);
-            return workerModel.SecondRight.HasValue && workerModel.SecondRight.Value;
+            return workerModel.Rights.HasFlag(GroupRights.Fourth);
         }
     }
 }

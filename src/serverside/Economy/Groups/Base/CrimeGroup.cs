@@ -6,6 +6,7 @@
 
 using System.Linq;
 using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Group;
 using VRP.Serverside.Entities.Peds.CrimeBot;
@@ -27,7 +28,7 @@ namespace VRP.Serverside.Economy.Groups.Base
         {
             if (!ContainsWorker(account)) return false;
             WorkerModel workerModel = DbModel.Workers.First(w => w.Character.Id == account.CharacterEntity.DbModel.Id);
-            return workerModel.FirstRight.HasValue && workerModel.FirstRight.Value;
+            return workerModel.Rights.HasFlag(GroupRights.First);
         }
 
     }

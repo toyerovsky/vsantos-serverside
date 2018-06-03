@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -259,6 +260,16 @@ namespace VRP.Serverside.Entities
             return GetAccounts()
                 .FirstOrDefault(account => account.CharacterEntity?.CurrentCellphone.Number == number)
                 ?.CharacterEntity;
+        }
+
+        public static IEnumerable<CharacterEntity> GetCharacters()
+        {
+            return GetAccounts().Select(account => account.CharacterEntity);
+        }
+
+        public static IEnumerable<CharacterEntity> GetCharacters(Func<CharacterEntity, bool> expression)
+        {
+            return GetAccounts().Select(account => account.CharacterEntity).Where(expression);
         }
 
         #endregion

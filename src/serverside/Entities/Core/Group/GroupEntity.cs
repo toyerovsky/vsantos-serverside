@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Database;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
@@ -96,11 +97,7 @@ namespace VRP.Serverside.Entities.Core.Group
                 Group = DbModel,
                 Character = account.CharacterEntity.DbModel,
                 DutyMinutes = 0,
-                ChatRight = false,
-                DoorsRight = false,
-                OfferFromWarehouseRight = false,
-                PaycheckRight = false,
-                RecrutationRight = false,
+                Rights = GroupRights.None,
                 Salary = 0
             });
             Save();
@@ -113,14 +110,14 @@ namespace VRP.Serverside.Entities.Core.Group
             Save();
         }
 
-        public List<WorkerModel> GetWorkers()
+        public IEnumerable<WorkerModel> GetWorkers()
         {
-            return DbModel.Workers.Where(w => w.Character != null).ToList();
+            return DbModel.Workers.Where(w => w.Character != null);
         }
 
-        public bool CanPlayerOffer(AccountEntity account)
+        public bool CanPlayerOffer(WorkerModel worker)
         {
-            return DbModel.Workers.Single(w => w.Character == account.CharacterEntity.DbModel).OfferFromWarehouseRight;
+            return worker?.Rights.HasFlag(GroupRights.OfferFromWarehouse) ?? false;
         }
 
         /// <summary>
@@ -128,29 +125,44 @@ namespace VRP.Serverside.Entities.Core.Group
         /// </summary>
         /// <param Name="account"></param>
         /// <returns></returns>
-        public bool CanPlayerManageWorkers(AccountEntity account)
+        public bool CanPlayerManageWorkers(WorkerModel worker)
         {
-            return DbModel.Workers.Single(w => w.Character == account.CharacterEntity.DbModel).RecrutationRight;
+            return worker?.Rights.HasFlag(GroupRights.Recrutation) ?? false;
         }
 
-        public bool CanPlayerTakeMoney(AccountEntity account)
+        public bool CanPlayerTakeMoney(WorkerModel worker)
         {
-            return DbModel.Workers.Single(w => w.Character == account.CharacterEntity.DbModel).PaycheckRight;
+            return worker?.Rights.HasFlag(GroupRights.DepositWithdrawMoney) ?? false;
         }
 
-        public bool CanPlayerWriteOnChat(AccountEntity account)
+        public bool CanPlayerWriteOnChat(WorkerModel worker)
         {
-            return DbModel.Workers.Single(w => w.Character == account.CharacterEntity.DbModel).ChatRight;
+            return worker?.Rights.HasFlag(GroupRights.Chat) ?? false;
         }
 
-        public bool CanPlayerBuyInWarehouse(AccountEntity account)
+        public bool CanPlayerBuyInWarehouse(WorkerModel worker)
         {
-            return DbModel.Workers.Single(w => w.Character == account.CharacterEntity.DbModel).OrderFromWarehouseRight;
+            return worker?.Rights.HasFlag(GroupRights.OrderToWareouse) ?? false;
         }
 
         public bool ContainsWorker(AccountEntity account)
         {
             return DbModel.Workers.Any(w => w.Character.Id == account.CharacterEntity.DbModel.Id);
+        }
+
+        public bool ContainsWorker(CharacterEntity character)
+        {
+            return DbModel.Workers.Any(w => w.Character.Id == character.DbModel.Id);
+        }
+
+        public void AddWorker(WorkerModel worker)
+        {
+            using (RoleplayContext ctx = RoleplayContextFactory.NewContext())
+            {
+                ctx.Attach(DbModel);
+                DbModel.Workers.Add(worker);
+                ctx.SaveChanges();
+            }
         }
 
         public void Save()
