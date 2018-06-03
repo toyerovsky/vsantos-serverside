@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Entities;
@@ -47,16 +48,18 @@ namespace VRP.Serverside.Core.Extensions
 
         }
 
-        public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group)
+        public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group, out WorkerModel worker)
         {
             group = null;
+            worker = null;
             if (slot > 0 || slot <= 3)
             {
                 slot--; // slot-- żeby numerowanie dla graczy było od 1 do 3
                 List<GroupEntity> groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity()).ToList();
                 group = slot < groups.Count ? groups[slot] : null;
+                worker = client.GetAccountEntity().CharacterEntity.DbModel.Workers.SingleOrDefault(g => g.Id == groups[slot].Id);
             }
-            return group != null;
+            return group != null && worker != null;
         }
     }
 }

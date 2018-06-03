@@ -24,7 +24,7 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public VehiclesRepository() : this(RolePlayContextFactory.NewContext())
+        public VehiclesRepository() : this(RoleplayContextFactory.NewContext())
         {
         }
 

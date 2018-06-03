@@ -11,7 +11,7 @@ namespace VRP.Core.Database.Models
     public class GroupWarehouseOrderModel
     {
         public int Id { get; set; }
-        public string[] ShipmentLog { get; set; }
+        public string ShipmentLog { get; set; }
 
         public int OrderedItemCount { get; set; }
 

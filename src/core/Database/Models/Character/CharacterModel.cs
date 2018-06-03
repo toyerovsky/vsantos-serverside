@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using VRP.Core.Database.Models.Character;
+using VRP.Core.Database.Models.Lease;
 using VRP.Core.Enums;
 
 namespace VRP.Core.Database.Models
@@ -61,5 +62,6 @@ namespace VRP.Core.Database.Models
         public virtual ICollection<BuildingModel> Buildings { get; set; }
         public virtual ICollection<DescriptionModel> Descriptions { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
+        public virtual ICollection<AgreementModel> Agreements { get; set; }
     }
 }

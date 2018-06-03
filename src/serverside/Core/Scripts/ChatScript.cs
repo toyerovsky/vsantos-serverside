@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core.Database.Models;
 using VRP.Core.Tools;
 using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
@@ -140,17 +141,16 @@ namespace VRP.Serverside.Core.Scripts
                 return;
             }
 
-            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group) && group != null)
+            if (sender.TryGetGroupByUnsafeSlot(groupSlot, out GroupEntity group, out WorkerModel worker))
             {
-                if (group.CanPlayerWriteOnChat(sender.GetAccountEntity()))
+                if (group.CanPlayerWriteOnChat(worker))
                 {
                     message = string.Join(" ", message);
-                    List<CharacterEntity> characters = EntityHelper.GetAccounts()
-                        .Where(account => group.DbModel.Workers
-                        .Any(worker => worker.Character.Id.Equals(account.CharacterEntity.DbModel.Id)))
-                        .Select(a => a.CharacterEntity).ToList();
+                    IEnumerable<CharacterEntity> characters = 
+                        EntityHelper.GetCharacters(c => group.ContainsWorker(c));
                     CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-                    SendMessageToSpecifiedPlayers(character, characters, message, ChatMessageType.GroupOoc, group.DbModel.Color);
+                    SendMessageToSpecifiedPlayers(character,
+                        characters, message, ChatMessageType.GroupOoc, group.DbModel.Color);
                 }
                 else
                 {

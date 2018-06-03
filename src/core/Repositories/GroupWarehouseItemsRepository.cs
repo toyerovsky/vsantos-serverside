@@ -24,7 +24,7 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public GroupWarehouseItemsRepository() : this(RolePlayContextFactory.NewContext())
+        public GroupWarehouseItemsRepository() : this(RoleplayContextFactory.NewContext())
         {
         }
 

@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using VRP.Core.Database.Models.Mdt;
 
 namespace VRP.Core.Database.Models
 {
@@ -13,7 +14,7 @@ namespace VRP.Core.Database.Models
         public int Id { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<CharacterRecordModel> InvolvedPeople { get; set; }
-        public virtual ICollection<VehicleRecordModel> InvolvedVehicles { get; set; }
+        public virtual ICollection<CriminalCaseCharacterRecordRelation> InvolvedPeople { get; set; }
+        public virtual ICollection<CriminalCaseVehicleRecordRelation> InvolvedVehicles { get; set; }
     }
 }

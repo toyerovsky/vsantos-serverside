@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using VRP.Core.Database.Models.Lease;
 using VRP.Core.Enums;
 
 namespace VRP.Core.Database.Models
@@ -22,10 +23,13 @@ namespace VRP.Core.Database.Models
 
         [EnumDataType(typeof(GroupType))]
         public virtual GroupType GroupType { get; set; }
+        
+        // navigation properties
         /// <summary>
         /// Pierwotny szef biznesu, który nie moze go opuscic
         /// </summary>
         public virtual CharacterModel BossCharacter { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
+        public virtual ICollection<AgreementModel> Agreements { get; set; }
     }
 }

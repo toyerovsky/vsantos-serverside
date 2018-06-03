@@ -12,9 +12,9 @@ using MySql.Data.MySqlClient;
 
 namespace VRP.Core.Database
 {
-    public class RolePlayContextFactory : IDesignTimeDbContextFactory<RoleplayContext>
+    public class RoleplayContextFactory : IDesignTimeDbContextFactory<RoleplayContext>
     {
-        private static readonly RolePlayContextFactory Instance = new RolePlayContextFactory();
+        private static readonly RoleplayContextFactory Instance = new RoleplayContextFactory();
 
         public static RoleplayContext NewContext() => Instance.CreateDbContext(new string[] { });
 
@@ -43,7 +43,7 @@ namespace VRP.Core.Database
                             throw;
                         }
 
-                        Colorful.Console.WriteLine($"[{nameof(RolePlayContextFactory)}] Connected to database.", Color.Green);
+                        Colorful.Console.WriteLine($"[{nameof(RoleplayContextFactory)}] Connected to database.", Color.Green);
                     }
                 }
                 _firstAttempt = false;

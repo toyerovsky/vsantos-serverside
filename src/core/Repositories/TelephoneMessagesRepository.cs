@@ -24,7 +24,7 @@ namespace VRP.Core.Repositories
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public TelephoneMessagesRepository() : this(RolePlayContextFactory.NewContext())
+        public TelephoneMessagesRepository() : this(RoleplayContextFactory.NewContext())
         {
         }
 

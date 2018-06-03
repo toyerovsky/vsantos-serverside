@@ -10,7 +10,7 @@ namespace VRP.Core.Database
         public decimal Cost { get; set; }
 
         // navigation properties
-        public virtual VehicleModel Vehicle { get; set; }
-        public virtual BuildingModel Building { get; set; }
+        public virtual VehicleModel VehicleModel { get; set; }
+        public virtual BuildingModel BuildingModel { get; set; }
     }
 }

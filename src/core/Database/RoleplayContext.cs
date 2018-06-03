@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Database.Models.Lease;
+using VRP.Core.Database.Models.Mdt;
 using VRP.Core.Database.Models.Misc;
 using VRP.Core.Database.Models.Vehicle;
 
@@ -55,6 +56,8 @@ namespace VRP.Core.Database
 
         #region Mdt
         public virtual DbSet<CriminalCaseModel> CriminalCases { get; set; }
+        public virtual DbSet<CriminalCaseVehicleRecordRelation> CriminalCaseVehicleRecordRelations { get; set; }
+        public virtual DbSet<CriminalCaseCharacterRecordRelation> CriminalCaseCharacterRecordRelations { get; set; }
         public virtual DbSet<CharacterRecordModel> CharacterRecords { get; set; }
         public virtual DbSet<VehicleRecordModel> VehicleRecordModels { get; set; }
         #endregion
@@ -84,8 +87,19 @@ namespace VRP.Core.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CharacterModel>()
-                .HasOne<CharacterLookModel>()
-                .WithOne();
+                .HasOne(character => character.CharacterLookModel)
+                .WithOne(characterLook => characterLook.CharacterModel)
+                .HasForeignKey<CharacterModel>();
+
+            modelBuilder.Entity<BuildingModel>()
+                .HasOne(building => building.AutoSaleModel)
+                .WithOne(buildingForSale => buildingForSale.BuildingModel)
+                .HasForeignKey<BuildingModel>();
+
+            modelBuilder.Entity<AgreementModel>()
+                .HasOne(agreement => agreement.LeaseModel)
+                .WithOne(lease => lease.AgreementModel)
+                .HasForeignKey<AgreementModel>();
         }
     }
 }

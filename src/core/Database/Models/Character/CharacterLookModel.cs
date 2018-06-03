@@ -44,6 +44,6 @@ namespace VRP.Core.Database.Models.Character
         public byte? UndershirtId { get; set; }
 
         // navigation properties
-        public virtual CharacterModel Character { get; set; }
+        public virtual CharacterModel CharacterModel { get; set; }
     }
 }
