@@ -268,7 +268,6 @@ namespace VRP.Serverside.Entities.Core.Building
             BuildingModel buildingModel = new BuildingModel()
             {
                 Name = name,
-                Cost = cost,
                 CurrentObjectCount = 0,
                 Description = "",
                 EnterCharge = null,
@@ -279,7 +278,7 @@ namespace VRP.Serverside.Entities.Core.Building
                 ExternalPickupPositionX = externalPosition.X,
                 ExternalPickupPositionY = externalPosition.Y,
                 ExternalPickupPositionZ = externalPosition.Z,
-                Items = new List<ItemModel>(),
+                ItemsInBuilding = new List<ItemModel>(),
                 SpawnPossible = spawnPossible,
                 CreatorId = creator.Id,
                 HasCctv = false,

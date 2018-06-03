@@ -94,95 +94,95 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
 
         private void Event_OnClientEventTrigger(Client sender, string eventName, params object[] arguments)
         {
-            //args 0 to string JSON z js który mówi co gracz kupił
-            if (eventName == "OnCrimeBotBought")
-            {
-                List<CrimeBotItem> items =
-                    JsonConvert.DeserializeObject<List<CrimeBotItem>>(arguments[0].ToString())
-                        .Where(item => item.Count > 0).ToList();
+            ////args 0 to string JSON z js który mówi co gracz kupił
+            //if (eventName == "OnCrimeBotBought")
+            //{
+            //    List<CrimeBotItem> items =
+            //        JsonConvert.DeserializeObject<List<CrimeBotItem>>(arguments[0].ToString())
+            //            .Where(item => item.Count > 0).ToList();
 
-                decimal sum = 0;
-                foreach (CrimeBotItem item in items)
-                {
-                    if (item.Count != 0) sum += item.Cost * item.Count;
-                }
+            //    decimal sum = 0;
+            //    foreach (CrimeBotItem item in items)
+            //    {
+            //        if (item.Count != 0) sum += item.Cost * item.Count;
+            //    }
 
-                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+            //    CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
 
-                if (!character.HasMoney(sum))
-                {
-                    SendMessageToNerbyPlayers(
-                        $"Co to jest? Brakuje ${sum - sender.GetAccountEntity().CharacterEntity.DbModel.Money}, forsa w gotówce", ChatMessageType.Normal);
-                    return;
-                }
+            //    if (!character.HasMoney(sum))
+            //    {
+            //        SendMessageToNerbyPlayers(
+            //            $"Co to jest? Brakuje ${sum - sender.GetAccountEntity().CharacterEntity.DbModel.Money}, forsa w gotówce", ChatMessageType.Normal);
+            //        return;
+            //    }
 
-                //Sprawdzamy czy gracz nie chce kupić więcej niż ma bot
-                if (items.Any(crimeBotItem => Items.First(x => x.Name == crimeBotItem.Name).Count < crimeBotItem.Count))
-                {
-                    return;
-                }
+            //    //Sprawdzamy czy gracz nie chce kupić więcej niż ma bot
+            //    if (items.Any(crimeBotItem => Items.First(x => x.Name == crimeBotItem.Name).Count < crimeBotItem.Count))
+            //    {
+            //        return;
+            //    }
 
-                using (ItemsRepository repository = new ItemsRepository())
-                {
-                    foreach (CrimeBotItem i in items)
-                    {
-                        //TYPY: 0 broń, 1 amunicja, 2 narkotyki 
-                        ItemModel item = new ItemModel();
+            //    using (ItemsRepository repository = new ItemsRepository())
+            //    {
+            //        foreach (CrimeBotItem i in items)
+            //        {
+            //            //TYPY: 0 broń, 1 amunicja, 2 narkotyki 
+            //            ItemModel item = new ItemModel();
 
-                        if (i.Type == ItemEntityType.Weapon)
-                        {
-                            Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
+            //            if (i.Type == ItemEntityType.Weapon)
+            //            {
+            //                Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
-                            item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
-                            item.CreatorId = null;
-                            item.Name = i.Name;
-                            item.ItemEntityType = i.Type;
-                            item.FirstParameter = (int)data.Item1;
-                            item.SecondParameter = data.Item2;
-                        }
-                        else if (i.Type == ItemEntityType.WeaponClip)
-                        {
-                            Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
+            //                item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
+            //                item.CreatorId = null;
+            //                item.Name = i.Name;
+            //                item.ItemEntityType = i.Type;
+            //                item.FirstParameter = (int)data.Item1;
+            //                item.SecondParameter = data.Item2;
+            //            }
+            //            else if (i.Type == ItemEntityType.WeaponClip)
+            //            {
+            //                Tuple<WeaponHash, int?> data = Constant.Items.GetWeaponData(i.Name);
 
-                            item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
-                            item.CreatorId = null;
-                            item.Name = i.Name;
-                            item.ItemEntityType = i.Type;
-                            item.FirstParameter = (int)data.Item1;
-                            item.SecondParameter = data.Item2;
-                        }
-                        else if (i.Type == ItemEntityType.Drug)
-                        {
-                            item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
-                            item.CreatorId = null;
-                            item.Name = i.Name;
-                            item.ItemEntityType = i.Type;
-                            item.FirstParameter = (int)Enum.Parse(typeof(DrugType), i.Name);
-                        }
-                        else
-                        {
-                            return;
-                        }
+            //                item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
+            //                item.CreatorId = null;
+            //                item.Name = i.Name;
+            //                item.ItemEntityType = i.Type;
+            //                item.FirstParameter = (int)data.Item1;
+            //                item.SecondParameter = data.Item2;
+            //            }
+            //            else if (i.Type == ItemEntityType.Drug)
+            //            {
+            //                item.Character = sender.GetAccountEntity().CharacterEntity.DbModel;
+            //                item.CreatorId = null;
+            //                item.Name = i.Name;
+            //                item.ItemEntityType = i.Type;
+            //                item.FirstParameter = (int)Enum.Parse(typeof(DrugType), i.Name);
+            //            }
+            //            else
+            //            {
+            //                return;
+            //            }
 
-                        PropertyInfo field = typeof(CrimeBotModel).GetProperties().Single(f => f.Name == i.DatabaseField);
-                        field.SetValue(DbModel, (int)field.GetValue(DbModel) - i.Count);
+            //            PropertyInfo field = typeof(CrimeBotModel).GetProperties().Single(f => f.Name == i.DatabaseField);
+            //            field.SetValue(DbModel, (int)field.GetValue(DbModel) - i.Count);
 
-                        repository.Insert(item);
-                    }
-                    repository.Save();
-                }
-                character.RemoveMoney(sum);
+            //            repository.Insert(item);
+            //        }
+            //        repository.Save();
+            //    }
+            //    character.RemoveMoney(sum);
 
 
-                using (CrimeBotsRepository repository = new CrimeBotsRepository())
-                {
-                    repository.Update(DbModel);
-                    repository.Save();
-                }
+            //    using (CrimeBotsRepository repository = new CrimeBotsRepository())
+            //    {
+            //        repository.Update(DbModel);
+            //        repository.Save();
+            //    }
 
-                EndTransaction();
-                Dispose(false);
-            }
+            //    EndTransaction();
+            //    Dispose(false);
+            //}
         }
 
         private void BotShape_OnEntityEnterColShape(ColShape shape, Client entity)

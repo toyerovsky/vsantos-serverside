@@ -21,6 +21,7 @@ namespace VRP.Core.Enums
         Sixth = 1 << 11,
         Seventh = 1 << 12,
         Eight = 1 << 13,
-        Ninth = 1 << 14
+        Ninth = 1 << 14,
+        AllBasic = DepositWithdrawMoney | Doors | Recrutation | Chat | OfferFromWarehouse | OrderToWareouse,
     }
 }

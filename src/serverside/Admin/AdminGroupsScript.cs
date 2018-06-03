@@ -52,11 +52,7 @@ namespace VRP.Serverside.Admin
                     {
                         Group = group.DbModel,
                         Character = boss.CharacterEntity.DbModel,
-                        ChatRight = true,
-                        DoorsRight = true,
-                        OfferFromWarehouseRight = true,
-                        PaycheckRight = true,
-                        RecrutationRight = true,
+                        Rights = GroupRights.AllBasic,
                         DutyMinutes = 0,
                         Salary = 0
                     });
@@ -104,11 +100,7 @@ namespace VRP.Serverside.Admin
                     {
                         Group = group.DbModel,
                         Character = sender.GetAccountEntity().CharacterEntity.DbModel,
-                        ChatRight = true,
-                        DoorsRight = true,
-                        OfferFromWarehouseRight = true,
-                        PaycheckRight = true,
-                        RecrutationRight = true,
+                        Rights = GroupRights.AllBasic,
                         DutyMinutes = 0,
                         Salary = 0
                     });
