@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 using VRP.Core.Tools;
 using VRP.Core.Validators;
 using VRP.Serverside.Core.Extensions;
@@ -146,7 +147,7 @@ namespace VRP.Serverside.Core.Scripts
                 if (group.CanPlayerWriteOnChat(worker))
                 {
                     message = string.Join(" ", message);
-                    IEnumerable<CharacterEntity> characters = 
+                    IEnumerable<CharacterEntity> characters =
                         EntityHelper.GetCharacters(c => group.ContainsWorker(c));
                     CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
                     SendMessageToSpecifiedPlayers(character,
@@ -180,8 +181,11 @@ namespace VRP.Serverside.Core.Scripts
         [Command("ado", GreedyArg = true)]
         public void SendAdministratorDoMessage(Client player, string message)
         {
+            if (!player.HasRank(ServerRank.AdministratorGry))
+                return;
+
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
-            message = chatMessageFormatter.Format(player.GetAccountEntity().CharacterEntity, message, ChatMessageType.ServerDo);
+            message = chatMessageFormatter.Format(player.Name, message, ChatMessageType.ServerDo);
             NAPI.Chat.SendChatMessageToAll(message);
         }
 
@@ -191,7 +195,7 @@ namespace VRP.Serverside.Core.Scripts
             string message, ChatMessageType chatMessageType, string color = "")
         {
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
-            message = chatMessageFormatter.Format(sender, message, chatMessageType);
+            message = chatMessageFormatter.Format(sender.FormatName, message, chatMessageType);
 
             foreach (CharacterEntity p in players)
                 p.AccountEntity.Client.SendChatMessage(message);
@@ -201,7 +205,7 @@ namespace VRP.Serverside.Core.Scripts
         public static void SendMessageToNearbyPlayers(CharacterEntity sender, string message, ChatMessageType chatMessageType)
         {
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
-            message = chatMessageFormatter.Format(sender, message, chatMessageType);
+            message = chatMessageFormatter.Format(sender.FormatName, message, chatMessageType);
 
             // Dla każdego klienta w zasięgu wyświetl wiadomość, zasięg jest pobierany przez rzutowanie enuma do floata
             NAPI.Player.GetPlayersInRadiusOfPlayer((float)chatMessageType, sender.AccountEntity.Client)
@@ -211,7 +215,7 @@ namespace VRP.Serverside.Core.Scripts
         public static void SendMessageToPlayer(CharacterEntity sender, string message, ChatMessageType chatMessageType)
         {
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();
-            message = chatMessageFormatter.Format(sender, message, chatMessageType);
+            message = chatMessageFormatter.Format(sender.FormatName, message, chatMessageType);
 
             sender.AccountEntity.Client.SendChatMessage(message);
         }

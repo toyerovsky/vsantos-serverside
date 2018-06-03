@@ -66,7 +66,7 @@ namespace VRP.Serverside.Admin
         [Command("listreports", Alias = "lr")]
         public void ShowCurrentReports(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do przeglądania raportów.");
                 return;
@@ -92,7 +92,7 @@ namespace VRP.Serverside.Admin
         [Command("aduty")]
         public void EnterAdminDuty(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do służby administracyjnej.");
                

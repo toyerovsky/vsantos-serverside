@@ -28,7 +28,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
         [Command("dodajbotp")]
         public void AddCrimeBot(Client sender, string name)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do tworzenia bota przestępczego.");
                 return;

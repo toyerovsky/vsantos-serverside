@@ -50,13 +50,13 @@ namespace VRP.Serverside.Entities.Common.Atm
         [Command("dodajbankomat")]
         public void CreateAtm(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do dodawania bankomatu.");
                 return;
             }
 
-            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\". użyj ctrl + alt + shift + d aby poznać swoją obecną pozycję.");
+            sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\".");
 
             void Handler(Client o, string message)
             {
@@ -95,7 +95,7 @@ namespace VRP.Serverside.Entities.Common.Atm
         [Command("usunbankomat")]
         public void DeleteAtm(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania bankomatu.");
                 return;

@@ -32,7 +32,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
             BusStopEntity.StartTransport(sender.GetAccountEntity().CharacterEntity, Convert.ToDecimal(arguments[1]), Convert.ToInt32(arguments[0]),
                 busStop.Data.Center, busStop.Data.Name);
         }
-   
+
 
         [Command("bus")]
         public void ShowBusMenu(Client sender)
@@ -57,7 +57,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
         [Command("dodajbus", "~y~UŻYJ ~w~ /dodajbus [nazwa]", GreedyArg = true)]
         public void AddBusStop(Client sender, string name)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendError("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
                 return;
@@ -91,7 +91,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
         [Command("usunbus")]
         public void DeleteBusStop(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
                 return;

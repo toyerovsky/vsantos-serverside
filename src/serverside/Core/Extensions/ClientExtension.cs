@@ -31,10 +31,14 @@ namespace VRP.Serverside.Core.Extensions
         //    NAPI.Notification.SendNotificationToPlayer(client, message, flashing);
         // }
 
+        public static bool HasRank(this Client client, ServerRank rank)
+        {
+            return client.GetAccountEntity().DbModel.ServerRank >= rank;
+        }
+
         public static void SendWarning(this Client client, string message, string title = "")
         {
             client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, NotificationType.Warning, title);
-            
         }
 
         public static void SendError(this Client client, string message, string title = "")
@@ -45,7 +49,6 @@ namespace VRP.Serverside.Core.Extensions
         public static void SendInfo(this Client client, string message, string title = "")
         {
             client.TriggerEvent(RemoteEvents.PlayerNotifyRequested, message, NotificationType.Info, title);
-
         }
 
         public static bool TryGetGroupByUnsafeSlot(this Client client, short slot, out GroupEntity group, out WorkerModel worker)

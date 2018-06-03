@@ -125,7 +125,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
         [Command("dodajautosalon", "~y~ UŻYJ ~w~ /dodajautosalon [model] [koszt] [typ salonu]")]
         public void AddVehicleToCarshop(Client sender, VehicleHash hash, VehicleClass vehicleClass, decimal cost, string type, string type2 = "Empty")
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do tworzenia pojazdu w salonie.");
                 return;
@@ -204,7 +204,7 @@ namespace VRP.Serverside.Entities.Common.Carshop
         [Command("usunsalon", "~y~ UŻYJ ~w~ /usunsalon")]
         public void DeleteCarshop(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania salonu samochodowego.");
                 return;

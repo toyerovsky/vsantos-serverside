@@ -24,7 +24,7 @@ namespace VRP.Serverside.Admin
         [Command("ustawrange", "~y~ UŻYJ ~w~ /ustawrange [id] [nazwa]")]
         public void SetRank(Client sender, int id, ServerRank rank)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorTechniczny3)
+            if (!sender.HasRank(ServerRank.AdministratorTechniczny3))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do ustawiania rang.");
                 return;
@@ -45,7 +45,7 @@ namespace VRP.Serverside.Admin
         [Command("tpc", "~y~ UŻYJ ~w~ /tpc [x] [y] [z]")]
         public void TeleportToCords(Client sender, float x, float y, float z)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do teleportu na koordynaty.");
                 return;
@@ -57,7 +57,7 @@ namespace VRP.Serverside.Admin
         [Command("tpmap", "~y~ UŻYJ ~w~ /tpmap")]
         public void TeleportToWaypoint(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do teleportu na waypoint.");
                 return;
@@ -72,7 +72,7 @@ namespace VRP.Serverside.Admin
         [Command("tp", "~y~ UŻYJ ~w~ /tp [id]")]
         public void TeleportToPlayer(Client sender, int id)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do teleportu.");
                 return;
@@ -89,11 +89,12 @@ namespace VRP.Serverside.Admin
         [Command("spec", "~y~ UŻYJ ~w~ /spec [id]")]
         public void SpectatePlayer(Client sender, int id)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do obserwowania.");
                 return;
             }
+
             AccountEntity controller = EntityHelper.GetAccountByServerId(id);
             if (controller == null)
             {
@@ -107,6 +108,12 @@ namespace VRP.Serverside.Admin
         [Command("specoff")]
         public void TurnOffSpectating(Client sender)
         {
+            if (!sender.HasRank(ServerRank.Support))
+            {
+                sender.SendWarning("Nie posiadasz uprawnień do obserwowania.");
+                return;
+            }
+
             NAPI.Player.SetPlayerToSpectator(sender);
             sender.SendInfo("Wyłączono obserwowanie.");
         }
@@ -114,7 +121,7 @@ namespace VRP.Serverside.Admin
         [Command("addspec", "~y~ UŻYJ ~w~ /addspec [id]", Description = "Polecenie ustawia wybranemu graczowi specowanie na nas.")]
         public void AddSpectator(Client sender, int id)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support3)
+            if (!sender.HasRank(ServerRank.Support3))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do ustawienia obserwowania.");
                 return;
@@ -132,7 +139,7 @@ namespace VRP.Serverside.Admin
         [Command("kick", "~y~ UŻYJ ~w~ /kick [id] (powod)", GreedyArg = true)]
         public void KickPlayer(Client sender, int id, string reason = "")
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do wyrzucenia gracza.");
                 return;
@@ -150,7 +157,7 @@ namespace VRP.Serverside.Admin
         public void StartFying(Client sender)
         {
             AccountEntity senderAccount = sender.GetAccountEntity();
-            if (senderAccount.DbModel.ServerRank < ServerRank.Support5)
+            if (!sender.HasRank(ServerRank.Support5))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do latania.");
                 return;
@@ -172,7 +179,7 @@ namespace VRP.Serverside.Admin
         [Command("god")]
         public void SetPlayerInvicible(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorTechniczny)
+            if (!sender.HasRank(ServerRank.AdministratorTechniczny))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do ustawienia nieśmiertelności.");
                 return;
@@ -192,7 +199,8 @@ namespace VRP.Serverside.Admin
         [Command("inv")]
         public void SetPlayerInvisible(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorTechniczny)
+            if (!sender.HasRank(ServerRank.AdministratorTechniczny)
+            )
             {
                 sender.SendInfo("Nie posiadasz uprawnień do ustawienia niewidzialności.");
                 return;
@@ -213,7 +221,7 @@ namespace VRP.Serverside.Admin
         [Command("hp")]
         public void SetPlayerHealth(Client sender, byte health, int id = -1)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendInfo("Nie posiadasz uprawnień do ustawienia poziomu zdrowia.");
                 return;
@@ -226,7 +234,7 @@ namespace VRP.Serverside.Admin
         [Command("savepos", "~y~ UŻYJ ~w~ /savepos [nazwa]", GreedyArg = true)]
         public void SaveCustomPosition(Client sender, string name)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.Support)
+            if (!sender.HasRank(ServerRank.Support))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do zapisywania pozycji.");
                 return;

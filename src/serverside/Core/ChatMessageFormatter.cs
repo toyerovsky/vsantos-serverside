@@ -13,7 +13,7 @@ namespace VRP.Serverside.Core
 {
     public class ChatMessageFormatter
     {
-        public string Format(CharacterEntity senderCharacter, string message, ChatMessageType chatMessageType, string color = "")
+        public string Format(string formatName, string message, ChatMessageType chatMessageType, int serverId = -1, string color = "")
         {
             if (char.IsLower(message.First()))
                 message = $"{char.ToUpper(message[0])}{message.Substring(1)}";
@@ -21,31 +21,31 @@ namespace VRP.Serverside.Core
             switch (chatMessageType)
             {
                 case ChatMessageType.Normal:
-                    message = $"{senderCharacter.FormatName} mówi: {message}";
+                    message = $"{formatName} mówi: {message}";
                     color = "#FFFFFF";
                     break;
                 case ChatMessageType.Quiet:
-                    message = $"{senderCharacter.FormatName} szepcze: {message}";
+                    message = $"{formatName} szepcze: {message}";
                     color = "#FFFFFF";
                     break;
                 case ChatMessageType.Loud:
-                    message = $"{senderCharacter.FormatName} krzyczy: {message}!";
+                    message = $"{formatName} krzyczy: {message}!";
                     color = "#FFFFFF";
                     break;
                 case ChatMessageType.Me:
-                    message = $"** {senderCharacter.FormatName} {message}";
+                    message = $"** {formatName} {message}";
                     color = "#C2A2DA";
                     break;
                 case ChatMessageType.ServerMe:
-                    message = $"* {senderCharacter.FormatName} {message}";
+                    message = $"* {formatName} {message}";
                     color = "#C2A2DA";
                     break;
                 case ChatMessageType.Do:
-                    message = $"** {message} (( {senderCharacter.FormatName} )) **";
+                    message = $"** {message} (( {formatName} )) **";
                     color = "#847DB7";
                     break;
                 case ChatMessageType.PhoneOthers:
-                    message = $"{senderCharacter.FormatName} mówi(telefon): {message}";
+                    message = $"{formatName} mówi(telefon): {message}";
                     color = "#FFFFFF";
                     break;
                 case ChatMessageType.ServerInfo:
@@ -57,18 +57,18 @@ namespace VRP.Serverside.Core
                     color = "#847DB7";
                     break;
                 case ChatMessageType.Megaphone:
-                    message = $"{senderCharacter.FormatName} \U0001F4E3 {message}";
+                    message = $"{formatName} \U0001F4E3 {message}";
                     color = "#FFDB00";
                     break;
                 case ChatMessageType.Phone:
                     color = "#FFDB00";
                     break;
                 case ChatMessageType.Ooc:
-                    message = $"(( [{senderCharacter.AccountEntity.ServerId}] {senderCharacter.FormatName} {message} ))";
+                    message = $"(( [{serverId}] {formatName} {message} ))";
                     color = "#CCCCCC";
                     break;
                 case ChatMessageType.GroupOoc:
-                    message = $"[{senderCharacter.AccountEntity.ServerId}] {senderCharacter.FormatName}: {message}";
+                    message = $"[{serverId}] {formatName}: {message}";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(chatMessageType), chatMessageType, null);

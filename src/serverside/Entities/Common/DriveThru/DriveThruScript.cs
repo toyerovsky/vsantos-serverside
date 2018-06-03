@@ -56,7 +56,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
             sender.SendInfo($"Pomyślnie zakupiłeś {itemModel.Name} za ${money}.");
         }
 
- 
+
 
         [ServerEvent(Event.ResourceStart)]
         private void OnResourceStart()
@@ -72,14 +72,14 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         [Command("dodajdrivethru", GreedyArg = true)]
         public void AddDriveThru(Client sender, string name)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do dodawania DriveThru.");
                 return;
             }
 
             sender.SendInfo("Ustaw się w wybranej pozycji, a następnie wpisz \"tu\" ctrl + alt + shift + d użyj /diag aby poznać swoją obecną pozycję.");
-            
+
             Vector3 center = null;
 
             void Handler(Client o, string message)
@@ -97,7 +97,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                     sender.SendInfo("Dodawanie DriveThru zakończyło się pomyślnie.");
                     DriveThruEntity driveThru = new DriveThruEntity(data);
                     driveThru.Spawn();
-                    DriveThrus.Add(driveThru);                    
+                    DriveThrus.Add(driveThru);
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace VRP.Serverside.Entities.Common.DriveThru
         [Command("usundrivethru")]
         public void DeleteDriveThru(Client sender)
         {
-            if (sender.GetAccountEntity().DbModel.ServerRank < ServerRank.AdministratorGry)
+            if (!sender.HasRank(ServerRank.AdministratorGry))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania przystanku DriveThru.");
                 return;
