@@ -93,20 +93,25 @@ namespace VRP.Core.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<CharacterModel>()
-            //    .HasOne(character => character.CharacterLookModel)
-            //    .WithOne(characterLook => characterLook.CharacterModel);
-            //    //.HasForeignKey<CharacterLookModel>(characterLook => characterLook.CharacterModel);
+            modelBuilder.Entity<CharacterModel>()
+                .HasOne(character => character.CharacterLookModel)
+                .WithOne(characterLook => characterLook.CharacterModel)
+                .HasForeignKey<CharacterLookModel>(characterLook => characterLook.CharacterId);
 
-            //modelBuilder.Entity<BuildingModel>()
-            //    .HasOne(building => building.AutoSaleModel)
-            //    .WithOne(autoSale => autoSale.BuildingModel);
-            //    //.HasForeignKey<AutoSaleModel>(autoSale => autoSale.BuildingModel);
+            modelBuilder.Entity<AutoSaleModel>()
+                .HasOne(autoSale => autoSale.BuildingModel)
+                .WithOne(building => building.AutoSaleModel)
+                .HasForeignKey<BuildingModel>(building => building.AutoSaleId);
 
-            //modelBuilder.Entity<AgreementModel>()
-            //    .HasOne(agreement => agreement.LeaseModel)
-            //    .WithOne(lease => lease.AgreementModel);
-            ////.HasForeignKey<LeaseModel>(lease => lease.AgreementModel);
+            modelBuilder.Entity<AutoSaleModel>()
+                .HasOne(autoSale => autoSale.VehicleModel)
+                .WithOne(vehicle => vehicle.AutoSaleModel)
+                .HasForeignKey<VehicleModel>(vehicle => vehicle.AutoSaleId);
+
+            modelBuilder.Entity<AgreementModel>()
+                .HasOne(agreement => agreement.LeaseModel)
+                .WithOne(lease => lease.AgreementModel)
+                .HasForeignKey<LeaseModel>(lease => lease.AgreementId);
         }
     }
 }

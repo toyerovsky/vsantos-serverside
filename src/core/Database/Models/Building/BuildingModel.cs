@@ -51,8 +51,7 @@ namespace VRP.Core.Database.Models.Building
         // navigation properties
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
-        [ForeignKey("AutoSaleId")]
-        public AutoSaleModel AutoSaleModel { get; set; }
+        public virtual AutoSaleModel AutoSaleModel { get; set; }
         public virtual ICollection<ItemModel> ItemsInBuilding { get; set; }
     }
 }

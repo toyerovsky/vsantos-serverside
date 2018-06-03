@@ -14,16 +14,6 @@
     <OutputPath>C:\RAGEMP\server-files\bridge\resources\vrp\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>C:\RAGEMP\server-files\bridge\resources\</OutputPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Entities\Interfaces\**" />
-    <EmbeddedResource Remove="Entities\Interfaces\**" />
-    <None Remove="Entities\Interfaces\**" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="gtanetwork.api" Version="0.3.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.2" />

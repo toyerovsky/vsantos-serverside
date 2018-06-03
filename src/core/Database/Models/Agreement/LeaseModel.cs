@@ -21,9 +21,7 @@ namespace VRP.Core.Database.Models.Agreement
         public int AgreementId { get; set; }
 
         // navigation properties
-        [ForeignKey("AgreementId")]
-        public AgreementModel AgreementModel { get; set; }
-
+        public virtual AgreementModel AgreementModel { get; set; }
         public virtual VehicleModel Vehicle { get; set; }
         public virtual BuildingModel Building { get; set; }
     }

@@ -54,7 +54,6 @@ namespace VRP.Core.Database.Models.Character
         // foreign keys
         public int CharacterId { get; set; }
         // navigation properties
-        [ForeignKey("CharacterId")]
-        public CharacterModel CharacterModel { get; set; }
+        public virtual CharacterModel CharacterModel { get; set; }
     }
 }

@@ -62,7 +62,6 @@ namespace VRP.Core.Database.Models.Vehicle
         // foreign keys
         public int AutoSaleId { get; set; }
         // navigation properties
-        [ForeignKey("AutoSaleId")]
         public virtual AutoSaleModel AutoSaleModel { get; set; }
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
         public virtual ICollection<VehicleTuningModel> VehicleTuning { get; set; }
