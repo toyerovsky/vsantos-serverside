@@ -168,7 +168,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                             Path.Combine(Utils.XmlDirectory, "CrimeBotPositions"))[Convert.ToInt32(arguments[0])];
 
                         group.CrimePedEntity = new CrimePedEntity(player, group, position.VehiclePosition,
-                            crimeBotData.Name, NAPI.Util.PedNameToModel(crimeBotData.Model), position.BotPosition);
+                            crimeBotData.Name, NAPI.Util.PedNameToModel(crimeBotData.PedSkin), position.BotPosition);
                         group.CrimePedEntity.Spawn();
                         sender.TriggerEvent("DrawCrimeBotComponents", position.BotPosition.Position, 500, 2);
                     }

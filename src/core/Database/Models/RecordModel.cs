@@ -11,7 +11,7 @@ using VRP.Core.Enums;
 
 namespace VRP.Core.Database.Models
 {
-    public class RecordModel
+    public class PoliceRecordModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

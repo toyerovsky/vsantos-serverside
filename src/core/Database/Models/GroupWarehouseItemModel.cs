@@ -9,18 +9,18 @@ using VRP.Core.Enums;
 
 namespace VRP.Core.Database.Models
 {
-    //Tabela do trzymania przedmiotów bazowych w magazynie
+    // Tabela do trzymania przedmiotów bazowych w magazynie
     public class GroupWarehouseItemModel
     {
         public int Id { get; set; }
         public decimal Cost { get; set; }
-        public decimal? MinimalCost { get; set; }
-        //Ile jest obecnie?
+        // Ile jest obecnie?
         public int Count { get; set; }
-        //Ile nadaje się co tydzień?
+        // Ile nadaje się co tydzień?
         public int ResetCount { get; set; }
 
-        public virtual ItemModel ItemModel { get; set; }
+        public virtual ItemTemplateModel ItemTemplateModel { get; set; }
+
         [EnumDataType(typeof(GroupType))]
         public virtual GroupType GroupType { get; set; }
     }

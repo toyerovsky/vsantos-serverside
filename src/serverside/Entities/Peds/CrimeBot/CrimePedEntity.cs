@@ -76,7 +76,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
             base.Spawn();
 
             Vehicle = VehicleEntity.Create(VehiclePosition,
-                NAPI.Util.VehicleNameToModel(DbModel.Vehicle), DbModel.Name, 0, DbModel.CreatorId, new Color(0, 0, 0), new Color(0, 0, 0));
+                NAPI.Util.VehicleNameToModel(DbModel.VehicleModel), DbModel.Name, 0, DbModel.CreatorId, new Color(0, 0, 0), new Color(0, 0, 0));
             Vehicle.GameVehicle.OpenDoor(5);
             BotHandle.PlayScenario("WORLD_HUMAN_SMOKING");
 
