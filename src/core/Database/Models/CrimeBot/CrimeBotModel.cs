@@ -19,6 +19,5 @@ namespace VRP.Core.Database.Models
         public string PedSkin { get; set; }
         // items for sale
         public virtual ICollection<CrimeBotItemModel> CrimeBotItems { get; set; }
-
     }
 }

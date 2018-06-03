@@ -14,7 +14,7 @@ namespace VRP.Core.Database.Models
         public string NumberPlate { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
-        public PoliceRecordModel Owner { get; set; }
+        public virtual MdtRecordModel Owner { get; set; }
         public byte[] Image { get; set; }
 
         public bool Towed { get; set; }

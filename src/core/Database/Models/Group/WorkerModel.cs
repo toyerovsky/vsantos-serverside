@@ -16,7 +16,7 @@ namespace VRP.Core.Database.Models
         public virtual GroupModel Group { get; set; }
         public virtual CharacterModel Character { get; set; }
 
-        public int Salary { get; set; }
+        public decimal Salary { get; set; }
         public int DutyMinutes { get; set; }
 
         [EnumDataType(typeof(GroupRights))]
