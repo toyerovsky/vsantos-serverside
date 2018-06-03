@@ -5,9 +5,10 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using VRP.Core.Database.Models.Item;
 using VRP.Core.Enums;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Warehouse
 {
     // Tabela do trzymania przedmiotów bazowych w magazynie
     public class GroupWarehouseItemModel

@@ -1,7 +1,15 @@
-﻿using System;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace VRP.Core.Database.Models.Character
 {
@@ -43,7 +51,10 @@ namespace VRP.Core.Database.Models.Character
         public byte? TorsoId { get; set; }
         public byte? UndershirtId { get; set; }
 
+        // foreign keys
+        public int CharacterId { get; set; }
         // navigation properties
-        public virtual CharacterModel CharacterModel { get; set; }
+        [ForeignKey("CharacterId")]
+        public CharacterModel CharacterModel { get; set; }
     }
 }

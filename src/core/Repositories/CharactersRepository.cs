@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Character;
 using VRP.Core.Interfaces;
 
 namespace VRP.Core.Repositories

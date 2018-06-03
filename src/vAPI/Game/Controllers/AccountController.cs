@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Account;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
 using VRP.Core.Services.LogInBroadcaster;

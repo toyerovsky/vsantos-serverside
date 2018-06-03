@@ -5,9 +5,8 @@
  */
 
 using System.Collections.Generic;
-using VRP.Core.Database.Models.Mdt;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Mdt
 {
     public class CriminalCaseModel
     {

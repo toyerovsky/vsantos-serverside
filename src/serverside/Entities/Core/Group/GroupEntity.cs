@@ -9,6 +9,8 @@ using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.CrimeBot;
+using VRP.Core.Database.Models.Group;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Serverside.Core.Extensions;

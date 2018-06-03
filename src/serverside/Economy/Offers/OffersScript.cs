@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Item;
 using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;

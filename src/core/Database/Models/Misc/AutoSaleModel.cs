@@ -1,8 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using VRP.Core.Database.Models;
-using VRP.Core.Enums;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
+ */
 
-namespace VRP.Core.Database
+using VRP.Core.Database.Models.Building;
+using VRP.Core.Database.Models.Vehicle;
+
+namespace VRP.Core.Database.Models.Misc
 {
     public class AutoSaleModel
     {

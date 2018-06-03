@@ -8,7 +8,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using VRP.Core.Enums;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Account
 {
     public class PenaltyModel
     {

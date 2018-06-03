@@ -11,6 +11,7 @@ using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Item;
 using VRP.Core.Enums;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;

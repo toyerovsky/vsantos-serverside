@@ -5,6 +5,7 @@
  */
 
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Warehouse;
 
 namespace VRP.Serverside.Economy.Groups.Structs
 {

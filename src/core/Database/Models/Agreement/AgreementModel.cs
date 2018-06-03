@@ -1,7 +1,14 @@
-﻿using System;
-using VRP.Core.Database.Models.Misc;
+﻿/* Copyright (C) Przemysław Postrach - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by V Role Play team <contact@v-rp.pl> December 2017
+ */
 
-namespace VRP.Core.Database.Models.Lease
+using System;
+using VRP.Core.Database.Models.Character;
+using VRP.Core.Database.Models.Group;
+
+namespace VRP.Core.Database.Models.Agreement
 {
     public class AgreementModel
     {

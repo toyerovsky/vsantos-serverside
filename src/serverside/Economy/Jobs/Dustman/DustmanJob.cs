@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Serialization;
 using VRP.Serverside.Economy.Jobs.Base;
 

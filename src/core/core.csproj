@@ -5,10 +5,11 @@
     <RootNamespace>VRP.Core</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\RAGEMP\server-files\bridge\resources\</OutputPath>
+    <OutputPath>C:\RAGEMP\server-files\bridge\resources\vrp\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,9 +30,6 @@
   <ItemGroup>
     <Reference Include="Dapper">
       <HintPath>..\..\..\..\..\.nuget\packages\dapper\1.50.4\lib\netstandard2.0\Dapper.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder">
-      <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration.binder\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
     </Reference>
   </ItemGroup>
 

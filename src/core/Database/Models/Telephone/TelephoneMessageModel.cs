@@ -5,8 +5,9 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using VRP.Core.Database.Models.Item;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Telephone
 {
     public class TelephoneMessageModel
     {

@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Character;
 using VRP.Core.Repositories;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.CharacterCreator;

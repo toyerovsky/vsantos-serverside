@@ -5,9 +5,10 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using VRP.Core.Database.Models.Character;
 using VRP.Core.Enums;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Group
 {
     public class WorkerModel
     {

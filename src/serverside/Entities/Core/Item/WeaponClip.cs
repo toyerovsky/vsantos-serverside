@@ -6,6 +6,7 @@
 
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Item;
 
 
 namespace VRP.Serverside.Entities.Core.Item

@@ -4,7 +4,9 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-namespace VRP.Core.Database.Models
+using VRP.Core.Database.Models.Character;
+
+namespace VRP.Core.Database.Models.Misc
 {
     public class DescriptionModel
     {

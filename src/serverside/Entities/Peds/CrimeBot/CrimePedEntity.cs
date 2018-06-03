@@ -12,6 +12,7 @@ using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.CrimeBot;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Serverside.Core.Extensions;

@@ -5,6 +5,7 @@
  */
 
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Vehicle;
 using VRP.Serverside.Economy.Jobs.Base;
 
 namespace VRP.Serverside.Economy.Jobs.Courier

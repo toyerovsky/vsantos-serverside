@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Character;
+using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Core.Serialization;

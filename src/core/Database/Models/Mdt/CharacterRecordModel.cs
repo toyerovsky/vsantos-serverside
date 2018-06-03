@@ -7,10 +7,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using VRP.Core.Database.Models.Mdt;
 using VRP.Core.Enums;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Mdt
 {
     public class CharacterRecordModel
     {

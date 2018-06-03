@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Character;
 using VRP.Core.Interfaces;
 
 namespace VRP.vAPI.Forum.Controllers

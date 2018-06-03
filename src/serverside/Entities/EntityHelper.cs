@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Group;
 using VRP.Core.Repositories;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;

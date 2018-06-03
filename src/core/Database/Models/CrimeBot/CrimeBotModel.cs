@@ -5,8 +5,9 @@
  */
 
 using System.Collections.Generic;
+using VRP.Core.Database.Models.Group;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.CrimeBot
 {
     public class CrimeBotModel
     {

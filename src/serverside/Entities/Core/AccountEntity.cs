@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GTANetworkAPI;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Account;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
 using VRP.Serverside.Core.Extensions;

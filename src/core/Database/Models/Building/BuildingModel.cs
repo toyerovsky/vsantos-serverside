@@ -7,8 +7,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using VRP.Core.Database.Models.Character;
+using VRP.Core.Database.Models.Group;
+using VRP.Core.Database.Models.Item;
+using VRP.Core.Database.Models.Misc;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Building
 {
     public class BuildingModel
     {
@@ -40,11 +45,14 @@ namespace VRP.Core.Database.Models
         public uint InternalDimension { get; set; }
         public string Description { get; set; }
 
+        // foreign keys
+        public int AutoSaleId { get; set; }
+
         // navigation properties
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
-        
-        public virtual AutoSaleModel AutoSaleModel { get; set; }
+        [ForeignKey("AutoSaleId")]
+        public AutoSaleModel AutoSaleModel { get; set; }
         public virtual ICollection<ItemModel> ItemsInBuilding { get; set; }
     }
 }

@@ -5,9 +5,14 @@
  */
 
 using System.Collections.Generic;
-using VRP.Core.Database.Models.Vehicle;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using VRP.Core.Database.Models.Character;
+using VRP.Core.Database.Models.Group;
+using VRP.Core.Database.Models.Item;
+using VRP.Core.Database.Models.Misc;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Vehicle
 {
     public class VehicleModel
     {
@@ -22,13 +27,13 @@ namespace VRP.Core.Database.Models
         public int NumberPlateStyle { get; set; }
 
         public string Name { get; set; }
-        
+
         public virtual string VehicleHash { get; set; }
 
         public float SpawnPositionX { get; set; }
         public float SpawnPositionY { get; set; }
         public float SpawnPositionZ { get; set; }
-        
+
         public float SpawnRotationX { get; set; }
         public float SpawnRotationY { get; set; }
         public float SpawnRotationZ { get; set; }
@@ -53,8 +58,12 @@ namespace VRP.Core.Database.Models
         public string SecondaryColor { get; set; }
         public int WheelType { get; set; }
         public int WheelColor { get; set; }
-        
+
+        // foreign keys
+        public int AutoSaleId { get; set; }
         // navigation properties
+        [ForeignKey("AutoSaleId")]
+        public virtual AutoSaleModel AutoSaleModel { get; set; }
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
         public virtual ICollection<VehicleTuningModel> VehicleTuning { get; set; }
     }

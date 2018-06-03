@@ -7,11 +7,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using VRP.Core.Database.Models.Character;
-using VRP.Core.Database.Models.Lease;
+using VRP.Core.Database.Models.Account;
+using VRP.Core.Database.Models.Agreement;
+using VRP.Core.Database.Models.Building;
+using VRP.Core.Database.Models.Group;
+using VRP.Core.Database.Models.Item;
+using VRP.Core.Database.Models.Misc;
+using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Enums;
 
-namespace VRP.Core.Database.Models
+namespace VRP.Core.Database.Models.Character
 {
     public class CharacterModel
     {

@@ -6,11 +6,18 @@
 
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Account;
+using VRP.Core.Database.Models.Agreement;
+using VRP.Core.Database.Models.Building;
 using VRP.Core.Database.Models.Character;
-using VRP.Core.Database.Models.Lease;
+using VRP.Core.Database.Models.CrimeBot;
+using VRP.Core.Database.Models.Group;
+using VRP.Core.Database.Models.Item;
 using VRP.Core.Database.Models.Mdt;
 using VRP.Core.Database.Models.Misc;
+using VRP.Core.Database.Models.Telephone;
 using VRP.Core.Database.Models.Vehicle;
+using VRP.Core.Database.Models.Warehouse;
 
 namespace VRP.Core.Database
 {
@@ -86,20 +93,20 @@ namespace VRP.Core.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CharacterModel>()
-                .HasOne(character => character.CharacterLookModel)
-                .WithOne(characterLook => characterLook.CharacterModel)
-                .HasForeignKey<CharacterModel>();
+            //modelBuilder.Entity<CharacterModel>()
+            //    .HasOne(character => character.CharacterLookModel)
+            //    .WithOne(characterLook => characterLook.CharacterModel);
+            //    //.HasForeignKey<CharacterLookModel>(characterLook => characterLook.CharacterModel);
 
-            modelBuilder.Entity<BuildingModel>()
-                .HasOne(building => building.AutoSaleModel)
-                .WithOne(buildingForSale => buildingForSale.BuildingModel)
-                .HasForeignKey<BuildingModel>();
+            //modelBuilder.Entity<BuildingModel>()
+            //    .HasOne(building => building.AutoSaleModel)
+            //    .WithOne(autoSale => autoSale.BuildingModel);
+            //    //.HasForeignKey<AutoSaleModel>(autoSale => autoSale.BuildingModel);
 
-            modelBuilder.Entity<AgreementModel>()
-                .HasOne(agreement => agreement.LeaseModel)
-                .WithOne(lease => lease.AgreementModel)
-                .HasForeignKey<AgreementModel>();
+            //modelBuilder.Entity<AgreementModel>()
+            //    .HasOne(agreement => agreement.LeaseModel)
+            //    .WithOne(lease => lease.AgreementModel);
+            ////.HasForeignKey<LeaseModel>(lease => lease.AgreementModel);
         }
     }
 }
