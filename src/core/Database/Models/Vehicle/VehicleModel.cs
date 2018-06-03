@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using VRP.Core.Database.Models.Vehicle;
 
 namespace VRP.Core.Database.Models
 {
@@ -53,6 +54,8 @@ namespace VRP.Core.Database.Models
         public int WheelType { get; set; }
         public int WheelColor { get; set; }
         
+        // navigation properties
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
+        public virtual ICollection<VehicleTuningModel> VehicleTuning { get; set; }
     }
 }

@@ -23,5 +23,8 @@ namespace VRP.Core.Database.Models
 
         [EnumDataType(typeof(GroupType))]
         public virtual GroupType GroupType { get; set; }
+
+        // navigation properties
+        public virtual GroupWarehouseModel GroupWarehouseModel { get; set; }
     }
 }

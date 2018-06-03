@@ -64,7 +64,7 @@ namespace VRP.Core.Repositories
             return accounts
                 .Include(account => account.Characters)
                     .ThenInclude(character => character.Buildings)
-                        .ThenInclude(building => building.Items)
+                        .ThenInclude(building => building.ItemsInBuilding)
                 .Include(account => account.Characters)
                     .ThenInclude(character => character.Buildings)
                 .Include(account => account.Characters)

@@ -33,7 +33,7 @@ namespace VRP.Core.Repositories
             if ((model.Character?.Id ?? 0) != 0)
                 _context.Attach(model.Character);
 
-            foreach (var item in model.Items)
+            foreach (var item in model.ItemsInBuilding)
                 if ((item?.Id ?? 0) != 0)
                     _context.Attach(item);
 
@@ -77,7 +77,7 @@ namespace VRP.Core.Repositories
             return buildings
                 .Include(building => building.Character)
                 .Include(building => building.Group)
-                .Include(building => building.Items);
+                .Include(building => building.ItemsInBuilding);
         }
 
         public IEnumerable<BuildingModel> GetAllNoRelated(Expression<Func<BuildingModel, bool>> expression = null)

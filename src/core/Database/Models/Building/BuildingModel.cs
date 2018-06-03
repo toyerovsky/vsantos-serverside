@@ -13,9 +13,6 @@ namespace VRP.Core.Database.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual CharacterModel Character { get; set; }
-        public virtual GroupModel Group { get; set; }
-        public ICollection<ItemModel> Items { get; set; }
         public int? CreatorId { get; set; }
         public decimal? EnterCharge { get; set; }
         [Required]
@@ -41,6 +38,10 @@ namespace VRP.Core.Database.Models
         [Required]
         public uint InternalDimension { get; set; }
         public string Description { get; set; }
-        public decimal? Cost { get; set; }
+
+        // navigation properties
+        public virtual CharacterModel Character { get; set; }
+        public virtual GroupModel Group { get; set; }
+        public virtual ICollection<ItemModel> ItemsInBuilding { get; set; }
     }
 }

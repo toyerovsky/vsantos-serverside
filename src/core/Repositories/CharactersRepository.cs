@@ -92,7 +92,7 @@ namespace VRP.Core.Repositories
 
             return characters
                 .Include(character => character.Buildings)
-                    .ThenInclude(building => building.Items)
+                    .ThenInclude(building => building.ItemsInBuilding)
                 .Include(character => character.Buildings)
                 .Include(character => character.Items)
                 .Include(character => character.Descriptions)

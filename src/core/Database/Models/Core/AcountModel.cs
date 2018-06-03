@@ -13,6 +13,7 @@ namespace VRP.Core.Database.Models
 {
     public class AccountModel
     {
+        [Key]
         public int Id { get; set; }
         [StringLength(50)]
         public string Name { get; set; }
@@ -29,6 +30,8 @@ namespace VRP.Core.Database.Models
         [EnumDataType(typeof(ServerRank))]
         public ServerRank ServerRank { get; set; }
         public string SerialsJson { get; set; }
+
+        // navigation properties
         public virtual ICollection<CharacterModel> Characters { get; set; }
         public virtual ICollection<PenaltyModel> Penalties { get; set; }
     }
