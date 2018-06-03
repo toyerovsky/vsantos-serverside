@@ -11,10 +11,12 @@ namespace VRP.Core.Database.Models
     public class TelephoneMessageModel
     {
         public int Id { get; set; }
-        public virtual ItemModel Cellphone { get; set; }
         [MaxLength(256)]
         public string Content { get; set; }
         [Phone]
         public int SenderNumber { get; set; }
+
+        // navigation properties
+        public virtual ItemModel Cellphone { get; set; }
     }
 }

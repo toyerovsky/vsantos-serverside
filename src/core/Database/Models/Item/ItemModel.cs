@@ -31,6 +31,5 @@ namespace VRP.Core.Database.Models
         public virtual CharacterModel Character { get; set; }
         public virtual BuildingModel Building { get; set; }
         public virtual VehicleModel Vehicle { get; set; }
-        public virtual GroupModel Group { get; set; }
     }
 }

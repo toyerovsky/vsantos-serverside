@@ -33,9 +33,6 @@ namespace VRP.Core.Repositories
             if ((model.Building?.Id ?? 0) != 0)
                 _context.Attach(model.Building);
 
-            if ((model.Group?.Id ?? 0) != 0)
-                _context.Attach(model.Group);
-
             if ((model.Character?.Id ?? 0) != 0)
                 _context.Attach(model.Character);
 
@@ -79,10 +76,7 @@ namespace VRP.Core.Repositories
             return items
                 .Include(item => item.Building)
                 .Include(item => item.Character)
-                    .ThenInclude(character => character.Account)
-                .Include(item => item.Group)
-                    .ThenInclude(group => group.BossCharacter)
-                        .ThenInclude(bossCharacter => bossCharacter.Account);
+                    .ThenInclude(character => character.Account);
         }
 
         public IEnumerable<ItemModel> GetAllNoRelated(Expression<Func<ItemModel, bool>> expression = null)

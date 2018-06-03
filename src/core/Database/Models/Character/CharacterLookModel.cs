@@ -8,7 +8,6 @@ namespace VRP.Core.Database.Models.Character
     public class CharacterLookModel
     {
         public int Id { get; set; }
-        public CharacterModel Character { get; set; }
 
         public byte? AccessoryId { get; set; }
         public byte? AccessoryTexture { get; set; }
@@ -43,5 +42,8 @@ namespace VRP.Core.Database.Models.Character
         public byte? TopTexture { get; set; }
         public byte? TorsoId { get; set; }
         public byte? UndershirtId { get; set; }
+
+        // navigation properties
+        public virtual CharacterModel Character { get; set; }
     }
 }

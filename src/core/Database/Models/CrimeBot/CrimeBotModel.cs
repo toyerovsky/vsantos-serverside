@@ -17,7 +17,8 @@ namespace VRP.Core.Database.Models
         public string VehicleModel { get; set; }
         // ped model
         public string PedSkin { get; set; }
-        // items for sale
-        public virtual ICollection<CrimeBotItemModel> CrimeBotItems { get; set; }
+
+        // navigation properties
+        public virtual ICollection<CrimeBotItemModel> CrimeBotItems { get; set; } // items for sale
     }
 }

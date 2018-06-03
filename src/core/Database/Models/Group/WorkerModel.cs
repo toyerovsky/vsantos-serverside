@@ -13,13 +13,14 @@ namespace VRP.Core.Database.Models
     {
         public int Id { get; set; }
 
-        public virtual GroupModel Group { get; set; }
-        public virtual CharacterModel Character { get; set; }
-
         public decimal Salary { get; set; }
         public int DutyMinutes { get; set; }
 
         [EnumDataType(typeof(GroupRights))]
-        public virtual GroupRights Rights { get; set; }
+        public GroupRights Rights { get; set; }
+
+        // navigation properties
+        public virtual GroupModel Group { get; set; }
+        public virtual CharacterModel Character { get; set; }
     }
 }

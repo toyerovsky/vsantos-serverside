@@ -1,4 +1,6 @@
-﻿using VRP.Core.Database.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using VRP.Core.Database.Models;
+using VRP.Core.Enums;
 
 namespace VRP.Core.Database
 {
@@ -9,6 +11,5 @@ namespace VRP.Core.Database
 
         // navigation properties
         public virtual BuildingModel Building { get; set; }
-
     }
 }

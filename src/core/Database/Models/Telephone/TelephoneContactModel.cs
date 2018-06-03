@@ -11,9 +11,11 @@ namespace VRP.Core.Database.Models
     public class TelephoneContactModel
     {
         public int Id { get; set; }
-        public ItemModel Cellphone { get; set; }
         public string Name { get; set; }
         [Phone]
         public int Number { get; set; }
+
+        // navigation properties
+        public virtual ItemModel Cellphone { get; set; }
     }
 }

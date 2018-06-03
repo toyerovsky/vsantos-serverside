@@ -42,6 +42,7 @@ namespace VRP.Core.Database.Models
         // navigation properties
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
+        public virtual BuildingForSaleModel BuildingForSale { get; set; }
         public virtual ICollection<ItemModel> ItemsInBuilding { get; set; }
     }
 }

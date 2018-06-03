@@ -15,7 +15,7 @@ namespace VRP.Core.Database.Models
         public string Name { get; set; }
         public int? CreatorId { get; set; }
         [EnumDataType(typeof(ZoneType))]
-        public virtual ZoneType ZoneType { get; set; }
+        public ZoneType ZoneType { get; set; }
         public string ZonePropertiesJson { get; set; }
     }
 }

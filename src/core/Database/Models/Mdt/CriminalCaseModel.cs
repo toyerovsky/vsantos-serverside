@@ -13,7 +13,7 @@ namespace VRP.Core.Database.Models
         public int Id { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<MdtRecordModel> InvolvedPeople { get; set; }
+        public virtual ICollection<CharacterRecordModel> InvolvedPeople { get; set; }
         public virtual ICollection<VehicleRecordModel> InvolvedVehicles { get; set; }
     }
 }

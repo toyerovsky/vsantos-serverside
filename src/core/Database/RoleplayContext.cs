@@ -6,6 +6,10 @@
 
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database.Models;
+using VRP.Core.Database.Models.Character;
+using VRP.Core.Database.Models.Lease;
+using VRP.Core.Database.Models.Misc;
+using VRP.Core.Database.Models.Vehicle;
 
 namespace VRP.Core.Database
 {
@@ -15,24 +19,73 @@ namespace VRP.Core.Database
         {
         }
 
+        #region Account
         public virtual DbSet<AccountModel> Accounts { get; set; }
         public virtual DbSet<PenaltyModel> Penaltlies { get; set; }
-        public virtual DbSet<CharacterModel> Characters { get; set; }
-        public virtual DbSet<VehicleModel> Vehicles { get; set; }
-        public virtual DbSet<GroupModel> Groups { get; set; }
-        public virtual DbSet<ItemModel> Items { get; set; }
+        #endregion
+
+        #region Agreement
+        public virtual DbSet<AgreementModel> Agreements { get; set; }
+        public virtual DbSet<LeaseModel> Leases { get; set; }
+        #endregion
+
+        #region Building
         public virtual DbSet<BuildingModel> Buildings { get; set; }
+        public virtual DbSet<BuildingForSaleModel> BuildingsForSale { get; set; }
+        #endregion
+
+        #region Character
+        public virtual DbSet<CharacterModel> Characters { get; set; }
+        public virtual DbSet<CharacterLookModel> CharacterLooks { get; set; }
+        #endregion
+
+        #region CrimeBot
         public virtual DbSet<CrimeBotModel> CrimeBots { get; set; }
+        public virtual DbSet<CrimeBotItemModel> CrimeBotItems { get; set; }
+        #endregion
+
+        #region Groups
+        public virtual DbSet<GroupModel> Groups { get; set; }
+        public virtual DbSet<WorkerModel> Workers { get; set; }
+        #endregion
+
+        #region Item
+        public virtual DbSet<ItemModel> Items { get; set; }
+        public virtual DbSet<ItemTemplateModel> ItemTemplates { get; set; }
+        #endregion
+
+        #region Mdt
+        public virtual DbSet<CriminalCaseModel> CriminalCases { get; set; }
+        public virtual DbSet<CharacterRecordModel> CharacterRecords { get; set; }
+        public virtual DbSet<VehicleRecordModel> VehicleRecordModels { get; set; }
+        #endregion
+
+        #region Misc
         public virtual DbSet<DescriptionModel> Descriptions { get; set; }
+        public virtual DbSet<ZoneModel> Zones { get; set; }
+        #endregion
+
+        #region Telephone
         public virtual DbSet<TelephoneContactModel> TelephoneContacts { get; set; }
         public virtual DbSet<TelephoneMessageModel> TelephoneMessages { get; set; }
-        public virtual DbSet<WorkerModel> Workers { get; set; }
+        #endregion
+
+        #region Vehicle
+        public virtual DbSet<VehicleModel> Vehicles { get; set; }
+        public virtual DbSet<VehicleTuningModel> VehicleTunings { get; set; }
+        #endregion
+
+        #region Warehouse 
         public virtual DbSet<GroupWarehouseItemModel> GroupWarehouseItems { get; set; }
         public virtual DbSet<GroupWarehouseOrderModel> GroupWarehouseOrders { get; set; }
-        public virtual DbSet<ZoneModel> Zones { get; set; }
+        public virtual DbSet<GroupWarehouseModel> GroupWarehouses { get; set; }
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CharacterModel>()
+                .HasOne<CharacterLookModel>()
+                .WithOne();
         }
     }
 }

@@ -9,8 +9,10 @@ namespace VRP.Core.Database.Models
     public class DescriptionModel
     {
         public int Id { get; set; }
-        public CharacterModel Character { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+
+        // navigation properties
+        public virtual CharacterModel Character { get; set; }
     }
 }
