@@ -31,7 +31,6 @@ namespace VRP.Core.Database
 
         #region Building
         public virtual DbSet<BuildingModel> Buildings { get; set; }
-        public virtual DbSet<BuildingForSaleModel> BuildingsForSale { get; set; }
         #endregion
 
         #region Character
@@ -63,6 +62,7 @@ namespace VRP.Core.Database
         #region Misc
         public virtual DbSet<DescriptionModel> Descriptions { get; set; }
         public virtual DbSet<ZoneModel> Zones { get; set; }
+        public virtual DbSet<AutoSaleModel> AutoSales { get; set; }
         #endregion
 
         #region Telephone
