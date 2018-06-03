@@ -152,9 +152,6 @@ namespace VRP.Serverside.Economy.Groups
 
                 if (sender.TryGetGroupByUnsafeSlot(Convert.ToInt16(slot), out GroupEntity group, out WorkerModel worker))
                 {
-                    WorkerModel worker =
-                        group.GetWorkers().Single(x => x.Character.Id == player.CharacterEntity.DbModel.Id);
-
                     dutyTimer.Start();
 
                     dutyTimer.Elapsed += (o, args) =>
