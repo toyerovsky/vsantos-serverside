@@ -48,7 +48,7 @@ namespace VRP.Serverside.Admin
                 if (boss.CharacterEntity.DbModel.Workers.Count < 3)
                 {
                     GroupEntity group = GroupEntity.Create(name, tag, type, color);
-                    group.GetWorkers().Add(new WorkerModel
+                    group.AddWorker(new WorkerModel
                     {
                         Group = group.DbModel,
                         Character = boss.CharacterEntity.DbModel,
@@ -96,7 +96,7 @@ namespace VRP.Serverside.Admin
 
                 if (player.CharacterEntity.DbModel.Workers.Count < 3)
                 {
-                    group.GetWorkers().Add(new WorkerModel
+                    group.AddWorker(new WorkerModel
                     {
                         Group = group.DbModel,
                         Character = sender.GetAccountEntity().CharacterEntity.DbModel,

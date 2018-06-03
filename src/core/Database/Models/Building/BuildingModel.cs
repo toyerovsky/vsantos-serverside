@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VRP.Core.Database.Models
 {
@@ -42,7 +43,8 @@ namespace VRP.Core.Database.Models
         // navigation properties
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
-        public virtual AutoSaleModel BuildingForSale { get; set; }
+        
+        public virtual AutoSaleModel AutoSaleModel { get; set; }
         public virtual ICollection<ItemModel> ItemsInBuilding { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
+using VRP.Core.Database;
 using VRP.Core.Database.Models;
 using VRP.Core.Enums;
 using VRP.Core.Repositories;
@@ -53,7 +54,7 @@ namespace VRP.Serverside.Entities.Core.Building
             ExteriorDoorsColshape = NAPI.ColShape.CreateCylinderColShape(externalPosition, 1, 3);
             ExteriorDoorsColshape.Dimension = (uint)DbModel.InternalDimension;
 
-            Color color = DbModel.Cost.HasValue ? new Color(106, 154, 40, 255) : new Color(255, 255, 0, 255);
+            Color color = DbModel.AutoSaleModel != null ? new Color(106, 154, 40, 255) : new Color(255, 255, 0, 255);
 
             //Jeśli budynek jest na sprzedaż marker jest zielony jeśli nie żółty
             BuildingMarker = NAPI.Marker.CreateMarker(2, externalPosition, new Vector3(0f, 0f, 0f),
@@ -101,7 +102,7 @@ namespace VRP.Serverside.Entities.Core.Building
                         DbModel.Name,
                         DbModel.Description,
                         DbModel.EnterCharge.HasValue ? DbModel.EnterCharge.ToString() : "",
-                        DbModel.Cost.HasValue ? DbModel.Cost.ToString() : ""
+                        DbModel?.AutoSaleModel.ToString() ?? ""
                     });
 
                     player.SetData("CurrentDoors", this);
@@ -123,38 +124,52 @@ namespace VRP.Serverside.Entities.Core.Building
 
         public void Buy(Client sender)
         {
-            if (!DbModel.Cost.HasValue)
+            if (DbModel.AutoSaleModel == null)
             {
                 sender.SendWarning("Ten budynek nie jest na sprzedaż");
                 return;
             }
 
-            CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-
-            if (!character.HasMoney(DbModel.Cost.Value))
+            using (RoleplayContext ctx = RoleplayContextFactory.NewContext())
             {
-                sender.SendError("Nie posiadasz wystarczającej ilości gotówki");
-                return;
+                ctx.Attach(DbModel);
+
+                CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
+
+                if (!character.HasMoney(DbModel.AutoSaleModel.Cost))
+                {
+                    sender.SendError("Nie posiadasz wystarczającej ilości gotówki");
+                    return;
+                }
+
+                BuildingMarker.Color = new Color(255, 255, 0);
+
+                character.RemoveMoney(DbModel.AutoSaleModel.Cost);
+                sender.TriggerEvent(Constant.RemoteEvents.RemoteEvents.CharacterShowShardRequested, "Zakupiono budynek", 5000);
+                NAPI.Player.PlaySoundFrontEnd(sender, "BASE_JUMP_PASSED", "HUD_AWARDS");
+
+                DbModel.Character = character.DbModel;
+                DbModel.AutoSaleModel = null;
+
+                ctx.Remove(DbModel.AutoSaleModel);
+                ctx.SaveChanges();
             }
-
-            BuildingMarker.Color = new Color(255, 255, 0);
-
-            character.RemoveMoney(DbModel.Cost.Value);
-            sender.TriggerEvent(Constant.RemoteEvents.RemoteEvents.CharacterShowShardRequested, "Zakupiono budynek", 5000);
-            NAPI.Player.PlaySoundFrontEnd(sender, "BASE_JUMP_PASSED", "HUD_AWARDS");
-
-            DbModel.Character = character.DbModel;
-            DbModel.Cost = null;
-            Save();
         }
 
         public void PutItemToBuilding(Client player, ItemModel itemModel)
         {
-            DbModel.Items.Add(itemModel);
-            itemModel.Building = DbModel;
-            itemModel.Character = null;
-            itemModel.Vehicle = null;
-            Save();
+            using (RoleplayContext ctx = RoleplayContextFactory.NewContext())
+            {
+                ctx.Attach(DbModel);
+                ctx.Attach(itemModel);
+
+                DbModel.ItemsInBuilding.Add(itemModel);
+                itemModel.Building = DbModel;
+                itemModel.Character = null;
+                itemModel.Vehicle = null;
+
+                ctx.SaveChanges();
+            }
         }
 
         public void Offer(CharacterEntity seller, CharacterEntity getter, decimal money)

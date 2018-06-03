@@ -21,7 +21,7 @@ namespace VRP.Core.Tools
         /// <returns></returns>
         public static uint GetNextFreeDimension()
         {
-            using (RoleplayContext ctx = RolePlayContextFactory.NewContext())
+            using (RoleplayContext ctx = RoleplayContextFactory.NewContext())
             {
                 //Do pierwszego budynku tak trzeba zrobić
                 if (!ctx.Buildings.Any()) return 1;

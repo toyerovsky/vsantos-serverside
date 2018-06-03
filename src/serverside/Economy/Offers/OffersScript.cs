@@ -127,29 +127,6 @@ namespace VRP.Serverside.Economy.Offers
                         sender.SendError("Aby oferować budynek musisz znajdować się w markerze bądź środku budynku");
                     }
                 }
-                //Tutaj są oferty wymagające uprawnień grupowych
-                else if (type == OfferType.IdCard)
-                {
-                    GroupEntity group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
-                    if (group == null) return;
-                    if (group.DbModel.GroupType != GroupType.CityHall || !((CityHall)group).CanPlayerGiveIdCard(sender.GetAccountEntity()))
-                    {
-                        sender.SendWarning("Twoja grupa, bądź postać nie posiada uprawnień do wydawania dowodu osobistego.");
-                        return;
-                    }
-                    offer = new Offer(senderCharacter, getterCharacter, safeMoneyCount, c => OfferActions.GiveIdCard(getterCharacter), true);
-                }
-                else if (type == OfferType.DrivingLicense)
-                {
-                    GroupEntity group = sender.GetAccountEntity().CharacterEntity.OnDutyGroup;
-                    if (group == null) return;
-                    if (group.DbModel.GroupType != GroupType.CityHall || !((CityHall)group).CanPlayerGiveDrivingLicense(sender.GetAccountEntity()))
-                    {
-                        sender.SendInfo("Twoja grupa, bądź postać nie posiada uprawnień do wydawania prawa jazdy.");
-                        return;
-                    }
-                    offer = new Offer(senderCharacter, getterCharacter, safeMoneyCount, c => OfferActions.GiveDrivingLicense(getterCharacter), true);
-                }
 
                 if (offer != null) getterCharacter.PendingOffer = offer;
             }
