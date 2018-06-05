@@ -5,6 +5,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using VRP.Core.Database.Models.Building;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Database.Models.Vehicle;
@@ -33,6 +34,8 @@ namespace VRP.Core.Database.Models.Item
         // navigation properties
         public virtual CharacterModel Character { get; set; }
         public virtual BuildingModel Building { get; set; }
-        public virtual VehicleModel Vehicle { get; set; }
+
+        public virtual VehicleModel OwnerVehicle { get; set; }
+        public virtual VehicleModel TuningInVehicle { get; set; }
     }
 }

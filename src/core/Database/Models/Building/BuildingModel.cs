@@ -6,8 +6,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Database.Models.Item;

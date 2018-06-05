@@ -10,26 +10,25 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Group;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class GroupsRepository : IRepository<GroupModel>
+    public class GroupsRepository : Repository<RoleplayContext, GroupModel>
     {
         private readonly RoleplayContext _context;
 
-        public GroupsRepository(RoleplayContext context)
+        public GroupsRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public GroupsRepository() : this(RoleplayContextFactory.NewContext())
+        public GroupsRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(GroupModel model)
+        public override void Insert(GroupModel model)
         {
             foreach (var worker in model.Workers)
                 if ((worker?.Id ?? 0) != 0)
@@ -41,32 +40,13 @@ namespace VRP.Core.Repositories
             _context.Groups.Add(model);
         }
 
-        public bool Contains(GroupModel model)
-        {
-            return _context.Groups.Any(groupModel => groupModel.Id == model.Id);
-        }
+        public override GroupModel Get(int id) => GetAll(group => group.Id == id).SingleOrDefault();
 
-        public void Update(GroupModel model) => _context.Entry(model).State = EntityState.Modified;
+        public override GroupModel Get(Expression<Func<GroupModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public void Delete(int id)
-        {
-            GroupModel group = _context.Groups.Find(id);
-            _context.Groups.Remove(group);
-        }
+        public override GroupModel GetNoRelated(Expression<Func<GroupModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
-        public GroupModel Get(int id) => GetAll(group => group.Id == id).SingleOrDefault();
-
-        public GroupModel GetNoRelated(int id)
-        {
-            GroupModel group = _context.Groups.Find(id);
-            return group;
-        }
-
-        public GroupModel Get(Expression<Func<GroupModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public GroupModel GetNoRelated(Expression<Func<GroupModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> expression = null)
+        public override IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> expression = null)
         {
             IQueryable<GroupModel> groups = expression != null ?
                 _context.Groups.Where(expression) :
@@ -81,7 +61,7 @@ namespace VRP.Core.Repositories
                         .ThenInclude(character => character.Account);
         }
 
-        public IEnumerable<GroupModel> GetAllNoRelated(Expression<Func<GroupModel, bool>> expression = null)
+        public override IEnumerable<GroupModel> GetAllNoRelated(Expression<Func<GroupModel, bool>> expression = null)
         {
             IQueryable<GroupModel> groups = expression != null ?
                 _context.Groups.Where(expression) :
@@ -89,10 +69,5 @@ namespace VRP.Core.Repositories
 
             return groups;
         }
-
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context?.Dispose();
-
     }
 }

@@ -10,22 +10,21 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Vehicle;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class VehiclesRepository : IRepository<VehicleModel>
+    public class VehiclesRepository : Repository<RoleplayContext, VehicleModel>
     {
         private readonly RoleplayContext _context;
 
-        public VehiclesRepository(RoleplayContext context)
+        public VehiclesRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public VehiclesRepository() : this(RoleplayContextFactory.NewContext())
+        public VehiclesRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
@@ -44,35 +43,13 @@ namespace VRP.Core.Repositories
             _context.Vehicles.Add(model);
         }
 
-        public bool Contains(VehicleModel model)
-        {
-            return _context.Vehicles.Any(vehicle => vehicle.Id == model.Id);
-        }
+        public override VehicleModel Get(int id) => GetAll(vehicle => vehicle.Id == id).SingleOrDefault();
 
-        public void Update(VehicleModel model)
-        {
-            _context.Attach(model).State = EntityState.Modified;
-        }
+        public override VehicleModel Get(Expression<Func<VehicleModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public void Delete(int id)
-        {
-            VehicleModel vehicle = _context.Vehicles.Find(id);
-            _context.Vehicles.Remove(vehicle);
-        }
+        public override VehicleModel GetNoRelated(Expression<Func<VehicleModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
-        public VehicleModel Get(int id) => GetAll(vehicle => vehicle.Id == id).SingleOrDefault();
-
-        public VehicleModel GetNoRelated(int id)
-        {
-            VehicleModel vehicle = _context.Vehicles.Find(id);
-            return vehicle;
-        }
-
-        public VehicleModel Get(Expression<Func<VehicleModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public VehicleModel GetNoRelated(Expression<Func<VehicleModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
+        public override IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
         {
             IQueryable<VehicleModel> vehicles = expression != null ?
                 _context.Vehicles.Where(expression) :
@@ -85,7 +62,7 @@ namespace VRP.Core.Repositories
                 .Include(vehicle => vehicle.ItemsInVehicle);
         }
 
-        public IEnumerable<VehicleModel> GetAllNoRelated(Expression<Func<VehicleModel, bool>> expression = null)
+        public override IEnumerable<VehicleModel> GetAllNoRelated(Expression<Func<VehicleModel, bool>> expression = null)
         {
             IQueryable<VehicleModel> vehicles = expression != null ?
                 _context.Vehicles.Where(expression) :
@@ -93,10 +70,5 @@ namespace VRP.Core.Repositories
 
             return vehicles;
         }
-
-
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context.Dispose();
     }
 }

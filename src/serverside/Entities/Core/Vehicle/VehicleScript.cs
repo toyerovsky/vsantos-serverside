@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Account;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Database.Models.Vehicle;

@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Building;
 using VRP.Core.Database.Models.Item;
 using VRP.Core.Database.Models.Vehicle;

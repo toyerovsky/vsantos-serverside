@@ -7,7 +7,6 @@
 using System;
 using System.Globalization;
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Character;
 using VRP.Serverside.Constant;
 

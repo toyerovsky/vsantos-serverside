@@ -7,8 +7,6 @@
 using System;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Forum;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Account;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Enums;

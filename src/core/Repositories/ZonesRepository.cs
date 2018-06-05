@@ -10,56 +10,31 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Misc;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class ZonesRepository : IRepository<ZoneModel>
+    public class ZonesRepository : Repository<RoleplayContext, ZoneModel>
     {
         private readonly RoleplayContext _context;
 
-        public ZonesRepository(RoleplayContext context)
+        public ZonesRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public ZonesRepository() : this(RoleplayContextFactory.NewContext())
+        public ZonesRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(ZoneModel model)
-        {
-            _context.Zones.Add(model);
-        }
+        public override ZoneModel Get(int id) => GetAll(zone => zone.Id == id).SingleOrDefault();
 
-        public bool Contains(ZoneModel model)
-        {
-            return _context.Zones.Any(zone => zone.Id == model.Id);
-        }
+        public override ZoneModel Get(Expression<Func<ZoneModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public void Update(ZoneModel model) => _context.Entry(model).State = EntityState.Modified;
+        public override ZoneModel GetNoRelated(Expression<Func<ZoneModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
-        public void Delete(int id)
-        {
-            ZoneModel zone = _context.Zones.Find(id);
-            _context.Zones.Remove(zone);
-        }
-
-        public ZoneModel Get(int id) => GetAll(zone => zone.Id == id).SingleOrDefault();
-
-        public ZoneModel GetNoRelated(int id)
-        {
-            ZoneModel zone = _context.Zones.Find(id);
-            return zone;
-        }
-
-        public ZoneModel Get(Expression<Func<ZoneModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public ZoneModel GetNoRelated(Expression<Func<ZoneModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
+        public override IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
         {
             IQueryable<ZoneModel> zones = expression != null ?
                 _context.Zones.Where(expression) :
@@ -68,7 +43,7 @@ namespace VRP.Core.Repositories
             return zones;
         }
 
-        public IEnumerable<ZoneModel> GetAllNoRelated(Expression<Func<ZoneModel, bool>> expression = null)
+        public override IEnumerable<ZoneModel> GetAllNoRelated(Expression<Func<ZoneModel, bool>> expression = null)
         {
             IQueryable<ZoneModel> zones = expression != null ?
                 _context.Zones.Where(expression) :
@@ -76,9 +51,5 @@ namespace VRP.Core.Repositories
 
             return zones;
         }
-
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context?.Dispose();
     }
 }

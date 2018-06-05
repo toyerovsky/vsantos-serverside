@@ -10,26 +10,25 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Character;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class CharactersRepository : IRepository<CharacterModel>
+    public class CharactersRepository : Repository<RoleplayContext, CharacterModel>
     {
         private readonly RoleplayContext _context;
 
-        public CharactersRepository(RoleplayContext context)
+        public CharactersRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public CharactersRepository() : this(RoleplayContextFactory.NewContext())
+        public CharactersRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(CharacterModel model)
+        public override void Insert(CharacterModel model)
         {
             foreach (var vehicle in model.Vehicles)
                 if ((vehicle?.Id ?? 0) != 0)
@@ -57,35 +56,13 @@ namespace VRP.Core.Repositories
             _context.Characters.Add(model);
         }
 
-        public bool Contains(CharacterModel model)
-        {
-            return _context.Characters.Any(character => character.Id == model.Id);
-        }
+        public override CharacterModel Get(int id) => GetAll(character => character.Id == id).SingleOrDefault();
 
-        public void Update(CharacterModel model)
-        {
-            _context.Entry(model).State = EntityState.Modified;
-        }
+        public override CharacterModel Get(Expression<Func<CharacterModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public void Delete(int id)
-        {
-            CharacterModel character = _context.Characters.Find(id);
-            _context.Characters.Remove(character);
-        }
+        public override CharacterModel GetNoRelated(Expression<Func<CharacterModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
-        public CharacterModel Get(int id) => GetAll(character => character.Id == id).SingleOrDefault();
-
-        public CharacterModel GetNoRelated(int id)
-        {
-            CharacterModel character = _context.Characters.Find(id);
-            return character;
-        }
-
-        public CharacterModel Get(Expression<Func<CharacterModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public CharacterModel GetNoRelated(Expression<Func<CharacterModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
+        public override IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {
             IQueryable<CharacterModel> characters = expression != null ?
                 _context.Characters.Where(expression) :
@@ -105,7 +82,7 @@ namespace VRP.Core.Repositories
                 .Include(character => character.Account);
         }
 
-        public IEnumerable<CharacterModel> GetAllNoRelated(Expression<Func<CharacterModel, bool>> expression = null)
+        public override IEnumerable<CharacterModel> GetAllNoRelated(Expression<Func<CharacterModel, bool>> expression = null)
         {
             IQueryable<CharacterModel> characters = expression != null ?
                 _context.Characters.Where(expression) :
@@ -113,9 +90,5 @@ namespace VRP.Core.Repositories
 
             return characters;
         }
-
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context.Dispose();
     }
 }

@@ -7,7 +7,6 @@
 using System;
 using Newtonsoft.Json;
 using VRP.Core.Services.EventArgs;
-using VRP.Core.Services.Model;
 
 namespace VRP.Core.Services.LogInWatcher
 {

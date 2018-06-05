@@ -4,7 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Item;
 using VRP.Core.Enums;
 using VRP.Core.Tools;

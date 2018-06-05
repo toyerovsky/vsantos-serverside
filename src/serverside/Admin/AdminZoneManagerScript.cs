@@ -8,7 +8,6 @@ using GTANetworkAPI;
 using VRP.Core.Enums;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Admin
 {

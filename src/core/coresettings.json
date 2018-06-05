@@ -1,18 +1,4 @@
 ﻿{
-  "Logging": {
-    "IncludeScopes": false,
-    "Debug": {
-      "LogLevel": {
-        "Default": "Warning"
-      }
-    },
-    "Console": {
-      "LogLevel": {
-        "Default": "Warning"
-      }
-    }
-  },
-  "UserBroadcastPort": 2138,
   "ConnectionStrings": {
     "gameConnectionString": "server=77.55.212.185;database=vrpsrv;Uid=vrp;Pwd=kR6BNDBDNsX5yhJU;Convert Zero Datetime=True",
     "forumConnectionString": "server=77.55.212.185;database=vrpforum;uid=vrp;pwd=kR6BNDBDNsX5yhJU;SslMode=None;Convert Zero Datetime=True"

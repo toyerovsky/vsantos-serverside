@@ -5,7 +5,6 @@
  */
 
 using Microsoft.EntityFrameworkCore;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Account;
 using VRP.Core.Database.Models.Agreement;
 using VRP.Core.Database.Models.Building;
@@ -82,7 +81,6 @@ namespace VRP.Core.Database
 
         #region Vehicle
         public virtual DbSet<VehicleModel> Vehicles { get; set; }
-        public virtual DbSet<VehicleTuningModel> VehicleTunings { get; set; }
         #endregion
 
         #region Warehouse 

@@ -5,18 +5,19 @@
  */
 
 using Microsoft.Extensions.Configuration;
-using VRP.Core.Interfaces;
+using VRP.Core.Database;
 using VRP.Core.Tools;
 
-namespace VRP.Serverside
+namespace VRP.Core
 {
     public static class Singletons
     {
-        public static readonly IConfiguration Configuration = new ConfigurationBuilder()
+        private static readonly IConfiguration Configuration = new ConfigurationBuilder()
             .SetBasePath(Utils.WorkingDirectory)
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("coresettings.json")
             .Build();
 
-        public static readonly ILogger Logger = new ConsoleLogger();
+        public static readonly RoleplayContextFactory RoleplayContextFactory =
+            new RoleplayContextFactory(Configuration.GetConnectionString("GameConnectionString"));
     }
 }

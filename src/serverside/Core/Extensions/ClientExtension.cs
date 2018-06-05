@@ -7,7 +7,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Enums;
 using VRP.Serverside.Constant.RemoteEvents;
@@ -34,7 +33,8 @@ namespace VRP.Serverside.Core.Extensions
 
         public static bool HasRank(this Client client, ServerRank rank)
         {
-            return client.GetAccountEntity().DbModel.ServerRank >= rank;
+            AccountEntity accountEntity = client.GetAccountEntity();
+            return accountEntity.DbModel.ServerRank >= rank;
         }
 
         public static void SendWarning(this Client client, string message, string title = "")
@@ -58,10 +58,11 @@ namespace VRP.Serverside.Core.Extensions
             worker = null;
             if (slot > 0 || slot <= 3)
             {
+                AccountEntity accountEntity = client.GetAccountEntity();
                 slot--; // slot-- żeby numerowanie dla graczy było od 1 do 3
-                List<GroupEntity> groups = EntityHelper.GetPlayerGroups(client.GetAccountEntity()).ToList();
+                List<GroupEntity> groups = EntityHelper.GetPlayerGroups(accountEntity).ToList();
                 group = slot < groups.Count ? groups[slot] : null;
-                worker = client.GetAccountEntity().CharacterEntity.DbModel.Workers.SingleOrDefault(g => g.Id == groups[slot].Id);
+                worker = accountEntity.CharacterEntity.DbModel.Workers.SingleOrDefault(g => g.Id == groups[slot].Id);
             }
             return group != null && worker != null;
         }

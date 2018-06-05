@@ -7,8 +7,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
+using VRP.Core;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.CrimeBot;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Enums;
@@ -159,7 +159,7 @@ namespace VRP.Serverside.Entities.Core.Group
 
         public void AddWorker(WorkerModel worker)
         {
-            using (RoleplayContext ctx = RoleplayContextFactory.NewContext())
+            using (RoleplayContext ctx = Singletons.RoleplayContextFactory.Create())
             {
                 ctx.Attach(DbModel);
                 DbModel.Workers.Add(worker);

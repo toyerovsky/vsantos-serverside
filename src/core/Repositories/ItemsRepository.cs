@@ -10,26 +10,25 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Item;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class ItemsRepository : IRepository<ItemModel>
+    public class ItemsRepository : Repository<RoleplayContext, ItemModel>
     {
         private readonly RoleplayContext _context;
 
-        public ItemsRepository(RoleplayContext context)
+        public ItemsRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public ItemsRepository() : this(RoleplayContextFactory.NewContext())
+        public ItemsRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(ItemModel model)
+        public override void Insert(ItemModel model)
         {
             if ((model.Building?.Id ?? 0) != 0)
                 _context.Attach(model.Building);
@@ -37,38 +36,22 @@ namespace VRP.Core.Repositories
             if ((model.Character?.Id ?? 0) != 0)
                 _context.Attach(model.Character);
 
-            if ((model.Vehicle?.Id ?? 0) != 0)
-                _context.Attach(model.Vehicle);
+            if ((model.OwnerVehicle?.Id ?? 0) != 0)
+                _context.Attach(model.OwnerVehicle);
+
+            if ((model.TuningInVehicle?.Id ?? 0) != 0)
+                _context.Attach(model.TuningInVehicle);
 
             _context.Items.Add(model);
         }
 
-        public bool Contains(ItemModel model)
-        {
-            return _context.Items.Any(item => item.Id == model.Id);
-        }
+        public override ItemModel Get(int id) => GetAll(item => item.Id == id).SingleOrDefault();
 
-        public void Update(ItemModel model) => _context.Entry(model).State = EntityState.Modified;
+        public override ItemModel Get(Expression<Func<ItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public void Delete(int id)
-        {
-            ItemModel item = _context.Items.Find(id);
-            _context.Items.Remove(item);
-        }
+        public override ItemModel GetNoRelated(Expression<Func<ItemModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
-        public ItemModel Get(int id) => GetAll(item => item.Id == id).SingleOrDefault();
-
-        public ItemModel GetNoRelated(int id)
-        {
-            ItemModel item = _context.Items.Find(id);
-            return item;
-        }
-
-        public ItemModel Get(Expression<Func<ItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public ItemModel GetNoRelated(Expression<Func<ItemModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> expression = null)
+        public override IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> expression = null)
         {
             IQueryable<ItemModel> items = expression != null ?
                 _context.Items.Where(expression) :
@@ -77,10 +60,12 @@ namespace VRP.Core.Repositories
             return items
                 .Include(item => item.Building)
                 .Include(item => item.Character)
-                    .ThenInclude(character => character.Account);
+                    .ThenInclude(character => character.Account)
+                .Include(item => item.TuningInVehicle)
+                .Include(item => item.OwnerVehicle);
         }
 
-        public IEnumerable<ItemModel> GetAllNoRelated(Expression<Func<ItemModel, bool>> expression = null)
+        public override IEnumerable<ItemModel> GetAllNoRelated(Expression<Func<ItemModel, bool>> expression = null)
         {
             IQueryable<ItemModel> items = expression != null ?
                 _context.Items.Where(expression) :
@@ -88,9 +73,5 @@ namespace VRP.Core.Repositories
 
             return items;
         }
-
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context?.Dispose();
     }
 }

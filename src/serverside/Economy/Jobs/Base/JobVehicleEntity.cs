@@ -5,7 +5,6 @@
  */
 
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Enums;
 using VRP.Core.Interfaces;

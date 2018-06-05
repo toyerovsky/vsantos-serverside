@@ -5,7 +5,6 @@
  */
 
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using VRP.Core.Database.Models.Building;
 using VRP.Core.Database.Models.Vehicle;
 

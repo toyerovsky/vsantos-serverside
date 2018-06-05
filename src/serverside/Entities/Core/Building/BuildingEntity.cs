@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
+using VRP.Core;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Account;
 using VRP.Core.Database.Models.Building;
 using VRP.Core.Database.Models.Character;
@@ -135,7 +135,7 @@ namespace VRP.Serverside.Entities.Core.Building
                 return;
             }
 
-            using (RoleplayContext ctx = RoleplayContextFactory.NewContext())
+            using (RoleplayContext ctx = Singletons.RoleplayContextFactory.Create())
             {
                 ctx.Attach(DbModel);
 
@@ -154,16 +154,15 @@ namespace VRP.Serverside.Entities.Core.Building
                 NAPI.Player.PlaySoundFrontEnd(sender, "BASE_JUMP_PASSED", "HUD_AWARDS");
 
                 DbModel.Character = character.DbModel;
-                DbModel.AutoSaleModel = null;
-
                 ctx.Remove(DbModel.AutoSaleModel);
+                DbModel.AutoSaleModel = null;
                 ctx.SaveChanges();
             }
         }
 
         public void PutItemToBuilding(Client player, ItemModel itemModel)
         {
-            using (RoleplayContext ctx = RoleplayContextFactory.NewContext())
+            using (RoleplayContext ctx = Singletons.RoleplayContextFactory.Create())
             {
                 ctx.Attach(DbModel);
                 ctx.Attach(itemModel);
@@ -171,7 +170,6 @@ namespace VRP.Serverside.Entities.Core.Building
                 DbModel.ItemsInBuilding.Add(itemModel);
                 itemModel.Building = DbModel;
                 itemModel.Character = null;
-                itemModel.Vehicle = null;
 
                 ctx.SaveChanges();
             }

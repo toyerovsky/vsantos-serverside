@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Database.Models.Item;

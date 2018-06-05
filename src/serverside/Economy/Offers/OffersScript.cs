@@ -8,15 +8,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Item;
-using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
-using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Building;
-using VRP.Serverside.Entities.Core.Group;
 using VRP.Serverside.Entities.Core.Vehicle;
 using VRP.Serverside.Constant.RemoteEvents;
 

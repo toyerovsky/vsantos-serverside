@@ -9,7 +9,6 @@ using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Enums;
 using VRP.Core.Validators;

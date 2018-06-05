@@ -10,26 +10,25 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Group;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class WorkersRepository : IRepository<WorkerModel>
+    public class WorkersRepository : Repository<RoleplayContext, WorkerModel>
     {
         private readonly RoleplayContext _context;
 
-        public WorkersRepository(RoleplayContext context)
+        public WorkersRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public WorkersRepository() : this(RoleplayContextFactory.NewContext())
+        public WorkersRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(WorkerModel model)
+        public override void Insert(WorkerModel model)
         {
             if ((model.Character?.Id ?? 0) != 0)
                 _context.Attach(model.Character);
@@ -40,32 +39,13 @@ namespace VRP.Core.Repositories
             _context.Workers.Add(model);
         }
 
-        public bool Contains(WorkerModel model)
-        {
-            return _context.Workers.Any(worker => worker.Id == model.Id);
-        }
+        public override WorkerModel Get(int id) => GetAll(worker => worker.Id == id).SingleOrDefault();
 
-        public void Update(WorkerModel model) => _context.Entry(model).State = EntityState.Modified;
+        public override WorkerModel Get(Expression<Func<WorkerModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public void Delete(int id)
-        {
-            WorkerModel worker = _context.Workers.Find(id);
-            _context.Workers.Remove(worker);
-        }
+        public override WorkerModel GetNoRelated(Expression<Func<WorkerModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
-        public WorkerModel Get(int id) => GetAll(worker => worker.Id == id).SingleOrDefault();
-
-        public WorkerModel GetNoRelated(int id)
-        {
-            WorkerModel worker = _context.Workers.Find(id);
-            return worker;
-        }
-
-        public WorkerModel Get(Expression<Func<WorkerModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public WorkerModel GetNoRelated(Expression<Func<WorkerModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public IEnumerable<WorkerModel> GetAll(Expression<Func<WorkerModel, bool>> expression = null)
+        public override IEnumerable<WorkerModel> GetAll(Expression<Func<WorkerModel, bool>> expression = null)
         {
             IQueryable<WorkerModel> workers = expression != null ?
                 _context.Workers.Where(expression) :
@@ -81,7 +61,7 @@ namespace VRP.Core.Repositories
                         .ThenInclude(group => group.Character);
         }
 
-        public IEnumerable<WorkerModel> GetAllNoRelated(Expression<Func<WorkerModel, bool>> expression = null)
+        public override IEnumerable<WorkerModel> GetAllNoRelated(Expression<Func<WorkerModel, bool>> expression = null)
         {
             IQueryable<WorkerModel> workers = expression != null ?
                 _context.Workers.Where(expression) :
@@ -89,9 +69,5 @@ namespace VRP.Core.Repositories
 
             return workers;
         }
-
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context?.Dispose();
     }
 }

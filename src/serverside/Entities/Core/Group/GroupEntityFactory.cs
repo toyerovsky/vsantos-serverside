@@ -5,7 +5,6 @@
  */
 
 using System;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Enums;
 using VRP.Serverside.Economy.Groups.Base;

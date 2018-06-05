@@ -10,54 +10,29 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Warehouse;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class GroupWarehouseItemsRepository : IRepository<GroupWarehouseItemModel>
+    public class GroupWarehouseItemsRepository : Repository<RoleplayContext, GroupWarehouseItemModel>
     {
         private readonly RoleplayContext _context;
 
-        public GroupWarehouseItemsRepository(RoleplayContext context)
+        public GroupWarehouseItemsRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public GroupWarehouseItemsRepository() : this(RoleplayContextFactory.NewContext())
+        public GroupWarehouseItemsRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(GroupWarehouseItemModel model)
-        {
-            _context.GroupWarehouseItems.Add(model);
-        }
+        public override GroupWarehouseItemModel Get(int id) => GetAll(groupWarehouseItem => groupWarehouseItem.Id == id).SingleOrDefault();
 
-        public bool Contains(GroupWarehouseItemModel model)
-        {
-            return _context.GroupWarehouseItems.Any(groupWarehouseItem => groupWarehouseItem.Id == model.Id);
-        }
+        public override GroupWarehouseItemModel Get(Expression<Func<GroupWarehouseItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public void Update(GroupWarehouseItemModel model) => _context.Entry(model).State = EntityState.Modified;
-
-        public void Delete(int id)
-        {
-            GroupWarehouseItemModel warehouseItem = _context.GroupWarehouseItems.Find(id);
-            _context.GroupWarehouseItems.Remove(warehouseItem);
-        }
-
-        public GroupWarehouseItemModel Get(int id) => GetAll(groupWarehouseItem => groupWarehouseItem.Id == id).SingleOrDefault();
-
-        public GroupWarehouseItemModel GetNoRelated(int id)
-        {
-            GroupWarehouseItemModel warehouseItem = _context.GroupWarehouseItems.Find(id);
-            return warehouseItem;
-        }
-
-        public GroupWarehouseItemModel Get(Expression<Func<GroupWarehouseItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
+        public override IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
         {
             IQueryable<GroupWarehouseItemModel> groupWarehouseItems = expression != null ?
                 _context.GroupWarehouseItems.Where(expression) :
@@ -66,10 +41,11 @@ namespace VRP.Core.Repositories
             return groupWarehouseItems;
         }
 
-        public GroupWarehouseItemModel GetNoRelated(Expression<Func<GroupWarehouseItemModel, bool>> expression) => Get(expression);
+        public override GroupWarehouseItemModel GetNoRelated(Expression<Func<GroupWarehouseItemModel, bool>> expression) => Get(expression);
 
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context?.Dispose();
+        public override IEnumerable<GroupWarehouseItemModel> GetAllNoRelated(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -4,8 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
-using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Account;
 using VRP.Core.Database.Models.Building;
 using VRP.Core.Database.Models.Character;
@@ -26,11 +23,7 @@ using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Database.Models.Warehouse;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
-using VRP.Core.Services;
-using VRP.Core.Services.LogInBroadcaster;
-using VRP.Core.Services.LogInWatcher;
 using VRP.Core.Services.UserStorage;
-using VRP.Core.Tools;
 
 namespace VRP.vAPI
 {

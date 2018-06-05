@@ -14,18 +14,21 @@ namespace VRP.Core.Database
 {
     public class RoleplayContextFactory : IDesignTimeDbContextFactory<RoleplayContext>
     {
-        private static readonly RoleplayContextFactory Instance = new RoleplayContextFactory();
+        public RoleplayContext Create() => this.CreateDbContext(new[] {""});
 
-        public static RoleplayContext NewContext() => Instance.CreateDbContext(new string[] { });
+        private readonly string _connectionString;
 
-        private string _connectionString = "server=77.55.212.185;database=vrpsrv;Uid=vrp;Pwd=kR6BNDBDNsX5yhJU;";
+        public RoleplayContextFactory(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
         private bool _firstAttempt = true;
         public RoleplayContext CreateDbContext(string[] args)
         {
             if (_firstAttempt)
             {
-                using (MySqlConnection testConnection = new MySqlConnection(/*Singletons.Configuration.GetConnectionString("gameConnectionString")*/_connectionString))
+                using (MySqlConnection testConnection = new MySqlConnection(_connectionString))
                 {
                     testConnection.Open();
                     string query = "select 1";
@@ -50,7 +53,7 @@ namespace VRP.Core.Database
             }
 
             DbContextOptionsBuilder<RoleplayContext> options = new DbContextOptionsBuilder<RoleplayContext>();
-            options.UseMySql(/*Singletons.Configuration.GetConnectionString("gameConnectionString")*/_connectionString);
+            options.UseMySql(_connectionString);
 
             return new RoleplayContext(options.Options);
         }

@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Item;
 using VRP.Core.Database.Models.Telephone;
 using VRP.Core.Serialization;

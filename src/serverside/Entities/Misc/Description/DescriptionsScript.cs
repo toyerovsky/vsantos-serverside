@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Misc;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Core;

@@ -4,12 +4,10 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Repositories;
 using VRP.Serverside.Constant.RemoteEvents;

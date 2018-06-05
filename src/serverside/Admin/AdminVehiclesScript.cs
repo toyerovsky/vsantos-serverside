@@ -5,6 +5,7 @@
  */
 
 using GTANetworkAPI;
+using VRP.Core.Enums;
 using VRP.Serverside.Core.Exceptions;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
@@ -17,6 +18,12 @@ namespace VRP.Serverside.Admin
         [Command("kolor", "~y~ UŻYJ ~w~ /kolor [hexPodstawowy] [hexDodatkowy]")]
         public void ChangeVehicleColor(Client sender, string primaryHex, string secondaryHex, long vehicleId = -1)
         {
+            if (!sender.HasRank(ServerRank.AdministratorGry))
+            {
+                sender.SendWarning("Nie posiadasz uprawnień do ustawiania koloru pojazdu.");
+                return;
+            }
+
             if (!sender.IsInVehicle && vehicleId == -1)
             {
                 sender.SendWarning("Wsiądź do pojazu lub podaj Id aby ustawić jego kolor.");
@@ -37,7 +44,7 @@ namespace VRP.Serverside.Admin
             catch (ColorConvertException e)
             {
                 sender.SendError("Wprowadzony kolor jest nieprawidłowy.");
-                Colorful.Console.WriteLine($"[Error]{nameof(AdminGroupsScript)} Nieprawidłowy kolor", System.Drawing.Color.DarkRed);
+                Colorful.Console.WriteLine($"[Error] {nameof(AdminGroupsScript)} Nieprawidłowy kolor", System.Drawing.Color.DarkRed);
                 Colorful.Console.WriteLine(e.Message, System.Drawing.Color.DarkRed);
                 return;
             }
@@ -45,9 +52,15 @@ namespace VRP.Serverside.Admin
             vehicle?.ChangeColor(primaryColor, secondaryColor);
         }
 
-        [Command("napraw", "~y~ UŻYJ ~w~ /kolor [podstawowy] (dodatkowy)")]
+        [Command("napraw", "~y~ UŻYJ ~w~ /napraw")]
         public void RepairVehicle(Client sender, long vehicleId = -1)
         {
+            if (!sender.HasRank(ServerRank.AdministratorGry))
+            {
+                sender.SendWarning("Nie posiadasz uprawnień do naprawiania pojazdów.");
+                return;
+            }
+
             if (!sender.IsInVehicle && vehicleId == -1)
             {
                 sender.SendWarning("Wsiądź do pojazu lub podaj Id aby go naprawić.");

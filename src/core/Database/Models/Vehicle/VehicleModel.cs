@@ -6,7 +6,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Database.Models.Item;
@@ -63,7 +62,9 @@ namespace VRP.Core.Database.Models.Vehicle
         public int AutoSaleId { get; set; }
         // navigation properties
         public virtual AutoSaleModel AutoSaleModel { get; set; }
+        [InverseProperty("OwnerVehicle")]
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
-        public virtual ICollection<VehicleTuningModel> VehicleTuning { get; set; }
+        [InverseProperty("TuningInVehicle")]
+        public virtual ICollection<ItemModel> VehicleTuning { get; set; }
     }
 }

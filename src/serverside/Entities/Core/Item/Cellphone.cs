@@ -7,7 +7,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Item;
 using VRP.Core.Database.Models.Telephone;
 using VRP.Core.Enums;

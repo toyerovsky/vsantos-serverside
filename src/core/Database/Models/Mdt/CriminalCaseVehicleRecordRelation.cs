@@ -4,10 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace VRP.Core.Database.Models.Mdt
 {
     public class CriminalCaseVehicleRecordRelation

@@ -10,53 +10,31 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
-using VRP.Core.Database.Models;
 using VRP.Core.Database.Models.Account;
-using VRP.Core.Interfaces;
+using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class AccountsRepository : IRepository<AccountModel>
+    public class AccountsRepository : Repository<RoleplayContext, AccountModel>
     {
         private readonly RoleplayContext _context;
 
-        public AccountsRepository(RoleplayContext context)
+        public AccountsRepository(RoleplayContext context) : base(context)
         {
             _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
-        public AccountsRepository() : this(RoleplayContextFactory.NewContext())
+        public AccountsRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
+       
+        public override AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
 
-        public void Insert(AccountModel model) => _context.Accounts.Add(model);
+        public override AccountModel Get(Expression<Func<AccountModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public bool Contains(AccountModel model)
-        {
-            return _context.Accounts.Any(account => account.ForumUserId == model.ForumUserId);
-        }
+        public override AccountModel GetNoRelated(Expression<Func<AccountModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
 
-        public void Update(AccountModel model) => _context.Entry(model).State = EntityState.Modified;
-
-        public void Delete(int id)
-        {
-            AccountModel account = _context.Accounts.Find(id);
-            _context.Accounts.Remove(account);
-        }
-
-        public AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
-
-        public AccountModel GetNoRelated(int id)
-        {
-            AccountModel account = _context.Accounts.Find(id);
-            return account;
-        }
-
-        public AccountModel Get(Expression<Func<AccountModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public AccountModel GetNoRelated(Expression<Func<AccountModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public IEnumerable<AccountModel> GetAll(Expression<Func<AccountModel, bool>> expression = null)
+        public override IEnumerable<AccountModel> GetAll(Expression<Func<AccountModel, bool>> expression = null)
         {
             IQueryable<AccountModel> accounts = expression != null ?
                 _context.Accounts.Where(expression) :
@@ -88,7 +66,7 @@ namespace VRP.Core.Repositories
                 .Include(account => account.Penalties);
         }
 
-        public IEnumerable<AccountModel> GetAllNoRelated(Expression<Func<AccountModel, bool>> expression = null)
+        public override IEnumerable<AccountModel> GetAllNoRelated(Expression<Func<AccountModel, bool>> expression = null)
         {
             IQueryable<AccountModel> accounts = expression != null ?
                 _context.Accounts.Where(expression) :
@@ -96,9 +74,5 @@ namespace VRP.Core.Repositories
 
             return accounts;
         }
-
-        public void Save() => _context.SaveChanges();
-
-        public void Dispose() => _context?.Dispose();
     }
 }
