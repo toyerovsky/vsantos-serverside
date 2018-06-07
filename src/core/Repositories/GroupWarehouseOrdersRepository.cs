@@ -11,44 +11,42 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Warehouse;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class GroupWarehouseOrdersRepository : Repository<RoleplayContext, GroupWarehouseOrderModel>
+    public class GroupWarehouseOrdersRepository : Repository<RoleplayContext, GroupWarehouseOrderModel>, IJoinableRepository<GroupWarehouseOrderModel>
     {
-        private readonly RoleplayContext _context;
-
         public GroupWarehouseOrdersRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public GroupWarehouseOrdersRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public override GroupWarehouseOrderModel Get(int id) => GetAll(groupWarehouseOrder => groupWarehouseOrder.Id == id).SingleOrDefault();
+        public GroupWarehouseOrderModel JoinAndGet(int id) => JoinAndGetAll(groupWarehouseOrder => groupWarehouseOrder.Id == id).SingleOrDefault();
 
-        public override GroupWarehouseOrderModel Get(Expression<Func<GroupWarehouseOrderModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public GroupWarehouseOrderModel JoinAndGet(Expression<Func<GroupWarehouseOrderModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override GroupWarehouseOrderModel GetNoRelated(Expression<Func<GroupWarehouseOrderModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<GroupWarehouseOrderModel> GetAll(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
+        public IEnumerable<GroupWarehouseOrderModel> JoinAndGetAll(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
         {
             IQueryable<GroupWarehouseOrderModel> groupWarehouseOrders = expression != null ?
-                _context.GroupWarehouseOrders.Where(expression) :
-                _context.GroupWarehouseOrders;
+                Context.GroupWarehouseOrders.Where(expression) :
+                Context.GroupWarehouseOrders;
 
             return groupWarehouseOrders
                 .Include(order => order.Getter);
         }
 
-        public override IEnumerable<GroupWarehouseOrderModel> GetAllNoRelated(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
+        public override GroupWarehouseOrderModel Get(Func<GroupWarehouseOrderModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<GroupWarehouseOrderModel> GetAll(Func<GroupWarehouseOrderModel, bool> func = null)
         {
-            IQueryable<GroupWarehouseOrderModel> groupWarehouseOrders = expression != null ?
-                _context.GroupWarehouseOrders.Where(expression) :
-                _context.GroupWarehouseOrders;
+            IEnumerable<GroupWarehouseOrderModel> groupWarehouseOrders = func != null ?
+                Context.GroupWarehouseOrders.Where(func) :
+                Context.GroupWarehouseOrders;
 
             return groupWarehouseOrders;
         }

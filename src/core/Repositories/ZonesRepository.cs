@@ -17,37 +17,21 @@ namespace VRP.Core.Repositories
 {
     public class ZonesRepository : Repository<RoleplayContext, ZoneModel>
     {
-        private readonly RoleplayContext _context;
-
         public ZonesRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public ZonesRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public override ZoneModel Get(int id) => GetAll(zone => zone.Id == id).SingleOrDefault();
+        public override ZoneModel Get(Func<ZoneModel, bool> func) => GetAll(func).FirstOrDefault();
 
-        public override ZoneModel Get(Expression<Func<ZoneModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public override ZoneModel GetNoRelated(Expression<Func<ZoneModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
+        public override IEnumerable<ZoneModel> GetAll(Func<ZoneModel, bool> func = null)
         {
-            IQueryable<ZoneModel> zones = expression != null ?
-                _context.Zones.Where(expression) :
-                _context.Zones;
-
-            return zones;
-        }
-
-        public override IEnumerable<ZoneModel> GetAllNoRelated(Expression<Func<ZoneModel, bool>> expression = null)
-        {
-            IQueryable<ZoneModel> zones = expression != null ?
-                _context.Zones.Where(expression) :
-                _context.Zones;
+            IEnumerable<ZoneModel> zones = func != null ?
+                Context.Zones.Where(func) :
+                Context.Zones;
 
             return zones;
         }

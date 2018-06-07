@@ -18,11 +18,11 @@ namespace VRP.Core.Repositories.Base
         where TEntity : class
         where TContext : DbContext
     {
-        private readonly TContext _context;
+        protected readonly TContext Context;
 
         protected Repository(TContext context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
+            Context = context ?? throw new ArgumentException(nameof(Context));
         }
 
         /// <summary>
@@ -31,22 +31,22 @@ namespace VRP.Core.Repositories.Base
         /// <param name="model"></param>
         public virtual void Insert(TEntity model)
         {
-            _context.Add(model);
+            Context.Add(model);
         }
 
         public virtual async Task InsertAsync(TEntity model)
         {
-            await _context.AddAsync(model);
+            await Context.AddAsync(model);
         }
 
         public virtual bool Contains(TEntity model)
         {
-            return _context.Find<TEntity>(model) != null;
+            return Context.Find<TEntity>(model) != null;
         }
 
         public virtual async Task<bool> ContainsAsync(TEntity model)
         {
-            return await _context.FindAsync<TEntity>(model) != null;
+            return await Context.FindAsync<TEntity>(model) != null;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace VRP.Core.Repositories.Base
         /// <param name="model"></param>
         public virtual void Update(TEntity model)
         {
-            _context.Update(model);
+            Context.Update(model);
         }
 
         /// <summary>
@@ -64,45 +64,53 @@ namespace VRP.Core.Repositories.Base
         /// <param name="model"></param>
         public virtual void BeginUpdate(TEntity model)
         {
-            _context.Attach(model);
+            Context.Attach(model);
         }
 
         public virtual void Delete(int id)
         {
-            TEntity model = _context.Find<TEntity>(id);
-            _context.Remove(model);
+            TEntity model = Context.Find<TEntity>(id);
+            Context.Remove(model);
         }
-
-        public abstract TEntity Get(int id);
-        public abstract TEntity Get(Expression<Func<TEntity, bool>> expression);
-        public abstract TEntity GetNoRelated(Expression<Func<TEntity, bool>> expression);
-        public abstract IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> expression = null);
-        public abstract IEnumerable<TEntity> GetAllNoRelated(Expression<Func<TEntity, bool>> expression = null);
 
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual TEntity GetNoRelated(int id)
+        public virtual TEntity Get(int id)
         {
-            TEntity model = _context.Find<TEntity>(id);
+            TEntity model = Context.Find<TEntity>(id);
             return model;
         }
 
+        /// <summary>
+        /// Get entity without eager loading navigation properties
+        /// </summary>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public abstract TEntity Get(Func<TEntity, bool> func);
+
+        /// <summary>
+        /// Get entities without eager loading navigation properties
+        /// </summary>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public abstract IEnumerable<TEntity> GetAll(Func<TEntity, bool> func = null);
+
         public void Save()
         {
-            _context.SaveChanges();
+            Context.SaveChanges();
         }
 
         public async Task<int> SaveAsync()
         {
-            return await _context.SaveChangesAsync();
+            return await Context.SaveChangesAsync();
         }
 
         public virtual void Dispose()
         {
-            _context?.Dispose();
+            Context?.Dispose();
         }
     }
 }

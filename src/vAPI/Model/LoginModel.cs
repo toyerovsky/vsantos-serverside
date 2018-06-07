@@ -4,7 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-namespace VRP.vAPI.Game.Model
+namespace VRP.vAPI.Model
 {
     public class LoginModel
     {

@@ -14,9 +14,9 @@ using VRP.Core.Database.Models.Account;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
 using VRP.Core.Services.UserStorage;
-using VRP.vAPI.Game.Model;
+using VRP.vAPI.Model;
 
-namespace VRP.vAPI.Game.Controllers
+namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
@@ -43,21 +43,18 @@ namespace VRP.vAPI.Game.Controllers
             if (_usersStorageService.IsUserOnline(loginModel.Email))
             {
                 return Forbid("User is already on-line.");
-            } 
+            }
 
             ForumDatabaseHelper forumDatabaseHelper = new ForumDatabaseHelper(Startup.Configuration);
             if (forumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
             {
                 Guid userGuid = Guid.NewGuid();
+                AccountModel accountModel = _accountsRepository.Get(account => account.ForumUserId == forumUser.Id);
                 Task.Run(() =>
                 {
-                    using (AccountsRepository accountsRepository = new AccountsRepository())
-                    {
-                        AccountModel accountModel = accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id);
-                        _usersStorageService.Login(userGuid, accountModel.Id);
-                    }
+                    _usersStorageService.Login(userGuid, accountModel.Id);
                 });
-                return Json(new { userGuid, accountId = _accountsRepository.GetNoRelated(account => account.ForumUserId == forumUser.Id).Id });
+                return Json(new { userGuid, accountId = accountModel.Id });
             }
 
             return NotFound();

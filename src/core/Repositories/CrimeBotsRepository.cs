@@ -11,17 +11,17 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.CrimeBot;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class CrimeBotsRepository : Repository<RoleplayContext, CrimeBotModel>
+    public class CrimeBotsRepository : Repository<RoleplayContext, CrimeBotModel>, IJoinableRepository<CrimeBotModel>
     {
-        private readonly RoleplayContext _context;
+        private readonly RoleplayContext Context;
 
         public CrimeBotsRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public CrimeBotsRepository() : this(Singletons.RoleplayContextFactory.Create())
@@ -31,22 +31,20 @@ namespace VRP.Core.Repositories
         public override void Insert(CrimeBotModel model)
         {
             if ((model.GroupModel?.Id ?? 0) != 0)
-                _context.Attach(model.GroupModel);
+                Context.Attach(model.GroupModel);
 
-            _context.CrimeBots.Add(model);
+            Context.CrimeBots.Add(model);
         }
 
-        public override CrimeBotModel Get(int id) => GetAll(crimeBot => crimeBot.Id == id).SingleOrDefault();
+        public CrimeBotModel JoinAndGet(int id) => JoinAndGetAll(crimeBot => crimeBot.Id == id).SingleOrDefault();
 
-        public override CrimeBotModel Get(Expression<Func<CrimeBotModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public CrimeBotModel JoinAndGet(Expression<Func<CrimeBotModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override CrimeBotModel GetNoRelated(Expression<Func<CrimeBotModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<CrimeBotModel> GetAll(Expression<Func<CrimeBotModel, bool>> expression = null)
+        public IEnumerable<CrimeBotModel> JoinAndGetAll(Expression<Func<CrimeBotModel, bool>> expression = null)
         {
             IQueryable<CrimeBotModel> crimeBots = expression != null ?
-                _context.CrimeBots.Where(expression) :
-                _context.CrimeBots;
+                Context.CrimeBots.Where(expression) :
+                Context.CrimeBots;
 
             return crimeBots
                 .Include(crimeBot => crimeBot.GroupModel)
@@ -55,11 +53,13 @@ namespace VRP.Core.Repositories
                     .ThenInclude(group => group.Workers);
         }
 
-        public override IEnumerable<CrimeBotModel> GetAllNoRelated(Expression<Func<CrimeBotModel, bool>> expression = null)
+        public override CrimeBotModel Get(Func<CrimeBotModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<CrimeBotModel> GetAll(Func<CrimeBotModel, bool> func = null)
         {
-            IQueryable<CrimeBotModel> crimeBots = expression != null ?
-                _context.CrimeBots.Where(expression) :
-                _context.CrimeBots;
+            IEnumerable<CrimeBotModel> crimeBots = func != null ?
+                Context.CrimeBots.Where(func) :
+                Context.CrimeBots;
 
             return crimeBots;
         }

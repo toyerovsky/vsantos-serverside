@@ -11,48 +11,38 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Telephone;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class TelephoneContactsRepository : Repository<RoleplayContext, TelephoneContactModel>
+    public class TelephoneContactsRepository : Repository<RoleplayContext, TelephoneContactModel>, IJoinableRepository<TelephoneContactModel>
     {
-        private readonly RoleplayContext _context;
-
         public TelephoneContactsRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public TelephoneContactsRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(TelephoneContactModel model)
+        public override void Insert(TelephoneContactModel model)
         {
             if ((model.Cellphone?.Id ?? 0) != 0)
-                _context.Attach(model.Cellphone);
+                Context.Attach(model.Cellphone);
 
-            _context.TelephoneContacts.Add(model);
+            Context.TelephoneContacts.Add(model);
         }
 
-        public override TelephoneContactModel Get(int id) => GetAll(telephoneContact => telephoneContact.Id == id).SingleOrDefault();
+        public TelephoneContactModel JoinAndGet(int id) => JoinAndGetAll(telephoneContact => telephoneContact.Id == id).SingleOrDefault();
 
-        public override TelephoneContactModel GetNoRelated(int id)
-        {
-            TelephoneContactModel contact = _context.TelephoneContacts.Find(id);
-            return contact;
-        }
+        public TelephoneContactModel JoinAndGet(Expression<Func<TelephoneContactModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override TelephoneContactModel Get(Expression<Func<TelephoneContactModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public override TelephoneContactModel GetNoRelated(Expression<Func<TelephoneContactModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<TelephoneContactModel> GetAll(Expression<Func<TelephoneContactModel, bool>> expression = null)
+        public IEnumerable<TelephoneContactModel> JoinAndGetAll(Expression<Func<TelephoneContactModel, bool>> expression = null)
         {
             IQueryable<TelephoneContactModel> telephoneContacts = expression != null ?
-                _context.TelephoneContacts.Where(expression) :
-                _context.TelephoneContacts;
+                Context.TelephoneContacts.Where(expression) :
+                Context.TelephoneContacts;
 
             return telephoneContacts
                 .Include(contact => contact.Cellphone)
@@ -60,11 +50,13 @@ namespace VRP.Core.Repositories
                     .ThenInclude(cellphone => cellphone.Character);
         }
 
-        public override IEnumerable<TelephoneContactModel> GetAllNoRelated(Expression<Func<TelephoneContactModel, bool>> expression = null)
+        public override TelephoneContactModel Get(Func<TelephoneContactModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<TelephoneContactModel> GetAll(Func<TelephoneContactModel, bool> func = null)
         {
-            IQueryable<TelephoneContactModel> telephoneContacts = expression != null ?
-                _context.TelephoneContacts.Where(expression) :
-                _context.TelephoneContacts;
+            IEnumerable<TelephoneContactModel> telephoneContacts = func != null ?
+                Context.TelephoneContacts.Where(func) :
+                Context.TelephoneContacts;
 
             return telephoneContacts;
         }

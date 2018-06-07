@@ -36,19 +36,11 @@ namespace VRP.Core.Repositories
             _context.TelephoneMessages.Add(model);
         }
 
-        public override TelephoneMessageModel Get(int id) => GetAll(telephoneMessage => telephoneMessage.Id == id).SingleOrDefault();
+        public TelephoneMessageModel JoinAndGet(int id) => JoinAndGetAll(telephoneMessage => telephoneMessage.Id == id).SingleOrDefault();
 
-        public override TelephoneMessageModel GetNoRelated(int id)
-        {
-            TelephoneMessageModel message = _context.TelephoneMessages.Find(id);
-            return message;
-        }
+        public TelephoneMessageModel JoinAndGet(Expression<Func<TelephoneMessageModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override TelephoneMessageModel Get(Expression<Func<TelephoneMessageModel, bool>> expression) => GetAll(expression).FirstOrDefault();
-
-        public override TelephoneMessageModel GetNoRelated(Expression<Func<TelephoneMessageModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<TelephoneMessageModel> GetAll(Expression<Func<TelephoneMessageModel, bool>> expression = null)
+        public IEnumerable<TelephoneMessageModel> JoinAndGetAll(Expression<Func<TelephoneMessageModel, bool>> expression = null)
         {
             IQueryable<TelephoneMessageModel> telephoneMessages = expression != null ?
                 _context.TelephoneMessages.Where(expression) :
@@ -60,10 +52,12 @@ namespace VRP.Core.Repositories
                     .ThenInclude(cellphone => cellphone.Character);
         }
 
-        public override IEnumerable<TelephoneMessageModel> GetAllNoRelated(Expression<Func<TelephoneMessageModel, bool>> expression = null)
+        public override TelephoneMessageModel Get(Func<TelephoneMessageModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<TelephoneMessageModel> GetAll(Func<TelephoneMessageModel, bool> func = null)
         {
-            IQueryable<TelephoneMessageModel> telephoneMessages = expression != null ?
-                _context.TelephoneMessages.Where(expression) :
+            IEnumerable<TelephoneMessageModel> telephoneMessages = func != null ?
+                _context.TelephoneMessages.Where(func) :
                 _context.TelephoneMessages;
 
             return telephoneMessages;

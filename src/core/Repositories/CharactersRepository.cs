@@ -17,11 +17,8 @@ namespace VRP.Core.Repositories
 {
     public class CharactersRepository : Repository<RoleplayContext, CharacterModel>
     {
-        private readonly RoleplayContext _context;
-
         public CharactersRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public CharactersRepository() : this(Singletons.RoleplayContextFactory.Create())
@@ -32,41 +29,39 @@ namespace VRP.Core.Repositories
         {
             foreach (var vehicle in model.Vehicles)
                 if ((vehicle?.Id ?? 0) != 0)
-                    _context.Attach(vehicle);
+                    Context.Attach(vehicle);
 
             foreach (var item in model.Items)
                 if ((item?.Id ?? 0) != 0)
-                    _context.Attach(item);
+                    Context.Attach(item);
 
             if ((model.Account?.Id ?? 0) != 0)
-                _context.Attach(model.Account);
+                Context.Attach(model.Account);
 
             foreach (var building in model.Buildings)
                 if ((building?.Id ?? 0) != 0)
-                    _context.Attach(building);
+                    Context.Attach(building);
 
             foreach (var description in model.Descriptions)
                 if ((description?.Id ?? 0) != 0)
-                    _context.Attach(description);
+                    Context.Attach(description);
 
             foreach (var worker in model.Workers)
                 if ((worker?.Id ?? 0) != 0)
-                    _context.Attach(worker);
+                    Context.Attach(worker);
 
-            _context.Characters.Add(model);
+            Context.Characters.Add(model);
         }
 
-        public override CharacterModel Get(int id) => GetAll(character => character.Id == id).SingleOrDefault();
+        public CharacterModel JoinAndGet(int id) => JoinAndGetAll(character => character.Id == id).SingleOrDefault();
 
-        public override CharacterModel Get(Expression<Func<CharacterModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public CharacterModel JoinAndGet(Expression<Func<CharacterModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override CharacterModel GetNoRelated(Expression<Func<CharacterModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
+        public IEnumerable<CharacterModel> JoinAndGetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {
             IQueryable<CharacterModel> characters = expression != null ?
-                _context.Characters.Where(expression) :
-                _context.Characters;
+                Context.Characters.Where(expression) :
+                Context.Characters;
 
             return characters
                 .Include(character => character.Buildings)
@@ -82,11 +77,13 @@ namespace VRP.Core.Repositories
                 .Include(character => character.Account);
         }
 
-        public override IEnumerable<CharacterModel> GetAllNoRelated(Expression<Func<CharacterModel, bool>> expression = null)
+        public override CharacterModel Get(Func<CharacterModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<CharacterModel> GetAll(Func<CharacterModel, bool> func = null)
         {
-            IQueryable<CharacterModel> characters = expression != null ?
-                _context.Characters.Where(expression) :
-                _context.Characters;
+            IEnumerable<CharacterModel> characters = func != null ?
+                Context.Characters.Where(func) :
+                Context.Characters;
 
             return characters;
         }

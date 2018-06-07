@@ -11,17 +11,15 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Vehicle;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class VehiclesRepository : Repository<RoleplayContext, VehicleModel>
+    public class VehiclesRepository : Repository<RoleplayContext, VehicleModel>, IJoinableRepository<VehicleModel>
     {
-        private readonly RoleplayContext _context;
-
         public VehiclesRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public VehiclesRepository() : this(Singletons.RoleplayContextFactory.Create())
@@ -31,29 +29,27 @@ namespace VRP.Core.Repositories
         public void Insert(VehicleModel model)
         {
             if ((model.Character?.Id ?? 0) != 0)
-                _context.Attach(model.Character);
+                Context.Attach(model.Character);
 
             foreach (var item in model.ItemsInVehicle)
                 if ((item?.Id ?? 0) != 0)
-                    _context.Attach(item);
+                    Context.Attach(item);
 
             if ((model.Group?.Id ?? 0) != 0)
-                _context.Attach(model.Group);
+                Context.Attach(model.Group);
 
-            _context.Vehicles.Add(model);
+            Context.Vehicles.Add(model);
         }
 
-        public override VehicleModel Get(int id) => GetAll(vehicle => vehicle.Id == id).SingleOrDefault();
+        public VehicleModel JoinAndGet(int id) => JoinAndGetAll(vehicle => vehicle.Id == id).SingleOrDefault();
 
-        public override VehicleModel Get(Expression<Func<VehicleModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public VehicleModel JoinAndGet(Expression<Func<VehicleModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override VehicleModel GetNoRelated(Expression<Func<VehicleModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
+        public IEnumerable<VehicleModel> JoinAndGetAll(Expression<Func<VehicleModel, bool>> expression = null)
         {
             IQueryable<VehicleModel> vehicles = expression != null ?
-                _context.Vehicles.Where(expression) :
-                _context.Vehicles;
+                Context.Vehicles.Where(expression) :
+                Context.Vehicles;
 
             return vehicles
                 .Include(vehicle => vehicle.Character)
@@ -62,11 +58,13 @@ namespace VRP.Core.Repositories
                 .Include(vehicle => vehicle.ItemsInVehicle);
         }
 
-        public override IEnumerable<VehicleModel> GetAllNoRelated(Expression<Func<VehicleModel, bool>> expression = null)
+        public override VehicleModel Get(Func<VehicleModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<VehicleModel> GetAll(Func<VehicleModel, bool> func = null)
         {
-            IQueryable<VehicleModel> vehicles = expression != null ?
-                _context.Vehicles.Where(expression) :
-                _context.Vehicles;
+            IEnumerable<VehicleModel> vehicles = func != null ?
+                Context.Vehicles.Where(func) :
+                Context.Vehicles;
 
             return vehicles;
         }

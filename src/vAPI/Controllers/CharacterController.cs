@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.Core.Database;
 
-namespace VRP.vAPI.Game.Controllers
+namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]

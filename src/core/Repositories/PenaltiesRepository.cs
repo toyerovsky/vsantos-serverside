@@ -11,51 +11,50 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Account;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class PenaltiesRepository : Repository<RoleplayContext, PenaltyModel>
+    public class PenaltiesRepository : Repository<RoleplayContext, PenaltyModel>, IJoinableRepository<PenaltyModel>
     {
-        private readonly RoleplayContext _context;
-
         public PenaltiesRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public PenaltiesRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public void Insert(PenaltyModel model)
+        public override void Insert(PenaltyModel model)
         {
             if ((model.Account?.Id ?? 0) != 0)
-                _context.Attach(model.Account);
+                Context.Attach(model.Account);
 
-            _context.Penaltlies.Add(model);
+            Context.Penaltlies.Add(model);
         }
-        public override PenaltyModel Get(int id) => GetAll(penalty => penalty.Id == id).SingleOrDefault();
 
-        public override PenaltyModel Get(Expression<Func<PenaltyModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public PenaltyModel JoinAndGet(int id) => JoinAndGetAll(penalty => penalty.Id == id).SingleOrDefault();
 
-        public override PenaltyModel GetNoRelated(Expression<Func<PenaltyModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
+        public PenaltyModel JoinAndGet(Expression<Func<PenaltyModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> expression = null)
+        public IEnumerable<PenaltyModel> JoinAndGetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {
             IQueryable<PenaltyModel> penatlies = expression != null ?
-                _context.Penaltlies.Where(expression) :
-                _context.Penaltlies;
+                Context.Penaltlies.Where(expression) :
+                Context.Penaltlies;
 
             return penatlies
                 .Include(penatly => penatly.Account);
         }
+        
+        public override PenaltyModel Get(Func<PenaltyModel, bool> func) => GetAll(func).FirstOrDefault();
 
-        public override IEnumerable<PenaltyModel> GetAllNoRelated(Expression<Func<PenaltyModel, bool>> expression = null)
+        public override IEnumerable<PenaltyModel> GetAll(Func<PenaltyModel, bool> func = null)
         {
-            IQueryable<PenaltyModel> penatlies = expression != null ?
-                _context.Penaltlies.Where(expression) :
-                _context.Penaltlies;
+            IEnumerable<PenaltyModel> penatlies = func != null ?
+                Context.Penaltlies.Where(func) :
+                Context.Penaltlies;
 
             return penatlies;
         }

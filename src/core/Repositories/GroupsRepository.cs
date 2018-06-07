@@ -11,17 +11,15 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Group;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class GroupsRepository : Repository<RoleplayContext, GroupModel>
+    public class GroupsRepository : Repository<RoleplayContext, GroupModel>, IJoinableRepository<GroupModel>
     {
-        private readonly RoleplayContext _context;
-
         public GroupsRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public GroupsRepository() : this(Singletons.RoleplayContextFactory.Create())
@@ -32,25 +30,23 @@ namespace VRP.Core.Repositories
         {
             foreach (var worker in model.Workers)
                 if ((worker?.Id ?? 0) != 0)
-                    _context.Attach(worker);
+                    Context.Attach(worker);
 
             if ((model.BossCharacter?.Id ?? 0) != 0)
-                _context.Attach(model.BossCharacter);
+                Context.Attach(model.BossCharacter);
 
-            _context.Groups.Add(model);
+            Context.Groups.Add(model);
         }
 
-        public override GroupModel Get(int id) => GetAll(group => group.Id == id).SingleOrDefault();
+        public GroupModel JoinAndGet(int id) => JoinAndGetAll(group => group.Id == id).SingleOrDefault();
 
-        public override GroupModel Get(Expression<Func<GroupModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public GroupModel JoinAndGet(Expression<Func<GroupModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override GroupModel GetNoRelated(Expression<Func<GroupModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> expression = null)
+        public IEnumerable<GroupModel> JoinAndGetAll(Expression<Func<GroupModel, bool>> expression = null)
         {
             IQueryable<GroupModel> groups = expression != null ?
-                _context.Groups.Where(expression) :
-                _context.Groups;
+                Context.Groups.Where(expression) :
+                Context.Groups;
 
             return groups
                 .Include(group => group.BossCharacter)
@@ -61,11 +57,13 @@ namespace VRP.Core.Repositories
                         .ThenInclude(character => character.Account);
         }
 
-        public override IEnumerable<GroupModel> GetAllNoRelated(Expression<Func<GroupModel, bool>> expression = null)
+        public override GroupModel Get(Func<GroupModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<GroupModel> GetAll(Func<GroupModel, bool> func = null)
         {
-            IQueryable<GroupModel> groups = expression != null ?
-                _context.Groups.Where(expression) :
-                _context.Groups;
+            IEnumerable<GroupModel> groups = func != null ?
+                Context.Groups.Where(func) :
+                Context.Groups;
 
             return groups;
         }

@@ -11,14 +11,13 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Building;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class BuildingsRepository : Repository<RoleplayContext, BuildingModel>
+    public class BuildingsRepository : Repository<RoleplayContext, BuildingModel>, IJoinableRepository<BuildingModel>
     {
-        private readonly RoleplayContext _context;
-
         public BuildingsRepository(RoleplayContext context) : base(context)
         {
         }
@@ -30,30 +29,29 @@ namespace VRP.Core.Repositories
         public override void Insert(BuildingModel model)
         {
             if ((model.Character?.Id ?? 0) != 0)
-                _context.Attach(model.Character);
+                Context.Attach(model.Character);
 
             foreach (var item in model.ItemsInBuilding)
                 if ((item?.Id ?? 0) != 0)
-                    _context.Attach(item);
+                    Context.Attach(item);
 
             if ((model.Group?.Id ?? 0) != 0)
-                _context.Attach(model.Group);
+                Context.Attach(model.Group);
 
-            _context.Buildings.Add(model);
+            Context.Buildings.Add(model);
         }
 
+        public BuildingModel JoinAndGet(int id) => JoinAndGetAll(building => building.Id == id).SingleOrDefault();
 
-        public override BuildingModel Get(int id) => GetAll(building => building.Id == id).SingleOrDefault();
+        public BuildingModel JoinAndGet(Expression<Func<BuildingModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override BuildingModel Get(Expression<Func<BuildingModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public override BuildingModel Get(Func<BuildingModel, bool> func) => GetAll(func).FirstOrDefault();
 
-        public override BuildingModel GetNoRelated(Expression<Func<BuildingModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<BuildingModel> GetAll(Expression<Func<BuildingModel, bool>> expression = null)
+        public IEnumerable<BuildingModel> JoinAndGetAll(Expression<Func<BuildingModel, bool>> expression = null)
         {
             IQueryable<BuildingModel> buildings = expression != null ?
-                _context.Buildings.Where(expression) :
-                _context.Buildings;
+                Context.Buildings.Where(expression) :
+                Context.Buildings;
 
             return buildings
                 .Include(building => building.Character)
@@ -61,11 +59,11 @@ namespace VRP.Core.Repositories
                 .Include(building => building.ItemsInBuilding);
         }
 
-        public override IEnumerable<BuildingModel> GetAllNoRelated(Expression<Func<BuildingModel, bool>> expression = null)
+        public override IEnumerable<BuildingModel> GetAll(Func<BuildingModel, bool> func = null)
         {
-            IQueryable<BuildingModel> buildings = expression != null ?
-                _context.Buildings.Where(expression) :
-                _context.Buildings;
+            IEnumerable<BuildingModel> buildings = func != null ?
+                Context.Buildings.Where(func) :
+                Context.Buildings;
 
             return buildings;
         }

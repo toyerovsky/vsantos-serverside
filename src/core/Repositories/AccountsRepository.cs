@@ -11,34 +11,30 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Account;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class AccountsRepository : Repository<RoleplayContext, AccountModel>
+    public class AccountsRepository : Repository<RoleplayContext, AccountModel>, IJoinableRepository<AccountModel>
     {
-        private readonly RoleplayContext _context;
-
         public AccountsRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public AccountsRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
-       
-        public override AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
 
-        public override AccountModel Get(Expression<Func<AccountModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public AccountModel JoinAndGet(int id) => JoinAndGetAll(account => account.Id == id).SingleOrDefault();
 
-        public override AccountModel GetNoRelated(Expression<Func<AccountModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
+        public AccountModel JoinAndGet(Expression<Func<AccountModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<AccountModel> GetAll(Expression<Func<AccountModel, bool>> expression = null)
+        public IEnumerable<AccountModel> JoinAndGetAll(Expression<Func<AccountModel, bool>> expression = null)
         {
             IQueryable<AccountModel> accounts = expression != null ?
-                _context.Accounts.Where(expression) :
-                _context.Accounts;
+                Context.Accounts.Where(expression) :
+                Context.Accounts;
 
             return accounts
                 .Include(account => account.Characters)
@@ -66,11 +62,15 @@ namespace VRP.Core.Repositories
                 .Include(account => account.Penalties);
         }
 
-        public override IEnumerable<AccountModel> GetAllNoRelated(Expression<Func<AccountModel, bool>> expression = null)
+        public override AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
+
+        public override AccountModel Get(Func<AccountModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<AccountModel> GetAll(Func<AccountModel, bool> func = null)
         {
-            IQueryable<AccountModel> accounts = expression != null ?
-                _context.Accounts.Where(expression) :
-                _context.Accounts;
+            IEnumerable<AccountModel> accounts = func != null ?
+                Context.Accounts.Where(func) :
+                Context.Accounts;
 
             return accounts;
         }

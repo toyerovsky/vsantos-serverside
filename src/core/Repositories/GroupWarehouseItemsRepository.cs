@@ -9,43 +9,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Warehouse;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class GroupWarehouseItemsRepository : Repository<RoleplayContext, GroupWarehouseItemModel>
+    public class GroupWarehouseItemsRepository : Repository<RoleplayContext, GroupWarehouseItemModel>, IJoinableRepository<GroupWarehouseItemModel>
     {
-        private readonly RoleplayContext _context;
-
         public GroupWarehouseItemsRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public GroupWarehouseItemsRepository() : this(Singletons.RoleplayContextFactory.Create())
         {
         }
 
-        public override GroupWarehouseItemModel Get(int id) => GetAll(groupWarehouseItem => groupWarehouseItem.Id == id).SingleOrDefault();
+        public GroupWarehouseItemModel JoinAndGet(int id) =>
+            JoinAndGetAll(groupWarehouseItem => groupWarehouseItem.Id == id).SingleOrDefault();
 
-        public override GroupWarehouseItemModel Get(Expression<Func<GroupWarehouseItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public GroupWarehouseItemModel JoinAndGet(Expression<Func<GroupWarehouseItemModel, bool>> expression) =>
+            JoinAndGetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
+        public IEnumerable<GroupWarehouseItemModel> JoinAndGetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression)
         {
             IQueryable<GroupWarehouseItemModel> groupWarehouseItems = expression != null ?
-                _context.GroupWarehouseItems.Where(expression) :
-                _context.GroupWarehouseItems;
+                Context.GroupWarehouseItems.Where(expression) :
+                Context.GroupWarehouseItems;
 
-            return groupWarehouseItems;
+            return groupWarehouseItems
+                .Include(groupWarehouseItem => groupWarehouseItem.GroupWarehouseModel)
+                .Include(groupWarehouseItem => groupWarehouseItem.ItemTemplateModel);
         }
 
-        public override GroupWarehouseItemModel GetNoRelated(Expression<Func<GroupWarehouseItemModel, bool>> expression) => Get(expression);
+        public override GroupWarehouseItemModel Get(Func<GroupWarehouseItemModel, bool> func) => GetAll(func).FirstOrDefault();
 
-        public override IEnumerable<GroupWarehouseItemModel> GetAllNoRelated(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
+        public override IEnumerable<GroupWarehouseItemModel> GetAll(Func<GroupWarehouseItemModel, bool> func = null)
         {
-            throw new NotImplementedException();
+            IEnumerable<GroupWarehouseItemModel> groupWarehouseItems = func != null ?
+                Context.GroupWarehouseItems.Where(func) :
+                Context.GroupWarehouseItems;
+
+            return groupWarehouseItems;
         }
     }
 }

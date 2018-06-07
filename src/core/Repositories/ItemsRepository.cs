@@ -11,17 +11,15 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Item;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class ItemsRepository : Repository<RoleplayContext, ItemModel>
+    public class ItemsRepository : Repository<RoleplayContext, ItemModel>, IJoinableRepository<ItemModel>
     {
-        private readonly RoleplayContext _context;
-
         public ItemsRepository(RoleplayContext context) : base(context)
         {
-            _context = context ?? throw new ArgumentException(nameof(_context));
         }
 
         public ItemsRepository() : this(Singletons.RoleplayContextFactory.Create())
@@ -31,31 +29,29 @@ namespace VRP.Core.Repositories
         public override void Insert(ItemModel model)
         {
             if ((model.Building?.Id ?? 0) != 0)
-                _context.Attach(model.Building);
+                Context.Attach(model.Building);
 
             if ((model.Character?.Id ?? 0) != 0)
-                _context.Attach(model.Character);
+                Context.Attach(model.Character);
 
             if ((model.OwnerVehicle?.Id ?? 0) != 0)
-                _context.Attach(model.OwnerVehicle);
+                Context.Attach(model.OwnerVehicle);
 
             if ((model.TuningInVehicle?.Id ?? 0) != 0)
-                _context.Attach(model.TuningInVehicle);
+                Context.Attach(model.TuningInVehicle);
 
-            _context.Items.Add(model);
+            Context.Items.Add(model);
         }
 
-        public override ItemModel Get(int id) => GetAll(item => item.Id == id).SingleOrDefault();
+        public ItemModel JoinAndGet(int id) => JoinAndGetAll(item => item.Id == id).SingleOrDefault();
 
-        public override ItemModel Get(Expression<Func<ItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
+        public ItemModel JoinAndGet(Expression<Func<ItemModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
-        public override ItemModel GetNoRelated(Expression<Func<ItemModel, bool>> expression) => GetAllNoRelated(expression).FirstOrDefault();
-
-        public override IEnumerable<ItemModel> GetAll(Expression<Func<ItemModel, bool>> expression = null)
+        public IEnumerable<ItemModel> JoinAndGetAll(Expression<Func<ItemModel, bool>> expression = null)
         {
             IQueryable<ItemModel> items = expression != null ?
-                _context.Items.Where(expression) :
-                _context.Items;
+                Context.Items.Where(expression) :
+                Context.Items;
 
             return items
                 .Include(item => item.Building)
@@ -65,11 +61,13 @@ namespace VRP.Core.Repositories
                 .Include(item => item.OwnerVehicle);
         }
 
-        public override IEnumerable<ItemModel> GetAllNoRelated(Expression<Func<ItemModel, bool>> expression = null)
+        public override ItemModel Get(Func<ItemModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override IEnumerable<ItemModel> GetAll(Func<ItemModel, bool> func = null)
         {
-            IQueryable<ItemModel> items = expression != null ?
-                _context.Items.Where(expression) :
-                _context.Items;
+            IEnumerable<ItemModel> items = func != null ?
+                Context.Items.Where(func) :
+                Context.Items;
 
             return items;
         }
