@@ -20,12 +20,10 @@ namespace VRP.vAPI.Controllers
     [EnableCors("AllowAnyOrigin")]
     public class CharacterController : Controller
     {
-        private readonly RoleplayContext _roleplayContext;
         private readonly IConfiguration _configuration;
 
-        public CharacterController(RoleplayContext roleplayContext, IConfiguration configuration)
+        public CharacterController(IConfiguration configuration)
         {
-            _roleplayContext = roleplayContext;
             _configuration = configuration;
         }
 

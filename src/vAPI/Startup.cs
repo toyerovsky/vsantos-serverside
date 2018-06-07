@@ -54,19 +54,19 @@ namespace VRP.vAPI
             services.AddScoped(factory => Configuration);
 
             // scoped repositories
-            services.AddScoped<IRepository<AccountModel>, AccountsRepository>();
-            services.AddScoped<IRepository<BuildingModel>, BuildingsRepository>();
-            services.AddScoped<IRepository<CharacterModel>, CharactersRepository>();
-            services.AddScoped<IRepository<CrimeBotModel>, CrimeBotsRepository>();
-            services.AddScoped<IRepository<GroupModel>, GroupsRepository>();
-            services.AddScoped<IRepository<GroupWarehouseItemModel>, GroupWarehouseItemsRepository>();
-            services.AddScoped<IRepository<GroupWarehouseOrderModel>, GroupWarehouseOrdersRepository>();
-            services.AddScoped<IRepository<ItemModel>, ItemsRepository>();
-            services.AddScoped<IRepository<PenaltyModel>, PenaltiesRepository>();
-            services.AddScoped<IRepository<TelephoneContactModel>, TelephoneContactsRepository>();
+            services.AddScoped<IJoinableRepository<AccountModel>, AccountsRepository>();
+            services.AddScoped<IJoinableRepository<BuildingModel>, BuildingsRepository>();
+            services.AddScoped<IJoinableRepository<CharacterModel>, CharactersRepository>();
+            services.AddScoped<IJoinableRepository<CrimeBotModel>, CrimeBotsRepository>();
+            services.AddScoped<IJoinableRepository<GroupModel>, GroupsRepository>();
+            services.AddScoped<IJoinableRepository<GroupWarehouseItemModel>, GroupWarehouseItemsRepository>();
+            services.AddScoped<IJoinableRepository<GroupWarehouseOrderModel>, GroupWarehouseOrdersRepository>();
+            services.AddScoped<IJoinableRepository<ItemModel>, ItemsRepository>();
+            services.AddScoped<IJoinableRepository<PenaltyModel>, PenaltiesRepository>();
+            services.AddScoped<IJoinableRepository<TelephoneContactModel>, TelephoneContactsRepository>();
             services.AddScoped<IRepository<TelephoneMessageModel>, TelephoneMessagesRepository>();
-            services.AddScoped<IRepository<VehicleModel>, VehiclesRepository>();
-            services.AddScoped<IRepository<WorkerModel>, WorkersRepository>();
+            services.AddScoped<IJoinableRepository<VehicleModel>, VehiclesRepository>();
+            services.AddScoped<IJoinableRepository<WorkerModel>, WorkersRepository>();
             services.AddScoped<IRepository<ZoneModel>, ZonesRepository>();
 
             services.AddMvc().AddJsonOptions(options =>

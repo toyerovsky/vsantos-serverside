@@ -23,10 +23,11 @@ namespace VRP.vAPI.Controllers
     [EnableCors("AllowAnyOrigin")]
     public class AccountController : Controller
     {
-        private readonly IRepository<AccountModel> _accountsRepository;
+        private readonly IJoinableRepository<AccountModel> _accountsRepository;
         private readonly IUsersStorageService _usersStorageService;
 
-        public AccountController(IRepository<AccountModel> accountsRepository, IUsersStorageService usersStorageService)
+        public AccountController(IJoinableRepository<AccountModel> accountsRepository, 
+            IUsersStorageService usersStorageService)
         {
             _accountsRepository = accountsRepository;
             _usersStorageService = usersStorageService;

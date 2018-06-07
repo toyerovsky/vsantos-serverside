@@ -11,11 +11,12 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Character;
+using VRP.Core.Interfaces;
 using VRP.Core.Repositories.Base;
 
 namespace VRP.Core.Repositories
 {
-    public class CharactersRepository : Repository<RoleplayContext, CharacterModel>
+    public class CharactersRepository : Repository<RoleplayContext, CharacterModel>, IJoinableRepository<CharacterModel>
     {
         public CharactersRepository(RoleplayContext context) : base(context)
         {
