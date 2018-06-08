@@ -5,6 +5,7 @@
  */
 
 using VRP.Core.Database.Models.Character;
+using VRP.Core.Database.Models.Vehicle;
 
 namespace VRP.Core.Database.Models.Misc
 {
@@ -16,5 +17,6 @@ namespace VRP.Core.Database.Models.Misc
 
         // navigation properties
         public virtual CharacterModel Character { get; set; }
+        public virtual VehicleModel Vehicle { get; set; }
     }
 }

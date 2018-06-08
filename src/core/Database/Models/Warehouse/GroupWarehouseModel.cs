@@ -12,8 +12,9 @@ namespace VRP.Core.Database.Models.Warehouse
     public class GroupWarehouseModel
     {
         public int Id { get; set; }
-        public GroupModel Group { get; set; }
 
+        // navigation properties
+        public virtual GroupModel Group { get; set; }
         public virtual ICollection<GroupWarehouseItemModel> ItemsInWarehouse { get; set; }
     }
 }

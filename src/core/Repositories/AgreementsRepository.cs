@@ -33,7 +33,7 @@ namespace VRP.Core.Repositories
 
             return agreements
                 .Include(agreement => agreement.LeaseModel)
-                .ThenInclude(lease => lease.Building)
+                    .ThenInclude(lease => lease.Building)
                 .Include(agreement => agreement.LeaserCharacter)
                 .Include(agreement => agreement.LeaserGroup);
         }
