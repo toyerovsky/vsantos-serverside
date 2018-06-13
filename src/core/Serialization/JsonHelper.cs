@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace VRP.Core.Serialization
@@ -25,7 +27,7 @@ namespace VRP.Core.Serialization
             return Directory.GetFiles(path).Select(JsonConvert.DeserializeObject<T>).ToList();
         }
 
-        public static void AddJsonObject<T>(T value, string path, string fileName = "")
+        public static async Task AddJsonObject<T>(T value, string path, string fileName = "")
         {
             if (path.Last() != '\\')
             {
@@ -51,12 +53,10 @@ namespace VRP.Core.Serialization
             }
 
             string json = JsonConvert.SerializeObject(value);
+            byte[] data = Encoding.UTF8.GetBytes(json);
 
-            if (!File.Exists($"{path}{fileName}.json"))
-                File.Create($"{path}{fileName}.json");
-
-            File.AppendAllText($"{path}{fileName}.json", json);
-            
+            using (FileStream file = File.Open($"{path}{fileName}.json", FileMode.OpenOrCreate))
+                await file.WriteAsync(data, 0, data.Length);
         }
     }
 }
