@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using VRP.Core.Database.Models.Account;
 using VRP.Core.Database.Models.Agreement;
 using VRP.Core.Database.Models.Building;
@@ -23,7 +24,7 @@ namespace VRP.Core.Database.Models.Character
         public int Id { get; set; }
         public bool Online { get; set; }
         public DateTime CreateTime { get; set; }
-        public DateTime? LastLoginTime { get; set; }
+        public DateTime LastLoginTime { get; set; }
         public TimeSpan TodayPlayedTime { get; set; }
         public TimeSpan PlayedTime { get; set; }
         public string Name { get; set; }
@@ -33,9 +34,7 @@ namespace VRP.Core.Database.Models.Character
         public int? BankAccountNumber { get; set; }
         public decimal BankMoney { get; set; }
         public bool Gender { get; set; }
-        public byte Weight { get; set; }
-        public DateTime BornDate { get; set; }
-        public byte Height { get; set; }
+        public DateTime? BornDate { get; set; }
         public bool HasIdCard { get; set; }
         public bool HasDrivingLicense { get; set; }
         public string ForumDescription { get; set; }
@@ -50,16 +49,19 @@ namespace VRP.Core.Database.Models.Character
         public float LastRotationZ { get; set; }
         public uint CurrentDimension { get; set; }
         public int MinutesToRespawn { get; set; }
-        public bool? IsCreated { get; set; }
         public bool Freemode { get; set; }
         [EnumDataType(typeof(JobType))]
-        public virtual JobType Job { get; set; }
+        public JobType Job { get; set; }
         public decimal? MoneyJob { get; set; }
         public decimal? JobLimit { get; set; }
         public DateTime? JobReleaseDate { get; set; }
 
         // navigation properties
-        public virtual CharacterLookModel CharacterLookModel { get; set; }
+        [ForeignKey("CharacterLook")]
+        public int CharacterLookModelId { get; set; }
+        public virtual CharacterLookModel CharacterLook { get; set; }
+        [ForeignKey("Account")]
+        public int AccountId { get; set; }
         public virtual AccountModel Account { get; set; }
 
         public virtual ICollection<VehicleModel> Vehicles { get; set; }

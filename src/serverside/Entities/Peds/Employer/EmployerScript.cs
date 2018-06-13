@@ -47,9 +47,6 @@ namespace VRP.Serverside.Entities.Peds.Employer
                     case JobType.Greenkeeper:
                         sender.SendInfo("Podjąłeś się pracy: Ogrodnik. Udaj się na pole golfowe i wsiądź do kosiarki.");
                         break;
-                    case JobType.Thief:
-                        sender.SendInfo("Podjąłeś się pracy: Złodziej. Udaj się do portu i wsiądź do jednej z ciężarówek.");
-                        break;
                     case JobType.Courier:
                         sender.SendInfo("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.");
                         break;
