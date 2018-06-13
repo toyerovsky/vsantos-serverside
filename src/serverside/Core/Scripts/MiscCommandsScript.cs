@@ -27,7 +27,7 @@ namespace VRP.Serverside.Core.Scripts
             }
 
             IEnumerable<AccountEntity> accounts = EntityHelper.GetAccounts()
-                .Where(account => account.CharacterEntity.FormatName.ToLower().StartsWith(name));
+                .Where(account => account.CharacterEntity.FormatName.ToLower().Contains(name));
 
             CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
             ChatScript.SendMessageToPlayer(senderCharacter, "Znalezieni gracze: ", ChatMessageType.ServerInfo);
@@ -40,25 +40,24 @@ namespace VRP.Serverside.Core.Scripts
         [Command("pokaz", "~y~ UŻYJ ~w~ /pokaz [dowod/prawko] [id]")]
         public void Show(Client sender, string type, int id)
         {
-            if (NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender).All(x => x.GetAccountEntity().ServerId != id))
+            AccountEntity getterAccount = EntityHelper.GetAccountByCharacterId(id);
+            if (getterAccount.Client.Position.DistanceTo(sender.Position) > 6f)
             {
-                sender.SendWarning("W twoim otoczeniu nie znaleziono gracza o podanym Id.");;
+                sender.SendError("W twoim otoczeniu nie znaleziono gracza o podanym Id.");
                 return;
             }
 
             CharacterEntity senderCharacter = sender.GetAccountEntity().CharacterEntity;
-            CharacterEntity getterCharacter = NAPI.Player.GetPlayersInRadiusOfPlayer(6f, sender)
-                .Single(x => x.GetAccountEntity().ServerId == id).GetAccountEntity().CharacterEntity;
-
+            
             if (type.ToLower().Trim() == ShowType.IdCard.GetDescription())
             {
-                ChatScript.SendMessageToNearbyPlayers(senderCharacter, $"pokazuje dowód osobisty {getterCharacter.FormatName}", ChatMessageType.ServerMe);
-                getterCharacter.SendInfo($"Osoba {senderCharacter.FormatName} pokazała Ci swój dowód osobisty.");
+                ChatScript.SendMessageToNearbyPlayers(senderCharacter, $"pokazuje dowód osobisty {getterAccount.CharacterEntity.FormatName}", ChatMessageType.ServerMe);
+                getterAccount.CharacterEntity.SendInfo($"Osoba {senderCharacter.FormatName} pokazała Ci swój dowód osobisty.");
             }
             else if (type.ToLower().Trim() == ShowType.DrivingLicense.GetDescription())
             {
-                ChatScript.SendMessageToNearbyPlayers(senderCharacter, $"pokazuje prawo jazdy {getterCharacter.FormatName}", ChatMessageType.ServerMe);
-                getterCharacter.SendInfo($"Osoba {senderCharacter.FormatName} pokazała Ci swoje prawo jazdy.");
+                ChatScript.SendMessageToNearbyPlayers(senderCharacter, $"pokazuje prawo jazdy {getterAccount.CharacterEntity.FormatName}", ChatMessageType.ServerMe);
+                getterAccount.CharacterEntity.SendInfo($"Osoba {senderCharacter.FormatName} pokazała Ci swoje prawo jazdy.");
             }
         }
     }
