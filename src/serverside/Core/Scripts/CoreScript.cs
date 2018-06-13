@@ -5,14 +5,20 @@
  */
 
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using GTANetworkAPI;
+using Microsoft.VisualBasic.CompilerServices;
+using VRP.Core;
+using VRP.Core.Serialization;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Building;
 using VRP.Serverside.Entities.Core.Vehicle;
 using VRP.Serverside.Constant.RemoteEvents;
+using Utils = VRP.Core.Tools.Utils;
 
 namespace VRP.Serverside.Core.Scripts
 {
@@ -40,10 +46,11 @@ namespace VRP.Serverside.Core.Scripts
         [ServerEvent(Event.ResourceStop)]
         public void OnResourceStop()
         {
-
             foreach (AccountEntity account in EntityHelper.GetAccounts()
                 .Where(x => x.CharacterEntity != null))
+            {
                 account.Dispose();
+            }
 
             foreach (VehicleEntity vehicle in EntityHelper.GetVehicles())
             {
@@ -79,14 +86,16 @@ namespace VRP.Serverside.Core.Scripts
             //args[1] float Y
             //args[2] float Z
             //Jak przesyłamy Vector3 to nie działa
-
-            sender.Position = new Vector3((float)arguments[0], (float)arguments[1], (float)arguments[2]);
+            sender.Position = new Vector3(
+                (float)arguments[0],
+                (float)arguments[1],
+                (float)arguments[2]
+            );
         }
 
         [RemoteEvent(RemoteEvents.InvokeWaypointVector)]
         public void InvokeWaypointVectorHandler(Client sender, params object[] arguments)
         {
-
             //To zdarzenie musi mieć tylko jedną subskrypcę
             if (sender.HasData("WaypointVectorHandler"))
             {

@@ -85,11 +85,12 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
                 CharacterEntity characterEntity = Player.CharacterEntity;
                 for (int i = 0; i < Count; i++)
                 {
-                    characterEntity.DbModel.MoneyJob += 25;
+                    characterEntity.DbModel.PartTimeJobWorkerModel.Salary += 25;
                 }
                 characterEntity.Save();
                 Player.Client.SendInfo(
-                    $"Zakończyłeś pracę operatora śmieciarki, zarobiłeś: ${characterEntity.DbModel.MoneyJob}.");
+                    $"Zakończyłeś pracę operatora śmieciarki, zarobiłeś: ${characterEntity.DbModel.PartTimeJobWorkerModel.Salary}."
+                );
             }
             else
             {

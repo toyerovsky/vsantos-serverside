@@ -23,17 +23,17 @@ namespace VRP.Serverside.Economy.Jobs.Base
 
         public virtual decimal CurrentSalary
         {
-            get => Player.CharacterEntity.DbModel.MoneyJob ?? 0;
+            get => Player.CharacterEntity.DbModel.PartTimeJobWorkerModel.Salary;
             set
             {
                 if (value < 0)
                 {
-                    Player.CharacterEntity.DbModel.MoneyJob = 0;
+                    Player.CharacterEntity.DbModel.PartTimeJobWorkerModel.Salary = 0;
                     ReleaseWorker();
                 }
                 else
                 {
-                    Player.CharacterEntity.DbModel.MoneyJob = value;
+                    Player.CharacterEntity.DbModel.PartTimeJobWorkerModel.Salary = value;
                 }
                 Player.CharacterEntity.Save();
             }
@@ -47,8 +47,7 @@ namespace VRP.Serverside.Economy.Jobs.Base
             Player.Client.SendInfo("Nie wypracowałeś wystarczającej ilości gotówki na pokrycie szkód.");
             Player.Client.SendInfo("Zostałeś zwolniony. Zanim ponownie znajdziesz zatrudnienie minie trochę czasu.");
             Stop();
-            Player.CharacterEntity.DbModel.Job = 0;
-            Player.CharacterEntity.DbModel.JobReleaseDate = DateTime.Now;
+            Player.CharacterEntity.DbModel.PartTimeJobWorkerModel = null;
             Player.CharacterEntity.Save();
         }
 

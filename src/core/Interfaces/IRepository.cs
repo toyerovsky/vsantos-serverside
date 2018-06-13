@@ -13,10 +13,6 @@ namespace VRP.Core.Interfaces
 {
     public interface IRepository<T> : IDisposable
     {
-        /// <summary>
-        /// Method doensn't include saving added entities
-        /// </summary>
-        /// <param name="model"></param>
         void Insert(T model);
 
         Task InsertAsync(T model);

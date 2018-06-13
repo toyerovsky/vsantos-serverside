@@ -66,21 +66,6 @@ namespace VRP.Serverside.Economy.Jobs
         //}
 
         #region STATIC
-
-        private static void ResetJobLimit()
-        {
-            using (CharactersRepository repository = new CharactersRepository())
-            {
-                foreach (CharacterModel character in repository.GetAll())
-                {
-                    if (character.JobLimit == 0)
-                        continue;
-
-                    character.JobLimit = 0;
-                }
-                repository.Save();
-            }
-        }
         public static GarbageModel GetRandomGarbage() => Garbages[Utils.RandomRange(Garbages.Count)];
 
         #endregion
@@ -97,14 +82,14 @@ namespace VRP.Serverside.Economy.Jobs
             }
 
             // FixMe
-            //var garbage = Garbages.Where().OrderBy(x => x.Position).ToList()[0];
+            //var garbage = Garbages.Where().OrderBy(x => x.InDbPosition).ToList()[0];
 
             //if (XmlHelper.TryDeleteXmlObject(garbage.FilePath))
             //{
             //    if (garbage.GtaPropId != 0)
-            //        NAPI.Object.DeleteObject(sender, garbage.Position, garbage.GtaPropId);
+            //        NAPI.Object.DeleteObject(sender, garbage.InDbPosition, garbage.GtaPropId);
             //    Garbages.Remove(garbage);
-            //    sender.Notify($"Usuwanie śmietnika na pozycji {garbage.Position} zakończyło się pomyślnie.");
+            //    sender.Notify($"Usuwanie śmietnika na pozycji {garbage.InDbPosition} zakończyło się pomyślnie.");
             //}
             //else
             //{

@@ -10,6 +10,7 @@ using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Jobs.Base;
+using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Jobs.Dustman
 {
@@ -21,7 +22,7 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
         {
         }
 
-        //public DustmanVehicle(FullPosition spawnPosition, VehicleHash hash, string numberplate, int numberplatestyle, int creatorId, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0, float engineTorqueMultiplier = 0, CharacterModel character = null, GroupModel groupModel = null)
+        //public DustmanVehicle(FullPosition spawnPosition, VehicleHash hash, string numberplate, int numberplatestyle, int creatorId, Color primaryColor, Color secondaryColor, float enginePowerMultiplier = 0, float engineTorqueMultiplier = 0, Character character = null, GroupModel groupModel = null)
         //    : base(spawnPosition, hash, numberplate, numberplatestyle, creatorId, primaryColor, secondaryColor, enginePowerMultiplier, engineTorqueMultiplier, character, groupModel)
         //{
         //    Events.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
@@ -39,7 +40,8 @@ namespace VRP.Serverside.Economy.Jobs.Dustman
 
         private void OnPlayerEnterVehicle(Client player, NetHandle vehicle)
         {
-            if (player.GetAccountEntity().CharacterEntity.DbModel.Job != JobType.Dustman)
+            CharacterEntity character = player.GetAccountEntity().CharacterEntity;
+            if (character.DbModel.PartTimeJobWorkerModel.PartTimeJobEmployerModel.PartTimeJobModel.JobType != JobType.Dustman)
             {
                 player.SendInfo("Aby skorzystać z tego pojazdu musisz podjąć pracę operator śmieciarki.");
                 return;

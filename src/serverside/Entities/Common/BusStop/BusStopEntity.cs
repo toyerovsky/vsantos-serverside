@@ -68,7 +68,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
             busTimer.Start();
             busTimer.Elapsed += (sender, args) =>
             {
-                player.Position = position;
+                player.InDbPosition = position;
                 // TODO: Odciemnianie ekranu
                 // NAPI.Native.SendNativeToPlayer(player, Hash.DO_SCREEN_FADE_IN, 2000); //Odciemnianie ekranu
                 player.Dimension = (uint)Dimension.Global;

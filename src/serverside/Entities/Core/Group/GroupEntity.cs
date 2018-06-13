@@ -51,21 +51,6 @@ namespace VRP.Serverside.Entities.Core.Group
                 Color = color.ToHex()
             };
 
-            if (groupModel.GroupType == GroupType.Crime)
-            {
-                CrimeBotModel crimeBotModel = new CrimeBotModel
-                {
-                    Name = "",
-                    GroupModel = groupModel
-                };
-
-                using (CrimeBotsRepository repository = new CrimeBotsRepository())
-                {
-                    repository.Insert(crimeBotModel);
-                    repository.Save();
-                }
-            }
-
             using (GroupsRepository repository = new GroupsRepository())
             {
                 repository.Insert(groupModel);

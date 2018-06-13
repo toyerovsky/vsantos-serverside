@@ -75,7 +75,7 @@ namespace VRP.Serverside.Entities.Core.Building
                     player.TriggerEvent("DrawBuildingComponents", false);
                     player.SetData("CurrentDoors", this);
 
-                    //Doors target jest potrzebne ponieważ Colshape nie ma pola Position... 
+                    //Doors target jest potrzebne ponieważ Colshape nie ma pola InDbPosition... 
                     //dodatkowo przydaje się aby sprawdzać po stronie klienta czy gracz jest w jakimś budynku
                     //Gracz jest obecnie w zasięgu jakichś drzwi
 

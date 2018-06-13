@@ -36,29 +36,29 @@ namespace VRP.Serverside.Entities.Peds.Employer
             if (eventName == "OnPlayerSelectedJob")
             {
                 AccountEntity player = sender.GetAccountEntity();
-                player.CharacterEntity.DbModel.Job = (JobType)Convert.ToInt32(arguments[0]);
+                //player.CharacterEntity.DbModel.Job = (JobType)Convert.ToInt32(arguments[0]);
                 player.Save();
 
-                switch (player.CharacterEntity.DbModel.Job)
-                {
-                    case JobType.Dustman:
-                        sender.SendInfo("Podjąłeś się pracy: Operator śmieciarki. Udaj się na wysypisko i wsiądź do śmieciarki.");
-                        break;
-                    case JobType.Greenkeeper:
-                        sender.SendInfo("Podjąłeś się pracy: Ogrodnik. Udaj się na pole golfowe i wsiądź do kosiarki.");
-                        break;
-                    case JobType.Courier:
-                        sender.SendInfo("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.");
-                        break;
-                }
+                //switch (player.CharacterEntity.DbModel.Job)
+                //{
+                //    case JobType.Dustman:
+                //        sender.SendInfo("Podjąłeś się pracy: Operator śmieciarki. Udaj się na wysypisko i wsiądź do śmieciarki.");
+                //        break;
+                //    case JobType.Greenkeeper:
+                //        sender.SendInfo("Podjąłeś się pracy: Ogrodnik. Udaj się na pole golfowe i wsiądź do kosiarki.");
+                //        break;
+                //    case JobType.Courier:
+                //        sender.SendInfo("Podjąłeś się pracy: Kurier. Udaj się do magazynu, jest on oznaczony na mapie ikoną FixMe.");
+                //        break;
+                //}
             }
             else if (eventName == "OnPlayerTakeMoneyJob")
             {
                 CharacterEntity character = sender.GetAccountEntity().CharacterEntity;
-                if (character.DbModel.MoneyJob != null)
+                if (character.DbModel?.PartTimeJobWorkerModel.Salary != null)
                 {
-                    character.AddMoney(character.DbModel.MoneyJob.Value);
-                    character.DbModel.MoneyJob = 0;
+                    character.AddMoney(character.DbModel.PartTimeJobWorkerModel.Salary);
+                    character.DbModel.PartTimeJobWorkerModel.Salary = 0;
                     character.Save();
                 }
             }

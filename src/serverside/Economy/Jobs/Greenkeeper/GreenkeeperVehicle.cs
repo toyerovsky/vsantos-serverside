@@ -10,6 +10,7 @@ using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Jobs.Base;
+using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Jobs.Greenkeeper
 {
@@ -29,7 +30,8 @@ namespace VRP.Serverside.Economy.Jobs.Greenkeeper
 
         private void Events_OnPlayerEnterVehicle(Client player, Vehicle vehicle, sbyte seatId)
         {
-            if (player.GetAccountEntity().CharacterEntity.DbModel.Job != JobType.Greenkeeper)
+            CharacterEntity character = player.GetAccountEntity().CharacterEntity;
+            if (character.DbModel.PartTimeJobWorkerModel.PartTimeJobEmployerModel.PartTimeJobModel.JobType!= JobType.Greenkeeper)
             {
                 player.SendInfo("Aby skorzystać z tego pojazdu musisz podjąć pracę ogrodnik.");
                 return;

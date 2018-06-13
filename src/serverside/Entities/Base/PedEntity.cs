@@ -19,7 +19,7 @@ namespace VRP.Serverside.Entities.Base
 
         protected TextLabel NameLabel { get; set; }
         /// <summary>
-        /// Jest to tylko i wyłącznie pozycja spawnu, potem korzystamy z BotHandle.Position
+        /// Jest to tylko i wyłącznie pozycja spawnu, potem korzystamy z BotHandle.InDbPosition
         /// </summary>
         protected FullPosition SpawnPosition { get; set; }
         protected Ped BotHandle { get; set; }

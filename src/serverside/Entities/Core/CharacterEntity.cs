@@ -64,7 +64,7 @@ namespace VRP.Serverside.Entities.Core
             }
         }
 
-        public Vector3 Position
+        public Vector3 InDbPosition
         {
             get => new Vector3(DbModel.LastPositionX, DbModel.LastPositionY, DbModel.LastPositionZ);
             set
@@ -76,7 +76,7 @@ namespace VRP.Serverside.Entities.Core
             }
         }
 
-        public Vector3 Rotation
+        public Vector3 InDbRotation
         {
             get => new Vector3(DbModel.LastRotationX, DbModel.LastRotationY, DbModel.LastRotationZ);
             set
@@ -119,8 +119,8 @@ namespace VRP.Serverside.Entities.Core
         {
             if (AccountEntity != null)
             {
-                Position = AccountEntity.Client.Position;
-                Rotation = AccountEntity.Client.Rotation;
+                InDbPosition = AccountEntity.Client.Position;
+                InDbRotation = AccountEntity.Client.Rotation;
             }
 
             using (CharactersRepository repository = new CharactersRepository())
@@ -162,8 +162,8 @@ namespace VRP.Serverside.Entities.Core
 
             CharacterSelected?.Invoke(AccountEntity.Client, this);
 
-            if (DbModel.Freemode)
-                CharacterCreator = new CharacterCreator(this);
+            //if (DbModel.Freemode)
+            //    CharacterCreator = new CharacterCreator(this);
             Description = new Description(AccountEntity);
             AccountEntity.Client.SetSharedData("Id", DbModel.Id);
 

@@ -43,7 +43,7 @@ namespace VRP.Serverside.Core.Scripts
             {
                 if (!sender.HasData("CharacterBW")) // Zdejmowanie BW
                 {
-                    NAPI.Player.SpawnPlayer(sender, playerCharacter.Position);
+                    NAPI.Player.SpawnPlayer(sender, playerCharacter.InDbPosition);
                     playerCharacter.SetBw(0);
                     sender.TriggerEvent(RemoteEvents.PlayerBwTimerDestroyRequested);
                     sender.SendInfo("Twoje BW zosta³o anulowane.");

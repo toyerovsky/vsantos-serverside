@@ -38,7 +38,7 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
                     AccountEntity player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
-                    if (player.CharacterEntity.DbModel.Job != JobType.Courier)
+                    if (player.CharacterEntity.DbModel.PartTimeJobWorkerModel.PartTimeJobEmployerModel.PartTimeJobModel.JobType != JobType.Courier)
                     {
                         player.Client.SendInfo("Aby podjąć pracę kuriera udaj się do pracodawcy.");
                         return;
@@ -63,7 +63,7 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
                     AccountEntity player = NAPI.Player.GetPlayerFromHandle(entity).GetAccountEntity();
-                    if (player.CharacterEntity.DbModel.Job != JobType.Courier) return;
+                    if (player.CharacterEntity.DbModel.PartTimeJobWorkerModel.PartTimeJobEmployerModel.PartTimeJobModel.JobType != JobType.Courier) return;
                     player.Client.TriggerEvent("DisposeCourierMenu");
                 }
             };

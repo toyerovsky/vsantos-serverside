@@ -26,7 +26,7 @@ namespace VRP.Core.Repositories
         {
         }
 
-        public void Insert(VehicleModel model)
+        public void InsertWithRelated(VehicleModel model)
         {
             if ((model.Character?.Id ?? 0) != 0)
                 Context.Attach(model.Character);

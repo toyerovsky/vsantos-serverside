@@ -27,7 +27,10 @@ namespace VRP.Serverside.Entities.Peds.Employer
                 if (NAPI.Entity.GetEntityType(entity) == EntityType.Player)
                 {
                     Client sender = NAPI.Player.GetPlayerFromHandle(entity);
-                    NAPI.ClientEvent.TriggerClientEvent(sender, "OnPlayerEnteredEmployer", sender.GetAccountEntity().CharacterEntity.DbModel.MoneyJob.ToString());
+                    NAPI.ClientEvent.TriggerClientEvent(sender, 
+                        "OnPlayerEnteredEmployer", 
+                        sender.GetAccountEntity().CharacterEntity.DbModel.PartTimeJobWorkerModel.Salary.ToString()
+                    );
                 }
             };
 

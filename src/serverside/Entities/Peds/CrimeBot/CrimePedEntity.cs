@@ -166,7 +166,7 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
             //            PropertyInfo field = typeof(CrimeBotModel).GetProperties().Single(f => f.Name == i.DatabaseField);
             //            field.SetValue(DbModel, (int)field.GetValue(DbModel) - i.Count);
 
-            //            repository.Insert(item);
+            //            repository.InsertWithRelated(item);
             //        }
             //        repository.Save();
             //    }
