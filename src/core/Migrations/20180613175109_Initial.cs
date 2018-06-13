@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
+using System.Collections.Generic;
 
 namespace VRP.Core.Migrations
 {
@@ -99,6 +100,20 @@ namespace VRP.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PartTimeJobModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    DailyMoneyLimit = table.Column<decimal>(nullable: false),
+                    JobType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartTimeJobModel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Zones",
                 columns: table => new
                 {
@@ -120,25 +135,19 @@ namespace VRP.Core.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AccountId = table.Column<int>(nullable: true),
+                    AccountId = table.Column<int>(nullable: false),
                     BankAccountNumber = table.Column<int>(nullable: true),
                     BankMoney = table.Column<decimal>(nullable: false),
-                    BornDate = table.Column<DateTime>(nullable: false),
+                    BornDate = table.Column<DateTime>(nullable: true),
+                    CharacterLookId = table.Column<int>(nullable: false),
                     CreateTime = table.Column<DateTime>(nullable: false),
                     CurrentDimension = table.Column<uint>(nullable: false),
-                    ForumDescription = table.Column<string>(nullable: true),
-                    Freemode = table.Column<bool>(nullable: false),
                     Gender = table.Column<bool>(nullable: false),
                     HasDrivingLicense = table.Column<bool>(nullable: false),
                     HasIdCard = table.Column<bool>(nullable: false),
                     Health = table.Column<byte>(nullable: false),
-                    Height = table.Column<byte>(nullable: false),
                     IsAlive = table.Column<bool>(nullable: false),
-                    IsCreated = table.Column<bool>(nullable: true),
-                    Job = table.Column<int>(nullable: false),
-                    JobLimit = table.Column<decimal>(nullable: true),
-                    JobReleaseDate = table.Column<DateTime>(nullable: true),
-                    LastLoginTime = table.Column<DateTime>(nullable: true),
+                    LastLoginTime = table.Column<DateTime>(nullable: false),
                     LastPositionX = table.Column<float>(nullable: false),
                     LastPositionY = table.Column<float>(nullable: false),
                     LastPositionZ = table.Column<float>(nullable: false),
@@ -148,14 +157,12 @@ namespace VRP.Core.Migrations
                     MinutesToRespawn = table.Column<int>(nullable: false),
                     Model = table.Column<string>(nullable: true),
                     Money = table.Column<decimal>(nullable: false),
-                    MoneyJob = table.Column<decimal>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Online = table.Column<bool>(nullable: false),
+                    PartTimeJobWorkerId = table.Column<int>(nullable: false),
                     PlayedTime = table.Column<TimeSpan>(nullable: false),
-                    Story = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true),
-                    TodayPlayedTime = table.Column<TimeSpan>(nullable: false),
-                    Weight = table.Column<byte>(nullable: false)
+                    TodayPlayedTime = table.Column<TimeSpan>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,7 +172,7 @@ namespace VRP.Core.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -245,6 +252,33 @@ namespace VRP.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PartTimeJobEmployerModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    PartTimeJobId = table.Column<int>(nullable: false),
+                    PartTimeJobModelId = table.Column<int>(nullable: true),
+                    PositionX = table.Column<float>(nullable: false),
+                    PositionY = table.Column<float>(nullable: false),
+                    PositionZ = table.Column<float>(nullable: false),
+                    RotationX = table.Column<float>(nullable: false),
+                    RotationY = table.Column<float>(nullable: false),
+                    RotationZ = table.Column<float>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartTimeJobEmployerModel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PartTimeJobEmployerModel_PartTimeJobModel_PartTimeJobModelId",
+                        column: x => x.PartTimeJobModelId,
+                        principalTable: "PartTimeJobModel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CharacterLooks",
                 columns: table => new
                 {
@@ -290,27 +324,6 @@ namespace VRP.Core.Migrations
                     table.PrimaryKey("PK_CharacterLooks", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CharacterLooks_Characters_CharacterId",
-                        column: x => x.CharacterId,
-                        principalTable: "Characters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Descriptions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CharacterId = table.Column<int>(nullable: true),
-                    Content = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Descriptions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Descriptions_Characters_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Characters",
                         principalColumn: "Id",
@@ -365,6 +378,34 @@ namespace VRP.Core.Migrations
                         name: "FK_CriminalCaseVehicleRecordRelations_VehicleRecordModels_VehicleRecordId",
                         column: x => x.VehicleRecordId,
                         principalTable: "VehicleRecordModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PartTimeJobWorkerModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CharacterId = table.Column<int>(nullable: false),
+                    PartTimeJobEmployerId = table.Column<int>(nullable: false),
+                    PartTimeJobEmployerModelId = table.Column<int>(nullable: true),
+                    Salary = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartTimeJobWorkerModel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PartTimeJobWorkerModel_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalTable: "Characters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PartTimeJobWorkerModel_PartTimeJobEmployerModel_PartTimeJobEmployerModelId",
+                        column: x => x.PartTimeJobEmployerModelId,
+                        principalTable: "PartTimeJobEmployerModel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -514,6 +555,7 @@ namespace VRP.Core.Migrations
                     Name = table.Column<string>(nullable: true),
                     NumberPlate = table.Column<string>(nullable: true),
                     NumberPlateStyle = table.Column<int>(nullable: false),
+                    PartTimeJobModelId = table.Column<int>(nullable: true),
                     PrimaryColor = table.Column<string>(nullable: true),
                     SecondaryColor = table.Column<string>(nullable: true),
                     SpawnPositionX = table.Column<float>(nullable: false),
@@ -549,6 +591,12 @@ namespace VRP.Core.Migrations
                         name: "FK_Vehicles_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_PartTimeJobModel_PartTimeJobModelId",
+                        column: x => x.PartTimeJobModelId,
+                        principalTable: "PartTimeJobModel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -670,6 +718,34 @@ namespace VRP.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Descriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CharacterId = table.Column<int>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    VehicleId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Descriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Descriptions_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalTable: "Characters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Descriptions_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
@@ -683,9 +759,10 @@ namespace VRP.Core.Migrations
                     ItemEntityType = table.Column<int>(nullable: false),
                     ItemHash = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
+                    OwnerVehicleId = table.Column<int>(nullable: true),
                     SecondParameter = table.Column<int>(nullable: true),
                     ThirdParameter = table.Column<int>(nullable: true),
-                    VehicleId = table.Column<int>(nullable: true),
+                    TuningInVehicleId = table.Column<int>(nullable: true),
                     Weight = table.Column<short>(nullable: false)
                 },
                 constraints: table =>
@@ -704,8 +781,14 @@ namespace VRP.Core.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Items_Vehicles_VehicleId",
-                        column: x => x.VehicleId,
+                        name: "FK_Items_Vehicles_OwnerVehicleId",
+                        column: x => x.OwnerVehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Items_Vehicles_TuningInVehicleId",
+                        column: x => x.TuningInVehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -740,28 +823,6 @@ namespace VRP.Core.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Leases_Vehicles_VehicleId",
-                        column: x => x.VehicleId,
-                        principalTable: "Vehicles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VehicleTunings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BreaksMultiplier = table.Column<float>(nullable: false),
-                    EngineMultiplier = table.Column<float>(nullable: false),
-                    TorqueMultiplier = table.Column<float>(nullable: false),
-                    VehicleId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VehicleTunings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_VehicleTunings_Vehicles_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "Id",
@@ -888,6 +949,11 @@ namespace VRP.Core.Migrations
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Descriptions_VehicleId",
+                table: "Descriptions",
+                column: "VehicleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Groups_BossCharacterId",
                 table: "Groups",
                 column: "BossCharacterId");
@@ -928,9 +994,14 @@ namespace VRP.Core.Migrations
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_VehicleId",
+                name: "IX_Items_OwnerVehicleId",
                 table: "Items",
-                column: "VehicleId");
+                column: "OwnerVehicleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_TuningInVehicleId",
+                table: "Items",
+                column: "TuningInVehicleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Leases_AgreementId",
@@ -947,6 +1018,22 @@ namespace VRP.Core.Migrations
                 name: "IX_Leases_VehicleId",
                 table: "Leases",
                 column: "VehicleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartTimeJobEmployerModel_PartTimeJobModelId",
+                table: "PartTimeJobEmployerModel",
+                column: "PartTimeJobModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartTimeJobWorkerModel_CharacterId",
+                table: "PartTimeJobWorkerModel",
+                column: "CharacterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartTimeJobWorkerModel_PartTimeJobEmployerModelId",
+                table: "PartTimeJobWorkerModel",
+                column: "PartTimeJobEmployerModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Penaltlies_AccountId",
@@ -985,9 +1072,9 @@ namespace VRP.Core.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VehicleTunings_VehicleId",
-                table: "VehicleTunings",
-                column: "VehicleId");
+                name: "IX_Vehicles_PartTimeJobModelId",
+                table: "Vehicles",
+                column: "PartTimeJobModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Workers_CharacterId",
@@ -1027,6 +1114,9 @@ namespace VRP.Core.Migrations
                 name: "Leases");
 
             migrationBuilder.DropTable(
+                name: "PartTimeJobWorkerModel");
+
+            migrationBuilder.DropTable(
                 name: "Penaltlies");
 
             migrationBuilder.DropTable(
@@ -1034,9 +1124,6 @@ namespace VRP.Core.Migrations
 
             migrationBuilder.DropTable(
                 name: "TelephoneMessages");
-
-            migrationBuilder.DropTable(
-                name: "VehicleTunings");
 
             migrationBuilder.DropTable(
                 name: "Workers");
@@ -1063,6 +1150,9 @@ namespace VRP.Core.Migrations
                 name: "Agreements");
 
             migrationBuilder.DropTable(
+                name: "PartTimeJobEmployerModel");
+
+            migrationBuilder.DropTable(
                 name: "Items");
 
             migrationBuilder.DropTable(
@@ -1079,6 +1169,9 @@ namespace VRP.Core.Migrations
 
             migrationBuilder.DropTable(
                 name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "PartTimeJobModel");
 
             migrationBuilder.DropTable(
                 name: "Characters");

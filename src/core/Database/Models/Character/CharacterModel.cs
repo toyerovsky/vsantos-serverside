@@ -15,6 +15,7 @@ using VRP.Core.Database.Models.Group;
 using VRP.Core.Database.Models.Item;
 using VRP.Core.Database.Models.Misc;
 using VRP.Core.Database.Models.Vehicle;
+using VRP.Core.Database.PartTimeJob;
 using VRP.Core.Enums;
 
 namespace VRP.Core.Database.Models.Character
@@ -37,8 +38,6 @@ namespace VRP.Core.Database.Models.Character
         public DateTime? BornDate { get; set; }
         public bool HasIdCard { get; set; }
         public bool HasDrivingLicense { get; set; }
-        public string ForumDescription { get; set; }
-        public string Story { get; set; }
         public bool IsAlive { get; set; }
         public byte Health { get; set; }
         public float LastPositionX { get; set; }
@@ -49,20 +48,17 @@ namespace VRP.Core.Database.Models.Character
         public float LastRotationZ { get; set; }
         public uint CurrentDimension { get; set; }
         public int MinutesToRespawn { get; set; }
-        public bool Freemode { get; set; }
-        [EnumDataType(typeof(JobType))]
-        public JobType Job { get; set; }
-        public decimal? MoneyJob { get; set; }
-        public decimal? JobLimit { get; set; }
-        public DateTime? JobReleaseDate { get; set; }
 
         // navigation properties
         [ForeignKey("CharacterLook")]
-        public int CharacterLookModelId { get; set; }
+        public int CharacterLookId { get; set; }
         public virtual CharacterLookModel CharacterLook { get; set; }
         [ForeignKey("Account")]
         public int AccountId { get; set; }
         public virtual AccountModel Account { get; set; }
+        [ForeignKey("PartTimeJobWorker")]
+        public int PartTimeJobWorkerId { get; set; }
+        public virtual PartTimeJobWorkerModel PartTimeJobWorkerModel { get; set; }
 
         public virtual ICollection<VehicleModel> Vehicles { get; set; }
         public virtual ICollection<ItemModel> Items { get; set; }
@@ -70,5 +66,15 @@ namespace VRP.Core.Database.Models.Character
         public virtual ICollection<DescriptionModel> Descriptions { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
         public virtual ICollection<AgreementModel> Agreements { get; set; }
+
+        public CharacterModel()
+        {
+            Vehicles = new HashSet<VehicleModel>();
+            Items = new HashSet<ItemModel>();
+            Buildings = new HashSet<BuildingModel>();
+            Descriptions = new HashSet<DescriptionModel>();
+            Workers = new HashSet<WorkerModel>();
+            Agreements = new HashSet<AgreementModel>();
+        }
     }
 }

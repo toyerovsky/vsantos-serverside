@@ -42,7 +42,7 @@ namespace VRP.Core.Repositories
                 Context.CharacterLooks;
 
             return characterLooks
-                .Include(characterLook => characterLook.CharacterModel);
+                .Include(characterLook => characterLook.Character);
         }
     }
 }

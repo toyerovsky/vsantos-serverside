@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Database.Models.Group;
 using VRP.Core.Database.Models.Item;
@@ -44,6 +45,7 @@ namespace VRP.Core.Database.Models.Building
         public string Description { get; set; }
 
         // foreign keys
+        [ForeignKey("AutoSaleModel")]
         public int AutoSaleId { get; set; }
 
         // navigation properties

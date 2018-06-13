@@ -4,6 +4,8 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace VRP.Core.Database.Models.Character
 {
     public class CharacterLookModel
@@ -45,8 +47,9 @@ namespace VRP.Core.Database.Models.Character
         public byte? UndershirtId { get; set; }
 
         // foreign keys
+        [ForeignKey("Character")]
         public int CharacterId { get; set; }
         // navigation properties
-        public virtual CharacterModel CharacterModel { get; set; }
+        public virtual CharacterModel Character { get; set; }
     }
 }

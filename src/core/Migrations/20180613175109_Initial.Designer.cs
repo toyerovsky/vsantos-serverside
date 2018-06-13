@@ -12,7 +12,7 @@ using VRP.Core.Enums;
 namespace VRP.Core.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180603220426_Initial")]
+    [Migration("20180613175109_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -270,21 +270,19 @@ namespace VRP.Core.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AccountId");
+                    b.Property<int>("AccountId");
 
                     b.Property<int?>("BankAccountNumber");
 
                     b.Property<decimal>("BankMoney");
 
-                    b.Property<DateTime>("BornDate");
+                    b.Property<DateTime?>("BornDate");
+
+                    b.Property<int>("CharacterLookId");
 
                     b.Property<DateTime>("CreateTime");
 
                     b.Property<uint>("CurrentDimension");
-
-                    b.Property<string>("ForumDescription");
-
-                    b.Property<bool>("Freemode");
 
                     b.Property<bool>("Gender");
 
@@ -294,19 +292,9 @@ namespace VRP.Core.Migrations
 
                     b.Property<byte>("Health");
 
-                    b.Property<byte>("Height");
-
                     b.Property<bool>("IsAlive");
 
-                    b.Property<bool?>("IsCreated");
-
-                    b.Property<int>("Job");
-
-                    b.Property<decimal?>("JobLimit");
-
-                    b.Property<DateTime?>("JobReleaseDate");
-
-                    b.Property<DateTime?>("LastLoginTime");
+                    b.Property<DateTime>("LastLoginTime");
 
                     b.Property<float>("LastPositionX");
 
@@ -326,21 +314,17 @@ namespace VRP.Core.Migrations
 
                     b.Property<decimal>("Money");
 
-                    b.Property<decimal?>("MoneyJob");
-
                     b.Property<string>("Name");
 
                     b.Property<bool>("Online");
 
-                    b.Property<TimeSpan>("PlayedTime");
+                    b.Property<int>("PartTimeJobWorkerId");
 
-                    b.Property<string>("Story");
+                    b.Property<TimeSpan>("PlayedTime");
 
                     b.Property<string>("Surname");
 
                     b.Property<TimeSpan>("TodayPlayedTime");
-
-                    b.Property<byte>("Weight");
 
                     b.HasKey("Id");
 
@@ -468,11 +452,13 @@ namespace VRP.Core.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("OwnerVehicleId");
+
                     b.Property<int?>("SecondParameter");
 
                     b.Property<int?>("ThirdParameter");
 
-                    b.Property<int?>("VehicleId");
+                    b.Property<int?>("TuningInVehicleId");
 
                     b.Property<short>("Weight");
 
@@ -482,7 +468,9 @@ namespace VRP.Core.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("OwnerVehicleId");
+
+                    b.HasIndex("TuningInVehicleId");
 
                     b.ToTable("Items");
                 });
@@ -644,9 +632,13 @@ namespace VRP.Core.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int?>("VehicleId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CharacterId");
+
+                    b.HasIndex("VehicleId");
 
                     b.ToTable("Descriptions");
                 });
@@ -749,6 +741,8 @@ namespace VRP.Core.Migrations
 
                     b.Property<int>("NumberPlateStyle");
 
+                    b.Property<int?>("PartTimeJobModelId");
+
                     b.Property<string>("PrimaryColor");
 
                     b.Property<string>("SecondaryColor");
@@ -788,27 +782,9 @@ namespace VRP.Core.Migrations
 
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("PartTimeJobModelId");
+
                     b.ToTable("Vehicles");
-                });
-
-            modelBuilder.Entity("VRP.Core.Database.Models.Vehicle.VehicleTuningModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<float>("BreaksMultiplier");
-
-                    b.Property<float>("EngineMultiplier");
-
-                    b.Property<float>("TorqueMultiplier");
-
-                    b.Property<int?>("VehicleId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VehicleId");
-
-                    b.ToTable("VehicleTunings");
                 });
 
             modelBuilder.Entity("VRP.Core.Database.Models.Warehouse.GroupWarehouseItemModel", b =>
@@ -873,6 +849,73 @@ namespace VRP.Core.Migrations
                     b.ToTable("GroupWarehouseOrders");
                 });
 
+            modelBuilder.Entity("VRP.Core.Database.PartTimeJob.PartTimeJobEmployerModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("PartTimeJobId");
+
+                    b.Property<int?>("PartTimeJobModelId");
+
+                    b.Property<float>("PositionX");
+
+                    b.Property<float>("PositionY");
+
+                    b.Property<float>("PositionZ");
+
+                    b.Property<float>("RotationX");
+
+                    b.Property<float>("RotationY");
+
+                    b.Property<float>("RotationZ");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartTimeJobModelId");
+
+                    b.ToTable("PartTimeJobEmployerModel");
+                });
+
+            modelBuilder.Entity("VRP.Core.Database.PartTimeJob.PartTimeJobModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("DailyMoneyLimit");
+
+                    b.Property<int>("JobType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PartTimeJobModel");
+                });
+
+            modelBuilder.Entity("VRP.Core.Database.PartTimeJob.PartTimeJobWorkerModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CharacterId");
+
+                    b.Property<int>("PartTimeJobEmployerId");
+
+                    b.Property<int?>("PartTimeJobEmployerModelId");
+
+                    b.Property<decimal>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
+
+                    b.HasIndex("PartTimeJobEmployerModelId");
+
+                    b.ToTable("PartTimeJobWorkerModel");
+                });
+
             modelBuilder.Entity("VRP.Core.Database.Models.Account.PenaltyModel", b =>
                 {
                     b.HasOne("VRP.Core.Database.Models.Account.AccountModel", "Account")
@@ -925,17 +968,17 @@ namespace VRP.Core.Migrations
 
             modelBuilder.Entity("VRP.Core.Database.Models.Character.CharacterLookModel", b =>
                 {
-                    b.HasOne("VRP.Core.Database.Models.Character.CharacterModel", "CharacterModel")
-                        .WithOne("CharacterLookModel")
-                        .HasForeignKey("VRP.Core.Database.Models.Character.CharacterLookModel", "CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("VRP.Core.Database.Models.Character.CharacterModel", "Character")
+                        .WithOne("CharacterLook")
+                        .HasForeignKey("VRP.Core.Database.Models.Character.CharacterLookModel", "CharacterId");
                 });
 
             modelBuilder.Entity("VRP.Core.Database.Models.Character.CharacterModel", b =>
                 {
                     b.HasOne("VRP.Core.Database.Models.Account.AccountModel", "Account")
                         .WithMany("Characters")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VRP.Core.Database.Models.CrimeBot.CrimeBotItemModel", b =>
@@ -984,9 +1027,13 @@ namespace VRP.Core.Migrations
                         .WithMany("Items")
                         .HasForeignKey("CharacterId");
 
-                    b.HasOne("VRP.Core.Database.Models.Vehicle.VehicleModel", "Vehicle")
+                    b.HasOne("VRP.Core.Database.Models.Vehicle.VehicleModel", "OwnerVehicle")
                         .WithMany("ItemsInVehicle")
-                        .HasForeignKey("VehicleId");
+                        .HasForeignKey("OwnerVehicleId");
+
+                    b.HasOne("VRP.Core.Database.Models.Vehicle.VehicleModel", "TuningInVehicle")
+                        .WithMany("VehicleTuning")
+                        .HasForeignKey("TuningInVehicleId");
                 });
 
             modelBuilder.Entity("VRP.Core.Database.Models.Mdt.CriminalCaseCharacterRecordRelation", b =>
@@ -1023,6 +1070,10 @@ namespace VRP.Core.Migrations
                     b.HasOne("VRP.Core.Database.Models.Character.CharacterModel", "Character")
                         .WithMany("Descriptions")
                         .HasForeignKey("CharacterId");
+
+                    b.HasOne("VRP.Core.Database.Models.Vehicle.VehicleModel", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
                 });
 
             modelBuilder.Entity("VRP.Core.Database.Models.Telephone.TelephoneContactModel", b =>
@@ -1053,13 +1104,10 @@ namespace VRP.Core.Migrations
                     b.HasOne("VRP.Core.Database.Models.Group.GroupModel", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
-                });
 
-            modelBuilder.Entity("VRP.Core.Database.Models.Vehicle.VehicleTuningModel", b =>
-                {
-                    b.HasOne("VRP.Core.Database.Models.Vehicle.VehicleModel", "Vehicle")
-                        .WithMany("VehicleTuning")
-                        .HasForeignKey("VehicleId");
+                    b.HasOne("VRP.Core.Database.PartTimeJob.PartTimeJobModel")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("PartTimeJobModelId");
                 });
 
             modelBuilder.Entity("VRP.Core.Database.Models.Warehouse.GroupWarehouseItemModel", b =>
@@ -1089,6 +1137,25 @@ namespace VRP.Core.Migrations
                     b.HasOne("VRP.Core.Database.Models.Item.ItemTemplateModel", "OrderedItemTemplate")
                         .WithMany()
                         .HasForeignKey("OrderedItemTemplateId");
+                });
+
+            modelBuilder.Entity("VRP.Core.Database.PartTimeJob.PartTimeJobEmployerModel", b =>
+                {
+                    b.HasOne("VRP.Core.Database.PartTimeJob.PartTimeJobModel", "PartTimeJobModel")
+                        .WithMany("Employers")
+                        .HasForeignKey("PartTimeJobModelId");
+                });
+
+            modelBuilder.Entity("VRP.Core.Database.PartTimeJob.PartTimeJobWorkerModel", b =>
+                {
+                    b.HasOne("VRP.Core.Database.Models.Character.CharacterModel", "Character")
+                        .WithOne("PartTimeJobWorkerModel")
+                        .HasForeignKey("VRP.Core.Database.PartTimeJob.PartTimeJobWorkerModel", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.Core.Database.PartTimeJob.PartTimeJobEmployerModel", "PartTimeJobEmployerModel")
+                        .WithMany("Workers")
+                        .HasForeignKey("PartTimeJobEmployerModelId");
                 });
 #pragma warning restore 612, 618
         }

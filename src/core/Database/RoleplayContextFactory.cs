@@ -14,9 +14,15 @@ namespace VRP.Core.Database
 {
     public class RoleplayContextFactory : IDesignTimeDbContextFactory<RoleplayContext>
     {
-        public RoleplayContext Create() => this.CreateDbContext(new[] {""});
+        public RoleplayContext Create() => this.CreateDbContext(new[] { "" });
 
         private readonly string _connectionString;
+
+        // add this to auto generate migrations
+        public RoleplayContextFactory() : this("server=77.55.212.185;database=vrpsrv;Uid=vrp;Pwd=kR6BNDBDNsX5yhJU;Convert Zero Datetime=True")
+        {
+
+        }
 
         public RoleplayContextFactory(string connectionString)
         {

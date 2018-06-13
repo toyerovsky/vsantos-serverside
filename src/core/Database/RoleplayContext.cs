@@ -92,8 +92,8 @@ namespace VRP.Core.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CharacterModel>()
-                .HasOne(character => character.CharacterLookModel)
-                .WithOne(characterLook => characterLook.CharacterModel)
+                .HasOne(character => character.CharacterLook)
+                .WithOne(characterLook => characterLook.Character)
                 .HasForeignKey<CharacterLookModel>(characterLook => characterLook.CharacterId);
 
             modelBuilder.Entity<AutoSaleModel>()
