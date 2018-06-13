@@ -8,9 +8,9 @@ namespace VRP.Core.Enums
 {
     public enum JobType
     {
+        None,
         Dustman = 1,
         Greenkeeper,
         Courier,
-        Thief
     }
 }

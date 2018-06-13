@@ -6,12 +6,15 @@
 
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.Core.Database;
+using VRP.Core.Database.Models.Character;
+using VRP.Core.Repositories;
 
 namespace VRP.vAPI.Controllers
 {
@@ -46,6 +49,23 @@ namespace VRP.vAPI.Controllers
                     return Json(characters);
                 }
             }
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] CharacterModel characterModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            using (CharactersRepository repository = new CharactersRepository())
+            {
+                repository.Insert(characterModel);
+                repository.Save();
+            }
+
+            return Created("GET", characterModel);
         }
     }
 }
