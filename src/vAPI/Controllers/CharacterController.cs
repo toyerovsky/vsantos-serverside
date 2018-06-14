@@ -39,12 +39,12 @@ namespace VRP.vAPI.Controllers
         [HttpGet("account")]
         public IActionResult GetByAccountId()
         {
-            var query = "SELECT Name, Surname, Money, Model FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
+            var query = "SELECT Id, Name, Surname, Money, Model FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
 
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.GetAccountId() }))
+                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.GetAccountId()}))
                 {
                     var characters = multiple.Read<CharacterModel>().Select(character => new
                     {
@@ -58,8 +58,8 @@ namespace VRP.vAPI.Controllers
             }
         }
 
-        [HttpPost("select/{id}")]
-        public async Task<IActionResult> SelectCharacter([FromRoute] int id)
+        [HttpPost("select")]
+        public async Task<IActionResult> SelectCharacter([FromBody] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -98,6 +98,7 @@ namespace VRP.vAPI.Controllers
 
             using (CharactersRepository repository = new CharactersRepository())
             {
+                characterModel.AccountId = HttpContext.User.GetAccountId();
                 repository.Insert(characterModel);
                 repository.Save();
             }

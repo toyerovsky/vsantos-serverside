@@ -10,6 +10,11 @@ namespace VRP.vAPI.Extensions
     {
         public static int GetAccountId(this ClaimsPrincipal claims)
         {
+            return int.Parse(claims.Identities.Select(claim => claim.FindFirst("AccountId").Value).First());
+        }
+
+        public static int GetCharacterId(this ClaimsPrincipal claims)
+        {
             return int.Parse(claims.Identities.Select(claim => claim.FindFirst("CharacterId").Value).First());
         }
     }
