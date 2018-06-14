@@ -20,6 +20,7 @@ using MySql.Data.MySqlClient;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Repositories;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -43,7 +44,7 @@ namespace VRP.vAPI.Controllers
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.Identities.First(claim => claim.Name == "CharacterId") }))
+                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.GetAccountId() }))
                 {
                     var characters = multiple.Read<CharacterModel>().Select(character => new
                     {
@@ -57,22 +58,33 @@ namespace VRP.vAPI.Controllers
             }
         }
 
-        [HttpPost("select/{characterId}")]
-        public IActionResult SelectCharacter([FromRoute] int characterId)
+        [HttpPost("select/{id}")]
+        public async Task<IActionResult> SelectCharacter([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            IEnumerable<Claim> claims = new List<Claim>()
+            using (CharactersRepository charactersRepository = new CharactersRepository())
             {
-                new Claim("CharacterId", characterId.ToString())
-            };
+                Task<CharacterModel> charactersTask = charactersRepository.GetAsync(id);
 
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
-            HttpContext.User.AddIdentity(claimsIdentity);
+                int accountId = HttpContext.User.GetAccountId();
 
+                if ((await charactersTask).AccountId != accountId)
+                {
+                    return Forbid();
+                }
+
+                IEnumerable<Claim> claims = new List<Claim>()
+                {
+                    new Claim("CharacterId", id.ToString())
+                };
+
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
+                HttpContext.User.AddIdentity(claimsIdentity);
+            }
             return Ok();
         }
 
