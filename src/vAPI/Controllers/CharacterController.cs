@@ -20,6 +20,7 @@ using MySql.Data.MySqlClient;
 using VRP.Core.Database;
 using VRP.Core.Database.Models.Character;
 using VRP.Core.Repositories;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -38,12 +39,12 @@ namespace VRP.vAPI.Controllers
         [HttpGet("account")]
         public IActionResult GetByAccountId()
         {
-            var query = "SELECT Name, Surname, Money, Model FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
+            var query = "SELECT Id, Name, Surname, Money, Model FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
 
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.Identities.First(claim => claim.Name == "CharacterId") }))
+                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.GetAccountId()}))
                 {
                     var characters = multiple.Read<CharacterModel>().Select(character => new
                     {
@@ -57,22 +58,33 @@ namespace VRP.vAPI.Controllers
             }
         }
 
-        [HttpPost("select/{characterId}")]
-        public IActionResult SelectCharacter([FromRoute] int characterId)
+        [HttpPost("select")]
+        public async Task<IActionResult> SelectCharacter([FromBody] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            IEnumerable<Claim> claims = new List<Claim>()
+            using (CharactersRepository charactersRepository = new CharactersRepository())
             {
-                new Claim("CharacterId", characterId.ToString())
-            };
+                Task<CharacterModel> charactersTask = charactersRepository.GetAsync(id);
 
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
-            HttpContext.User.AddIdentity(claimsIdentity);
+                int accountId = HttpContext.User.GetAccountId();
 
+                if ((await charactersTask).AccountId != accountId)
+                {
+                    return Forbid();
+                }
+
+                IEnumerable<Claim> claims = new List<Claim>()
+                {
+                    new Claim("CharacterId", id.ToString())
+                };
+
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
+                HttpContext.User.AddIdentity(claimsIdentity);
+            }
             return Ok();
         }
 
@@ -86,6 +98,7 @@ namespace VRP.vAPI.Controllers
 
             using (CharactersRepository repository = new CharactersRepository())
             {
+                characterModel.AccountId = HttpContext.User.GetAccountId();
                 repository.Insert(characterModel);
                 repository.Save();
             }
