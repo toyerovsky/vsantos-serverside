@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System.Collections.Generic;
 using System.Data;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -13,11 +14,11 @@ namespace VRP.Core.Database.Forum
 {
     public class ForumDatabaseHelper
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
 
-        public ForumDatabaseHelper(IConfiguration configuration)
+        public ForumDatabaseHelper(string connectionString)
         {
-            _configuration = configuration;
+            _connectionString = connectionString;
         }
 
         public bool CheckPasswordMatch(string email, string password, out ForumUser forumUser)
@@ -28,13 +29,14 @@ namespace VRP.Core.Database.Forum
                 return false;
 
             using (IDbConnection connection =
-                new MySqlConnection(_configuration.GetConnectionString("forumConnectionString")))
+                new MySqlConnection(_connectionString))
             {
                 var query = "SELECT member_id as Id," +
                             " Name as UserName," +
                             " members_pass_hash as PasswordHash," +
                             " members_pass_salt as PasswordSalt," +
                             " member_group_id as GroupId," +
+                            " email as Email," +
                             " mgroup_others as OtherGroups FROM core_members WHERE email = @email";
 
                 forumUser = connection.QueryFirstOrDefault<ForumUser>(query, new { email });

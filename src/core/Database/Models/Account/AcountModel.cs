@@ -18,6 +18,7 @@ namespace VRP.Core.Database.Models.Account
         public int Id { get; set; }
         [StringLength(50)]
         public string Name { get; set; }
+        [Key]
         public long ForumUserId { get; set; }
         [EmailAddress]
         [StringLength(50)]
@@ -26,7 +27,6 @@ namespace VRP.Core.Database.Models.Account
         public string SecondaryForumGroups { get; set; }
         [StringLength(50)]
         public string SocialClub { get; set; }
-        [DataType(DataType.DateTime)]
         public DateTime LastLogin { get; set; }
         [EnumDataType(typeof(ServerRank))]
         public ServerRank ServerRank { get; set; }

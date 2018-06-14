@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -39,16 +40,13 @@ namespace VRP.vAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //// decreases time of first usage by 2000 ms
-            //ForumDatabaseHelper.CheckPasswordMatch("admin@v-santos.pl", "qweqwe", out ForumUser forumUser);
-
             services.AddDbContext<RoleplayContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("gameConnectionString"));
             });
 
-            // singletons
-            services.AddSingleton<IUsersStorageService>(new UsersStorageService());
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
 
             // scoped
             services.AddScoped(factory => Configuration);
@@ -93,6 +91,8 @@ namespace VRP.vAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
+            app.UseCookiePolicy();
             app.UseMvc();
             app.UseCors("AllowAnyOrigin");
         }

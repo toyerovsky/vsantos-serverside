@@ -9,6 +9,7 @@ namespace VRP.Core.Database.Forum
     public class ForumUser
     {
         public long Id { get; set; }
+        public string Email { get; set; }
         public string UserName { get; set; }
         public short GroupId { get; set; }
         public string OtherGroups { get; set; }

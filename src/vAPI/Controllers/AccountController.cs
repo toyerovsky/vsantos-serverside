@@ -6,11 +6,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Dapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using MySql.Data.MySqlClient;
 using VRP.Core.Database.Forum;
 using VRP.Core.Database.Models.Account;
+using VRP.Core.Enums;
 using VRP.Core.Interfaces;
 using VRP.Core.Repositories;
 using VRP.Core.Services.UserStorage;
@@ -24,57 +32,65 @@ namespace VRP.vAPI.Controllers
     public class AccountController : Controller
     {
         private readonly IJoinableRepository<AccountModel> _accountsRepository;
-        private readonly IUsersStorageService _usersStorageService;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IJoinableRepository<AccountModel> accountsRepository, 
-            IUsersStorageService usersStorageService)
+        public AccountController(IJoinableRepository<AccountModel> accountsRepository,
+            IConfiguration configuration)
         {
             _accountsRepository = accountsRepository;
-            _usersStorageService = usersStorageService;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (_usersStorageService.IsUserOnline(loginModel.Email))
+            using (IDbConnection connection =
+                new MySqlConnection(_configuration.GetConnectionString("gameConnectionString")))
             {
-                return Forbid("User is already on-line.");
-            }
+                ForumDatabaseHelper forumDatabaseHelper =
+                    new ForumDatabaseHelper(_configuration.GetConnectionString("forumConnectionString"));
 
-            ForumDatabaseHelper forumDatabaseHelper = new ForumDatabaseHelper(Startup.Configuration);
-            if (forumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
-            {
-                Guid userGuid = Guid.NewGuid();
-                AccountModel accountModel = _accountsRepository.Get(account => account.ForumUserId == forumUser.Id);
-                Task.Run(() =>
+                if (forumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
                 {
-                    _usersStorageService.Login(userGuid, accountModel.Id);
-                });
-                return Json(new { userGuid, accountId = accountModel.Id });
-            }
+                    string accountIdQuery = "SELECT Id FROM Accounts WHERE ForumUserId = @Id";
+                    AccountModel account = connection.QuerySingleOrDefault<AccountModel>(accountIdQuery, new { forumUser.Id });
 
+                    IEnumerable<Claim> claims = new List<Claim>()
+                    {
+                        new Claim("AccountId", account.Id.ToString()),
+                        new Claim("CharacterId", ""),
+                        new Claim(ClaimTypes.Name, forumUser.Email),
+                        new Claim("ForumUserName", forumUser.UserName),
+                        new Claim(ClaimTypes.Role, ((ServerRank) forumUser.GroupId).ToString()),
+                    };
+
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(
+                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    AuthenticationProperties authenticationProperties = new AuthenticationProperties();
+
+                    ClaimsPrincipal principal = new ClaimsPrincipal(claimsIdentity);
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        principal,
+                        authenticationProperties);
+
+                    return SignIn(principal, authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+            }
             return NotFound();
         }
 
         [HttpPost("logout")]
-        public IActionResult LogOut([FromBody] Guid userGuid)
+        public async Task<IActionResult> LogOut()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (_usersStorageService.IsUserOnline(userGuid))
-            {
-                _usersStorageService.LogOut(userGuid);
-                return Ok();
-            }
-
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return BadRequest();
         }
 

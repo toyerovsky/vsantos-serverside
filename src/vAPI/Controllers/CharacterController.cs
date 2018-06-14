@@ -5,11 +5,15 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
@@ -31,15 +35,15 @@ namespace VRP.vAPI.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("account/{accountId}")]
-        public IActionResult GetByAccountId(int accountId)
+        [HttpGet("account")]
+        public IActionResult GetByAccountId()
         {
             var query = "SELECT Name, Surname, Money, Model FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
 
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, new { accountId }))
+                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.Identities.First(claim => claim.Name == "CharacterId") }))
                 {
                     var characters = multiple.Read<CharacterModel>().Select(character => new
                     {
@@ -51,6 +55,25 @@ namespace VRP.vAPI.Controllers
                     return Json(characters);
                 }
             }
+        }
+
+        [HttpPost("select/{characterId}")]
+        public IActionResult SelectCharacter([FromRoute] int characterId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            IEnumerable<Claim> claims = new List<Claim>()
+            {
+                new Claim("CharacterId", characterId.ToString())
+            };
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
+            HttpContext.User.AddIdentity(claimsIdentity);
+
+            return Ok();
         }
 
         [HttpPost]

@@ -62,8 +62,6 @@ namespace VRP.Core.Repositories
                 .Include(account => account.Penalties);
         }
 
-        public override AccountModel Get(int id) => GetAll(account => account.Id == id).SingleOrDefault();
-
         public override AccountModel Get(Func<AccountModel, bool> func) => GetAll(func).FirstOrDefault();
 
         public override IEnumerable<AccountModel> GetAll(Func<AccountModel, bool> func = null)
