@@ -17,9 +17,9 @@ namespace VRP.Core.Interfaces
 
         Task InsertAsync(T model);
 
-        bool Contains(T model);
+        bool Contains(int id);
 
-        Task<bool> ContainsAsync(T model);
+        Task<bool> ContainsAsync(int id);
 
         /// <summary>
         /// Updates all fields of model after Save() is called
@@ -38,9 +38,11 @@ namespace VRP.Core.Interfaces
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="key"></param>
         /// <returns></returns>
-        T Get(int id);
+        T Get(object key);
+
+        Task<T> GetAsync(object key);
 
         /// <summary>
         /// Get entity without eager loading navigation properties

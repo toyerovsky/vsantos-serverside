@@ -39,14 +39,14 @@ namespace VRP.Core.Repositories.Base
             await Context.AddAsync(model);
         }
 
-        public virtual bool Contains(TEntity model)
+        public virtual bool Contains(int id)
         {
-            return Context.Find<TEntity>(model) != null;
+            return Context.Find<TEntity>(id) != null;
         }
 
-        public virtual async Task<bool> ContainsAsync(TEntity model)
+        public virtual async Task<bool> ContainsAsync(int id)
         {
-            return await Context.FindAsync<TEntity>(model) != null;
+            return await Context.FindAsync<TEntity>(id) != null;
         }
 
         /// <summary>
@@ -76,12 +76,18 @@ namespace VRP.Core.Repositories.Base
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="key"></param>
         /// <returns></returns>
-        public virtual TEntity Get(int id)
+        public virtual TEntity Get(object key)
         {
-            TEntity model = Context.Find<TEntity>(id);
+            TEntity model = Context.Find<TEntity>(key);
             return model;
+        }
+
+        public virtual async Task<TEntity> GetAsync(object key)
+        {
+            Task<TEntity> task = Context.FindAsync<TEntity>(key);
+            return await task;
         }
 
         /// <summary>
