@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using VRP.Core.Database.Models.Vehicle;
 using VRP.Core.Interfaces;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -27,11 +28,11 @@ namespace VRP.vAPI.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("charactervehicles")]
+        public IActionResult GetVehiclesByCharacterId()
         {
-           // int characterId = HttpContext.User.Identities.First(claim => claim.Name == "CharacterId").;
-            //IEnumerable<VehicleModel> vehicles = _vehiclesRepository.Get(vehicle => vehicle.CreatorId ==);
+            int characterId = HttpContext.User.GetCharacterId();
+            IEnumerable<VehicleModel> vehicles = _vehiclesRepository.JoinAndGetAll(vehicle => vehicle.Character.Id == characterId);
             return Json(vehicles);
         }
     }
