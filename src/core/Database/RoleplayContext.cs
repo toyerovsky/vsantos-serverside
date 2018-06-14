@@ -110,6 +110,9 @@ namespace VRP.Core.Database
                 .HasOne(agreement => agreement.LeaseModel)
                 .WithOne(lease => lease.AgreementModel)
                 .HasForeignKey<LeaseModel>(lease => lease.AgreementId);
+
+            modelBuilder.Entity<AccountModel>()
+                .HasKey(account => account.Id);
         }
     }
 }
