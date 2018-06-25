@@ -4,7 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Security.Claims;
@@ -16,12 +15,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using VRP.Core.Database.Forum;
-using VRP.Core.Database.Models.Account;
-using VRP.Core.Enums;
-using VRP.Core.Interfaces;
-using VRP.Core.Repositories;
-using VRP.Core.Services.UserStorage;
+using VRP.Core.Tools;
+using VRP.DAL.Database.Forum;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Enums;
+using VRP.DAL.Interfaces;
 using VRP.vAPI.Model;
 
 namespace VRP.vAPI.Controllers
@@ -55,7 +53,8 @@ namespace VRP.vAPI.Controllers
                 ForumDatabaseHelper forumDatabaseHelper =
                     new ForumDatabaseHelper(_configuration.GetConnectionString("forumConnectionString"));
 
-                if (forumDatabaseHelper.CheckPasswordMatch(loginModel.Email, loginModel.Password, out ForumUser forumUser))
+                ForumUser forumUser = forumDatabaseHelper.GetForumUserByEmail(loginModel.Email);
+                if (UserDataHelper.CheckPasswordMatch(forumUser, loginModel.Password))
                 {
                     string accountIdQuery = "SELECT Id FROM Accounts WHERE ForumUserId = @Id";
                     AccountModel account = connection.QuerySingleOrDefault<AccountModel>(accountIdQuery, new { forumUser.Id });
@@ -63,7 +62,6 @@ namespace VRP.vAPI.Controllers
                     IEnumerable<Claim> claims = new List<Claim>()
                     {
                         new Claim("AccountId", account.Id.ToString()),
-                        new Claim("CharacterId", ""),
                         new Claim(ClaimTypes.Name, forumUser.Email),
                         new Claim("ForumUserName", forumUser.UserName),
                         new Claim(ClaimTypes.Role, ((ServerRank) forumUser.GroupId).ToString()),

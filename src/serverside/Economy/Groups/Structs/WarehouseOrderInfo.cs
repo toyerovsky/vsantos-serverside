@@ -4,7 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.Core.Database.Models.Warehouse;
+using VRP.DAL.Database.Models.Warehouse;
 using VRP.Serverside.Entities.Core;
 
 namespace VRP.Serverside.Economy.Groups.Structs

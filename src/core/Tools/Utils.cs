@@ -8,8 +8,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using VRP.Core.Database;
 using VRP.Core.Enums;
+using VRP.DAL.Database;
 
 namespace VRP.Core.Tools
 {

@@ -7,10 +7,12 @@
 using System;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Account;
-using VRP.Core.Database.Models.Character;
+using VRP.Core;
 using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
@@ -42,8 +44,9 @@ namespace VRP.Serverside.Core.Login
             {
                 if (EntityHelper.GetAccounts().All(account => account.DbModel.Id != accountId))
                 {
-                    using (AccountsRepository accountsRepository = new AccountsRepository())
-                    using (CharactersRepository charactersRepository = new CharactersRepository())
+                    RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                    using (AccountsRepository accountsRepository = new AccountsRepository(ctx))
+                    using (CharactersRepository charactersRepository = new CharactersRepository(ctx))
                     {
                         AccountModel accountModel = accountsRepository.Get(accountId);
                         AccountEntity accountEntity = new AccountEntity(accountModel, sender);

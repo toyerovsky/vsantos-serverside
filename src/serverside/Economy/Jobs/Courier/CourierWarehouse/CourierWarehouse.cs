@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using VRP.Core.Enums;
+using VRP.DAL.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups;
 using VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse.Models;

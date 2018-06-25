@@ -9,10 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using VRP.Core.Database.Models.Item;
-using VRP.Core.Database.Models.Warehouse;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.Core;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Database.Models.Warehouse;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Structs;
 using VRP.Serverside.Entities.Core;
@@ -62,7 +64,8 @@ namespace VRP.Serverside.Economy.Groups
                 if (arguments[8] != null)
                     groupWarehouseItem.ItemTemplateModel.ThirdParameter = (int)arguments[8];
 
-                using (GroupWarehouseItemsRepository repository = new GroupWarehouseItemsRepository())
+                RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                using (GroupWarehouseItemsRepository repository = new GroupWarehouseItemsRepository(ctx))
                 {
                     repository.Insert(groupWarehouseItem);
                     repository.Save();
@@ -79,8 +82,8 @@ namespace VRP.Serverside.Economy.Groups
         public void OnPlayerPlaceOrderHandler(Client sender, params object[] arguments)
         {
             /* Argumenty
-                 * args[0] - List<WarehouseItemInfo> JSON
-                 */
+             * args[0] - List<WarehouseItemInfo> JSON
+             */
 
             AccountEntity player = sender.GetAccountEntity();
             GroupEntity group = player.CharacterEntity.OnDutyGroup;
@@ -99,7 +102,8 @@ namespace VRP.Serverside.Economy.Groups
                         //ShipmentLog = $"[{DateTime.Now}] Złożenie zamówienia w magazynie. \n"
                     };
 
-                    using (GroupWarehouseOrdersRepository repository = new GroupWarehouseOrdersRepository())
+                    RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                    using (GroupWarehouseOrdersRepository repository = new GroupWarehouseOrdersRepository(ctx))
                     {
                         repository.Insert(shipment);
                         repository.Save();

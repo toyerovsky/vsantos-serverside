@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>VRP.Core</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <RuntimeFrameworkVersion>2.0.6</RuntimeFrameworkVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>core</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,17 +18,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.NETCore.App" Version="2.0.6" />
+    <PackageReference Update="Microsoft.NETCore.App" Version="2.1.0" />
     <PackageReference Include="BCrypt.Net-Core" Version="1.4.0" />
-    <PackageReference Include="Colorful.Console" Version="1.2.6" />
-    <PackageReference Include="Dapper" Version="1.50.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
+    <PackageReference Include="Colorful.Console" Version="1.2.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dal\dal.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="coresettings.json">

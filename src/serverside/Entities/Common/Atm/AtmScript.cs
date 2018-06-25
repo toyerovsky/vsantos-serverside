@@ -7,9 +7,9 @@
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Enums;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
+using VRP.DAL.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Economy.Bank;

@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Enums;
 using VRP.Core.Tools;
+using VRP.DAL.Enums;
 using VRP.Serverside.Constant.Structs;
 
 namespace VRP.Serverside.Constant

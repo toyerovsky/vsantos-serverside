@@ -14,6 +14,7 @@ using VRP.Core.Extensions;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
 using VRP.Core.Validators;
+using VRP.DAL.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Common.Carshop.Models;
 using VRP.Serverside.Entities.Core;

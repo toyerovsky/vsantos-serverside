@@ -4,8 +4,10 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.Core.Database.Models.Item;
-using VRP.Core.Repositories;
+using VRP.Core;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Interfaces;
 
 namespace VRP.Serverside.Entities.Core.Item
@@ -33,7 +35,8 @@ namespace VRP.Serverside.Entities.Core.Item
 
         protected virtual void Save()
         {
-            using (ItemsRepository repository = new ItemsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (ItemsRepository repository = new ItemsRepository(ctx))
             {
                 repository.Update(DbModel);
                 repository.Save();
@@ -42,7 +45,8 @@ namespace VRP.Serverside.Entities.Core.Item
 
         protected virtual void Delete()
         {
-            using (ItemsRepository repository = new ItemsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (ItemsRepository repository = new ItemsRepository(ctx))
             {
                 repository.Delete(DbModel.Id);
                 repository.Save();

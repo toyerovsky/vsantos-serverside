@@ -7,12 +7,15 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Character;
-using VRP.Core.Database.Models.Group;
-using VRP.Core.Database.Models.Item;
-using VRP.Core.Database.Models.Vehicle;
+using VRP.Core;
 using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Database.Models.Vehicle;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Base;
 using VRP.Serverside.Entities.Core.Item;
@@ -70,7 +73,8 @@ namespace VRP.Serverside.Entities.Core.Vehicle
 
             if (!nonDbVehicle)
             {
-                using (VehiclesRepository repository = new VehiclesRepository())
+                RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                using (VehiclesRepository repository = new VehiclesRepository(ctx))
                 {
                     repository.Insert(vehicleModel);
                     repository.Save();
@@ -102,15 +106,13 @@ namespace VRP.Serverside.Entities.Core.Vehicle
             DbModel.EnginePowerMultiplier = GameVehicle.EnginePowerMultiplier;
             DbModel.NumberPlateStyle = GameVehicle.NumberPlateStyle;
             DbModel.NumberPlate = GameVehicle.NumberPlate;
-            //DbModel.Fuel = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_fuel");
             DbModel.Fuel = GameVehicle.GetSharedData("fuel");
-            //DbModel.FuelConsumption = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_fuelConsumption");
             DbModel.FuelConsumption = GameVehicle.GetSharedData("fuelConsumption");
-            //DbModel.Milage = NAPI.Data.GetEntitySharedData(GameVehicle.Handle, "_milage");
             DbModel.Milage = GameVehicle.GetSharedData("milage");
 
             if (_nonDbVehicle) return;
-            using (VehiclesRepository repository = new VehiclesRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (VehiclesRepository repository = new VehiclesRepository(ctx))
             {
                 repository.Update(DbModel);
                 repository.Save();

@@ -7,8 +7,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Group;
 using VRP.Core.Enums;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Enums;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;

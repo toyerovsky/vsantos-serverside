@@ -5,7 +5,7 @@
  */
 
 using GTANetworkAPI;
-using VRP.Core.Enums;
+using VRP.DAL.Enums;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.Extensions;
 

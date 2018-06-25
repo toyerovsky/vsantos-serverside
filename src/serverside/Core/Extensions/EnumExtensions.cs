@@ -6,7 +6,7 @@
 
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Enums;
+using VRP.DAL.Enums;
 
 namespace VRP.Serverside.Core.Extensions
 {

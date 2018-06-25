@@ -5,8 +5,8 @@
  */
 
 using Microsoft.Extensions.Configuration;
-using VRP.Core.Database;
 using VRP.Core.Tools;
+using VRP.DAL.Database;
 
 namespace VRP.Core
 {

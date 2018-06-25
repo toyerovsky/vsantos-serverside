@@ -10,15 +10,15 @@ using System.Linq;
 using System.Timers;
 using GTANetworkAPI;
 using VRP.Core;
-using VRP.Core.Database;
-using VRP.Core.Database.Models.Account;
-using VRP.Core.Database.Models.Building;
-using VRP.Core.Database.Models.Character;
-using VRP.Core.Database.Models.Group;
-using VRP.Core.Database.Models.Item;
 using VRP.Core.Enums;
-using VRP.Core.Repositories;
 using VRP.Core.Tools;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Database.Models.Building;
+using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities.Base;
@@ -273,7 +273,8 @@ namespace VRP.Serverside.Entities.Core.Building
 
         public static void LoadBuildings()
         {
-            using (BuildingsRepository repository = new BuildingsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (BuildingsRepository repository = new BuildingsRepository(ctx))
                 foreach (BuildingModel building in repository.GetAll())
                 {
                     new BuildingEntity(building);
@@ -306,7 +307,8 @@ namespace VRP.Serverside.Entities.Core.Building
                 Group = groupModel
             };
 
-            using (BuildingsRepository repository = new BuildingsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (BuildingsRepository repository = new BuildingsRepository(ctx))
             {
                 repository.Insert(buildingModel);
                 repository.Save();

@@ -8,11 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using VRP.Core;
-using VRP.Core.Database;
-using VRP.Core.Database.Models.CrimeBot;
-using VRP.Core.Database.Models.Group;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Interfaces;
 
@@ -51,7 +50,8 @@ namespace VRP.Serverside.Entities.Core.Group
                 Color = color.ToHex()
             };
 
-            using (GroupsRepository repository = new GroupsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (GroupsRepository repository = new GroupsRepository(ctx))
             {
                 repository.Insert(groupModel);
                 repository.Save();
@@ -154,7 +154,8 @@ namespace VRP.Serverside.Entities.Core.Group
 
         public void Save()
         {
-            using (GroupsRepository repository = new GroupsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (GroupsRepository repository = new GroupsRepository(ctx))
             {
                 repository.Update(DbModel);
                 repository.Save();

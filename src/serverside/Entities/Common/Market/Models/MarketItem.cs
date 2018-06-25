@@ -5,8 +5,8 @@
  */
 
 using System;
-using VRP.Core.Enums;
 using VRP.Core.Interfaces;
+using VRP.DAL.Enums;
 
 namespace VRP.Serverside.Entities.Common.Market.Models
 {

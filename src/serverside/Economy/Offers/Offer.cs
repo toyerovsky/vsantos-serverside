@@ -7,11 +7,13 @@
 using System;
 using System.Collections.Generic;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Building;
-using VRP.Core.Database.Models.Item;
-using VRP.Core.Database.Models.Vehicle;
+using VRP.Core;
 using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Building;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Database.Models.Vehicle;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Entities.Core;
 
@@ -90,7 +92,8 @@ namespace VRP.Serverside.Economy.Offers
 
                     ItemModel.Character = Getter.DbModel;
 
-                    using (ItemsRepository repository = new ItemsRepository())
+                    RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                    using (ItemsRepository repository = new ItemsRepository(ctx))
                     {
                         repository.Update(ItemModel);
                         repository.Save();
@@ -104,7 +107,8 @@ namespace VRP.Serverside.Economy.Offers
 
                     Vehicle.Character = Getter.DbModel;
 
-                    using (VehiclesRepository repository = new VehiclesRepository())
+                    RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                    using (VehiclesRepository repository = new VehiclesRepository(ctx))
                     {
                         repository.Update(Vehicle);
                         repository.Save();
@@ -118,7 +122,8 @@ namespace VRP.Serverside.Economy.Offers
 
                     Building.Character = Getter.DbModel;
 
-                    using (BuildingsRepository repository = new BuildingsRepository())
+                    RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                    using (BuildingsRepository repository = new BuildingsRepository(ctx))
                     {
                         repository.Update(Building);
                         repository.Save();

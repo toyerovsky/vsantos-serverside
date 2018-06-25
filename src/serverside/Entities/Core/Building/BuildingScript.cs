@@ -9,8 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using GTANetworkAPI;
 using Newtonsoft.Json;
+using VRP.Core;
 using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.DAL.Database;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 
 namespace VRP.Serverside.Entities.Core.Building
@@ -41,9 +44,11 @@ namespace VRP.Serverside.Entities.Core.Building
                          * args[3] bool spawnPossible
                          */
 
-                        if (Constant.Items.DefaultInteriors.All(i => i.Name != (string)arguments[2]) || !sender.HasData("AdminDoorPosition")) return;
+                        if (Constant.Items.DefaultInteriors.All(i => i.Name != (string)arguments[2]) ||
+                            !sender.HasData("AdminDoorPosition")) return;
 
-                        Vector3 internalPosition = Constant.Items.DefaultInteriors.First(i => i.Name == (string)arguments[2]).InternalPosition;
+                        Vector3 internalPosition = Constant.Items.DefaultInteriors
+                            .First(i => i.Name == (string)arguments[2]).InternalPosition;
                         Vector3 externalPosition = sender.GetData("AdminDoorPosition");
 
                         BuildingEntity building = BuildingEntity.Create(
@@ -68,7 +73,9 @@ namespace VRP.Serverside.Entities.Core.Building
                          * args[2] enterCharge
                          */
 
-                        BuildingEntity building = sender.HasData("CurrentDoors") ? sender.GetData("CurrentDoors") : sender.GetAccountEntity().CharacterEntity.CurrentBuilding;
+                        BuildingEntity building = sender.HasData("CurrentDoors")
+                            ? sender.GetData("CurrentDoors")
+                            : sender.GetAccountEntity().CharacterEntity.CurrentBuilding;
                         building.DbModel.Name = arguments[0].ToString();
                         building.DbModel.Description = arguments[1].ToString();
                         if (decimal.TryParse(arguments[2].ToString(), out decimal result))
@@ -93,7 +100,8 @@ namespace VRP.Serverside.Entities.Core.Building
             BuildingEntity building = sender.GetData("CurrentDoors");
 
             //TODO: Dodanie zeby pracownicy mogli otwierać budynki grupowe zgodnie z uprawnieniami
-            if (building.DbModel.Character == null || building.DbModel.Character.Id != sender.GetAccountEntity().CharacterEntity.DbModel.Id)
+            if (building.DbModel.Character == null ||
+                building.DbModel.Character.Id != sender.GetAccountEntity().CharacterEntity.DbModel.Id)
             {
                 sender.SendError("Nie jesteś właścicielem tego budynku.");
                 return;
@@ -124,6 +132,7 @@ namespace VRP.Serverside.Entities.Core.Building
                     sender.TriggerEvent("ShowBuildingManagePanel", adminInfo);
                     return;
                 }
+
                 sender.SendError("Budynek o podanym Id nie istnieje.");
                 return;
             }
@@ -137,7 +146,8 @@ namespace VRP.Serverside.Entities.Core.Building
                     : sender.GetAccountEntity().CharacterEntity.CurrentBuilding;
 
                 //TODO: Dodanie, żeby właściciel grupy mógł zarządzać budynkiem grupowym
-                if (building.DbModel.Character == null || building.DbModel.Character.Id != sender.GetAccountEntity().CharacterEntity.DbModel.Id)
+                if (building.DbModel.Character == null || building.DbModel.Character.Id !=
+                    sender.GetAccountEntity().CharacterEntity.DbModel.Id)
                 {
                     sender.SendError("Nie jesteś właścicielem tego budynku.");
                     return;
@@ -155,7 +165,8 @@ namespace VRP.Serverside.Entities.Core.Building
             }
             else
             {
-                sender.SendInfo("Aby otworzyć panel zarządzania budynkiem musisz znajdować się w markerze bądź środku budynku.");
+                sender.SendInfo(
+                    "Aby otworzyć panel zarządzania budynkiem musisz znajdować się w markerze bądź środku budynku.");
             }
         }
 
@@ -177,32 +188,31 @@ namespace VRP.Serverside.Entities.Core.Building
                 sender.SendError("Aby usunąć budynek musisz podać jego Id, lub znajdować się w jego drzwiach.");
             }
 
-            if (sender.HasData("CurrentDoors"))
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (BuildingsRepository repository = new BuildingsRepository(ctx))
             {
-                BuildingEntity building = (BuildingEntity)sender.GetData("CurrentDoors");
-                building.Dispose();
-                using (BuildingsRepository repository = new BuildingsRepository())
+                if (sender.HasData("CurrentDoors"))
                 {
+                    BuildingEntity building = (BuildingEntity)sender.GetData("CurrentDoors");
+                    building.Dispose();
+                    repository.Delete(building.DbModel.Id);
+                    repository.Save();
+
+                    return;
+                }
+
+                if (id != -1 && EntityHelper.GetBuilding(id) != null)
+                {
+                    BuildingEntity building = EntityHelper.GetBuilding(id);
+                    building.Dispose();
+
                     repository.Delete(building.DbModel.Id);
                     repository.Save();
                 }
-                return;
             }
-
-            if (id != -1 && EntityHelper.GetBuilding(id) != null)
-            {
-                BuildingEntity building = EntityHelper.GetBuilding(id);
-                building.Dispose();
-                using (BuildingsRepository repository = new BuildingsRepository())
-                {
-                    repository.Delete(building.DbModel.Id);
-                    repository.Save();
-                }
-                return;
-            }
-
             sender.SendError("Podany budynek nie istnieje.");
         }
+
 
         [Command("dodajdrzwi")]
         public void CreateBuilding(Client sender)

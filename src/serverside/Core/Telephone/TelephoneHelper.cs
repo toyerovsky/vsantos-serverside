@@ -6,9 +6,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.Core;
 using VRP.Core.Tools;
+using VRP.DAL.Database;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 
 namespace VRP.Serverside.Core.Telephone
 {
@@ -16,7 +18,8 @@ namespace VRP.Serverside.Core.Telephone
     {
         public static int GetNextFreeTelephoneNumber()
         {
-            using (ItemsRepository repository = new ItemsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (ItemsRepository repository = new ItemsRepository(ctx))
             {
                 IEnumerable<int> numbers = repository.GetAll()
                     .Where(i => i.ItemEntityType == ItemEntityType.Cellphone && i.ThirdParameter.HasValue)

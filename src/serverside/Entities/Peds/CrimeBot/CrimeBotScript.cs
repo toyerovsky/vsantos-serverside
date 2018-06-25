@@ -9,11 +9,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.CrimeBot;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.Core;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.CrimeBot;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities.Core;
@@ -161,7 +163,8 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
                         return;
                     }
 
-                    using (CrimeBotsRepository repository = new CrimeBotsRepository())
+                    RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+                    using (CrimeBotsRepository repository = new CrimeBotsRepository(ctx))
                     {
                         CrimeBotModel crimeBotData = repository.Get(crimeBot => crimeBot.GroupModel.Id == group.Id);
                         CrimeBotPosition position = XmlHelper.GetXmlObjects<CrimeBotPosition>(

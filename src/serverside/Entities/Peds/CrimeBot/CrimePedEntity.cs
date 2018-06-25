@@ -11,9 +11,11 @@ using System.Reflection;
 using System.Timers;
 using GTANetworkAPI;
 using Newtonsoft.Json;
-using VRP.Core.Database.Models.CrimeBot;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.Core;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.CrimeBot;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Groups.Base;
 using VRP.Serverside.Entities.Base;
@@ -45,7 +47,8 @@ namespace VRP.Serverside.Entities.Peds.CrimeBot
             Group = group;
             VehiclePosition = vehiclePosition;
 
-            using (CrimeBotsRepository repository = new CrimeBotsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (CrimeBotsRepository repository = new CrimeBotsRepository(ctx))
                 DbModel = repository.Get(crimeBot => crimeBot.GroupModel.Id == group.Id);
 
             List<PropertyInfo> properties = new List<PropertyInfo> { null };

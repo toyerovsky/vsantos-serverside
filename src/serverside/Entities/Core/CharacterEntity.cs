@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Character;
-using VRP.Core.Repositories;
+using VRP.Core;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Constant.RemoteEvents;
 using VRP.Serverside.Core.CharacterCreator;
 using VRP.Serverside.Core.Extensions;
@@ -123,7 +125,8 @@ namespace VRP.Serverside.Entities.Core
                 InDbRotation = AccountEntity.Client.Rotation;
             }
 
-            using (CharactersRepository repository = new CharactersRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (CharactersRepository repository = new CharactersRepository(ctx))
             {
                 repository.Update(DbModel);
                 repository.Save();

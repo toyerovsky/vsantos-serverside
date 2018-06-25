@@ -5,8 +5,8 @@
  */
 
 using System.Linq;
-using VRP.Core.Database.Models.Item;
 using VRP.Core.Enums;
+using VRP.DAL.Database.Models.Item;
 using VRP.Serverside.Core.Scripts;
 
 namespace VRP.Serverside.Entities.Core.Item

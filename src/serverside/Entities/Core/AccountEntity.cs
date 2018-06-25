@@ -6,9 +6,11 @@
 
 using System;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Account;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.Core;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Interfaces;
 
@@ -68,7 +70,8 @@ namespace VRP.Serverside.Entities.Core
 
         public void Kick(AccountEntity creator, string reason)
         {
-            using (PenaltiesRepository repository = new PenaltiesRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (PenaltiesRepository repository = new PenaltiesRepository(ctx))
             {
                 PenaltyModel model = new PenaltyModel()
                 {
@@ -89,7 +92,8 @@ namespace VRP.Serverside.Entities.Core
 
         public void Ban(AccountEntity creator, string reason, DateTime expiryDate)
         {
-            using (PenaltiesRepository repository = new PenaltiesRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (PenaltiesRepository repository = new PenaltiesRepository(ctx))
             {
                 PenaltyModel model = new PenaltyModel()
                 {
@@ -111,7 +115,8 @@ namespace VRP.Serverside.Entities.Core
 
         public void Save()
         {
-            using (AccountsRepository accountsRepository = new AccountsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (AccountsRepository accountsRepository = new AccountsRepository(ctx))
             {
                 accountsRepository.Update(DbModel);
                 accountsRepository.Save();

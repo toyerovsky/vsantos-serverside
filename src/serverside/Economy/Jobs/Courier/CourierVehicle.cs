@@ -4,7 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.Core.Database.Models.Vehicle;
+using VRP.DAL.Database.Models.Vehicle;
 using VRP.Serverside.Economy.Jobs.Base;
 
 namespace VRP.Serverside.Economy.Jobs.Courier

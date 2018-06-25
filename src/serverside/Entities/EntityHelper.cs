@@ -9,10 +9,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Group;
-using VRP.Core.Repositories;
+using VRP.Core;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Entities.Common.Atm;
 using VRP.Serverside.Entities.Common.Atm.Models;
 using VRP.Serverside.Entities.Common.Booth;
@@ -342,7 +344,8 @@ namespace VRP.Serverside.Entities
         {
             //Group loading
             GroupEntityFactory factory = new GroupEntityFactory();
-            using (GroupsRepository repository = new GroupsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (GroupsRepository repository = new GroupsRepository(ctx))
             {
                 foreach (GroupModel group in repository.GetAll())
                 {

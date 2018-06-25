@@ -1,0 +1,11 @@
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\bin\Debug\netcoreapp2.1\dal.deps.json
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\bin\Debug\netcoreapp2.1\dal.dll
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\obj\Debug\netcoreapp2.1\dal.csprojAssemblyReference.cache
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\obj\Debug\netcoreapp2.1\dal.csproj.CoreCompileInputs.cache
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\obj\Debug\netcoreapp2.1\dal.AssemblyInfoInputs.cache
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\obj\Debug\netcoreapp2.1\dal.AssemblyInfo.cs
+C:\RAGEMP\server-files\bridge\resources\vrp\netcoreapp2.1\dal.deps.json
+C:\RAGEMP\server-files\bridge\resources\vrp\netcoreapp2.1\dal.dll
+C:\RAGEMP\server-files\bridge\resources\vrp\netcoreapp2.1\dal.pdb
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\obj\Debug\netcoreapp2.1\dal.dll
+C:\Users\przem\source\repos\vsantos-serverside\src\dal\obj\Debug\netcoreapp2.1\dal.pdb

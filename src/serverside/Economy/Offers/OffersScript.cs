@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Item;
+using VRP.DAL.Database.Models.Item;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities;
 using VRP.Serverside.Entities.Core;

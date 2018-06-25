@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vAPI", "vAPI\vAPI.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "core", "core\core.csproj", "{6D160F47-5934-48CD-9565-389DD214572B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dal", "dal\dal.csproj", "{223C043E-0F36-43AF-AED3-6AAB0357C36A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{6D160F47-5934-48CD-9565-389DD214572B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D160F47-5934-48CD-9565-389DD214572B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D160F47-5934-48CD-9565-389DD214572B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{223C043E-0F36-43AF-AED3-6AAB0357C36A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{223C043E-0F36-43AF-AED3-6AAB0357C36A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{223C043E-0F36-43AF-AED3-6AAB0357C36A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{223C043E-0F36-43AF-AED3-6AAB0357C36A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

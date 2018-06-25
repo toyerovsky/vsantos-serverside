@@ -5,8 +5,8 @@
  */
 
 using System.Linq;
-using VRP.Core.Database.Models.Group;
-using VRP.Core.Enums;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Enums;
 using VRP.Serverside.Entities.Core;
 using VRP.Serverside.Entities.Core.Group;
 using VRP.Serverside.Entities.Peds.CrimeBot;
@@ -20,7 +20,7 @@ namespace VRP.Serverside.Economy.Groups.Base
          */
         public CrimePedEntity CrimePedEntity { get; set; }
 
-        public CrimeGroup(GroupModel editor) : base(editor)
+        public CrimeGroup(GroupModel model) : base(model)
         {
         }
 

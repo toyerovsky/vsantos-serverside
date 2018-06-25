@@ -6,8 +6,8 @@
 
 using System;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Vehicle;
-using VRP.Core.Enums;
+using VRP.DAL.Database.Models.Vehicle;
+using VRP.DAL.Enums;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Economy.Jobs.Base;
 using VRP.Serverside.Entities.Core;

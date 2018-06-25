@@ -4,7 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.Core.Enums;
+using VRP.DAL.Enums;
 
 namespace VRP.Serverside.Entities.Peds.CrimeBot.Models
 {

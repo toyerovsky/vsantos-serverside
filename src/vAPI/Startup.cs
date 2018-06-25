@@ -11,20 +11,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using VRP.Core.Database;
-using VRP.Core.Database.Models.Account;
-using VRP.Core.Database.Models.Building;
-using VRP.Core.Database.Models.Character;
-using VRP.Core.Database.Models.CrimeBot;
-using VRP.Core.Database.Models.Group;
-using VRP.Core.Database.Models.Item;
-using VRP.Core.Database.Models.Misc;
-using VRP.Core.Database.Models.Telephone;
-using VRP.Core.Database.Models.Vehicle;
-using VRP.Core.Database.Models.Warehouse;
-using VRP.Core.Interfaces;
-using VRP.Core.Repositories;
-using VRP.Core.Services.UserStorage;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Database.Models.Building;
+using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Database.Models.CrimeBot;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Database.Models.Misc;
+using VRP.DAL.Database.Models.Telephone;
+using VRP.DAL.Database.Models.Vehicle;
+using VRP.DAL.Database.Models.Warehouse;
+using VRP.DAL.Interfaces;
+using VRP.DAL.Repositories;
 
 namespace VRP.vAPI
 {

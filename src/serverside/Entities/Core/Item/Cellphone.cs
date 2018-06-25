@@ -7,10 +7,12 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using VRP.Core.Database.Models.Item;
-using VRP.Core.Database.Models.Telephone;
+using VRP.Core;
 using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Database.Models.Telephone;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Scripts;
 using VRP.Serverside.Core.Telephone;
 
@@ -37,12 +39,13 @@ namespace VRP.Serverside.Entities.Core.Item
         /// <param name="itemModel"></param>
         public Cellphone(ItemModel itemModel) : base(itemModel)
         {
-            using (TelephoneMessagesRepository repository = new TelephoneMessagesRepository())
-                Messages = new ObservableCollection<TelephoneMessageModel>(repository.GetAll().Where(m => m.Cellphone.Id == Id));
-
-
-            using (TelephoneContactsRepository repository = new TelephoneContactsRepository())
-                Contacts = new ObservableCollection<TelephoneContactModel>(repository.GetAll().Where(m => m.Cellphone.Id == Id));
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (TelephoneMessagesRepository messagesRepository = new TelephoneMessagesRepository(ctx))
+            using (TelephoneContactsRepository contactsRepository = new TelephoneContactsRepository(ctx))
+            {           
+                Messages = new ObservableCollection<TelephoneMessageModel>(messagesRepository.GetAll().Where(m => m.Cellphone.Id == Id));       
+                Contacts = new ObservableCollection<TelephoneContactModel>(contactsRepository.GetAll().Where(m => m.Cellphone.Id == Id));
+            }
 
             Messages.CollectionChanged += Messages_CollectionChanged;
             Contacts.CollectionChanged += Contacts_CollectionChanged;
@@ -69,7 +72,8 @@ namespace VRP.Serverside.Entities.Core.Item
 
         private void Messages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            using (TelephoneMessagesRepository repository = new TelephoneMessagesRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (TelephoneMessagesRepository repository = new TelephoneMessagesRepository(ctx))
             {
                 foreach (TelephoneMessageModel message in e.NewItems.Cast<TelephoneMessageModel>().Where(m => !e.OldItems.Contains(m)))
                     repository.Insert(message);
@@ -83,7 +87,8 @@ namespace VRP.Serverside.Entities.Core.Item
 
         private void Contacts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            using (TelephoneContactsRepository repository = new TelephoneContactsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (TelephoneContactsRepository repository = new TelephoneContactsRepository(ctx))
             {
                 foreach (TelephoneContactModel contact in e.NewItems.Cast<TelephoneContactModel>().Where(m => !e.OldItems.Contains(m)))
                     repository.Insert(contact);

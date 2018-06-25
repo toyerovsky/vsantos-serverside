@@ -9,11 +9,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GTANetworkAPI;
-using VRP.Core.Database.Models.Item;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.Core;
 using VRP.Core.Serialization;
 using VRP.Core.Tools;
+using VRP.DAL.Database;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Enums;
+using VRP.DAL.Repositories;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Entities.Common.DriveThru.Models;
 using VRP.Serverside.Entities.Core;
@@ -48,7 +50,8 @@ namespace VRP.Serverside.Entities.Common.DriveThru
                 FirstParameter = (int)arguments[1],
             };
 
-            using (ItemsRepository repository = new ItemsRepository())
+            RoleplayContext ctx = Singletons.RoleplayContextFactory.Create();
+            using (ItemsRepository repository = new ItemsRepository(ctx))
             {
                 repository.Insert(itemModel);
                 repository.Save();

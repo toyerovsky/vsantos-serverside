@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using GTANetworkAPI;
-using VRP.Core.Enums;
+using VRP.DAL.Enums;
 using VRP.Serverside.Constant;
 using VRP.Serverside.Core.Extensions;
 using VRP.Serverside.Core.Scripts;

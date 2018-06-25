@@ -1,14 +1,12 @@
-﻿using System;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Data;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using VRP.Core.Database.Models.Account;
-using VRP.Core.Enums;
-using VRP.Core.Repositories;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Enums;
+using VRP.DAL.Interfaces;
+using VRP.DAL.Repositories;
 
 namespace VRP.vAPI.Controllers
 {
@@ -17,10 +15,12 @@ namespace VRP.vAPI.Controllers
     public class SeedController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly IRepository<AccountModel> _accountsRepository;
 
-        public SeedController(IConfiguration configuration)
+        public SeedController(IConfiguration configuration, IRepository<AccountModel> accountsRepository)
         {
             _configuration = configuration;
+            _accountsRepository = accountsRepository;
         }
 
         [HttpPost("seedaccounts")]
@@ -34,15 +34,14 @@ namespace VRP.vAPI.Controllers
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("forumConnectionString")))
             {
-                using (AccountsRepository accountsRepository = new AccountsRepository())
                 using (var multiple = connection.QueryMultiple(query))
                 {
                     foreach (var account in multiple.Read<AccountModel>())
                     {
                         account.ServerRank = (ServerRank)account.PrimaryForumGroup;
-                        accountsRepository.Insert(account);
+                        _accountsRepository.Insert(account);
                     }
-                    accountsRepository.Save();
+                    _accountsRepository.Save();
                 }
             }
             return Ok();
