@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using VRP.DAL.Database.Models.Vehicle;
-using VRP.DAL.Interfaces;
+using VRP.Core.Database.Models.Vehicle;
+using VRP.Core.Interfaces;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -20,6 +21,14 @@ namespace VRP.vAPI.Controllers
         {
             _vehiclesRepository = vehiclesRepository;
             _configuration = configuration;
+        }
+
+        [HttpGet("charactervehicles")]
+        public IActionResult GetVehiclesByCharacterId()
+        {
+            int characterId = HttpContext.User.GetCharacterId();
+            IEnumerable<VehicleModel> vehicles = _vehiclesRepository.JoinAndGetAll(vehicle => vehicle.Character.Id == characterId);
+            return Json(vehicles);
         }
     }
 }
