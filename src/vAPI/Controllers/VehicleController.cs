@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using VRP.Core.Database.Models.Vehicle;
-using VRP.Core.Interfaces;
+using VRP.DAL.Database.Models.Vehicle;
+using VRP.DAL.Interfaces;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
