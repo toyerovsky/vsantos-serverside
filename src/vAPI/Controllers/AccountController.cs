@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,7 @@ namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    [EnableCors("AllowAnyOrigin")]
+    [EnableCors("dev")]
     public class AccountController : Controller
     {
         private readonly IJoinableRepository<AccountModel> _accountsRepository;
@@ -62,24 +63,25 @@ namespace VRP.vAPI.Controllers
                     IEnumerable<Claim> claims = new List<Claim>()
                     {
                         new Claim("AccountId", account.Id.ToString()),
-                        new Claim(ClaimTypes.Name, forumUser.Email),
+                        new Claim(ClaimTypes.Email, forumUser.Email),
                         new Claim("ForumUserName", forumUser.UserName),
                         new Claim(ClaimTypes.Role, ((ServerRank) forumUser.GroupId).ToString()),
                     };
 
-                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    claimsIdentity.AddClaims(claims);
 
                     AuthenticationProperties authenticationProperties = new AuthenticationProperties();
 
-                    ClaimsPrincipal principal = new ClaimsPrincipal(claimsIdentity);
+                    ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
-                        principal,
-                        authenticationProperties);
+                        claimsPrincipal,
+                        authenticationProperties
+                    );
 
-                    return SignIn(principal, authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme);
+                    return SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
                 }
             }
             return NotFound();

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -23,13 +24,13 @@ namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    [EnableCors("AllowAnyOrigin")]
+    [EnableCors("dev")]
     public class CharacterController : Controller
     {
         private readonly IConfiguration _configuration;
-        private readonly IRepository<CharacterModel> _charactersRepository;
+        private readonly IJoinableRepository<CharacterModel> _charactersRepository;
 
-        public CharacterController(IConfiguration configuration, IRepository<CharacterModel> charactersRepository)
+        public CharacterController(IConfiguration configuration, IJoinableRepository<CharacterModel> charactersRepository)
         {
             _configuration = configuration;
             _charactersRepository = charactersRepository;
@@ -43,7 +44,7 @@ namespace VRP.vAPI.Controllers
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, new { characterId = HttpContext.User.GetAccountId() }))
+                using (var multiple = connection.QueryMultiple(query, new { accountId = HttpContext.User.GetAccountId() }))
                 {
                     var characters = multiple.Read<CharacterModel>().Select(character => new
                     {
@@ -75,9 +76,9 @@ namespace VRP.vAPI.Controllers
             }
 
             IEnumerable<Claim> claims = new List<Claim>()
-                {
-                    new Claim("CharacterId", id.ToString())
-                };
+            {
+                new Claim("CharacterId", id.ToString())
+            };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
             HttpContext.User.AddIdentity(claimsIdentity);

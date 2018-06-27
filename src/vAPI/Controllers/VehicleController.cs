@@ -10,7 +10,7 @@ namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    [EnableCors("AllowAnyOrigin")]
+    [EnableCors("dev")]
     public class VehicleController : Controller
     {
         private readonly IJoinableRepository<VehicleModel> _vehiclesRepository;
