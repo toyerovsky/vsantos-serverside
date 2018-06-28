@@ -4,4 +4,6 @@
   <file src="core.pdb"/>
   <script src="serverside.dll"/>
   <file src="serverside.pdb"/>
+  <script src="dal.dll"/>
+  <file src="dal.pdb"/>
 </meta>
