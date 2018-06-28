@@ -6,24 +6,20 @@
 
 namespace VRP.DAL.Enums
 {
-    // To jest po to, żeby można było awansować ludzi, żeby się cieszyli
-    // np supporter lvl 1 nie ma dostępu do czegoś do czego ma dostęp supporter lvl2
-    // Jeśli zmienimy danemu użytkownikowi grupe przez ACP i zaloguje się na forum to wrzuci go na pierwszy poziom danej rangi
     public enum ServerRank
     {
         Uzytkownik,
-        Premium,
+        Donator,
         Support,
         Support2,
         Support3,
         Support4,
         Support5,
-        Support6,
-        AdministratorGry,
-        AdministratorGry2,
-        AdministratorGry3,
-        AdministratorGry4,
-        AdministratorGry5,
+        AdministratorRozgrywki,
+        AdministratorRozgrywki2,
+        AdministratorRozgrywki3,
+        AdministratorRozgrywki4,
+        AdministratorRozgrywki5,
         AdministratorTechniczny,
         AdministratorTechniczny2,
         AdministratorTechniczny3,

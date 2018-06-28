@@ -28,6 +28,7 @@ namespace VRP.vAPI.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("dev")]
+    [Authorize("Authenticated")]
     public class AccountController : Controller
     {
         private readonly IJoinableRepository<AccountModel> _accountsRepository;
@@ -41,6 +42,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)

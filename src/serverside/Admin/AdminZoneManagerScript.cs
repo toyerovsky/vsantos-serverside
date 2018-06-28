@@ -16,9 +16,9 @@ namespace VRP.Serverside.Admin
         [Command("strefa")]
         public void OpenZoneManager(Client sender)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry2))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
-                sender.SendWarning("Nie posiadasz uprawnień do latania.");
+                sender.SendWarning("Nie posiadasz uprawnień do menadżera stref.");
                 return;
             }
 

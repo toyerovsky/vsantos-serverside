@@ -181,7 +181,7 @@ namespace VRP.Serverside.Core.Scripts
         [Command("ado", GreedyArg = true)]
         public void SendAdministratorDoMessage(Client player, string message)
         {
-            if (!player.HasRank(ServerRank.AdministratorGry))
+            if (!player.HasRank(ServerRank.AdministratorRozgrywki))
                 return;
 
             ChatMessageFormatter chatMessageFormatter = new ChatMessageFormatter();

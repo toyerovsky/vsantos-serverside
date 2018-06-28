@@ -157,7 +157,7 @@ namespace VRP.Serverside.Entities.Common.Booth
         [Command("usunbudke")]
         public void DeleteBusStop(Client sender)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendError("Nie posiadasz uprawnień do usuwania budki.");
                 return;

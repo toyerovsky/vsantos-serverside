@@ -6,7 +6,6 @@ using MySql.Data.MySqlClient;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
-using VRP.DAL.Repositories;
 
 namespace VRP.vAPI.Controllers
 {

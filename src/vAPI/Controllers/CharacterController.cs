@@ -10,14 +10,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Interfaces;
-using VRP.DAL.Repositories;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -25,6 +24,7 @@ namespace VRP.vAPI.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("dev")]
+    [Authorize("Authenticated")]
     public class CharacterController : Controller
     {
         private readonly IConfiguration _configuration;

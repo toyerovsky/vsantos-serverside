@@ -71,8 +71,9 @@ namespace VRP.vAPI
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
                 {
                     options.LoginPath = "/api/account/login";
                     options.LogoutPath = "/api/account/logout";
@@ -80,6 +81,15 @@ namespace VRP.vAPI
                     options.Cookie.Expiration = TimeSpan.FromDays(1);
                     options.Cookie.HttpOnly = true;
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Authenticated", policy =>
+                    {
+                        policy.RequireAuthenticatedUser();
+                        policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme);
+                    });
+            });
 
             services.AddCors(options =>
             {
