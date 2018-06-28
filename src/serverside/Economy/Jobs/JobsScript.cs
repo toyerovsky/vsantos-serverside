@@ -73,7 +73,7 @@ namespace VRP.Serverside.Economy.Jobs
         [Command("usunsmietnik")]
         public void DeleteGarbage(Client sender)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania śmietnika.");
                 return;
@@ -98,7 +98,7 @@ namespace VRP.Serverside.Economy.Jobs
         [Command("dodajsmietnik", "~y~ UŻYJ ~w~ /dodajsmietnik (id obiektu)")]
         public void AddGarbage(Client sender, int prop = 0)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do tworzenia śmietnika.");
                 return;
@@ -128,7 +128,7 @@ namespace VRP.Serverside.Economy.Jobs
         [Command("dodajautopraca", "~y~ UŻYJ ~w~ /dodajautopraca [typ]")]
         public void AddVehicleToJob(Client sender, JobType type)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do dodawania auta do pracy.");
                 return;

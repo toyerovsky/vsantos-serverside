@@ -22,7 +22,7 @@ namespace VRP.Serverside.Admin
         [Command("stworzgrupe")]
         public void CreateGroup(Client sender, int bossId, GroupType type, string name, string tag, string hexColor)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry2))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do tworzenia grupy.");
                 return;
@@ -76,7 +76,7 @@ namespace VRP.Serverside.Admin
         [Command("wejdzgrupa")]
         public void JoinGroup(Client sender, long groupId)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendError("Nie posiadasz uprawnień do ustawienia wchodzenia do grupy.");
                 return;

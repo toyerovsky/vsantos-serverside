@@ -11,6 +11,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +27,7 @@ namespace VRP.vAPI.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("dev")]
+    [Authorize("Authenticated")]
     public class CharacterController : Controller
     {
         private readonly IConfiguration _configuration;

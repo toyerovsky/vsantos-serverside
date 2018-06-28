@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,17 +13,14 @@ namespace VRP.vAPI.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("dev")]
+    [Authorize("Authenticated")]
     public class VehicleController : Controller
     {
         private readonly IJoinableRepository<VehicleModel> _vehiclesRepository;
-        private readonly IConfiguration _configuration;
 
-
-        public VehicleController(IJoinableRepository<VehicleModel> vehiclesRepository,
-            IConfiguration configuration)
+        public VehicleController(IJoinableRepository<VehicleModel> vehiclesRepository)
         {
             _vehiclesRepository = vehiclesRepository;
-            _configuration = configuration;
         }
 
         [HttpGet("charactervehicles")]

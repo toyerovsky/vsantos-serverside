@@ -129,7 +129,7 @@ namespace VRP.Serverside.Economy.Groups
         [Command("dodajprzedmiotmag")]
         public void AddWarehouseItem(Client sender)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry4))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki3))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do tworzenia grupy.");
                 return;

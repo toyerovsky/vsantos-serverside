@@ -57,7 +57,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
         [Command("dodajbus", "~y~UŻYJ ~w~ /dodajbus [nazwa]", GreedyArg = true)]
         public void AddBusStop(Client sender, string name)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendError("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
                 return;
@@ -91,7 +91,7 @@ namespace VRP.Serverside.Entities.Common.BusStop
         [Command("usunbus")]
         public void DeleteBusStop(Client sender)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania przystanku autobusowego.");
                 return;

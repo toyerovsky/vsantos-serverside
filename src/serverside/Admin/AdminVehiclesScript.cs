@@ -18,7 +18,7 @@ namespace VRP.Serverside.Admin
         [Command("kolor", "~y~ UŻYJ ~w~ /kolor [hexPodstawowy] [hexDodatkowy]")]
         public void ChangeVehicleColor(Client sender, string primaryHex, string secondaryHex, long vehicleId = -1)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do ustawiania koloru pojazdu.");
                 return;
@@ -55,7 +55,7 @@ namespace VRP.Serverside.Admin
         [Command("napraw", "~y~ UŻYJ ~w~ /napraw")]
         public void RepairVehicle(Client sender, long vehicleId = -1)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do naprawiania pojazdów.");
                 return;

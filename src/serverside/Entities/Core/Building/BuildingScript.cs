@@ -177,7 +177,7 @@ namespace VRP.Serverside.Entities.Core.Building
         [Command("usundrzwi", "~y~UŻYJ ~w~ /usundrzwi (id)")]
         public void DeleteBuilding(Client sender, long id = -1)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry4))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do usuwania drzwi.");
                 return;
@@ -217,7 +217,7 @@ namespace VRP.Serverside.Entities.Core.Building
         [Command("dodajdrzwi")]
         public void CreateBuilding(Client sender)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry4))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki4))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do tworzenia drzwi.");
                 return;

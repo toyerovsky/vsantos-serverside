@@ -5,7 +5,9 @@
  */
 
 using System;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
@@ -71,8 +74,9 @@ namespace VRP.vAPI
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
                 {
                     options.LoginPath = "/api/account/login";
                     options.LogoutPath = "/api/account/logout";
@@ -80,6 +84,15 @@ namespace VRP.vAPI
                     options.Cookie.Expiration = TimeSpan.FromDays(1);
                     options.Cookie.HttpOnly = true;
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Authenticated", policy =>
+                    {
+                        policy.RequireAuthenticatedUser();
+                        policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme);
+                    });
+            });
 
             services.AddCors(options =>
             {

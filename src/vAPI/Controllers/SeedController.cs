@@ -1,12 +1,13 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
-using VRP.DAL.Repositories;
 
 namespace VRP.vAPI.Controllers
 {

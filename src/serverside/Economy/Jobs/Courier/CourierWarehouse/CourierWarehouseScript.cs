@@ -59,7 +59,7 @@ namespace VRP.Serverside.Economy.Jobs.Courier.CourierWarehouse
         [Command("dodajmagazyn", "~y~ UŻYJ ~w~ /dodajmagazyn [nazwa]")]
         public void AddVehicleToJob(Client sender, string name)
         {
-            if (!sender.HasRank(ServerRank.AdministratorGry))
+            if (!sender.HasRank(ServerRank.AdministratorRozgrywki2))
             {
                 sender.SendWarning("Nie posiadasz uprawnień do dodawania auta do pracy.");
                 return;
