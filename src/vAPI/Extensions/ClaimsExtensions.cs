@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
-using Newtonsoft.Json;
 
 namespace VRP.vAPI.Extensions
 {

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Interfaces;
 using VRP.vAPI.Extensions;
