@@ -7,7 +7,7 @@ namespace VRP.DAL.Interfaces
     public interface IJoinableRepository<T> : IRepository<T>
     {
         T JoinAndGet(int id);
-        T JoinAndGet(Expression<Func<T, bool>> expression);
-        IEnumerable<T> JoinAndGetAll(Expression<Func<T, bool>> expression);
+        T JoinAndGet(Expression<Func<T, bool>> expression = null);
+        IEnumerable<T> JoinAndGetAll(Expression<Func<T, bool>> expression = null);
     }
 }
