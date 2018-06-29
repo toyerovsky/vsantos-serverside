@@ -32,6 +32,10 @@ namespace VRP.DAL.Interfaces
         /// <param name="model"></param>
         void BeginUpdate(T model);
 
+        /// <summary>
+        /// Removes an entity from the database when next Save() is called
+        /// </summary>
+        /// <param name="id"></param>
         void Delete(int id);
 
         /// <summary>
