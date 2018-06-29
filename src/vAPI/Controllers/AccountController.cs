@@ -109,5 +109,14 @@ namespace VRP.vAPI.Controllers
             AccountModel account = _accountsRepository.Get(id);
             return Json(account);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _accountsRepository?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

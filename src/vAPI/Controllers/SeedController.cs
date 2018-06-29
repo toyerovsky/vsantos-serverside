@@ -45,5 +45,14 @@ namespace VRP.vAPI.Controllers
             }
             return Ok();
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _accountsRepository?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

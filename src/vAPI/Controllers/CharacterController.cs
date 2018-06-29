@@ -100,5 +100,14 @@ namespace VRP.vAPI.Controllers
 
             return Created("GET", characterModel);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _charactersRepository?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

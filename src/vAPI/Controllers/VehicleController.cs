@@ -28,5 +28,14 @@ namespace VRP.vAPI.Controllers
             IEnumerable<VehicleModel> vehicles = _vehiclesRepository.JoinAndGetAll(vehicle => vehicle.Character.Id == characterId);
             return Json(vehicles);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _vehiclesRepository?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
