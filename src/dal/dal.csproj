@@ -4,9 +4,15 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>VRP.DAL</RootNamespace>
     <AssemblyName>dal</AssemblyName>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\RAGEMP\server-files\bridge\resources\vrp\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>C:\RAGEMP\server-files\bridge\resources\vrp\</OutputPath>
   </PropertyGroup>
 
