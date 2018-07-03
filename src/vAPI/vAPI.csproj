@@ -4,7 +4,6 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>VRP.vAPI</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
