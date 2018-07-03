@@ -58,6 +58,15 @@ namespace VRP.vAPI.Controllers
             }
         }
 
+        [HttpGet("selectedcharacter")]
+        public IActionResult GetCharacterById()
+        {
+            int characterId = HttpContext.User.GetCharacterId();
+            CharacterModel character = _charactersRepository.Get(characterId);
+            return Json(character);
+        }
+
+
         [HttpPost("select")]
         public async Task<IActionResult> SelectCharacter([FromBody] int id)
         {
