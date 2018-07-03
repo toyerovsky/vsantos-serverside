@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +49,7 @@ namespace VRP.vAPI.Controllers
                 {
                     var characters = multiple.Read<CharacterModel>().Select(character => new
                     {
+                        id = character.Id,
                         name = character.Name,
                         surname = character.Surname,
                         money = character.Money,
@@ -66,7 +68,6 @@ namespace VRP.vAPI.Controllers
             return Json(character);
         }
 
-
         [HttpPost("select")]
         public async Task<IActionResult> SelectCharacter([FromBody] int id)
         {
@@ -84,14 +85,11 @@ namespace VRP.vAPI.Controllers
                 return Forbid();
             }
 
-            IEnumerable<Claim> claims = new List<Claim>()
-            {
-                new Claim("CharacterId", id.ToString())
-            };
-
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            claimsIdentity.AddClaim(new Claim("CharacterId", id.ToString()));
             HttpContext.User.AddIdentity(claimsIdentity);
 
+            await HttpContext.SignInAsync(HttpContext.User);
             return Ok();
         }
 
