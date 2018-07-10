@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VRP.DAL.Database;
 
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    partial class RoleplayContextModelSnapshot : ModelSnapshot
+    [Migration("20180710151147_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,6 +33,9 @@ namespace VRP.DAL.Migrations
                     b.Property<string>("ForumUserName");
 
                     b.Property<DateTime>("LastLogin");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50);
 
                     b.Property<string>("PasswordHash");
 

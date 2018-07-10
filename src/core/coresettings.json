@@ -1,6 +1,5 @@
 ﻿{
   "ConnectionStrings": {
-    "gameConnectionString": "server=91.121.86.154;database=vrpsrv;Uid=vrp;Pwd=eG5gOVODozY93ICX34oe;Convert Zero Datetime=True",
-    "forumConnectionString": "server=91.121.86.154;database=vrpforum;uid=vrp;pwd=eG5gOVODozY93ICX34oe;SslMode=None;Convert Zero Datetime=True"
+    "gameConnectionString": "server=91.121.86.154;database=vrpsrv;Uid=vrp;Pwd=eG5gOVODozY93ICX34oe;Convert Zero Datetime=True"
   }
 }

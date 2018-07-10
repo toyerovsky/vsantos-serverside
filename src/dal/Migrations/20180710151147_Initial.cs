@@ -16,7 +16,8 @@ namespace VRP.DAL.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     ForumUserId = table.Column<long>(nullable: false),
-                    Email = table.Column<string>(maxLength: 50, nullable: true),
+                    ForumUserName = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
                     PrimaryForumGroup = table.Column<long>(nullable: false),
                     SecondaryForumGroups = table.Column<string>(nullable: true),
                     SocialClub = table.Column<string>(maxLength: 50, nullable: true),
@@ -28,7 +29,7 @@ namespace VRP.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
-                    table.UniqueConstraint("AK_Accounts_ForumUserId_Id", x => new { x.ForumUserId, x.Id });
+                    table.UniqueConstraint("AK_Accounts_Email_ForumUserId_Id", x => new { x.Email, x.ForumUserId, x.Id });
                 });
 
             migrationBuilder.CreateTable(

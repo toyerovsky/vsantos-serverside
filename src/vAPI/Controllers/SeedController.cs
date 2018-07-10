@@ -26,8 +26,8 @@ namespace VRP.vAPI.Controllers
         public IActionResult Post()
         {
             var query = "SELECT member_id as ForumUserId," +
-                        " name as Name," +
-                        " member_group_id as PrimaryForumGroup,`" +
+                        " name as Name, member_pass_hash as PasswordHash," +
+                        " member_group_id as PrimaryForumGroup, member_pass_salt as PasswordSalt," +
                         " email as Email FROM core_members";
 
             using (IDbConnection connection = new MySqlConnection(

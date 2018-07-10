@@ -9,8 +9,8 @@ using VRP.DAL.Database;
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180710134215_Initial")]
-    partial class Initial
+    [Migration("20180710152352_RemoveAccountName")]
+    partial class RemoveAccountName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,14 +25,14 @@ namespace VRP.DAL.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<long>("ForumUserId");
 
-                    b.Property<DateTime>("LastLogin");
+                    b.Property<string>("ForumUserName");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(50);
+                    b.Property<DateTime>("LastLogin");
 
                     b.Property<string>("PasswordHash");
 
@@ -49,7 +49,7 @@ namespace VRP.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("ForumUserId", "Id");
+                    b.HasAlternateKey("Email", "ForumUserId", "Id");
 
                     b.ToTable("Accounts");
                 });

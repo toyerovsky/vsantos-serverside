@@ -16,9 +16,8 @@ namespace VRP.DAL.Database
         private readonly string _connectionString;
 
         // add this to auto generate migrations
-        public RoleplayContextFactory() : this("server=77.55.212.185;database=vrpsrv;Uid=vrp;Pwd=kR6BNDBDNsX5yhJU;Convert Zero Datetime=True")
+        public RoleplayContextFactory() : this("server=91.121.86.154;database=vrpsrv;uid=vrp;pwd=eG5gOVODozY93ICX34oe;SslMode=None;Convert Zero Datetime=True")
         {
-
         }
 
         public RoleplayContextFactory(string connectionString)

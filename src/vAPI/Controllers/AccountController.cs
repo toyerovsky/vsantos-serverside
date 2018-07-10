@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.Core.Tools;
-using VRP.DAL.Database.Forum;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
@@ -32,13 +31,10 @@ namespace VRP.vAPI.Controllers
     public class AccountController : Controller
     {
         private readonly IJoinableRepository<AccountModel> _accountsRepository;
-        private readonly IConfiguration _configuration;
 
-        public AccountController(IJoinableRepository<AccountModel> accountsRepository,
-            IConfiguration configuration)
+        public AccountController(IJoinableRepository<AccountModel> accountsRepository)
         {
             _accountsRepository = accountsRepository;
-            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -50,50 +46,42 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            using (IDbConnection connection =
-                new MySqlConnection(_configuration.GetConnectionString("gameConnectionString")))
+            AccountModel account = _accountsRepository.Get(loginModel.Email);
+
+            if (account != null && account.PasswordHash == loginModel.PasswordHash)
             {
-                ForumDatabaseHelper forumDatabaseHelper =
-                    new ForumDatabaseHelper(_configuration.GetConnectionString("forumConnectionString"));
-
-                ForumUser forumUser = forumDatabaseHelper.GetForumUserByEmail(loginModel.Email);
-                if (UserDataHelper.CheckPasswordMatch(forumUser, loginModel.Password))
+                IEnumerable<Claim> claims = new List<Claim>
                 {
-                    string accountIdQuery = "SELECT Id FROM Accounts WHERE ForumUserId = @Id";
-                    AccountModel account = connection.QuerySingleOrDefault<AccountModel>(accountIdQuery, new { forumUser.Id });
+                    new Claim("AccountId", account.Id.ToString()),
+                    new Claim(ClaimTypes.Email, account.Email),
+                    new Claim("ForumUserName", account.ForumUserName),
+                    new Claim(ClaimTypes.Role, account.ServerRank.ToString())
+                };
 
-                    IEnumerable<Claim> claims = new List<Claim>()
-                    {
-                        new Claim("AccountId", account.Id.ToString()),
-                        new Claim(ClaimTypes.Email, forumUser.Email),
-                        new Claim("ForumUserName", forumUser.UserName),
-                        new Claim(ClaimTypes.Role, ((ServerRank) forumUser.GroupId).ToString()),
-                    };
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                claimsIdentity.AddClaims(claims);
 
-                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                    claimsIdentity.AddClaims(claims);
+                AuthenticationProperties authenticationProperties = new AuthenticationProperties();
 
-                    AuthenticationProperties authenticationProperties = new AuthenticationProperties();
+                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-                    ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    claimsPrincipal,
+                    authenticationProperties
+                );
 
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        claimsPrincipal,
-                        authenticationProperties
-                    );
-
-                    return SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
-                }
+                return SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
             }
-            return NotFound();
+
+            return NotFound(loginModel);
         }
 
         [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return BadRequest();
+            return SignOut(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         [HttpGet]
@@ -107,6 +95,13 @@ namespace VRP.vAPI.Controllers
         public IActionResult Get(int id)
         {
             AccountModel account = _accountsRepository.Get(id);
+            return Json(account);
+        }
+
+        [HttpGet("{email}")]
+        public IActionResult Get(string email)
+        {
+            AccountModel account = _accountsRepository.Get(email);
             return Json(account);
         }
 
