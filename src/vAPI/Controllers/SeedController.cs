@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using VRP.Core.Interfaces;
+using VRP.Core.Mappers;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
@@ -16,11 +18,13 @@ namespace VRP.vAPI.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IJoinableRepository<AccountModel> _accountsRepository;
+        private readonly IMapper<ServerRank, long> _serverRankMapper;
 
-        public SeedController(IConfiguration configuration, IJoinableRepository<AccountModel> accountsRepository)
+        public SeedController(IConfiguration configuration, IJoinableRepository<AccountModel> accountsRepository, IMapper<ServerRank, long> serverRankMapper)
         {
             _configuration = configuration;
             _accountsRepository = accountsRepository;
+            _serverRankMapper = serverRankMapper;
         }
 
         [HttpPost("seedaccounts")]
@@ -28,9 +32,9 @@ namespace VRP.vAPI.Controllers
         {
             var query = "SELECT member_id as ForumUserId," +
                         " name as ForumUserName, members_pass_hash as PasswordHash," +
-                        " member_group_id as PrimaryForumGroup, members_pass_salt as PasswordSalt," +
+                        " member_group_id as PrimaryForumGroup, members_pass_salt as PasswordSalt, pp_main_photo as AvatarUrl," +
                         " email as Email FROM core_members";
-
+            
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("forumConnectionString")))
             {
@@ -38,7 +42,7 @@ namespace VRP.vAPI.Controllers
                 {
                     foreach (var account in multiple.Read<AccountModel>())
                     {
-                        account.ServerRank = (ServerRank)account.PrimaryForumGroup;
+                        account.ServerRank = _serverRankMapper.Map(account.PrimaryForumGroup);
                         _accountsRepository.Insert(account);
                     }
                     _accountsRepository.Save();

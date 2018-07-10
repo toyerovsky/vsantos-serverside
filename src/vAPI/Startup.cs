@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using VRP.Core.Interfaces;
+using VRP.Core.Mappers;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Building;
@@ -25,6 +27,7 @@ using VRP.DAL.Database.Models.Misc;
 using VRP.DAL.Database.Models.Telephone;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
+using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
 using VRP.DAL.Repositories;
 
@@ -65,6 +68,9 @@ namespace VRP.vAPI
             services.AddScoped<IJoinableRepository<VehicleModel>, VehiclesRepository>();
             services.AddScoped<IJoinableRepository<WorkerModel>, WorkersRepository>();
             services.AddScoped<IRepository<ZoneModel>, ZonesRepository>();
+
+            // scoped mappers
+            services.AddScoped<IMapper<ServerRank, long>, ServerRankMapper>();
 
             services.AddMvc().AddJsonOptions(options =>
             {

@@ -32,6 +32,7 @@ namespace VRP.DAL.Database.Models.Account
         public ServerRank ServerRank { get; set; }
         public string PasswordSalt { get; set; }
         public string PasswordHash { get; set; }
+        public string AvatarUrl { get; set; }
 
         // navigation properties
         public virtual ICollection<SerialModel> Serials { get; set; }

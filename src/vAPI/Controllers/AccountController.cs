@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -82,23 +83,39 @@ namespace VRP.vAPI.Controllers
         public IActionResult Get()
         {
             IEnumerable<AccountModel> accounts = _accountsRepository.GetAll();
-            return Json(accounts);
+            return Json(accounts.Select(account => new
+            {
+                id = account.Id,
+                forumUserName = account.ForumUserName,
+                email = account.Email,
+                serverRank = account.ServerRank.ToString(),
+                lastLogin = account.LastLogin
+            }));
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             AccountModel account = _accountsRepository.Get(id);
-            return Json(account);
+            return Json(new
+            {
+                id = account.Id,
+                forumUserName = account.ForumUserName,
+                email = account.Email,
+                serverRank = account.ServerRank.ToString(),
+                lastLogin = account.LastLogin,
+                avatarUrl = account.AvatarUrl
+            });
         }
 
-        [HttpGet("{email}")]
+        [HttpGet("email/{email}")]
         [AllowAnonymous]
         public IActionResult Get(string email)
         {
             AccountModel account = _accountsRepository.Get(a => a.Email == email);
             var loginModel = new
             {
+                id = account.Id,
                 passwordSalt = account.PasswordSalt,
                 forumUserName = account.ForumUserName
             };
