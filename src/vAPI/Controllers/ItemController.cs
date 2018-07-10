@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Interfaces;
-using VRP.DAL.Repositories;
 using VRP.vAPI.Extensions;
 
 namespace vAPI.Controllers

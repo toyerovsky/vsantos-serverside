@@ -4,7 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
 using VRP.DAL.Database.Models.Misc;
 
 namespace VRP.DAL.Database.Models.DriveThru

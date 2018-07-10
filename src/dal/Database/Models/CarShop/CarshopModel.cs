@@ -4,9 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
 using System.ComponentModel.DataAnnotations;
-using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 
 namespace VRP.DAL.Database.Models.CarShop

@@ -5,20 +5,14 @@
  */
 
 using System.Collections.Generic;
-using System.Data;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
-using VRP.Core.Tools;
 using VRP.DAL.Database.Models.Account;
-using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
 using VRP.vAPI.Model;
 
@@ -46,7 +40,7 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            AccountModel account = _accountsRepository.Get(loginModel.Email);
+            AccountModel account = _accountsRepository.Get(a => a.Email == loginModel.Email);
 
             if (account != null && account.PasswordHash == loginModel.PasswordHash)
             {
@@ -99,10 +93,16 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{email}")]
+        [AllowAnonymous]
         public IActionResult Get(string email)
         {
-            AccountModel account = _accountsRepository.Get(email);
-            return Json(account);
+            AccountModel account = _accountsRepository.Get(a => a.Email == email);
+            var loginModel = new
+            {
+                passwordSalt = account.PasswordSalt,
+                forumUserName = account.ForumUserName
+            };
+            return Json(loginModel);
         }
 
         protected override void Dispose(bool disposing)

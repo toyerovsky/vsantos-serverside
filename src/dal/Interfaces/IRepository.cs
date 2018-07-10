@@ -41,9 +41,10 @@ namespace VRP.DAL.Interfaces
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        T Get(object key);
+        T Get(int id);
+
 
         Task<T> GetAsync(object key);
 

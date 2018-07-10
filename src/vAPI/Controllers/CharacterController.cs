@@ -4,7 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Security.Claims;

@@ -74,18 +74,18 @@ namespace VRP.DAL.Repositories.Base
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public virtual TEntity Get(object key)
+        public TEntity Get(int id)
         {
-            TEntity model = Context.Find<TEntity>(key);
+            TEntity model = Context.Find<TEntity>(id);
             return model;
         }
 
-        public virtual async Task<TEntity> GetAsync(object key)
+        public Task<TEntity> GetAsync(object key)
         {
             Task<TEntity> task = Context.FindAsync<TEntity>(key);
-            return await task;
+            return task;
         }
 
         /// <summary>

@@ -4,8 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.DAL.Database.Models.Account;
-
 namespace VRP.DAL.Database.Models.Bank
 {
     public class AtmModel
