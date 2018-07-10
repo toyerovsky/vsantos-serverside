@@ -29,6 +29,12 @@ namespace VRP.vAPI.Controllers
             return Json(vehicles);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            return Json(_vehiclesRepository.Get(id));
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
