@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using VRP.DAL.Database.Models.Bot;
 using VRP.DAL.Database.Models.Group;
 
 namespace VRP.DAL.Database.Models.CrimeBot
@@ -12,14 +13,13 @@ namespace VRP.DAL.Database.Models.CrimeBot
     public class CrimeBotModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int? CreatorId { get; set; }
-        public virtual GroupModel GroupModel { get; set; }
+        public int CreatorId { get; set; }
         public string VehicleModel { get; set; }
-        // ped model
-        public string PedSkin { get; set; }
 
         // navigation properties
-        public virtual ICollection<CrimeBotItemModel> CrimeBotItems { get; set; } // items for sale
+        // items for sale
+        public virtual ICollection<CrimeBotItemModel> CrimeBotItems { get; set; }
+        public virtual GroupModel GroupModel { get; set; }
+        public virtual BotModel BotModel { get; set; }
     }
 }

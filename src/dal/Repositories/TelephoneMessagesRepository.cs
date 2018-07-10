@@ -21,7 +21,7 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public void Insert(TelephoneMessageModel model)
+        public override void Insert(TelephoneMessageModel model)
         {
             if ((model.Cellphone?.Id ?? 0) != 0)
                 Context.Attach(model.Cellphone);

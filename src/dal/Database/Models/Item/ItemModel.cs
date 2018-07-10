@@ -28,7 +28,7 @@ namespace VRP.DAL.Database.Models.Item
         public int? FourthParameter { get; set; }
 
         [EnumDataType(typeof(ItemEntityType))]
-        public virtual ItemEntityType ItemEntityType { get; set; }
+        public ItemEntityType ItemEntityType { get; set; }
 
         // navigation properties
         public virtual CharacterModel Character { get; set; }

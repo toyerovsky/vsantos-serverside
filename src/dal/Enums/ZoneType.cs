@@ -9,7 +9,6 @@ namespace VRP.DAL.Enums
     public enum ZoneType
     {
         Circle,
-        Rectangle,
-        Polygon
+        Rectangle
     }
 }

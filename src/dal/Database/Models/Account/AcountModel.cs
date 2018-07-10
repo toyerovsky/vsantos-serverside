@@ -30,9 +30,11 @@ namespace VRP.DAL.Database.Models.Account
         public DateTime LastLogin { get; set; }
         [EnumDataType(typeof(ServerRank))]
         public ServerRank ServerRank { get; set; }
-        public string SerialsJson { get; set; }
+        public string PasswordSalt { get; set; }
+        public string PasswordHash { get; set; }
 
         // navigation properties
+        public virtual ICollection<SerialModel> Serials { get; set; }
         public virtual ICollection<CharacterModel> Characters { get; set; }
         public virtual ICollection<PenaltyModel> Penalties { get; set; }
     }

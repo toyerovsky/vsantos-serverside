@@ -5,24 +5,24 @@
  */
 
 using System;
-using GTANetworkAPI;
-using VRP.Core.Interfaces;
-using VRP.Serverside.Entities.Core.Item;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Database.Models.Bot;
+using VRP.DAL.Enums;
 
-namespace VRP.Serverside.Entities.Common.Corners.Models
+namespace VRP.DAL.Database.Models.Corner
 {
-    [Serializable]
-    public class CornerBotModel : IXmlObject
+    public class CornerBotModel
     {
-        public int BotId { get; set; }
-        public string Name { get; set; }
-        public PedHash PedHash { get; set; }
+        public int Id { get; set; }
         public DrugType DrugType { get; set; }
         public decimal MoneyCount { get; set; }
+        public int CreatorId { get; set; }
+
         public string Greeting { get; set; }
         public string GoodFarewell { get; set; }
         public string BadFarewell { get; set; }
-        public string CreatorForumName { get; set; }
-        public string FilePath { get; set; }
+
+        // navigation properties
+        public virtual BotModel BotModel { get; set; }
     }
 }

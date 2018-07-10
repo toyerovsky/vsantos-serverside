@@ -4,18 +4,17 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.DAL.Database.Models.Item;
+using System;
+using VRP.DAL.Database.Models.Misc;
 
-namespace VRP.DAL.Database.Models.CrimeBot
+namespace VRP.DAL.Database.Models.DriveThru
 {
-    public class CrimeBotItemModel
+    public class DriveThruModel
     {
         public int Id { get; set; }
-        public decimal Cost { get; set; }
-        public int Count { get; set; }
-        public int ResetCount { get; set; }
+        public int CreatorId { get; set; }
 
         // navigation properties
-        public virtual ItemTemplateModel ItemTemplateModel { get; set; }
+        public virtual ZoneModel ZoneModel { get; set; }
     }
 }

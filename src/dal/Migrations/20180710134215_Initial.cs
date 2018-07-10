@@ -22,7 +22,8 @@ namespace VRP.DAL.Migrations
                     SocialClub = table.Column<string>(maxLength: 50, nullable: true),
                     LastLogin = table.Column<DateTime>(nullable: false),
                     ServerRank = table.Column<int>(nullable: false),
-                    SerialsJson = table.Column<string>(nullable: true)
+                    PasswordSalt = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,6 +42,21 @@ namespace VRP.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AutoSales", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BotModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    PedHash = table.Column<uint>(nullable: false),
+                    CreatorId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BotModel", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,9 +136,10 @@ namespace VRP.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    CreatorId = table.Column<int>(nullable: true),
+                    CreatorId = table.Column<int>(nullable: false),
                     ZoneType = table.Column<int>(nullable: false),
-                    ZonePropertiesJson = table.Column<string>(nullable: true)
+                    ZonePropertiesJson = table.Column<string>(nullable: true),
+                    Dimension = table.Column<uint>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,7 +162,7 @@ namespace VRP.DAL.Migrations
                     Model = table.Column<string>(nullable: true),
                     Money = table.Column<decimal>(nullable: false),
                     BankAccountNumber = table.Column<int>(nullable: true),
-                    BankMoney = table.Column<decimal>(nullable: false),
+                    BankMoney = table.Column<decimal>(nullable: true),
                     Gender = table.Column<bool>(nullable: false),
                     BornDate = table.Column<DateTime>(nullable: true),
                     HasIdCard = table.Column<bool>(nullable: false),
@@ -182,11 +199,11 @@ namespace VRP.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatorId = table.Column<int>(nullable: true),
-                    AccountId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     ExpiryDate = table.Column<DateTime>(nullable: false),
                     Reason = table.Column<string>(maxLength: 256, nullable: true),
-                    PenaltyType = table.Column<int>(nullable: false)
+                    PenaltyType = table.Column<int>(nullable: false),
+                    AccountId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -197,6 +214,26 @@ namespace VRP.DAL.Migrations
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SerialModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    GameSerial = table.Column<string>(nullable: true),
+                    AccountId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SerialModel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SerialModel_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -494,15 +531,20 @@ namespace VRP.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    CreatorId = table.Column<int>(nullable: true),
-                    GroupModelId = table.Column<int>(nullable: true),
+                    CreatorId = table.Column<int>(nullable: false),
                     VehicleModel = table.Column<string>(nullable: true),
-                    PedSkin = table.Column<string>(nullable: true)
+                    GroupModelId = table.Column<int>(nullable: true),
+                    BotModelId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CrimeBots", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CrimeBots_BotModel_BotModelId",
+                        column: x => x.BotModelId,
+                        principalTable: "BotModel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CrimeBots_Groups_GroupModelId",
                         column: x => x.GroupModelId,
@@ -803,8 +845,8 @@ namespace VRP.DAL.Migrations
                     Cost = table.Column<decimal>(nullable: false),
                     ChargeFrequency = table.Column<TimeSpan>(nullable: false),
                     AgreementId = table.Column<int>(nullable: false),
-                    VehicleId = table.Column<int>(nullable: true),
-                    BuildingId = table.Column<int>(nullable: true)
+                    VehicleId = table.Column<int>(nullable: false),
+                    BuildingId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -820,13 +862,13 @@ namespace VRP.DAL.Migrations
                         column: x => x.BuildingId,
                         principalTable: "Buildings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Leases_Vehicles_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -917,6 +959,11 @@ namespace VRP.DAL.Migrations
                 name: "IX_CrimeBotItems_ItemTemplateModelId",
                 table: "CrimeBotItems",
                 column: "ItemTemplateModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrimeBots_BotModelId",
+                table: "CrimeBots",
+                column: "BotModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CrimeBots_GroupModelId",
@@ -1041,6 +1088,11 @@ namespace VRP.DAL.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SerialModel_AccountId",
+                table: "SerialModel",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TelephoneContacts_CellphoneId",
                 table: "TelephoneContacts",
                 column: "CellphoneId");
@@ -1120,6 +1172,9 @@ namespace VRP.DAL.Migrations
                 name: "Penaltlies");
 
             migrationBuilder.DropTable(
+                name: "SerialModel");
+
+            migrationBuilder.DropTable(
                 name: "TelephoneContacts");
 
             migrationBuilder.DropTable(
@@ -1154,6 +1209,9 @@ namespace VRP.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "BotModel");
 
             migrationBuilder.DropTable(
                 name: "CharacterRecords");

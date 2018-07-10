@@ -4,19 +4,18 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System;
-using GTANetworkAPI;
-using VRP.Core.Interfaces;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Database.Models.Misc;
 
-namespace VRP.Serverside.Entities.Common.BusStop.Models
+namespace VRP.DAL.Database.Models.BusStop
 {
-    [Serializable]
-    public class BusStopModel : IXmlObject
+    public class BusStopModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Vector3 Center { get; set; }
-        public string CreatorForumName { get; set; }
-        public string FilePath { get; set; }
+        public int CreatorId { get; set; }
+
+        // navigation properties
+        public virtual ZoneModel BusStopZone { get; set; }
     }
 }

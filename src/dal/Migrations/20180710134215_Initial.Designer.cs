@@ -9,7 +9,7 @@ using VRP.DAL.Database;
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180625223125_Initial")]
+    [Migration("20180710134215_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,11 +34,13 @@ namespace VRP.DAL.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(50);
 
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PasswordSalt");
+
                     b.Property<long>("PrimaryForumGroup");
 
                     b.Property<string>("SecondaryForumGroups");
-
-                    b.Property<string>("SerialsJson");
 
                     b.Property<int>("ServerRank");
 
@@ -77,6 +79,22 @@ namespace VRP.DAL.Migrations
                     b.ToTable("Penaltlies");
                 });
 
+            modelBuilder.Entity("VRP.DAL.Database.Models.Account.SerialModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccountId");
+
+                    b.Property<string>("GameSerial");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("SerialModel");
+                });
+
             modelBuilder.Entity("VRP.DAL.Database.Models.Agreement.AgreementModel", b =>
                 {
                     b.Property<int>("Id")
@@ -108,13 +126,13 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int>("AgreementId");
 
-                    b.Property<int?>("BuildingId");
+                    b.Property<int>("BuildingId");
 
                     b.Property<TimeSpan>("ChargeFrequency");
 
                     b.Property<decimal>("Cost");
 
-                    b.Property<int?>("VehicleId");
+                    b.Property<int>("VehicleId");
 
                     b.HasKey("Id");
 
@@ -126,6 +144,22 @@ namespace VRP.DAL.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("Leases");
+                });
+
+            modelBuilder.Entity("VRP.DAL.Database.Models.Bot.BotModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CreatorId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<uint>("PedHash");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BotModel");
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Building.BuildingModel", b =>
@@ -273,7 +307,7 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int?>("BankAccountNumber");
 
-                    b.Property<decimal>("BankMoney");
+                    b.Property<decimal?>("BankMoney");
 
                     b.Property<DateTime?>("BornDate");
 
@@ -361,17 +395,17 @@ namespace VRP.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CreatorId");
+                    b.Property<int?>("BotModelId");
+
+                    b.Property<int>("CreatorId");
 
                     b.Property<int?>("GroupModelId");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("PedSkin");
 
                     b.Property<string>("VehicleModel");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BotModelId");
 
                     b.HasIndex("GroupModelId");
 
@@ -649,7 +683,9 @@ namespace VRP.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CreatorId");
+                    b.Property<int>("CreatorId");
+
+                    b.Property<uint>("Dimension");
 
                     b.Property<string>("Name");
 
@@ -924,6 +960,14 @@ namespace VRP.DAL.Migrations
                         .HasForeignKey("AccountId");
                 });
 
+            modelBuilder.Entity("VRP.DAL.Database.Models.Account.SerialModel", b =>
+                {
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "AccountModel")
+                        .WithMany("Serials")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("VRP.DAL.Database.Models.Agreement.AgreementModel", b =>
                 {
                     b.HasOne("VRP.DAL.Database.Models.Character.CharacterModel", "LeaserCharacter")
@@ -937,18 +981,20 @@ namespace VRP.DAL.Migrations
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Agreement.LeaseModel", b =>
                 {
-                    b.HasOne("VRP.DAL.Database.Models.Agreement.AgreementModel", "AgreementModel")
+                    b.HasOne("VRP.DAL.Database.Models.Agreement.AgreementModel", "Agreement")
                         .WithOne("LeaseModel")
                         .HasForeignKey("VRP.DAL.Database.Models.Agreement.LeaseModel", "AgreementId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.Building.BuildingModel", "Building")
                         .WithMany()
-                        .HasForeignKey("BuildingId");
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.Vehicle.VehicleModel", "Vehicle")
                         .WithMany()
-                        .HasForeignKey("VehicleId");
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Building.BuildingModel", b =>
@@ -995,6 +1041,10 @@ namespace VRP.DAL.Migrations
 
             modelBuilder.Entity("VRP.DAL.Database.Models.CrimeBot.CrimeBotModel", b =>
                 {
+                    b.HasOne("VRP.DAL.Database.Models.Bot.BotModel", "BotModel")
+                        .WithMany()
+                        .HasForeignKey("BotModelId");
+
                     b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "GroupModel")
                         .WithMany()
                         .HasForeignKey("GroupModelId");

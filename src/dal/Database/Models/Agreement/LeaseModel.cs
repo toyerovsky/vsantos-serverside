@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Vehicle;
 
@@ -17,10 +18,15 @@ namespace VRP.DAL.Database.Models.Agreement
         public TimeSpan ChargeFrequency { get; set; }
 
         // foreign keys
+        [ForeignKey("Agreement")]
         public int AgreementId { get; set; }
+        [ForeignKey("Vehicle")]
+        public int VehicleId { get; set; }
+        [ForeignKey("Building")]
+        public int BuildingId { get; set; }
 
         // navigation properties
-        public virtual AgreementModel AgreementModel { get; set; }
+        public virtual AgreementModel Agreement { get; set; }
         public virtual VehicleModel Vehicle { get; set; }
         public virtual BuildingModel Building { get; set; }
     }

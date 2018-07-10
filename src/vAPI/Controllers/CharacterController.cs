@@ -61,7 +61,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("selectedcharacter")]
-        public IActionResult GetCharacterById()
+        public IActionResult GetSelectedCharacter()
         {
             int characterId = HttpContext.User.GetCharacterId();
             CharacterModel character = _charactersRepository.Get(characterId);
@@ -106,6 +106,26 @@ namespace VRP.vAPI.Controllers
             _charactersRepository.Save();
 
             return Created("GET", characterModel);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put([FromRoute] int id, [FromBody] CharacterModel updatedCharacter)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            CharacterModel character = _charactersRepository.Get(id);
+
+            if (updatedCharacter == null)
+            {
+                return NotFound(character);
+            }
+
+            _charactersRepository.BeginUpdate(character);
+
+            return NoContent();
         }
 
         protected override void Dispose(bool disposing)

@@ -15,15 +15,15 @@ namespace VRP.DAL.Database.Models.Account
         public int Id { get; set; }
         public int? CreatorId { get; set; }
 
-        public virtual AccountModel Account { get; set; }
-
         public DateTime Date { get; set; }
         public DateTime ExpiryDate { get; set; }
         [StringLength(256)]
         public string Reason { get; set; }
-        
-        [EnumDataType(typeof(PenaltyType))]
-        public virtual PenaltyType PenaltyType { get; set; }
-    }
 
+        [EnumDataType(typeof(PenaltyType))]
+        public PenaltyType PenaltyType { get; set; }
+
+        // navigation properties
+        public virtual AccountModel Account { get; set; }
+    }
 }

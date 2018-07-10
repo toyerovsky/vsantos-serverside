@@ -7,7 +7,7 @@
 using System;
 using System.ComponentModel;
 
-namespace VRP.Core.Enums
+namespace VRP.DAL.Enums
 {
     [Flags]
     public enum CarshopType

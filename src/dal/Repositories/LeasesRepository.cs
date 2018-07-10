@@ -27,7 +27,7 @@ namespace VRP.DAL.Repositories
                 Context.Leases;
 
             return leases
-                .Include(lease => lease.AgreementModel)
+                .Include(lease => lease.Agreement)
                 .Include(lease => lease.Building)
                 .Include(lease => lease.Vehicle);
         }

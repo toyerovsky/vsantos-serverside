@@ -4,19 +4,20 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using System.ComponentModel.DataAnnotations;
 using VRP.DAL.Enums;
 
-namespace VRP.DAL.Database.Models.Misc
+namespace VRP.DAL.Database.Models.CarShop
 {
-    public class ZoneModel
+    public class CarshopVehicleModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int CreatorId { get; set; }
-        [EnumDataType(typeof(ZoneType))]
-        public ZoneType ZoneType { get; set; }
-        public string ZonePropertiesJson { get; set; }
-        public uint Dimension { get; set; }
+        public string Hash { get; set; }
+        public string Category { get; set; }
+        public decimal Cost { get; set; }
+        [EnumDataType(typeof(CarshopType))]
+        public CarshopType CarshopFlags { get; set; }
     }
 }

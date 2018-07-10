@@ -18,8 +18,6 @@ namespace VRP.DAL.Repositories
 {
     public class CrimeBotsRepository : Repository<RoleplayContext, CrimeBotModel>, IJoinableRepository<CrimeBotModel>
     {
-        private readonly RoleplayContext Context;
-
         public CrimeBotsRepository(RoleplayContext context) : base(context)
         {
         }

@@ -29,6 +29,8 @@ namespace VRP.DAL.Database.Models.Mdt
         public Guid DNACode { get; set; }
 
         public bool Wanted { get; set; }
+
+        // navigation properties
         public virtual ICollection<VehicleRecordModel> Vehicles { get; set; }
         public virtual ICollection<CriminalCaseCharacterRecordRelation> CriminalCases { get; set; }
     }

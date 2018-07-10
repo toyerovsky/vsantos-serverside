@@ -108,7 +108,7 @@ namespace VRP.DAL.Database
 
             modelBuilder.Entity<AgreementModel>()
                 .HasOne(agreement => agreement.LeaseModel)
-                .WithOne(lease => lease.AgreementModel)
+                .WithOne(lease => lease.Agreement)
                 .HasForeignKey<LeaseModel>(lease => lease.AgreementId);
 
             modelBuilder.Entity<AccountModel>()

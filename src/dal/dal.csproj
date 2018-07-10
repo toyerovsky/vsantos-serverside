@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-
+    <Folder Include="Database\Models\Market\" />
   </ItemGroup>
 
 </Project>
