@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VRP.DAL.Database;
 
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    partial class RoleplayContextModelSnapshot : ModelSnapshot
+    [Migration("20180711093649_CharacterBlockage")]
+    partial class CharacterBlockage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,6 +319,8 @@ namespace VRP.DAL.Migrations
 
                     b.Property<DateTime?>("BornDate");
 
+                    b.Property<int>("CharacterBlockageId");
+
                     b.Property<int>("CharacterLookId");
 
                     b.Property<DateTime>("CreateTime");
@@ -368,6 +372,8 @@ namespace VRP.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("CharacterBlockageId");
 
                     b.ToTable("Characters");
                 });
@@ -1041,6 +1047,11 @@ namespace VRP.DAL.Migrations
                     b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Account")
                         .WithMany("Characters")
                         .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Account.PenaltyModel", "CharacterBlockage")
+                        .WithMany()
+                        .HasForeignKey("CharacterBlockageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

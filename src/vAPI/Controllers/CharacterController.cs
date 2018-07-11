@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Security.Claims;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Interfaces;
 using VRP.vAPI.Extensions;
@@ -29,15 +31,37 @@ namespace VRP.vAPI.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IJoinableRepository<CharacterModel> _charactersRepository;
+        private readonly IJoinableRepository<AccountModel> _accountsRepository;
 
-        public CharacterController(IConfiguration configuration, IJoinableRepository<CharacterModel> charactersRepository)
+        public CharacterController(IConfiguration configuration, IJoinableRepository<CharacterModel> charactersRepository,
+            IJoinableRepository<AccountModel> accountsRepository)
         {
             _configuration = configuration;
             _charactersRepository = charactersRepository;
+            _accountsRepository = accountsRepository;
+        }
+
+        [HttpGet("account/{accountId}")]
+        public IActionResult GetByAccountId(int accountId)
+        {
+            if (!_accountsRepository.Contains(accountId))
+            {
+                return NotFound(accountId);
+            }
+
+            IEnumerable<CharacterModel> characters = _accountsRepository.JoinAndGet(accountId).Characters;
+            return Json(characters);
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            IEnumerable<CharacterModel> characters = _charactersRepository.JoinAndGetAll();
+            return Json(characters);
         }
 
         [HttpGet("account")]
-        public IActionResult GetByAccountId()
+        public IActionResult GetByCurrentUserCredentials()
         {
             var query = "SELECT Id, Name, Surname, Money, Model FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
 
@@ -100,7 +124,6 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            characterModel.AccountId = HttpContext.User.GetAccountId();
             _charactersRepository.Insert(characterModel);
             _charactersRepository.Save();
 

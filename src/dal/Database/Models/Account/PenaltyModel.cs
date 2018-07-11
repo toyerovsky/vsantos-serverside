@@ -6,6 +6,9 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Enums;
 
 namespace VRP.DAL.Database.Models.Account
@@ -13,7 +16,6 @@ namespace VRP.DAL.Database.Models.Account
     public class PenaltyModel
     {
         public int Id { get; set; }
-        public int? CreatorId { get; set; }
 
         public DateTime Date { get; set; }
         public DateTime ExpiryDate { get; set; }
@@ -24,6 +26,16 @@ namespace VRP.DAL.Database.Models.Account
         public PenaltyType PenaltyType { get; set; }
 
         // navigation properties
+        [ForeignKey("Account")]
+        public int AccountId { get; set; }
         public virtual AccountModel Account { get; set; }
+        [ForeignKey("Creator")]
+        public int? CreatorId { get; set; }
+        public virtual AccountModel Creator { get; set; }
+
+        // used in the case of character blockage
+        [ForeignKey("Character")]
+        public int CharacterId { get; set; }
+        public virtual CharacterModel Character { get; set; }
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VRP.DAL.Database;
 
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    partial class RoleplayContextModelSnapshot : ModelSnapshot
+    [Migration("20180711071835_PenaltyCreator")]
+    partial class PenaltyCreator
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,8 +63,6 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int>("AccountId");
 
-                    b.Property<int>("CharacterId");
-
                     b.Property<int?>("CreatorId");
 
                     b.Property<DateTime>("Date");
@@ -77,8 +77,6 @@ namespace VRP.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("CharacterId");
 
                     b.HasIndex("CreatorId");
 
@@ -964,11 +962,6 @@ namespace VRP.DAL.Migrations
                     b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Account")
                         .WithMany("Penalties")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("VRP.DAL.Database.Models.Character.CharacterModel", "Character")
-                        .WithMany()
-                        .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Creator")

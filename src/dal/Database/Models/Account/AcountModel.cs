@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Enums;
 
@@ -37,6 +38,7 @@ namespace VRP.DAL.Database.Models.Account
         // navigation properties
         public virtual ICollection<SerialModel> Serials { get; set; }
         public virtual ICollection<CharacterModel> Characters { get; set; }
+        [InverseProperty("Account")]
         public virtual ICollection<PenaltyModel> Penalties { get; set; }
     }
 }

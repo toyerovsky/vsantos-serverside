@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using VRP.Core.Extensions;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Interfaces;
 using VRP.vAPI.Model;
@@ -88,7 +89,7 @@ namespace VRP.vAPI.Controllers
                 id = account.Id,
                 forumUserName = account.ForumUserName,
                 email = account.Email,
-                serverRank = account.ServerRank.ToString(),
+                serverRank = account.ServerRank.GetDescription(),
                 lastLogin = account.LastLogin
             }));
         }
@@ -102,7 +103,7 @@ namespace VRP.vAPI.Controllers
                 id = account.Id,
                 forumUserName = account.ForumUserName,
                 email = account.Email,
-                serverRank = account.ServerRank.ToString(),
+                serverRank = account.ServerRank.GetDescription(),
                 lastLogin = account.LastLogin,
                 avatarUrl = account.AvatarUrl
             });
