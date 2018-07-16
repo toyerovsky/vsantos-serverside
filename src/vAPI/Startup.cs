@@ -81,8 +81,8 @@ namespace VRP.vAPI
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/api/account/login";
-                    options.LogoutPath = "/api/account/logout";
+                    options.LoginPath = "/login";
+                    options.LogoutPath = "/logout";
                     options.Cookie.Name = ".AspNet.VRP";
                     options.Cookie.Expiration = TimeSpan.FromDays(1);
                     options.Cookie.HttpOnly = true;
