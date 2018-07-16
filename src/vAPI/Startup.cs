@@ -5,6 +5,7 @@
  */
 
 using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using VRP.Core.Interfaces;
 using VRP.Core.Mappers;
 using VRP.DAL.Database;
@@ -30,6 +32,7 @@ using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
 using VRP.DAL.Repositories;
+using VRP.vAPI.Dto;
 
 namespace VRP.vAPI
 {
@@ -70,11 +73,22 @@ namespace VRP.vAPI
             services.AddScoped<IRepository<ZoneModel>, ZonesRepository>();
 
             // scoped mappers
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AccountModel, AccountDto>().ReverseMap();
+                cfg.CreateMap<CharacterModel, CharacterDto>().ReverseMap();
+            });
+
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+
+            // scoped mappers
             services.AddScoped<IMapper<ServerRank, long>, ServerRankMapper>();
 
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
             services

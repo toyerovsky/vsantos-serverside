@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -16,9 +17,12 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Interfaces;
+using VRP.vAPI.Dto;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -31,33 +35,49 @@ namespace VRP.vAPI.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IJoinableRepository<CharacterModel> _charactersRepository;
-        private readonly IJoinableRepository<AccountModel> _accountsRepository;
+        private readonly IMapper _mapper;
 
-        public CharacterController(IConfiguration configuration, IJoinableRepository<CharacterModel> charactersRepository,
-            IJoinableRepository<AccountModel> accountsRepository)
+        public CharacterController(IConfiguration configuration, IJoinableRepository<CharacterModel> charactersRepository, IMapper mapper)
         {
             _configuration = configuration;
             _charactersRepository = charactersRepository;
-            _accountsRepository = accountsRepository;
+            _mapper = mapper;
         }
 
         [HttpGet("account/{accountId}")]
         public IActionResult GetByAccountId(int accountId)
         {
-            if (!_accountsRepository.Contains(accountId))
+            IEnumerable<CharacterModel> characters = _charactersRepository.GetAll(character => character.AccountId == accountId);
+
+            var characterModels = characters as CharacterModel[] ?? characters.ToArray();
+
+            if (!characterModels.Any())
             {
                 return NotFound(accountId);
             }
 
-            IEnumerable<CharacterModel> characters = _accountsRepository.JoinAndGet(accountId).Characters;
-            return Json(characters);
+            IEnumerable<CharacterDto> characterDtos =
+                _mapper.Map<IEnumerable<CharacterModel>, IEnumerable<CharacterDto>>(characterModels);
+
+            return Json(characterDtos);
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<CharacterModel> characters = _charactersRepository.JoinAndGetAll();
-            return Json(characters);
+            IEnumerable<CharacterModel> characters = _charactersRepository.GetAll();
+
+            var characterModels = characters as CharacterModel[] ?? characters.ToArray();
+
+            if (!characterModels.Any())
+            {
+                return NotFound();
+            }
+
+            IEnumerable<CharacterDto> characterDtos =
+                _mapper.Map<IEnumerable<CharacterModel>, IEnumerable<CharacterDto>>(characterModels);
+
+            return Json(characterDtos);
         }
 
         [HttpGet("account")]
@@ -117,21 +137,24 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] CharacterModel characterModel)
+        public IActionResult Post([FromBody] CharacterDto characterDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _charactersRepository.Insert(characterModel);
+            CharacterModel character = _mapper.Map<CharacterModel>(characterDto);
+            character.IsAlive = true;
+
+            _charactersRepository.Insert(character);
             _charactersRepository.Save();
 
-            return Created("GET", characterModel);
+            return Created("GET", character);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] string updatedCharacterJson)
+        public IActionResult Put([FromRoute] int id, [FromBody] CharacterDto characterDto)
         {
             if (!ModelState.IsValid)
             {
@@ -146,10 +169,10 @@ namespace VRP.vAPI.Controllers
             }
 
             _charactersRepository.BeginUpdate(character);
-            character.UpdateFieldsFromJson(updatedCharacterJson);
+            _mapper.Map(characterDto, character);
             _charactersRepository.Save();
 
-            return NoContent();
+            return Json(character);
         }
 
         protected override void Dispose(bool disposing)

@@ -6,7 +6,7 @@ using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Interfaces;
 using VRP.vAPI.Extensions;
 
-namespace vAPI.Controllers
+namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
