@@ -131,7 +131,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] CharacterModel updatedCharacter)
+        public IActionResult Put([FromRoute] int id, [FromBody] string updatedCharacterJson)
         {
             if (!ModelState.IsValid)
             {
@@ -140,12 +140,14 @@ namespace VRP.vAPI.Controllers
 
             CharacterModel character = _charactersRepository.Get(id);
 
-            if (updatedCharacter == null)
+            if (character == null)
             {
-                return NotFound(character);
+                return NotFound(id);
             }
 
             _charactersRepository.BeginUpdate(character);
+            character.UpdateFieldsFromJson(updatedCharacterJson);
+            _charactersRepository.Save();
 
             return NoContent();
         }

@@ -84,6 +84,12 @@ namespace VRP.vAPI.Controllers
         public IActionResult Get()
         {
             IEnumerable<AccountModel> accounts = _accountsRepository.GetAll();
+
+            if (accounts == null)
+            {
+                return NotFound();
+            }
+
             return Json(accounts.Select(account => new
             {
                 id = account.Id,
@@ -98,6 +104,12 @@ namespace VRP.vAPI.Controllers
         public IActionResult Get(int id)
         {
             AccountModel account = _accountsRepository.Get(id);
+
+            if (account == null)
+            {
+                return NotFound(id);
+            }
+
             return Json(new
             {
                 id = account.Id,
@@ -105,7 +117,8 @@ namespace VRP.vAPI.Controllers
                 email = account.Email,
                 serverRank = account.ServerRank.GetDescription(),
                 lastLogin = account.LastLogin,
-                avatarUrl = account.AvatarUrl
+                avatarUrl = account.AvatarUrl,
+                gravatarEmail = account.GravatarEmail
             });
         }
 
@@ -114,6 +127,12 @@ namespace VRP.vAPI.Controllers
         public IActionResult Get(string email)
         {
             AccountModel account = _accountsRepository.Get(a => a.Email == email);
+
+            if (account == null)
+            {
+                return NotFound(email);
+            }
+
             var loginModel = new
             {
                 id = account.Id,

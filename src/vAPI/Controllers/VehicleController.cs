@@ -32,7 +32,18 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return Json(_vehiclesRepository.Get(id));
+            VehicleModel vehicleModel = _vehiclesRepository.Get(id);
+
+            if (vehicleModel == null)
+            {
+                return NotFound(id);
+            }
+
+            return Json(new
+            {
+                id = vehicleModel.Id,
+                // serialize only fields that you need to share with front end
+            });
         }
 
         protected override void Dispose(bool disposing)

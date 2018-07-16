@@ -35,6 +35,7 @@ namespace VRP.vAPI.Controllers
         {
             IEnumerable<PenaltyModel> penalties =
                 _penaltiesRepository.JoinAndGetAll().Where(penalty => penalty.Account.Id == id);
+
             return Json(penalties.Select(penalty => new
             {
                 date = penalty.Date,
@@ -47,31 +48,6 @@ namespace VRP.vAPI.Controllers
                     serverRank = penalty.Creator.ServerRank.GetDescription()
                 }
             }));
-        }
-
-        // GET: api/Penalty/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Penalty
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Penalty/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
