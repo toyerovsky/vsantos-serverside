@@ -55,6 +55,7 @@ namespace VRP.vAPI
 
             // scoped
             services.AddScoped(factory => Configuration);
+            
 
             // scoped repositories
             services.AddScoped<IJoinableRepository<AccountModel>, AccountsRepository>();
@@ -115,7 +116,7 @@ namespace VRP.vAPI
             {
                 options.AddPolicy("dev", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost");
+                    builder.WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost","http://*","http://0.0.0.0","http://+");
                     builder.WithHeaders("accept", "content-type", "origin");
                     builder.WithMethods("get", "post", "put", "delete");
                     builder.AllowCredentials();
@@ -141,6 +142,7 @@ namespace VRP.vAPI
             app.UseMvc();
 
             app.UseCors("dev");
+            
         }
     }
 }
