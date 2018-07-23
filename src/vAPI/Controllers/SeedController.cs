@@ -7,6 +7,7 @@ using VRP.Core.Interfaces;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 using VRP.DAL.Interfaces;
+using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -15,13 +16,13 @@ namespace VRP.vAPI.Controllers
     public class SeedController : Controller
     {
         private readonly IConfiguration _configuration;
-        private readonly IJoinableRepository<AccountModel> _accountsRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper<ServerRank, long> _serverRankMapper;
 
-        public SeedController(IConfiguration configuration, IJoinableRepository<AccountModel> accountsRepository, IMapper<ServerRank, long> serverRankMapper)
+        public SeedController(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper<ServerRank, long> serverRankMapper)
         {
             _configuration = configuration;
-            _accountsRepository = accountsRepository;
+            _unitOfWork = unitOfWork;
             _serverRankMapper = serverRankMapper;
         }
 
@@ -41,9 +42,9 @@ namespace VRP.vAPI.Controllers
                     foreach (var account in multiple.Read<AccountModel>())
                     {
                         account.ServerRank = _serverRankMapper.Map(account.PrimaryForumGroup);
-                        _accountsRepository.Insert(account);
+                        _unitOfWork.AccountsRepository.Insert(account);
                     }
-                    _accountsRepository.Save();
+                    _unitOfWork.AccountsRepository.Save();
                 }
             }
             return Ok();
@@ -53,7 +54,7 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _accountsRepository?.Dispose();
+                _unitOfWork?.Dispose();
             }
             base.Dispose(disposing);
         }

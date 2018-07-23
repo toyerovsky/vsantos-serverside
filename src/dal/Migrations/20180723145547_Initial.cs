@@ -14,17 +14,18 @@ namespace VRP.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 50, nullable: true),
                     ForumUserId = table.Column<long>(nullable: false),
-                    ForumUserName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
+                    ForumUserName = table.Column<string>(nullable: true),
                     PrimaryForumGroup = table.Column<long>(nullable: false),
                     SecondaryForumGroups = table.Column<string>(nullable: true),
                     SocialClub = table.Column<string>(maxLength: 50, nullable: true),
                     LastLogin = table.Column<DateTime>(nullable: false),
                     ServerRank = table.Column<int>(nullable: false),
                     PasswordSalt = table.Column<string>(nullable: true),
-                    PasswordHash = table.Column<string>(nullable: true)
+                    PasswordHash = table.Column<string>(nullable: true),
+                    AvatarUrl = table.Column<string>(nullable: true),
+                    GravatarEmail = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -191,30 +192,6 @@ namespace VRP.DAL.Migrations
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Penaltlies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreatorId = table.Column<int>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: false),
-                    ExpiryDate = table.Column<DateTime>(nullable: false),
-                    Reason = table.Column<string>(maxLength: 256, nullable: true),
-                    PenaltyType = table.Column<int>(nullable: false),
-                    AccountId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Penaltlies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Penaltlies_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -390,6 +367,43 @@ namespace VRP.DAL.Migrations
                         name: "FK_Groups_Characters_BossCharacterId",
                         column: x => x.BossCharacterId,
                         principalTable: "Characters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Penaltlies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(nullable: false),
+                    ExpiryDate = table.Column<DateTime>(nullable: false),
+                    Reason = table.Column<string>(maxLength: 256, nullable: true),
+                    PenaltyType = table.Column<int>(nullable: false),
+                    AccountId = table.Column<int>(nullable: false),
+                    CreatorId = table.Column<int>(nullable: true),
+                    CharacterId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Penaltlies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Penaltlies_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Penaltlies_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalTable: "Characters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Penaltlies_Accounts_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -803,10 +817,10 @@ namespace VRP.DAL.Migrations
                     ThirdParameter = table.Column<int>(nullable: true),
                     FourthParameter = table.Column<int>(nullable: true),
                     ItemEntityType = table.Column<int>(nullable: false),
-                    CharacterId = table.Column<int>(nullable: true),
-                    BuildingId = table.Column<int>(nullable: true),
-                    OwnerVehicleId = table.Column<int>(nullable: true),
-                    TuningInVehicleId = table.Column<int>(nullable: true)
+                    CharacterId = table.Column<int>(nullable: false),
+                    BuildingId = table.Column<int>(nullable: false),
+                    VehicleId = table.Column<int>(nullable: false),
+                    TuningId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -816,25 +830,25 @@ namespace VRP.DAL.Migrations
                         column: x => x.BuildingId,
                         principalTable: "Buildings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Items_Characters_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Characters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Items_Vehicles_OwnerVehicleId",
-                        column: x => x.OwnerVehicleId,
+                        name: "FK_Items_Vehicles_TuningId",
+                        column: x => x.TuningId,
                         principalTable: "Vehicles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Items_Vehicles_TuningInVehicleId",
-                        column: x => x.TuningInVehicleId,
+                        name: "FK_Items_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1042,14 +1056,14 @@ namespace VRP.DAL.Migrations
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_OwnerVehicleId",
+                name: "IX_Items_TuningId",
                 table: "Items",
-                column: "OwnerVehicleId");
+                column: "TuningId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_TuningInVehicleId",
+                name: "IX_Items_VehicleId",
                 table: "Items",
-                column: "TuningInVehicleId");
+                column: "VehicleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Leases_AgreementId",
@@ -1087,6 +1101,16 @@ namespace VRP.DAL.Migrations
                 name: "IX_Penaltlies_AccountId",
                 table: "Penaltlies",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Penaltlies_CharacterId",
+                table: "Penaltlies",
+                column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Penaltlies_CreatorId",
+                table: "Penaltlies",
+                column: "CreatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SerialModel_AccountId",

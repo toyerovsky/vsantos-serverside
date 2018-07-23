@@ -9,8 +9,8 @@ using VRP.DAL.Database;
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180710152352_RemoveAccountName")]
-    partial class RemoveAccountName
+    [Migration("20180723145547_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,8 @@ namespace VRP.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AvatarUrl");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -31,6 +33,8 @@ namespace VRP.DAL.Migrations
                     b.Property<long>("ForumUserId");
 
                     b.Property<string>("ForumUserName");
+
+                    b.Property<string>("GravatarEmail");
 
                     b.Property<DateTime>("LastLogin");
 
@@ -59,7 +63,9 @@ namespace VRP.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AccountId");
+                    b.Property<int>("AccountId");
+
+                    b.Property<int>("CharacterId");
 
                     b.Property<int?>("CreatorId");
 
@@ -75,6 +81,10 @@ namespace VRP.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Penaltlies");
                 });
@@ -469,9 +479,9 @@ namespace VRP.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BuildingId");
+                    b.Property<int>("BuildingId");
 
-                    b.Property<int?>("CharacterId");
+                    b.Property<int>("CharacterId");
 
                     b.Property<int?>("CreatorId");
 
@@ -485,13 +495,13 @@ namespace VRP.DAL.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("OwnerVehicleId");
-
                     b.Property<int?>("SecondParameter");
 
                     b.Property<int?>("ThirdParameter");
 
-                    b.Property<int?>("TuningInVehicleId");
+                    b.Property<int>("TuningId");
+
+                    b.Property<int>("VehicleId");
 
                     b.Property<short>("Weight");
 
@@ -501,9 +511,9 @@ namespace VRP.DAL.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.HasIndex("OwnerVehicleId");
+                    b.HasIndex("TuningId");
 
-                    b.HasIndex("TuningInVehicleId");
+                    b.HasIndex("VehicleId");
 
                     b.ToTable("Items");
                 });
@@ -957,7 +967,17 @@ namespace VRP.DAL.Migrations
                 {
                     b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Account")
                         .WithMany("Penalties")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Character.CharacterModel", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Account.SerialModel", b =>
@@ -1072,19 +1092,23 @@ namespace VRP.DAL.Migrations
                 {
                     b.HasOne("VRP.DAL.Database.Models.Building.BuildingModel", "Building")
                         .WithMany("ItemsInBuilding")
-                        .HasForeignKey("BuildingId");
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.Character.CharacterModel", "Character")
                         .WithMany("Items")
-                        .HasForeignKey("CharacterId");
-
-                    b.HasOne("VRP.DAL.Database.Models.Vehicle.VehicleModel", "OwnerVehicle")
-                        .WithMany("ItemsInVehicle")
-                        .HasForeignKey("OwnerVehicleId");
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.Vehicle.VehicleModel", "TuningInVehicle")
                         .WithMany("VehicleTuning")
-                        .HasForeignKey("TuningInVehicleId");
+                        .HasForeignKey("TuningId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Vehicle.VehicleModel", "Vehicle")
+                        .WithMany("ItemsInVehicle")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Mdt.CriminalCaseCharacterRecordRelation", b =>

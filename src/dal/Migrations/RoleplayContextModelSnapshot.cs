@@ -591,7 +591,7 @@ namespace VRP.DAL.Migrations
 
                     b.HasIndex("CriminalCaseId");
 
-                    b.ToTable("CriminalCaseCharacterRecordRelation");
+                    b.ToTable("CriminalCaseCharacterRecordRelations");
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Mdt.CriminalCaseModel", b =>
@@ -621,7 +621,7 @@ namespace VRP.DAL.Migrations
 
                     b.HasIndex("VehicleRecordId");
 
-                    b.ToTable("CriminalCaseVehicleRecordRelation");
+                    b.ToTable("CriminalCaseVehicleRecordRelations");
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Mdt.VehicleRecordModel", b =>
