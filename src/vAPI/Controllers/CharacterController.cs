@@ -55,7 +55,7 @@ namespace VRP.vAPI.Controllers
             }
 
             IEnumerable<CharacterDto> characterDtos =
-                _mapper.Map<IEnumerable<CharacterModel>, IEnumerable<CharacterDto>>(characterModels);
+                _mapper.Map<CharacterDto[]>(characterModels);
 
             return Json(characterDtos);
         }
@@ -73,7 +73,7 @@ namespace VRP.vAPI.Controllers
             }
 
             IEnumerable<CharacterDto> characterDtos =
-                _mapper.Map<IEnumerable<CharacterModel>, IEnumerable<CharacterDto>>(characterModels);
+                _mapper.Map<CharacterDto[]>(characterModels);
 
             return Json(characterDtos);
         }
@@ -100,7 +100,7 @@ namespace VRP.vAPI.Controllers
                     }
 
                     IEnumerable<CharacterDto> characterDtos =
-                        _mapper.Map<IEnumerable<CharacterModel>, IEnumerable<CharacterDto>>(characterModels);
+                        _mapper.Map<CharacterDto[]>(characterModels);
 
                     return Json(characterDtos);
                 }

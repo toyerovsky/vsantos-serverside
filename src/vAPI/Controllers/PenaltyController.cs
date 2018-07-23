@@ -53,7 +53,7 @@ namespace VRP.vAPI.Controllers
                 return NotFound(id);
             }
 
-            IEnumerable<PenaltyDto> penaltyDtos = _mapper.Map<IEnumerable<PenaltyDto>>(penalties);
+            IEnumerable<PenaltyDto> penaltyDtos = _mapper.Map<PenaltyDto[]>(penalties);
             return Json(penaltyDtos);
         }
     }

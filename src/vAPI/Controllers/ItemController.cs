@@ -39,7 +39,7 @@ namespace VRP.vAPI.Controllers
                 return NotFound(characterId);
             }
 
-            IEnumerable<ItemDto> itemDtos = _mapper.Map<IEnumerable<ItemDto>>(items);
+            IEnumerable<ItemDto> itemDtos = _mapper.Map<ItemDto[]>(items);
             return Json(itemDtos);
         }
 

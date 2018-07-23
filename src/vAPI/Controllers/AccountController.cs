@@ -94,7 +94,7 @@ namespace VRP.vAPI.Controllers
                 return NotFound();
             }
 
-            IEnumerable<AccountDto> accountDtos = _mapper.Map<IEnumerable<AccountDto>>(accounts);
+            IEnumerable<AccountDto> accountDtos = _mapper.Map<AccountDto[]>(accounts);
             return Json(accountDtos);
         }
 
@@ -108,8 +108,8 @@ namespace VRP.vAPI.Controllers
                 return NotFound(id);
             }
 
-            IEnumerable<AccountDto> accountDtos = _mapper.Map<IEnumerable<AccountDto>>(account);
-            return Json(accountDtos);
+            AccountDto accountDto = _mapper.Map<AccountDto>(account);
+            return Json(accountDto);
         }
 
         [AllowAnonymous]

@@ -38,7 +38,7 @@ namespace VRP.vAPI.Controllers
                 return NotFound(characterId);
             }
 
-            IEnumerable<VehicleDto> vehicleDtos = _mapper.Map<IEnumerable<VehicleDto>>(vehicles);
+            IEnumerable<VehicleDto> vehicleDtos = _mapper.Map<VehicleDto[]>(vehicles);
             return Json(vehicleDtos);
         }
 
