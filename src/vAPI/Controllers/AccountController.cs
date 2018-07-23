@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -15,8 +16,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.Core.Extensions;
 using VRP.DAL.Database.Models.Account;
-using VRP.DAL.Interfaces;
+using VRP.vAPI.Dto;
 using VRP.vAPI.Model;
+using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -26,11 +28,13 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class AccountController : Controller
     {
-        private readonly IJoinableRepository<AccountModel> _accountsRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public AccountController(IJoinableRepository<AccountModel> accountsRepository)
+        public AccountController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _accountsRepository = accountsRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpPost("login")]
@@ -42,7 +46,7 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            AccountModel account = _accountsRepository.Get(a => a.Email == loginModel.Email);
+            AccountModel account = _unitOfWork.AccountsRepository.Get(a => a.Email == loginModel.Email);
 
             if (account != null && account.PasswordHash == loginModel.PasswordHash)
             {
@@ -83,70 +87,51 @@ namespace VRP.vAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<AccountModel> accounts = _accountsRepository.GetAll();
+            IEnumerable<AccountModel> accounts = _unitOfWork.AccountsRepository.GetAll();
 
-            if (accounts == null)
+            if (!accounts.Any())
             {
                 return NotFound();
             }
 
-            return Json(accounts.Select(account => new
-            {
-                id = account.Id,
-                forumUserName = account.ForumUserName,
-                email = account.Email,
-                serverRank = account.ServerRank.GetDescription(),
-                lastLogin = account.LastLogin
-            }));
+            IEnumerable<AccountDto> accountDtos = _mapper.Map<IEnumerable<AccountDto>>(accounts);
+            return Json(accountDtos);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            AccountModel account = _accountsRepository.Get(id);
+            AccountModel account = _unitOfWork.AccountsRepository.Get(id);
 
             if (account == null)
             {
                 return NotFound(id);
             }
 
-            return Json(new
-            {
-                id = account.Id,
-                forumUserName = account.ForumUserName,
-                email = account.Email,
-                serverRank = account.ServerRank.GetDescription(),
-                lastLogin = account.LastLogin,
-                avatarUrl = account.AvatarUrl,
-                gravatarEmail = account.GravatarEmail
-            });
+            IEnumerable<AccountDto> accountDtos = _mapper.Map<IEnumerable<AccountDto>>(account);
+            return Json(accountDtos);
         }
 
-        [HttpGet("email/{email}")]
         [AllowAnonymous]
+        [HttpGet("email/{email}")]
         public IActionResult Get(string email)
         {
-            AccountModel account = _accountsRepository.Get(a => a.Email == email);
+            AccountModel account = _unitOfWork.AccountsRepository.Get(a => a.Email == email);
 
             if (account == null)
             {
                 return NotFound(email);
             }
 
-            var loginModel = new
-            {
-                id = account.Id,
-                passwordSalt = account.PasswordSalt,
-                forumUserName = account.ForumUserName
-            };
-            return Json(loginModel);
+            AccountDto accountDto = _mapper.Map<AccountDto>(account);
+            return Json(accountDto);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _accountsRepository?.Dispose();
+                _unitOfWork?.Dispose();
             }
             base.Dispose(disposing);
         }

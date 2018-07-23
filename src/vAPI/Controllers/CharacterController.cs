@@ -17,13 +17,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Interfaces;
 using VRP.vAPI.Dto;
 using VRP.vAPI.Extensions;
+using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -34,20 +32,20 @@ namespace VRP.vAPI.Controllers
     public class CharacterController : Controller
     {
         private readonly IConfiguration _configuration;
-        private readonly IJoinableRepository<CharacterModel> _charactersRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CharacterController(IConfiguration configuration, IJoinableRepository<CharacterModel> charactersRepository, IMapper mapper)
+        public CharacterController(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _configuration = configuration;
-            _charactersRepository = charactersRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         [HttpGet("account/{accountId}")]
         public IActionResult GetByAccountId(int accountId)
         {
-            IEnumerable<CharacterModel> characters = _charactersRepository.GetAll(character => character.AccountId == accountId);
+            IEnumerable<CharacterModel> characters = _unitOfWork.CharactersRepository.GetAll(character => character.AccountId == accountId);
 
             var characterModels = characters as CharacterModel[] ?? characters.ToArray();
 
@@ -65,7 +63,7 @@ namespace VRP.vAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<CharacterModel> characters = _charactersRepository.GetAll();
+            IEnumerable<CharacterModel> characters = _unitOfWork.CharactersRepository.GetAll();
 
             var characterModels = characters as CharacterModel[] ?? characters.ToArray();
 
@@ -88,17 +86,23 @@ namespace VRP.vAPI.Controllers
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("gameConnectionString")))
             {
-                using (var multiple = connection.QueryMultiple(query, new { accountId = HttpContext.User.GetAccountId() }))
+                int accountId = HttpContext.User.GetAccountId();
+
+                using (var multiple = connection.QueryMultiple(query, new { accountId }))
                 {
-                    var characters = multiple.Read<CharacterModel>().Select(character => new
+                    IEnumerable<CharacterModel> characters = multiple.Read<CharacterModel>();
+
+                    var characterModels = characters as CharacterModel[] ?? characters.ToArray();
+
+                    if (!characterModels.Any())
                     {
-                        id = character.Id,
-                        name = character.Name,
-                        surname = character.Surname,
-                        money = character.Money,
-                        model = character.Model
-                    });
-                    return Json(characters);
+                        return NotFound(accountId);
+                    }
+
+                    IEnumerable<CharacterDto> characterDtos =
+                        _mapper.Map<IEnumerable<CharacterModel>, IEnumerable<CharacterDto>>(characterModels);
+
+                    return Json(characterDtos);
                 }
             }
         }
@@ -107,7 +111,7 @@ namespace VRP.vAPI.Controllers
         public IActionResult GetSelectedCharacter()
         {
             int characterId = HttpContext.User.GetCharacterId();
-            CharacterModel character = _charactersRepository.Get(characterId);
+            CharacterModel character = _unitOfWork.CharactersRepository.Get(characterId);
             return Json(character);
         }
 
@@ -119,7 +123,7 @@ namespace VRP.vAPI.Controllers
                 return BadRequest();
             }
 
-            Task<CharacterModel> charactersTask = _charactersRepository.GetAsync(id);
+            Task<CharacterModel> charactersTask = _unitOfWork.CharactersRepository.GetAsync(id);
 
             int accountId = HttpContext.User.GetAccountId();
 
@@ -147,8 +151,8 @@ namespace VRP.vAPI.Controllers
             CharacterModel character = _mapper.Map<CharacterModel>(characterDto);
             character.IsAlive = true;
 
-            _charactersRepository.Insert(character);
-            _charactersRepository.Save();
+            _unitOfWork.CharactersRepository.Insert(character);
+            _unitOfWork.CharactersRepository.Save();
 
             return Created("GET", character);
         }
@@ -161,16 +165,16 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            CharacterModel character = _charactersRepository.Get(id);
+            CharacterModel character = _unitOfWork.CharactersRepository.Get(id);
 
             if (character == null)
             {
                 return NotFound(id);
             }
 
-            _charactersRepository.BeginUpdate(character);
+            _unitOfWork.CharactersRepository.BeginUpdate(character);
             _mapper.Map(characterDto, character);
-            _charactersRepository.Save();
+            _unitOfWork.CharactersRepository.Save();
 
             return Json(character);
         }
@@ -179,7 +183,7 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _charactersRepository?.Dispose();
+                _unitOfWork?.Dispose();
             }
             base.Dispose(disposing);
         }

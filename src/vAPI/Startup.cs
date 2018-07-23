@@ -20,19 +20,10 @@ using VRP.Core.Interfaces;
 using VRP.Core.Mappers;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
-using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
-using VRP.DAL.Database.Models.CrimeBot;
-using VRP.DAL.Database.Models.Group;
-using VRP.DAL.Database.Models.Item;
-using VRP.DAL.Database.Models.Misc;
-using VRP.DAL.Database.Models.Telephone;
-using VRP.DAL.Database.Models.Vehicle;
-using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Enums;
-using VRP.DAL.Interfaces;
-using VRP.DAL.Repositories;
 using VRP.vAPI.Dto;
+using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI
 {
@@ -55,22 +46,8 @@ namespace VRP.vAPI
 
             // scoped
             services.AddScoped(factory => Configuration);
-
-            // scoped repositories
-            services.AddScoped<IJoinableRepository<AccountModel>, AccountsRepository>();
-            services.AddScoped<IJoinableRepository<BuildingModel>, BuildingsRepository>();
-            services.AddScoped<IJoinableRepository<CharacterModel>, CharactersRepository>();
-            services.AddScoped<IJoinableRepository<CrimeBotModel>, CrimeBotsRepository>();
-            services.AddScoped<IJoinableRepository<GroupModel>, GroupsRepository>();
-            services.AddScoped<IJoinableRepository<GroupWarehouseItemModel>, GroupWarehouseItemsRepository>();
-            services.AddScoped<IJoinableRepository<GroupWarehouseOrderModel>, GroupWarehouseOrdersRepository>();
-            services.AddScoped<IJoinableRepository<ItemModel>, ItemsRepository>();
-            services.AddScoped<IJoinableRepository<PenaltyModel>, PenaltiesRepository>();
-            services.AddScoped<IJoinableRepository<TelephoneContactModel>, TelephoneContactsRepository>();
-            services.AddScoped<IRepository<TelephoneMessageModel>, TelephoneMessagesRepository>();
-            services.AddScoped<IJoinableRepository<VehicleModel>, VehiclesRepository>();
-            services.AddScoped<IJoinableRepository<WorkerModel>, WorkersRepository>();
-            services.AddScoped<IRepository<ZoneModel>, ZonesRepository>();
+            
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             // scoped mappers
             var config = new MapperConfiguration(cfg =>
@@ -81,8 +58,7 @@ namespace VRP.vAPI
 
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-
-            // scoped mappers
+            
             services.AddScoped<IMapper<ServerRank, long>, ServerRankMapper>();
 
             services.AddMvc().AddJsonOptions(options =>

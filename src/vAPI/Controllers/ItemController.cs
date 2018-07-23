@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Interfaces;
+using VRP.vAPI.Dto;
 using VRP.vAPI.Extensions;
+using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -14,25 +18,42 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class ItemController : Controller
     {
-        private readonly IJoinableRepository<ItemModel> _itemsRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ItemController(IJoinableRepository<ItemModel> itemsRepository)
+        public ItemController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _itemsRepository = itemsRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpGet("characteritems")]
-        public IActionResult GetItemsByCharacterId()
+        public IActionResult GetItemsByCurrentCharacterId()
         {
             int characterId = HttpContext.User.GetCharacterId();
-            IEnumerable<ItemModel> items = _itemsRepository.JoinAndGetAll(item => item.Character.Id == characterId);
-            return Json(items);
+            CharacterModel character = _unitOfWork.CharactersRepository.Get(characterId);
+
+            if (character == null)
+            {
+                return NotFound(characterId);
+            }
+
+            IEnumerable<ItemDto> itemDtos = _mapper.Map<IEnumerable<ItemDto>>(character.Items);
+            return Json(itemDtos);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return Json(_itemsRepository.Get(id));
+            ItemModel item = _unitOfWork.ItemsRepository.Get(id);
+
+            if (item == null)
+            {
+                return NotFound(id);
+            }
+
+            ItemDto itemDto = _mapper.Map<ItemDto>(item);
+            return Json(itemDto);
         }
     }
 }

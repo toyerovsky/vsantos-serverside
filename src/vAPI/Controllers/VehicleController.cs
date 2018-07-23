@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Interfaces;
+using VRP.vAPI.Dto;
 using VRP.vAPI.Extensions;
+using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -14,43 +18,49 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class VehicleController : Controller
     {
-        private readonly IJoinableRepository<VehicleModel> _vehiclesRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public VehicleController(IJoinableRepository<VehicleModel> vehiclesRepository)
+        public VehicleController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _vehiclesRepository = vehiclesRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpGet("charactervehicles")]
         public IActionResult GetVehiclesByCharacterId()
         {
             int characterId = HttpContext.User.GetCharacterId();
-            IEnumerable<VehicleModel> vehicles = _vehiclesRepository.JoinAndGetAll(vehicle => vehicle.Character.Id == characterId);
-            return Json(vehicles);
+            IEnumerable<VehicleModel> vehicles = _unitOfWork.CharactersRepository.Get(characterId).Vehicles;
+
+            if (!vehicles.Any())
+            {
+                return NotFound(characterId);
+            }
+
+            IEnumerable<VehicleDto> vehicleDtos = _mapper.Map<IEnumerable<VehicleDto>>(vehicles);
+            return Json(vehicleDtos);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            VehicleModel vehicleModel = _vehiclesRepository.Get(id);
+            VehicleModel vehicle = _unitOfWork.VehiclesRepository.Get(id);
 
-            if (vehicleModel == null)
+            if (vehicle == null)
             {
                 return NotFound(id);
             }
 
-            return Json(new
-            {
-                id = vehicleModel.Id,
-                // serialize only fields that you need to share with front end
-            });
+            VehicleDto vehicleDto = _mapper.Map<VehicleDto>(vehicle);
+            return Json(vehicleDto);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _vehiclesRepository?.Dispose();
+                _unitOfWork?.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.Core.Extensions;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Interfaces;
+using VRP.vAPI.Dto;
+using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -15,39 +18,43 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class PenaltyController : Controller
     {
-        private readonly IJoinableRepository<PenaltyModel> _penaltiesRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public PenaltyController(IJoinableRepository<PenaltyModel> penaltiesRepository)
+        public PenaltyController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _penaltiesRepository = penaltiesRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // GET: api/Penalty
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<PenaltyModel> penalties = _penaltiesRepository.GetAll();
-            return Json(penalties);
+            IEnumerable<PenaltyModel> penalties = _unitOfWork.PenaltiesRepository.GetAll();
+
+            if (!penalties.Any())
+            {
+                return NotFound();
+            }
+
+            IEnumerable<PenaltyDto> penaltyDtos = _mapper.Map<IEnumerable<PenaltyDto>>(penalties);
+            return Json(penaltyDtos);
         }
 
         [HttpGet("account/{id}")]
         public IActionResult GetByAccountId(int id)
         {
             IEnumerable<PenaltyModel> penalties =
-                _penaltiesRepository.JoinAndGetAll().Where(penalty => penalty.Account.Id == id);
+                _unitOfWork.AccountsRepository.Get(id).Penalties;
 
-            return Json(penalties.Select(penalty => new
+            if (!penalties.Any())
             {
-                date = penalty.Date,
-                expiryDate = penalty.ExpiryDate,
-                penaltyType = penalty.PenaltyType.GetDescription(),
-                reason = penalty.Reason,
-                creator = new
-                {
-                    forumUserName = penalty.Creator.ForumUserName,
-                    serverRank = penalty.Creator.ServerRank.GetDescription()
-                }
-            }));
+                return NotFound(id);
+            }
+
+            IEnumerable<PenaltyDto> penaltyDtos = _mapper.Map<IEnumerable<PenaltyDto>>(penalties);
+            return Json(penaltyDtos);
         }
     }
 }
