@@ -46,7 +46,7 @@ namespace VRP.vAPI
 
             // scoped
             services.AddScoped(factory => Configuration);
-            
+
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             // scoped mappers
@@ -58,7 +58,7 @@ namespace VRP.vAPI
 
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-            
+
             services.AddScoped<IMapper<ServerRank, long>, ServerRankMapper>();
 
             services.AddMvc().AddJsonOptions(options =>
@@ -91,7 +91,7 @@ namespace VRP.vAPI
             {
                 options.AddPolicy("dev", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost","http://*","http://0.0.0.0","http://+");
+                    builder.WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost", "http://*", "http://0.0.0.0", "http://+");
                     builder.WithHeaders("accept", "content-type", "origin");
                     builder.WithMethods("get", "post", "put", "delete");
                     builder.AllowCredentials();
@@ -117,7 +117,7 @@ namespace VRP.vAPI
             app.UseMvc();
 
             app.UseCors("dev");
-            
+
         }
     }
 }

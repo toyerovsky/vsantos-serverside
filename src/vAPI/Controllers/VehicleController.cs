@@ -31,7 +31,7 @@ namespace VRP.vAPI.Controllers
         public IActionResult GetVehiclesByCharacterId()
         {
             int characterId = HttpContext.User.GetCharacterId();
-            IEnumerable<VehicleModel> vehicles = _unitOfWork.CharactersRepository.Get(characterId).Vehicles;
+            IEnumerable<VehicleModel> vehicles = _unitOfWork.VehiclesRepository.GetAll(vehicle => vehicle.CharacterId == characterId);
 
             if (!vehicles.Any())
             {

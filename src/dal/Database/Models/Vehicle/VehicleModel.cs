@@ -16,10 +16,6 @@ namespace VRP.DAL.Database.Models.Vehicle
     public class VehicleModel
     {
         public int Id { get; set; }
-
-        public virtual CharacterModel Character { get; set; }
-        public virtual GroupModel Group { get; set; }
-
         public int? CreatorId { get; set; }
 
         public string NumberPlate { get; set; }
@@ -59,9 +55,17 @@ namespace VRP.DAL.Database.Models.Vehicle
         public int WheelColor { get; set; }
 
         // foreign keys
+        [ForeignKey("AutoSaleModel")]
         public int AutoSaleId { get; set; }
+        [ForeignKey("Character")]
+        public int CharacterId { get; set; }
+        [ForeignKey("Group")]
+        public int GroupId { get; set; }
+
         // navigation properties
         public virtual AutoSaleModel AutoSaleModel { get; set; }
+        public virtual CharacterModel Character { get; set; }
+        public virtual GroupModel Group { get; set; }
         [InverseProperty("Vehicle")]
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
         [InverseProperty("TuningInVehicle")]

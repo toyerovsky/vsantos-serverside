@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -31,14 +32,14 @@ namespace VRP.vAPI.Controllers
         public IActionResult GetItemsByCurrentCharacterId()
         {
             int characterId = HttpContext.User.GetCharacterId();
-            CharacterModel character = _unitOfWork.CharactersRepository.Get(characterId);
+            IEnumerable<ItemModel> items = _unitOfWork.ItemsRepository.GetAll(item => item.CharacterId == characterId);
 
-            if (character == null)
+            if (!items.Any())
             {
                 return NotFound(characterId);
             }
 
-            IEnumerable<ItemDto> itemDtos = _mapper.Map<IEnumerable<ItemDto>>(character.Items);
+            IEnumerable<ItemDto> itemDtos = _mapper.Map<IEnumerable<ItemDto>>(items);
             return Json(itemDtos);
         }
 
