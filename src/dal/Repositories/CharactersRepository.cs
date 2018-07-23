@@ -22,34 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(CharacterModel model)
-        {
-            foreach (var vehicle in model.Vehicles)
-                if ((vehicle?.Id ?? 0) != 0)
-                    Context.Attach(vehicle);
-
-            foreach (var item in model.Items)
-                if ((item?.Id ?? 0) != 0)
-                    Context.Attach(item);
-
-            if ((model.Account?.Id ?? 0) != 0)
-                Context.Attach(model.Account);
-
-            foreach (var building in model.Buildings)
-                if ((building?.Id ?? 0) != 0)
-                    Context.Attach(building);
-
-            foreach (var description in model.Descriptions)
-                if ((description?.Id ?? 0) != 0)
-                    Context.Attach(description);
-
-            foreach (var worker in model.Workers)
-                if ((worker?.Id ?? 0) != 0)
-                    Context.Attach(worker);
-
-            Context.Characters.Add(model);
-        }
-
         public CharacterModel JoinAndGet(int id) => JoinAndGetAll(character => character.Id == id).SingleOrDefault();
 
         public CharacterModel JoinAndGet(Expression<Func<CharacterModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

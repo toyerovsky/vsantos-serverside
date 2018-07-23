@@ -22,21 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(BuildingModel model)
-        {
-            if ((model.Character?.Id ?? 0) != 0)
-                Context.Attach(model.Character);
-
-            foreach (var item in model.ItemsInBuilding)
-                if ((item?.Id ?? 0) != 0)
-                    Context.Attach(item);
-
-            if ((model.Group?.Id ?? 0) != 0)
-                Context.Attach(model.Group);
-
-            Context.Buildings.Add(model);
-        }
-
         public BuildingModel JoinAndGet(int id) => JoinAndGetAll(building => building.Id == id).SingleOrDefault();
 
         public BuildingModel JoinAndGet(Expression<Func<BuildingModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

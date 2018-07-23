@@ -22,14 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(TelephoneContactModel model)
-        {
-            if ((model.Cellphone?.Id ?? 0) != 0)
-                Context.Attach(model.Cellphone);
-
-            Context.TelephoneContacts.Add(model);
-        }
-
         public TelephoneContactModel JoinAndGet(int id) => JoinAndGetAll(telephoneContact => telephoneContact.Id == id).SingleOrDefault();
 
         public TelephoneContactModel JoinAndGet(Expression<Func<TelephoneContactModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

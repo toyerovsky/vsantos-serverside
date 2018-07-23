@@ -22,14 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(PenaltyModel model)
-        {
-            if ((model.Account?.Id ?? 0) != 0)
-                Context.Attach(model.Account);
-
-            Context.Penaltlies.Add(model);
-        }
-
         public PenaltyModel JoinAndGet(int id) => JoinAndGetAll(penalty => penalty.Id == id).SingleOrDefault();
 
         public PenaltyModel JoinAndGet(Expression<Func<PenaltyModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

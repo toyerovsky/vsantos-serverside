@@ -22,14 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(CrimeBotModel model)
-        {
-            if ((model.GroupModel?.Id ?? 0) != 0)
-                Context.Attach(model.GroupModel);
-
-            Context.CrimeBots.Add(model);
-        }
-
         public CrimeBotModel JoinAndGet(int id) => JoinAndGetAll(crimeBot => crimeBot.Id == id).SingleOrDefault();
 
         public CrimeBotModel JoinAndGet(Expression<Func<CrimeBotModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

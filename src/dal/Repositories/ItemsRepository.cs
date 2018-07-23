@@ -22,23 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(ItemModel model)
-        {
-            if ((model.Building?.Id ?? 0) != 0)
-                Context.Attach(model.Building);
-
-            if ((model.Character?.Id ?? 0) != 0)
-                Context.Attach(model.Character);
-
-            if ((model.OwnerVehicle?.Id ?? 0) != 0)
-                Context.Attach(model.OwnerVehicle);
-
-            if ((model.TuningInVehicle?.Id ?? 0) != 0)
-                Context.Attach(model.TuningInVehicle);
-
-            Context.Items.Add(model);
-        }
-
         public ItemModel JoinAndGet(int id) => JoinAndGetAll(item => item.Id == id).SingleOrDefault();
 
         public ItemModel JoinAndGet(Expression<Func<ItemModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
@@ -54,7 +37,7 @@ namespace VRP.DAL.Repositories
                 .Include(item => item.Character)
                     .ThenInclude(character => character.Account)
                 .Include(item => item.TuningInVehicle)
-                .Include(item => item.OwnerVehicle);
+                .Include(item => item.Vehicle);
         }
 
         public override ItemModel Get(Func<ItemModel, bool> func) => GetAll(func).FirstOrDefault();

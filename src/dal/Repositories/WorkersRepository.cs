@@ -22,17 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(WorkerModel model)
-        {
-            if ((model.Character?.Id ?? 0) != 0)
-                Context.Attach(model.Character);
-
-            if ((model.Group?.Id ?? 0) != 0)
-                Context.Attach(model.Group);
-
-            Context.Workers.Add(model);
-        }
-
         public WorkerModel JoinAndGet(int id) => JoinAndGetAll(worker => worker.Id == id).SingleOrDefault();
 
         public WorkerModel JoinAndGet(Expression<Func<WorkerModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

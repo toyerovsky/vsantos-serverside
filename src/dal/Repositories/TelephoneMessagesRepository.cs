@@ -21,14 +21,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(TelephoneMessageModel model)
-        {
-            if ((model.Cellphone?.Id ?? 0) != 0)
-                Context.Attach(model.Cellphone);
-
-            Context.TelephoneMessages.Add(model);
-        }
-
         public TelephoneMessageModel JoinAndGet(int id) => JoinAndGetAll(telephoneMessage => telephoneMessage.Id == id).SingleOrDefault();
 
         public TelephoneMessageModel JoinAndGet(Expression<Func<TelephoneMessageModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

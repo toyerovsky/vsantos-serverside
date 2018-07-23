@@ -22,21 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public void InsertWithRelated(VehicleModel model)
-        {
-            if ((model.Character?.Id ?? 0) != 0)
-                Context.Attach(model.Character);
-
-            foreach (var item in model.ItemsInVehicle)
-                if ((item?.Id ?? 0) != 0)
-                    Context.Attach(item);
-
-            if ((model.Group?.Id ?? 0) != 0)
-                Context.Attach(model.Group);
-
-            Context.Vehicles.Add(model);
-        }
-
         public VehicleModel JoinAndGet(int id) => JoinAndGetAll(vehicle => vehicle.Id == id).SingleOrDefault();
 
         public VehicleModel JoinAndGet(Expression<Func<VehicleModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();

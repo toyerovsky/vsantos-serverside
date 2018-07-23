@@ -22,18 +22,6 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override void Insert(GroupModel model)
-        {
-            foreach (var worker in model.Workers)
-                if ((worker?.Id ?? 0) != 0)
-                    Context.Attach(worker);
-
-            if ((model.BossCharacter?.Id ?? 0) != 0)
-                Context.Attach(model.BossCharacter);
-
-            Context.Groups.Add(model);
-        }
-
         public GroupModel JoinAndGet(int id) => JoinAndGetAll(group => group.Id == id).SingleOrDefault();
 
         public GroupModel JoinAndGet(Expression<Func<GroupModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
