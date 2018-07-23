@@ -5,6 +5,8 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Vehicle;
@@ -30,11 +32,22 @@ namespace VRP.DAL.Database.Models.Item
         [EnumDataType(typeof(ItemEntityType))]
         public ItemEntityType ItemEntityType { get; set; }
 
+        [ForeignKey("Character")]
+        public int CharacterId { get; set; }
+        [ForeignKey("Building")]
+        public int BuildingId { get; set; }
+        [ForeignKey("Vehicle")]
+        public int VehicleId { get; set; }
+        [ForeignKey("TuningInVehicle")]
+        public int TuningId { get; set; }
+
         // navigation properties
         public virtual CharacterModel Character { get; set; }
         public virtual BuildingModel Building { get; set; }
-
-        public virtual VehicleModel OwnerVehicle { get; set; }
+        public virtual VehicleModel Vehicle { get; set; }
+        /// <summary>
+        /// Property determines whether or not the item is mounted as tuning in any vehicle
+        /// </summary>
         public virtual VehicleModel TuningInVehicle { get; set; }
     }
 }

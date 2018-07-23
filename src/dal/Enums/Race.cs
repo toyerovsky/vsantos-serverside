@@ -1,16 +1,22 @@
-/* Copyright (C) Przemys³aw Postrach - All Rights Reserved
+/* Copyright (C) Przemysï¿½aw Postrach - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System.ComponentModel;
+
 namespace VRP.DAL.Enums
 {
-public enum Race
+    public enum Race
     {
+        [Description("BiaÅ‚a")]
         White,
+        [Description("Czarna")]
         Black,
+        [Description("Latynoska")]
         Latino,
-        Chinese
+        [Description("Azjatycka")]
+        Asian
     }
 }

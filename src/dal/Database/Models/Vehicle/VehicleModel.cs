@@ -62,7 +62,7 @@ namespace VRP.DAL.Database.Models.Vehicle
         public int AutoSaleId { get; set; }
         // navigation properties
         public virtual AutoSaleModel AutoSaleModel { get; set; }
-        [InverseProperty("OwnerVehicle")]
+        [InverseProperty("Vehicle")]
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
         [InverseProperty("TuningInVehicle")]
         public virtual ICollection<ItemModel> VehicleTuning { get; set; }
