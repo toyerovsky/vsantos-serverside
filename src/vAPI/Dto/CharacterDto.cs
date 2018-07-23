@@ -15,8 +15,12 @@ namespace VRP.vAPI.Dto
         public float LastRotationY { get; set; }
         public float LastRotationZ { get; set; }
         public DateTime CreateTime { get; set; }
+        public DateTime BornDate { get; set; }
         public bool IsAlive { get; set; }
         public byte Health { get; set; }
+        public bool Gender { get; set; }
+        public decimal Money { get; set; }
+        public decimal? BankMoney { get; set; }
 
         // foreign keys
         public int AccountId { get; set; }
