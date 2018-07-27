@@ -56,5 +56,14 @@ namespace VRP.vAPI.Controllers
             IEnumerable<PenaltyDto> penaltyDtos = _mapper.Map<PenaltyDto[]>(penalties);
             return Json(penaltyDtos);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _unitOfWork?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

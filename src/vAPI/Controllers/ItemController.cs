@@ -56,5 +56,14 @@ namespace VRP.vAPI.Controllers
             ItemDto itemDto = _mapper.Map<ItemDto>(item);
             return Json(itemDto);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _unitOfWork?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
