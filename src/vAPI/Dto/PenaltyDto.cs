@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace VRP.vAPI.Dto
 {
     public class PenaltyDto
@@ -10,5 +11,6 @@ namespace VRP.vAPI.Dto
         public string PenaltyType { get; set; }
         public string Reason { get; set; }
         public AccountDto Creator { get; set; }
+        public  CharacterDto Character { get; set; }
     }
 }

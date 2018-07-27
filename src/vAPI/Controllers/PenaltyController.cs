@@ -46,7 +46,7 @@ namespace VRP.vAPI.Controllers
         public IActionResult GetByAccountId(int id)
         {
             IEnumerable<PenaltyModel> penalties =
-                _unitOfWork.PenaltiesRepository.GetAll(penalty => penalty.AccountId == id);
+                _unitOfWork.PenaltiesRepository.JoinAndGetAll(penalty => penalty.AccountId == id);
 
             if (!penalties.Any())
             {

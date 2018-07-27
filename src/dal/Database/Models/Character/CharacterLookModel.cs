@@ -47,7 +47,7 @@ namespace VRP.DAL.Database.Models.Character
         public byte? UndershirtId { get; set; }
 
         // foreign keys
-        [ForeignKey("Character")]
+   
         public int CharacterId { get; set; }
         // navigation properties
         public virtual CharacterModel Character { get; set; }

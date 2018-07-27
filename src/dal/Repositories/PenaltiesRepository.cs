@@ -34,7 +34,8 @@ namespace VRP.DAL.Repositories
 
             return penatlies
                 .Include(penatly => penatly.Account)
-                .Include(penalty => penalty.Creator);
+                .Include(penalty => penalty.Creator)
+                .Include(pentaly => pentaly.Character);
         }
         
         public override PenaltyModel Get(Func<PenaltyModel, bool> func) => GetAll(func).FirstOrDefault();
