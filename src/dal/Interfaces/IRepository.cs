@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace VRP.DAL.Interfaces
 {
-    public interface IRepository<T> : IDisposable
+    public interface IRepository<T>
     {
         void Insert(T model);
 

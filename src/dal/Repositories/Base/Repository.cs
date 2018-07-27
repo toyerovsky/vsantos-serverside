@@ -111,10 +111,5 @@ namespace VRP.DAL.Repositories.Base
         {
             return await Context.SaveChangesAsync();
         }
-
-        public virtual void Dispose()
-        {
-            Context?.Dispose();
-        }
     }
 }
