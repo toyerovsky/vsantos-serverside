@@ -51,6 +51,20 @@ namespace VRP.vAPI.Controllers
             return Json(workerDtos);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            GroupModel group = _unitOfWork.GroupsRepository.JoinAndGet(id);
+
+            if (group == null)
+            {
+                return NotFound(id);
+            }
+
+            GroupDto groupDto = _mapper.Map<GroupDto>(group);
+            return Json(groupDto);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

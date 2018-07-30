@@ -15,5 +15,6 @@ namespace VRP.vAPI.Dto
         public decimal Money { get; set; }
         public string Color { get; set; }
         public string GroupType { get; set; }
+        public ICollection<WorkerDto> Workers { get; set; }
     }
 }

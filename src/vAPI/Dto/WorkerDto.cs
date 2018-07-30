@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VRP.DAL.Enums;
 
 namespace VRP.vAPI.Dto
 {
@@ -13,7 +14,7 @@ namespace VRP.vAPI.Dto
         public int DutyMinutes { get; set; }
 
       
-        public string Rights { get; set; }
+        public GroupRights Rights { get; set; }
 
   
         public GroupDto Group { get; set; }
