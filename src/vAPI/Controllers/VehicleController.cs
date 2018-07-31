@@ -56,6 +56,76 @@ namespace VRP.vAPI.Controllers
             return Json(vehicleDto);
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            IEnumerable<VehicleModel> vehicles = _unitOfWork.VehiclesRepository.GetAll();
+
+            var vehicleModels = vehicles as VehicleModel[] ?? vehicles.ToArray();
+
+            if (!vehicleModels.Any())
+            {
+                return NotFound();
+            }
+
+            IEnumerable<VehicleDto> vehicleDtos =
+                _mapper.Map<VehicleDto[]>(vehicleModels);
+
+            return Json(vehicleDtos);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] VehicleDto vehicleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            VehicleModel vehicle = _mapper.Map<VehicleModel>(vehicleDto);
+
+            _unitOfWork.VehiclesRepository.Insert(vehicle);
+            _unitOfWork.VehiclesRepository.Save();
+
+            return Created("GET", vehicle);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put([FromRoute] int id, [FromBody] VehicleDto vehicleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(vehicleDto);
+            }
+
+            VehicleModel vehicle = _unitOfWork.VehiclesRepository.JoinAndGet(id);
+
+            if (vehicle == null)
+            {
+                return NotFound(id);
+            }
+
+            _unitOfWork.VehiclesRepository.BeginUpdate(vehicle);
+            _mapper.Map(vehicleDto, vehicle);
+            _unitOfWork.VehiclesRepository.Save();
+
+            return Json(_mapper.Map<VehicleDto>(vehicle));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (!_unitOfWork.VehiclesRepository.Contains(id))
+            {
+                return NotFound(id);
+            }
+
+            _unitOfWork.VehiclesRepository.Delete(id);
+            _unitOfWork.Save();
+
+            return NoContent();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

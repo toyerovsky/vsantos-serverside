@@ -176,7 +176,7 @@ namespace VRP.vAPI.Controllers
             _mapper.Map(characterDto, character);
             _unitOfWork.CharactersRepository.Save();
 
-            return Json(character);
+            return Json(_mapper.Map<CharacterDto>(character));
         }
 
         protected override void Dispose(bool disposing)

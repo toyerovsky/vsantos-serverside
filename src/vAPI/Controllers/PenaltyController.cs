@@ -57,6 +57,58 @@ namespace VRP.vAPI.Controllers
             return Json(penaltyDtos);
         }
 
+        [HttpPost]
+        public IActionResult Post([FromBody] PenaltyDto penaltyDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(penaltyDto);
+            }
+
+            PenaltyModel penalty = _mapper.Map<PenaltyModel>(penaltyDto);
+
+            _unitOfWork.PenaltiesRepository.Insert(penalty);
+            _unitOfWork.PenaltiesRepository.Save();
+
+            return Created("GET", penalty);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put([FromRoute] int id, [FromBody] PenaltyDto penaltyDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(penaltyDto);
+            }
+
+            PenaltyModel penalty = _unitOfWork.PenaltiesRepository.JoinAndGet(id);
+
+            if (penalty == null)
+            {
+                return NotFound(id);
+            }
+
+            _unitOfWork.PenaltiesRepository.BeginUpdate(penalty);
+            _mapper.Map(penaltyDto, penalty);
+            _unitOfWork.PenaltiesRepository.Save();
+
+            return Json(_mapper.Map<PenaltyDto>(penalty));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (!_unitOfWork.PenaltiesRepository.Contains(id))
+            {
+                return NotFound(id);
+            }
+
+            _unitOfWork.PenaltiesRepository.Delete(id);
+            _unitOfWork.PenaltiesRepository.Save();
+
+            return NoContent();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
