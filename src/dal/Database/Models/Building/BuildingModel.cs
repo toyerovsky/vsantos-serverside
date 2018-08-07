@@ -16,9 +16,13 @@ namespace VRP.DAL.Database.Models.Building
 {
     public class BuildingModel
     {
+        public BuildingModel()
+        {
+            ItemsInBuilding = new HashSet<ItemModel>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? CreatorId { get; set; }
         public decimal? EnterCharge { get; set; }
         [Required]
         public float ExternalPickupPositionX { get; set; }
@@ -43,6 +47,8 @@ namespace VRP.DAL.Database.Models.Building
         [Required]
         public uint InternalDimension { get; set; }
         public string Description { get; set; }
+
+        public int? CreatorId { get; set; }
 
         // foreign keys
         [ForeignKey("AutoSaleModel")]

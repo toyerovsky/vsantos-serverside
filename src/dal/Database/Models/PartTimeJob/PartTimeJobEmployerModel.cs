@@ -5,6 +5,11 @@ namespace VRP.DAL.Database.Models.PartTimeJob
 {
     public class PartTimeJobEmployerModel
     {
+        public PartTimeJobEmployerModel()
+        {
+            Workers = new HashSet<PartTimeJobWorkerModel>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public float PositionX { get; set; }

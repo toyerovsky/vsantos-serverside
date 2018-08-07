@@ -10,6 +10,11 @@ namespace VRP.DAL.Database.Models.Corner
 {
     public class CornerModel
     {
+        public CornerModel()
+        {
+            CornerBots = new HashSet<CornerBotModel>();
+        }
+
         public int Id { get; set; }
         public int CreatorId { get; set; }
         public float PositionX { get; set; }

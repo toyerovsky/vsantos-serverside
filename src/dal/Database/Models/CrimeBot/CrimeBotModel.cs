@@ -12,6 +12,11 @@ namespace VRP.DAL.Database.Models.CrimeBot
 {
     public class CrimeBotModel
     {
+        public CrimeBotModel()
+        {
+            CrimeBotItems = new HashSet<CrimeBotItemModel>();
+        }
+
         public int Id { get; set; }
         public int CreatorId { get; set; }
         public string VehicleModel { get; set; }

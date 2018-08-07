@@ -15,6 +15,13 @@ namespace VRP.DAL.Database.Models.Account
 {
     public class AccountModel
     {
+        public AccountModel()
+        {
+            Serials = new HashSet<SerialModel>();
+            Characters = new HashSet<CharacterModel>();
+            Penalties = new HashSet<PenaltyModel>();
+        }
+
         [Key]
         public int Id { get; set; }
         [Key]

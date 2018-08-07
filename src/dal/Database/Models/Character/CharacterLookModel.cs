@@ -48,6 +48,7 @@ namespace VRP.DAL.Database.Models.Character
 
         // foreign keys
    
+        [ForeignKey("Character")]
         public int CharacterId { get; set; }
         // navigation properties
         public virtual CharacterModel Character { get; set; }

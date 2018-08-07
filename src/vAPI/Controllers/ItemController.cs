@@ -116,7 +116,7 @@ namespace VRP.vAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!_unitOfWork.GroupsRepository.Contains(id))
+            if (!_unitOfWork.ItemsRepository.Contains(id))
             {
                 return NotFound(id);
             }

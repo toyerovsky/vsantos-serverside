@@ -30,6 +30,7 @@ namespace VRP.vAPI.UnitOfWork
         public IJoinableRepository<VehicleModel> VehiclesRepository { get; set; }
         public IJoinableRepository<WorkerModel> WorkersRepository { get; set; }
         public IRepository<ZoneModel> ZonesRepository { get; set; }
+        public IJoinableRepository<GroupRankModel> GroupRanksRepository { get; set; }
 
         private RoleplayContext Context { get; }
 
@@ -50,6 +51,7 @@ namespace VRP.vAPI.UnitOfWork
             VehiclesRepository = new VehiclesRepository(context);
             WorkersRepository = new WorkersRepository(context);
             ZonesRepository = new ZonesRepository(context);
+            GroupRanksRepository = new GroupRankRepository(context);
         }
 
         public void Save()

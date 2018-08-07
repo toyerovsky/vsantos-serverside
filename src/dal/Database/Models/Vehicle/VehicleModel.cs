@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
@@ -15,25 +16,37 @@ namespace VRP.DAL.Database.Models.Vehicle
 {
     public class VehicleModel
     {
+        public VehicleModel()
+        {
+            ItemsInVehicle = new HashSet<ItemModel>();
+            VehicleTuning = new HashSet<ItemModel>();
+        }
+
         public int Id { get; set; }
         public int? CreatorId { get; set; }
 
         public string NumberPlate { get; set; }
         public int NumberPlateStyle { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
-        public virtual string VehicleHash { get; set; }
+        public string VehicleHash { get; set; }
 
+        [Required]
         public float SpawnPositionX { get; set; }
+        [Required]
         public float SpawnPositionY { get; set; }
+        [Required]
         public float SpawnPositionZ { get; set; }
 
+        [Required]
         public float SpawnRotationX { get; set; }
+        [Required]
         public float SpawnRotationY { get; set; }
+        [Required]
         public float SpawnRotationZ { get; set; }
-
-        public bool IsSpawned { get; set; }
+        
         public float EnginePowerMultiplier { get; set; }
         public float EngineTorqueMultiplier { get; set; }
         public float Health { get; set; }

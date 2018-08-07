@@ -29,6 +29,7 @@ namespace VRP.vAPI.UnitOfWork
         IJoinableRepository<VehicleModel> VehiclesRepository { get; set; }
         IJoinableRepository<WorkerModel> WorkersRepository { get; set; }
         IRepository<ZoneModel> ZonesRepository { get; set; }
+        IJoinableRepository<GroupRankModel> GroupRanksRepository { get; set; }
 
         void Save();
     }

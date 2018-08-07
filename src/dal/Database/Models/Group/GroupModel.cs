@@ -7,13 +7,21 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using VRP.DAL.Database.Models.Agreement;
+using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Enums;
 
 namespace VRP.DAL.Database.Models.Group
 {
     public class GroupModel
     {
+        public GroupModel()
+        {
+            Workers = new HashSet<WorkerModel>();
+            Agreements = new HashSet<AgreementModel>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Tag { get; set; }
@@ -32,5 +40,7 @@ namespace VRP.DAL.Database.Models.Group
         public virtual CharacterModel BossCharacter { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
         public virtual ICollection<AgreementModel> Agreements { get; set; }
+        public virtual ICollection<VehicleModel> Vehicles { get; set; }
+        public virtual ICollection<BuildingModel> Buildings { get; set; }
     }
 }

@@ -13,6 +13,12 @@ namespace VRP.DAL.Database.Models.Mdt
 {
     public class CharacterRecordModel
     {
+        public CharacterRecordModel()
+        {
+            Vehicles = new HashSet<VehicleRecordModel>();
+            CriminalCases = new HashSet<CriminalCaseCharacterRecordRelation>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }

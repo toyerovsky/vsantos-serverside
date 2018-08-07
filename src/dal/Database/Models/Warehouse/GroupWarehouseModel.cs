@@ -11,6 +11,11 @@ namespace VRP.DAL.Database.Models.Warehouse
 {
     public class GroupWarehouseModel
     {
+        public GroupWarehouseModel()
+        {
+            ItemsInWarehouse = new HashSet<GroupWarehouseItemModel>();
+        }
+
         public int Id { get; set; }
 
         // navigation properties

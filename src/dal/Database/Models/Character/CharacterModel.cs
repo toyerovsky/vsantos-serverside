@@ -20,6 +20,16 @@ namespace VRP.DAL.Database.Models.Character
 {
     public class CharacterModel
     {
+        public CharacterModel()
+        {
+            Vehicles = new HashSet<VehicleModel>();
+            Items = new HashSet<ItemModel>();
+            Buildings = new HashSet<BuildingModel>();
+            Descriptions = new HashSet<DescriptionModel>();
+            Workers = new HashSet<WorkerModel>();
+            Agreements = new HashSet<AgreementModel>();
+        }
+
         public int Id { get; set; }
         public bool Online { get; set; }
         public DateTime CreateTime { get; set; }
@@ -64,15 +74,5 @@ namespace VRP.DAL.Database.Models.Character
         public virtual ICollection<DescriptionModel> Descriptions { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
         public virtual ICollection<AgreementModel> Agreements { get; set; }
-
-        public CharacterModel()
-        {
-            Vehicles = new HashSet<VehicleModel>();
-            Items = new HashSet<ItemModel>();
-            Buildings = new HashSet<BuildingModel>();
-            Descriptions = new HashSet<DescriptionModel>();
-            Workers = new HashSet<WorkerModel>();
-            Agreements = new HashSet<AgreementModel>();
-        }
     }
 }

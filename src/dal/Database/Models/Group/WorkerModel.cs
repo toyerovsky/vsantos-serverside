@@ -23,5 +23,6 @@ namespace VRP.DAL.Database.Models.Group
         // navigation properties
         public virtual GroupModel Group { get; set; }
         public virtual CharacterModel Character { get; set; }
+        public virtual GroupRankModel GroupRank { get; set; }
     }
 }

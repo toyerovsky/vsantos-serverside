@@ -20,7 +20,11 @@ using VRP.Core.Interfaces;
 using VRP.Core.Mappers;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
+using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Enums;
 using VRP.vAPI.Dto;
 using VRP.vAPI.UnitOfWork;
@@ -54,6 +58,13 @@ namespace VRP.vAPI
             {
                 cfg.CreateMap<AccountModel, AccountDto>().ReverseMap();
                 cfg.CreateMap<CharacterModel, CharacterDto>().ReverseMap();
+                cfg.CreateMap<BuildingModel, BuildingDto>().ReverseMap();
+                cfg.CreateMap<GroupModel, GroupDto>().ReverseMap();
+                cfg.CreateMap<GroupRankModel, GroupRankDto>().ReverseMap();
+                cfg.CreateMap<ItemModel, ItemDto>().ReverseMap();
+                cfg.CreateMap<PenaltyModel, PenaltyDto>().ReverseMap();
+                cfg.CreateMap<VehicleModel, VehicleDto>().ReverseMap();
+                cfg.CreateMap<WorkerModel, WorkerDto>().ReverseMap();
             });
 
             var mapper = config.CreateMapper();

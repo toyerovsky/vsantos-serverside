@@ -53,6 +53,7 @@ namespace VRP.DAL.Database
         #region Groups
         public virtual DbSet<GroupModel> Groups { get; set; }
         public virtual DbSet<WorkerModel> Workers { get; set; }
+        public virtual DbSet<GroupRankModel> GroupRanks { get; set; }
         #endregion
 
         #region Item
