@@ -16,12 +16,12 @@ namespace VRP.vAPI.Controllers
     [Route("api/[controller]")]
     [EnableCors("dev")]
     [Authorize("Authenticated")]
-    public class GroupRanksController : Controller
+    public class GroupRankController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GroupRanksController(IUnitOfWork unitOfWork, IMapper mapper)
+        public GroupRankController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
