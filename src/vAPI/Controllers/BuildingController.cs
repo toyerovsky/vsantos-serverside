@@ -65,6 +65,8 @@ namespace VRP.vAPI.Controllers
             {
                 _unitOfWork?.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }
+}
