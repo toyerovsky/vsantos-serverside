@@ -21,8 +21,7 @@ namespace VRP.vAPI.Dto
         public bool Gender { get; set; }
         public decimal Money { get; set; }
         public decimal? BankMoney { get; set; }
-
-        // foreign keys
+        public AccountDto Account { get; set; }
         public int AccountId { get; set; }
     }
 }

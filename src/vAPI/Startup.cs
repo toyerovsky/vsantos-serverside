@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using VRP.Core.Extensions;
 using VRP.Core.Interfaces;
 using VRP.Core.Mappers;
 using VRP.DAL.Database;
@@ -56,7 +57,11 @@ namespace VRP.vAPI
             // scoped mappers
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<AccountModel, AccountDto>().ReverseMap();
+                cfg.CreateMap<AccountModel, AccountDto>()
+                    .ForMember(
+                        accountDto => accountDto.ServerRank,
+                        opt => opt.ResolveUsing((model, dto) => model.ServerRank.GetDescription()))
+                    .ReverseMap();
                 cfg.CreateMap<CharacterModel, CharacterDto>().ReverseMap();
                 cfg.CreateMap<BuildingModel, BuildingDto>().ReverseMap();
                 cfg.CreateMap<GroupModel, GroupDto>().ReverseMap();
