@@ -20,7 +20,7 @@ namespace VRP.Serverside.Core.Extensions
                 color = new Color(51, 143, 255);
             else if (serverRank >= ServerRank.AdministratorRozgrywki && serverRank <= ServerRank.AdministratorRozgrywki5)
                 color = new Color(0, 109, 15);
-            else if (serverRank >= ServerRank.AdministratorTechniczny && serverRank <= ServerRank.AdministratorTechniczny3)
+            else if (serverRank >= ServerRank.AdministratorTechniczny && serverRank <= ServerRank.AdministratorTechniczny2)
                 color = new Color(117, 13, 18);
             else if (serverRank >= ServerRank.Zarzad && serverRank <= ServerRank.Zarzad2)
                 color = new Color(255, 0, 0);

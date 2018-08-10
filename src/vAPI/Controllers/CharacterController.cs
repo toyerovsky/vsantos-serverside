@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.DAL.Database.Models.Character;
-using VRP.DAL.Interfaces;
 using VRP.vAPI.Dto;
 using VRP.vAPI.Extensions;
 using VRP.vAPI.UnitOfWork;

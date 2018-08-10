@@ -34,16 +34,12 @@ namespace VRP.DAL.Enums
         AdministratorRozgrywki4,
         [Description("Administrator rozgrywki V")]
         AdministratorRozgrywki5,
-        [Description("Administrator rozgrywki I")]
+        [Description("Administrator techniczny I")]
         AdministratorTechniczny,
-        [Description("Administrator rozgrywki II")]
+        [Description("Administrator techniczny II")]
         AdministratorTechniczny2,
-        [Description("Administrator rozgrywki III")]
-        AdministratorTechniczny3,
-        [Description("Administrator rozgrywki IV")]
-        AdministratorTechniczny4,
         [Description("Zarząd I")]
-        Zarzad,
+        Zarzad = 16,
         [Description("Zarząd II")]
         Zarzad2,
         [Description("Zarząd III")]
