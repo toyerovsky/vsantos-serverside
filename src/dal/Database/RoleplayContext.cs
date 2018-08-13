@@ -94,8 +94,8 @@ namespace VRP.DAL.Database
         #region Tickets
         public virtual DbSet<TicketModel> Tickets { get; set; }
         public virtual DbSet<TicketMessageModel> TicketMessages { get; set; }
-        public virtual DbSet<TicketAdminRecordRelation> TicketAdminRecordRelations { get; set; }
-        public virtual DbSet<TicketUserRecordRelation> TicketUserRecordRelations { get; set; }
+        public virtual DbSet<TicketAdminRelation> TicketAdminRecordRelations { get; set; }
+        public virtual DbSet<TicketUserRelation> TicketUserRecordRelations { get; set; }
         
 
         

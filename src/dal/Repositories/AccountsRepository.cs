@@ -55,7 +55,9 @@ namespace VRP.DAL.Repositories
                     .ThenInclude(character => character.Workers)
                         .ThenInclude(group => group.Group)
                             .ThenInclude(group => group.Workers)
-                .Include(account => account.Penalties);
+                .Include(account => account.Penalties)
+                .Include(account => account.AdminInTickets)
+                .Include(account => account.UserInTickets);
         }
 
         public override AccountModel Get(Func<AccountModel, bool> func) => GetAll(func).FirstOrDefault();

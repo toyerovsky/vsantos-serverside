@@ -2,11 +2,11 @@
 
 namespace VRP.DAL.Database.Models.Ticket
 {
-    public class TicketUserRecordRelation
+    public class TicketAdminRelation
     {
         public int Id { get; set; }
 
         public virtual TicketModel Ticket { get; set; }
-        public virtual AccountModel User { get; set; }
+        public virtual AccountModel Admin { get; set; }
     }
 }

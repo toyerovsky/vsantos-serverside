@@ -21,6 +21,9 @@ namespace VRP.DAL.Database.Models.Account
             Serials = new HashSet<SerialModel>();
             Characters = new HashSet<CharacterModel>();
             Penalties = new HashSet<PenaltyModel>();
+            UserInTickets = new HashSet<TicketUserRelation>();
+            AdminInTickets = new HashSet<TicketAdminRelation>();
+            TicketsMessages = new HashSet<TicketMessageModel>();
         }
 
         [Key]
@@ -49,7 +52,8 @@ namespace VRP.DAL.Database.Models.Account
         public virtual ICollection<CharacterModel> Characters { get; set; }
         [InverseProperty("Account")]
         public virtual ICollection<PenaltyModel> Penalties { get; set; }
-        public virtual ICollection<TicketModel> Tickets { get; set; }
-        public virtual ICollection<TicketMessageModel> TicketsMessage { get; set; }
+        public virtual ICollection<TicketUserRelation> UserInTickets { get; set; }
+        public virtual ICollection<TicketAdminRelation> AdminInTickets { get; set; }
+        public virtual ICollection<TicketMessageModel> TicketsMessages { get; set; }
     }
 }
