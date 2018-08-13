@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using VRP.DAL.Database.Models.Character;
+using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Enums;
 
 namespace VRP.DAL.Database.Models.Account
@@ -48,5 +49,7 @@ namespace VRP.DAL.Database.Models.Account
         public virtual ICollection<CharacterModel> Characters { get; set; }
         [InverseProperty("Account")]
         public virtual ICollection<PenaltyModel> Penalties { get; set; }
+        public virtual ICollection<TicketModel> Tickets { get; set; }
+        public virtual ICollection<TicketMessageModel> TicketsMessage { get; set; }
     }
 }
