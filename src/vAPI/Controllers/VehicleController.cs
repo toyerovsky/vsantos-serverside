@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.DAL.Database.Models.Vehicle;
-using VRP.DAL.Interfaces;
 using VRP.vAPI.Dto;
 using VRP.vAPI.Extensions;
 using VRP.vAPI.UnitOfWork;
@@ -50,6 +49,20 @@ namespace VRP.vAPI.Controllers
             if (vehicle == null)
             {
                 return NotFound(id);
+            }
+
+            VehicleDto vehicleDto = _mapper.Map<VehicleDto>(vehicle);
+            return Json(vehicleDto);
+        }
+
+        [HttpGet("{numberPlate}")]
+        public IActionResult Get(string numberPlate)
+        {
+            VehicleModel vehicle = _unitOfWork.VehiclesRepository.Get(veh => veh.NumberPlate == numberPlate);
+
+            if (vehicle == null)
+            {
+                return NotFound(numberPlate);
             }
 
             VehicleDto vehicleDto = _mapper.Map<VehicleDto>(vehicle);
