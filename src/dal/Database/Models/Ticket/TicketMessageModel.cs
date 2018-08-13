@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using VRP.DAL.Database.Models.Account;
 
-
-namespace VRP.Database.Models.Ticket
+namespace VRP.DAL.Database.Models.Ticket
 {
     public class TicketMessageModel
     {
-        public InformationContainer()
-        {
-            InvolvedAccounts = new HashSet<AccountModel>();
-        }
-
+        
         public int Id { get; set; }
-        public string ContentMessage { get; set; }
+        public string MessageContent { get; set; }
         public DateTime CreationTime { get; set; }
-
-        public virtual ICollection<AccountModel> InvolvedAccounts { get; set; }
+        [ForeignKey("TicketAuthor")]
+        public int AuthorId { get; set; }
+        public virtual AccountModel Author { get; set; }
+        [ForeignKey("Ticket")]
+        public int TicketId { get; set; }
+        public virtual TicketModel Ticket { get; set; }
 
     }
 }

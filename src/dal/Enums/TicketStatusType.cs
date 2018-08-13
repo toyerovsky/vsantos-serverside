@@ -2,7 +2,7 @@
 using System.ComponentModel;
 namespace VRP.DAL.Enums
 {
-    public enum StatusType
+    public enum TicketStatusType
     {
         [Description("Oczekujący")]
         Expectant,

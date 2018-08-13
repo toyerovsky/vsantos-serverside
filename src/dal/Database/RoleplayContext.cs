@@ -15,6 +15,7 @@ using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Database.Models.Mdt;
 using VRP.DAL.Database.Models.Misc;
 using VRP.DAL.Database.Models.Telephone;
+using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
 
@@ -90,6 +91,17 @@ namespace VRP.DAL.Database
         public virtual DbSet<GroupWarehouseModel> GroupWarehouses { get; set; }
         #endregion
 
+        #region Tickets
+        public virtual DbSet<TicketModel> Tickets { get; set; }
+        public virtual DbSet<TicketMessageModel> TicketMessages { get; set; }
+        public virtual DbSet<TicketAdminRecordRelation> TicketAdminRecordRelations { get; set; }
+        public virtual DbSet<TicketUserRecordRelation> TicketUserRecordRelations { get; set; }
+        
+
+        
+
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CharacterModel>()
@@ -114,6 +126,8 @@ namespace VRP.DAL.Database
 
             modelBuilder.Entity<AccountModel>()
                 .HasKey(account => account.Id);
+
+          
         }
     }
 }
