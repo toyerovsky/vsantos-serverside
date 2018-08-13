@@ -7,6 +7,7 @@ using VRP.DAL.Database.Models.Group;
 using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Database.Models.Misc;
 using VRP.DAL.Database.Models.Telephone;
+using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Interfaces;
@@ -30,6 +31,7 @@ namespace VRP.vAPI.UnitOfWork
         IJoinableRepository<WorkerModel> WorkersRepository { get; set; }
         IRepository<ZoneModel> ZonesRepository { get; set; }
         IJoinableRepository<GroupRankModel> GroupRanksRepository { get; set; }
+        IJoinableRepository<TicketModel> TicketsRepository { get; set; }
 
         void Save();
     }

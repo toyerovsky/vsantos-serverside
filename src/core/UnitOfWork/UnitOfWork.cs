@@ -7,6 +7,7 @@ using VRP.DAL.Database.Models.Group;
 using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Database.Models.Misc;
 using VRP.DAL.Database.Models.Telephone;
+using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Interfaces;
@@ -31,6 +32,7 @@ namespace VRP.vAPI.UnitOfWork
         public IJoinableRepository<WorkerModel> WorkersRepository { get; set; }
         public IRepository<ZoneModel> ZonesRepository { get; set; }
         public IJoinableRepository<GroupRankModel> GroupRanksRepository { get; set; }
+        public IJoinableRepository<TicketModel> TicketsRepository { get; set; }
 
         private RoleplayContext Context { get; }
 
@@ -52,6 +54,7 @@ namespace VRP.vAPI.UnitOfWork
             WorkersRepository = new WorkersRepository(context);
             ZonesRepository = new ZonesRepository(context);
             GroupRanksRepository = new GroupRankRepository(context);
+            TicketsRepository = new TicketsRepository(context);
         }
 
         public void Save()

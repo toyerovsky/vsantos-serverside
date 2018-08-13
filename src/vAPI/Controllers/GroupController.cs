@@ -27,7 +27,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("account/{id}")]
-        public IActionResult GetGoupsByAccounttId(int id)
+        public IActionResult GetGoupsByAccountId(int id)
         {
             List<WorkerModel> workers = new List<WorkerModel>();
             foreach (CharacterModel character in _unitOfWork.AccountsRepository.JoinAndGet(id).Characters)
