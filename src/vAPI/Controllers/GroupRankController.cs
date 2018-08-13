@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.DAL.Database.Models.Group;
-using VRP.DAL.Database.Models.Item;
 using VRP.vAPI.Dto;
-using VRP.vAPI.Extensions;
 using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VRP.DAL.Database.Models.Account;
 
 namespace VRP.DAL.Database.Models.Ticket
 {
     public class TicketMessageModel
     {
-        
         public int Id { get; set; }
         public string MessageContent { get; set; }
         public DateTime CreationTime { get; set; }

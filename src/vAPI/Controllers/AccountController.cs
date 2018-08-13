@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using VRP.Core.Extensions;
 using VRP.DAL.Database.Models.Account;
 using VRP.vAPI.Dto;
 using VRP.vAPI.Model;

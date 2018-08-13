@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
-using VRP.DAL.Database.Models.Item;
 using VRP.vAPI.Dto;
-using VRP.vAPI.Extensions;
 using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using VRP.DAL.Enums;
-
-namespace VRP.vAPI.Dto
+﻿namespace VRP.vAPI.Dto
 {
     public class WorkerDto
     {

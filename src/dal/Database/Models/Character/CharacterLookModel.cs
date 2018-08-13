@@ -4,8 +4,6 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace VRP.DAL.Database.Models.Character
 {
     public class CharacterLookModel

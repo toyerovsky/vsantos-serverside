@@ -4,9 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
-using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Group;
-using VRP.DAL.Database.Models.Misc;
 using VRP.DAL.Interfaces;
 using VRP.DAL.Repositories.Base;
 

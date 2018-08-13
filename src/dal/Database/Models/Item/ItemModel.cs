@@ -6,7 +6,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Vehicle;
