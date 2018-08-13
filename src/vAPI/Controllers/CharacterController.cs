@@ -106,6 +106,20 @@ namespace VRP.vAPI.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            CharacterModel character = _unitOfWork.CharactersRepository.Get(id);
+
+            if (character == null)
+            {
+                return NotFound(id);
+            }
+
+            CharacterDto characterDto = _mapper.Map<CharacterDto>(character);
+            return Json(characterDto);
+        }
+
         [HttpGet("selectedcharacter")]
         public IActionResult GetSelectedCharacter()
         {
