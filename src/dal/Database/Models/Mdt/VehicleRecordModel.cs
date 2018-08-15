@@ -24,7 +24,6 @@ namespace VRP.DAL.Database.Models.Mdt
         public bool Wanted { get; set; }
         public string SpecialFeatures { get; set; }
 
-
         // navigation properties
         public virtual CharacterRecordModel Owner { get; set; }
         public virtual ICollection<CriminalCaseVehicleRecordRelation> CriminalCases { get; set; }

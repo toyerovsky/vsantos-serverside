@@ -25,6 +25,7 @@ using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
 using VRP.DAL.Database.Models.Item;
+using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Enums;
 using VRP.vAPI.Dto;
@@ -70,6 +71,8 @@ namespace VRP.vAPI
                 cfg.CreateMap<PenaltyModel, PenaltyDto>().ReverseMap();
                 cfg.CreateMap<VehicleModel, VehicleDto>().ReverseMap();
                 cfg.CreateMap<WorkerModel, WorkerDto>().ReverseMap();
+                cfg.CreateMap<TicketModel, TicketDto>().ReverseMap();
+                cfg.CreateMap<TicketMessageModel, TicketMessageDto>().ReverseMap();
             });
 
             var mapper = config.CreateMapper();
