@@ -10,8 +10,8 @@ namespace VRP.DAL.Database.Models.Ticket
         public TicketModel()
         {
             MessageContent = new HashSet<TicketMessageModel>();
-            InvolvedAccounts = new HashSet<TicketAdminRelation>();
-            InvolvedAdmins = new HashSet<TicketUserRelation>();
+            InvolvedAccounts = new HashSet<TicketUserRelation>();
+            InvolvedAdmins = new HashSet<TicketAdminRelation>();
         }
 
         public int Id { get; set; }
@@ -22,8 +22,8 @@ namespace VRP.DAL.Database.Models.Ticket
         public TicketStatusType Status { get; set; }
 
         public virtual ICollection<TicketMessageModel> MessageContent { get; set; }
-        public virtual ICollection<TicketAdminRelation> InvolvedAccounts { get; set; }
-        public virtual ICollection<TicketUserRelation> InvolvedAdmins { get; set; }
+        public virtual ICollection<TicketUserRelation> InvolvedAccounts { get; set; }
+        public virtual ICollection<TicketAdminRelation> InvolvedAdmins { get; set; }
     }
 }
 

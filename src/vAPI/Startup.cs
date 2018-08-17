@@ -71,8 +71,16 @@ namespace VRP.vAPI
                 cfg.CreateMap<PenaltyModel, PenaltyDto>().ReverseMap();
                 cfg.CreateMap<VehicleModel, VehicleDto>().ReverseMap();
                 cfg.CreateMap<WorkerModel, WorkerDto>().ReverseMap();
-                cfg.CreateMap<TicketModel, TicketDto>().ReverseMap();
-                cfg.CreateMap<TicketMessageModel, TicketMessageDto>().ReverseMap();
+                cfg.CreateMap<TicketModel, TicketDto>()
+                    .ForMember(
+                        ticketDto => ticketDto.Status,
+                        opt => opt.ResolveUsing((model,dto)=> model.Status.GetDescription()))
+                    .ForMember(
+                        ticketDto => ticketDto.Type,
+                        opt => opt.ResolveUsing((model, dto) => model.Type.GetDescription()))
+                    .ReverseMap();
+                cfg.CreateMap<TicketMessageModel, TicketMessageDto>();
+
             });
 
             var mapper = config.CreateMapper();

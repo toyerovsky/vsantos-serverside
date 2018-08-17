@@ -40,7 +40,9 @@ namespace VRP.DAL.Repositories
             return tickets
                 .Include(ticket => ticket.MessageContent)
                 .Include(ticket => ticket.InvolvedAccounts)
-                .Include(ticket => ticket.InvolvedAdmins);
+                    .ThenInclude(ticket => ticket.User)
+                .Include(ticket => ticket.InvolvedAdmins)
+                    .ThenInclude(ticket => ticket.Admin);
         }
     }
 }

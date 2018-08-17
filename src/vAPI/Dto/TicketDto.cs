@@ -10,12 +10,12 @@ namespace VRP.vAPI.Dto
         public int Id { get; set; }
         public string Title { get; set; }
    
-        public TicketType Type { get; set; }
+        public string Type { get; set; }
         
-        public TicketStatusType Status { get; set; }
+        public string Status { get; set; }
 
         public virtual ICollection<TicketMessageDto> MessageContent { get; set; }
-        public virtual ICollection<TicketAdminRelation> InvolvedAccounts { get; set; }
-        public virtual ICollection<TicketUserRelation> InvolvedAdmins { get; set; }
+        public virtual ICollection<TicketUserRelation> InvolvedAccounts { get; set; }
+        public virtual ICollection<TicketAdminRelation> InvolvedAdmins { get; set; }
     }
 }

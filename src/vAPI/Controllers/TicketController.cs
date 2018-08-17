@@ -27,21 +27,18 @@ namespace VRP.vAPI.Controllers
         [HttpGet("account/{id}")]
         public IActionResult GetTicketsByAccountId(int id)
         {
-            List<TicketModel> tickets = new List<TicketModel>();
-            IEnumerable<TicketMessageModel> ticketsMessages =
-                _unitOfWork.AccountsRepository.JoinAndGet(id).TicketsMessages;
-            foreach (var ticketMessage in ticketsMessages)
-            {
-                tickets.Add(ticketMessage.Ticket);
-            }
+            
+            IEnumerable<TicketModel> tickets = _unitOfWork.TicketsRepository
+                .JoinAndGetAll(ticket => ticket.InvolvedAccounts.Any(acc => acc.User.Id == id));
+
             if (!tickets.Any())
             {
                 return NotFound(id);
             }
 
 
-           // IEnumerable<TicketDto> ticketDtos = _mapper.Map<TicketDto>(tickets);
-            return Json(tickets);
+            IEnumerable<TicketDto> ticketDtos = _mapper.Map<TicketDto[]>(tickets);
+            return Json(ticketDtos);
         }
 
         [HttpGet("{id}")]
@@ -53,7 +50,8 @@ namespace VRP.vAPI.Controllers
                 return NotFound(id);
             }
 
-            return Json(ticket);
+            TicketDto ticketDto = _mapper.Map<TicketDto>(ticket);   
+            return Json(ticketDto);
         }
 
 
