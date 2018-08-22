@@ -4,6 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
@@ -23,6 +24,6 @@ namespace VRP.vAPI
                 .UseStartup<Startup>()
                 .UseUrls("http://*:5000/")
                 .Build();
-       
+
     }
 }

@@ -62,6 +62,8 @@ namespace VRP.vAPI
                     .ForMember(
                         accountDto => accountDto.ServerRank,
                         opt => opt.ResolveUsing((model, dto) => model.ServerRank.GetDescription()))
+                    .ForMember(accountDto => accountDto.PasswordSalt,
+                        opt => opt.ResolveUsing((model, dto) => model.PasswordHash.Substring(0, 29)))
                     .ReverseMap();
                 cfg.CreateMap<CharacterModel, CharacterDto>().ReverseMap();
                 cfg.CreateMap<BuildingModel, BuildingDto>().ReverseMap();

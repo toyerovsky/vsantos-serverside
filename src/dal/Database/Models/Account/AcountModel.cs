@@ -42,7 +42,6 @@ namespace VRP.DAL.Database.Models.Account
         public DateTime LastLogin { get; set; }
         [EnumDataType(typeof(ServerRank))]
         public ServerRank ServerRank { get; set; }
-        public string PasswordSalt { get; set; }
         public string PasswordHash { get; set; }
         public string AvatarUrl { get; set; }
         public string GravatarEmail { get; set; }
