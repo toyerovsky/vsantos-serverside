@@ -11,6 +11,7 @@ namespace VRP.vAPI.Dto
         public DateTime LastLogin { get; set; }
         public string AvatarUrl { get; set; }
         public string GravatarEmail { get; set; }
+        public bool UseGravatar { get; set; }
         public string PasswordSalt { get; set; }
     }
 }
