@@ -25,11 +25,14 @@ namespace VRP.DAL.Database.Models.Account
         public PenaltyType PenaltyType { get; set; }
 
         // navigation properties
+        [ForeignKey("Deactivator")]
+        public int DeactivatorId { get; set; }
+        public virtual AccountModel Deactivator { get; set; }
         [ForeignKey("Account")]
         public int AccountId { get; set; }
         public virtual AccountModel Account { get; set; }
         [ForeignKey("Creator")]
-        public int? CreatorId { get; set; }
+        public int CreatorId { get; set; }
         public virtual AccountModel Creator { get; set; }
 
         // used in the case of character blockage

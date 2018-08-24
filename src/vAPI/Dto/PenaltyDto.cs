@@ -16,5 +16,7 @@ namespace VRP.vAPI.Dto
         public CharacterDto Character { get; set; }
         public int AccountId { get; set; }
         public AccountDto Account { get; set; }
+        public int DeactivatorId { get; set; }
+        public AccountDto Deactivator { get; set; }
     }
 }
