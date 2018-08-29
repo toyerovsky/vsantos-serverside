@@ -18,11 +18,6 @@ namespace VRP.DAL.Repositories
        }
 
         public override TicketModel Get(Func<TicketModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<TicketModel> GetAsync(Func<TicketModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public override IEnumerable<TicketModel> GetAll(Func<TicketModel, bool> func = null)
         {

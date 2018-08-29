@@ -54,10 +54,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override VehicleModel Get(Func<VehicleModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<VehicleModel> GetAsync(Func<VehicleModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<VehicleModel> GetAll(Func<VehicleModel, bool> func = null)
         {

@@ -21,10 +21,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override ZoneModel Get(Func<ZoneModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<ZoneModel> GetAsync(Func<ZoneModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<ZoneModel> GetAll(Func<ZoneModel, bool> func = null)
         {

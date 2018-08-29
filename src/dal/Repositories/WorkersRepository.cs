@@ -57,10 +57,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override WorkerModel Get(Func<WorkerModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<WorkerModel> GetAsync(Func<WorkerModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<WorkerModel> GetAll(Func<WorkerModel, bool> func = null)
         {
