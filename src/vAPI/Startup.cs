@@ -19,6 +19,7 @@ using Newtonsoft.Json.Serialization;
 using VRP.BLL.Extensions;
 using VRP.BLL.Interfaces;
 using VRP.BLL.Mappers;
+using VRP.BLL.Services;
 using VRP.BLL.UnitOfWork;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
@@ -55,6 +56,8 @@ namespace VRP.vAPI
             services.AddScoped(factory => Configuration);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // services
+            services.AddScoped<IPenaltyService, PenaltyService>();
 
             // scoped mappers
             var config = new MapperConfiguration(cfg =>
@@ -77,7 +80,7 @@ namespace VRP.vAPI
                 cfg.CreateMap<TicketModel, TicketDto>()
                     .ForMember(
                         ticketDto => ticketDto.Status,
-                        opt => opt.ResolveUsing((model,dto)=> model.Status.GetDescription()))
+                        opt => opt.ResolveUsing((model, dto) => model.Status.GetDescription()))
                     .ForMember(
                         ticketDto => ticketDto.Type,
                         opt => opt.ResolveUsing((model, dto) => model.Type.GetDescription()))
@@ -151,3 +154,4 @@ namespace VRP.vAPI
         }
     }
 }
+
