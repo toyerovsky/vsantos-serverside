@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Item;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public ItemModel JoinAndGet(int id) => JoinAndGetAll(item => item.Id == id).SingleOrDefault();
+        public async Task<ItemModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public ItemModel JoinAndGet(Expression<Func<ItemModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<ItemModel> JoinAndGetAsync(Expression<Func<ItemModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<ItemModel> JoinAndGetAll(Expression<Func<ItemModel, bool>> expression = null)
         {
@@ -40,7 +49,16 @@ namespace VRP.DAL.Repositories
                 .Include(item => item.Vehicle);
         }
 
+        public async Task<IEnumerable<ItemModel>> JoinAndGetAllAsync(Expression<Func<ItemModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override ItemModel Get(Func<ItemModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<ItemModel> GetAsync(Func<ItemModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<ItemModel> GetAll(Func<ItemModel, bool> func = null)
         {

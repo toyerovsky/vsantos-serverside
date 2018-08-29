@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using VRP.DAL.Database.Models.Account;
+using VRP.BLL.Services;
 using VRP.vAPI.Dto;
-using VRP.vAPI.UnitOfWork;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -16,93 +17,73 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class PenaltyController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IPenaltyService _penaltyService;
         private readonly IMapper _mapper;
 
-        public PenaltyController(IUnitOfWork unitOfWork, IMapper mapper)
+        public PenaltyController(IPenaltyService penaltyService, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _penaltyService = penaltyService;
             _mapper = mapper;
         }
 
         // GET: api/Penalty
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<PenaltyModel> penalties = _unitOfWork.PenaltiesRepository.GetAll();
-
-            if (!penalties.Any())
-            {
-                return NotFound();
-            }
-
-            IEnumerable<PenaltyDto> penaltyDtos = _mapper.Map<IEnumerable<PenaltyDto>>(penalties);
-            return Json(penaltyDtos);
+            return Json(await _penaltyService.GetAllAsync(null));
         }
 
         [HttpGet("account/{id}")]
-        public IActionResult GetByAccountId(int id)
+        public async Task<IActionResult> GetByAccountId(int id)
         {
-            IEnumerable<PenaltyModel> penalties =
-                _unitOfWork.PenaltiesRepository.JoinAndGetAll(penalty => penalty.AccountId == id);
+            IEnumerable<PenaltyDto> penalties =
+                await _penaltyService.GetAllAsync(penalty => penalty.AccountId == id);
 
             if (!penalties.Any())
             {
                 return NotFound(id);
             }
 
-            IEnumerable<PenaltyDto> penaltyDtos = _mapper.Map<PenaltyDto[]>(penalties);
-            return Json(penaltyDtos);
+            return Json(penalties);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] PenaltyDto penaltyDto)
+        public async Task<IActionResult> Post([FromBody] PenaltyDto penaltyDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(penaltyDto);
             }
 
-            PenaltyModel penalty = _mapper.Map<PenaltyModel>(penaltyDto);
-
-            _unitOfWork.PenaltiesRepository.Insert(penalty);
-            _unitOfWork.PenaltiesRepository.Save();
-
-            return Created("GET", penalty);
+            PenaltyDto dto = await _penaltyService.CreateAsync(HttpContext.User.GetAccountId(), penaltyDto);
+            return Created("", dto);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] PenaltyDto penaltyDto)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PenaltyDto penaltyDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(penaltyDto);
             }
 
-            PenaltyModel penalty = _unitOfWork.PenaltiesRepository.JoinAndGet(id);
-
-            if (penalty == null)
+            if (!await _penaltyService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.PenaltiesRepository.BeginUpdate(penalty);
-            _mapper.Map(penaltyDto, penalty);
-            _unitOfWork.PenaltiesRepository.Save();
-
-            return Json(_mapper.Map<PenaltyDto>(penalty));
+            return Json(await _penaltyService.UpdateAsync(id, penaltyDto));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!_unitOfWork.PenaltiesRepository.Contains(id))
+            if (!await _penaltyService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.PenaltiesRepository.Delete(id);
-            _unitOfWork.PenaltiesRepository.Save();
+            await _penaltyService.DeleteAsync(id);
 
             return NoContent();
         }
@@ -111,7 +92,7 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _unitOfWork?.Dispose();
+                _penaltyService?.Dispose();
             }
             base.Dispose(disposing);
         }

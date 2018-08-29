@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Warehouse;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public GroupWarehouseOrderModel JoinAndGet(int id) => JoinAndGetAll(groupWarehouseOrder => groupWarehouseOrder.Id == id).SingleOrDefault();
+        public async Task<GroupWarehouseOrderModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public GroupWarehouseOrderModel JoinAndGet(Expression<Func<GroupWarehouseOrderModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<GroupWarehouseOrderModel> JoinAndGetAsync(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<GroupWarehouseOrderModel> JoinAndGetAll(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
         {
@@ -36,7 +45,16 @@ namespace VRP.DAL.Repositories
                 .Include(order => order.Getter);
         }
 
+        public async Task<IEnumerable<GroupWarehouseOrderModel>> JoinAndGetAllAsync(Expression<Func<GroupWarehouseOrderModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override GroupWarehouseOrderModel Get(Func<GroupWarehouseOrderModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<GroupWarehouseOrderModel> GetAsync(Func<GroupWarehouseOrderModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<GroupWarehouseOrderModel> GetAll(Func<GroupWarehouseOrderModel, bool> func = null)
         {

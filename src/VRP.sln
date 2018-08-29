@@ -10,9 +10,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "serverside", "serverside\se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vAPI", "vAPI\vAPI.csproj", "{F0F10433-3A02-47E6-A612-F56545F9E179}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "core", "core\core.csproj", "{6D160F47-5934-48CD-9565-389DD214572B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bll", "core\bll.csproj", "{6D160F47-5934-48CD-9565-389DD214572B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dal", "dal\dal.csproj", "{223C043E-0F36-43AF-AED3-6AAB0357C36A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dal", "dal\dal.csproj", "{223C043E-0F36-43AF-AED3-6AAB0357C36A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public PenaltyModel JoinAndGet(int id) => JoinAndGetAll(penalty => penalty.Id == id).SingleOrDefault();
+        public async Task<PenaltyModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public PenaltyModel JoinAndGet(Expression<Func<PenaltyModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<PenaltyModel> JoinAndGetAsync(Expression<Func<PenaltyModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<PenaltyModel> JoinAndGetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {
@@ -37,8 +46,17 @@ namespace VRP.DAL.Repositories
                 .Include(penalty => penalty.Creator)
                 .Include(pentaly => pentaly.Character);
         }
-        
+
+        public async Task<IEnumerable<PenaltyModel>> JoinAndGetAllAsync(Expression<Func<PenaltyModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override PenaltyModel Get(Func<PenaltyModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<PenaltyModel> GetAsync(Func<PenaltyModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<PenaltyModel> GetAll(Func<PenaltyModel, bool> func = null)
         {

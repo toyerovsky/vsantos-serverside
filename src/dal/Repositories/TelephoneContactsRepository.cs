@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Telephone;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public TelephoneContactModel JoinAndGet(int id) => JoinAndGetAll(telephoneContact => telephoneContact.Id == id).SingleOrDefault();
+        public async Task<TelephoneContactModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public TelephoneContactModel JoinAndGet(Expression<Func<TelephoneContactModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<TelephoneContactModel> JoinAndGetAsync(Expression<Func<TelephoneContactModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<TelephoneContactModel> JoinAndGetAll(Expression<Func<TelephoneContactModel, bool>> expression = null)
         {
@@ -38,7 +47,16 @@ namespace VRP.DAL.Repositories
                     .ThenInclude(cellphone => cellphone.Character);
         }
 
+        public async Task<IEnumerable<TelephoneContactModel>> JoinAndGetAllAsync(Expression<Func<TelephoneContactModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override TelephoneContactModel Get(Func<TelephoneContactModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<TelephoneContactModel> GetAsync(Func<TelephoneContactModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<TelephoneContactModel> GetAll(Func<TelephoneContactModel, bool> func = null)
         {

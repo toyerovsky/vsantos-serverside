@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Character;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public CharacterModel JoinAndGet(int id) => JoinAndGetAll(character => character.Id == id).SingleOrDefault();
+        public async Task<CharacterModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public CharacterModel JoinAndGet(Expression<Func<CharacterModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<CharacterModel> JoinAndGetAsync(Expression<Func<CharacterModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<CharacterModel> JoinAndGetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {
@@ -46,7 +55,16 @@ namespace VRP.DAL.Repositories
                 .Include(character => character.Account);
         }
 
+        public async Task<IEnumerable<CharacterModel>> JoinAndGetAllAsync(Expression<Func<CharacterModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override CharacterModel Get(Func<CharacterModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<CharacterModel> GetAsync(Func<CharacterModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<CharacterModel> GetAll(Func<CharacterModel, bool> func = null)
         {

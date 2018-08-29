@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Mdt;
@@ -17,6 +18,10 @@ namespace VRP.DAL.Repositories
         }
 
         public override CriminalCaseModel Get(Func<CriminalCaseModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<CriminalCaseModel> GetAsync(Func<CriminalCaseModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<CriminalCaseModel> GetAll(Func<CriminalCaseModel, bool> func = null)
         {
@@ -30,8 +35,18 @@ namespace VRP.DAL.Repositories
         public CriminalCaseModel JoinAndGet(int id) =>
             JoinAndGetAll(criminalCase => criminalCase.Id == id).SingleOrDefault();
 
+        public async Task<CriminalCaseModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
         public CriminalCaseModel JoinAndGet(Expression<Func<CriminalCaseModel, bool>> expression) =>
             JoinAndGetAll(expression).FirstOrDefault();
+
+        public async Task<CriminalCaseModel> JoinAndGetAsync(Expression<Func<CriminalCaseModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<CriminalCaseModel> JoinAndGetAll(Expression<Func<CriminalCaseModel, bool>> expression)
         {
@@ -42,6 +57,11 @@ namespace VRP.DAL.Repositories
             return criminalCases
                 .Include(criminalCase => criminalCase.InvolvedPeople)
                 .Include(criminalCase => criminalCase.InvolvedVehicles);
+        }
+
+        public async Task<IEnumerable<CriminalCaseModel>> JoinAndGetAllAsync(Expression<Func<CriminalCaseModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
     }
 }

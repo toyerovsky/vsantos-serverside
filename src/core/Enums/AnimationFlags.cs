@@ -6,7 +6,7 @@
 
 using System;
 
-namespace VRP.Core.Enums
+namespace VRP.BLL.Enums
 {
     [Flags]
     public enum AnimationFlags

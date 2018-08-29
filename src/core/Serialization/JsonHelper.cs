@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace VRP.Core.Serialization
+namespace VRP.BLL.Serialization
 {
     public static class JsonHelper
     {

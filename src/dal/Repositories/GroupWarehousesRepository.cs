@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Warehouse;
@@ -17,6 +18,10 @@ namespace VRP.DAL.Repositories
         }
 
         public override GroupWarehouseModel Get(Func<GroupWarehouseModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<GroupWarehouseModel> GetAsync(Func<GroupWarehouseModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<GroupWarehouseModel> GetAll(Func<GroupWarehouseModel, bool> func = null)
         {
@@ -30,8 +35,18 @@ namespace VRP.DAL.Repositories
         public GroupWarehouseModel JoinAndGet(int id) =>
             JoinAndGetAll(groupWarehouse => groupWarehouse.Id == id).SingleOrDefault();
 
+        public async Task<GroupWarehouseModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
         public GroupWarehouseModel JoinAndGet(Expression<Func<GroupWarehouseModel, bool>> expression) =>
             JoinAndGetAll(expression).FirstOrDefault();
+
+        public async Task<GroupWarehouseModel> JoinAndGetAsync(Expression<Func<GroupWarehouseModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<GroupWarehouseModel> JoinAndGetAll(Expression<Func<GroupWarehouseModel, bool>> expression)
         {
@@ -42,6 +57,11 @@ namespace VRP.DAL.Repositories
             return groupWarehouses
                 .Include(groupWarehouse => groupWarehouse.Group)
                 .Include(groupWarehouse => groupWarehouse.ItemsInWarehouse);
+        }
+
+        public async Task<IEnumerable<GroupWarehouseModel>> JoinAndGetAllAsync(Expression<Func<GroupWarehouseModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
     }
 }

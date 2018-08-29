@@ -4,9 +4,9 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-using VRP.Core.Interfaces;
+using VRP.BLL.Interfaces;
 
-namespace VRP.Core.Validators
+namespace VRP.BLL.Validators
 {
     public class CellphoneNumberValidator : IValidator<string>
     {

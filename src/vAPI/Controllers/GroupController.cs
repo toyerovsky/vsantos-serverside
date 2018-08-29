@@ -4,10 +4,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using VRP.BLL.UnitOfWork;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
 using VRP.vAPI.Dto;
-using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {

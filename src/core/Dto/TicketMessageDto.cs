@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using VRP.DAL.Database.Models.Account;
-using VRP.DAL.Database.Models.Ticket;
-
-namespace VRP.vAPI.Dto
+﻿namespace VRP.vAPI.Dto
 {
     public class TicketMessageDto
     {

@@ -4,7 +4,7 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
-namespace VRP.Core.Interfaces
+namespace VRP.BLL.Interfaces
 {
     public interface ILogger
     {

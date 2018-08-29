@@ -16,9 +16,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using VRP.Core.Extensions;
-using VRP.Core.Interfaces;
-using VRP.Core.Mappers;
+using VRP.BLL.Extensions;
+using VRP.BLL.Interfaces;
+using VRP.BLL.Mappers;
+using VRP.BLL.UnitOfWork;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Building;
@@ -28,8 +29,8 @@ using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Enums;
+using VRP.DAL.UnitOfWork;
 using VRP.vAPI.Dto;
-using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI
 {
@@ -53,7 +54,7 @@ namespace VRP.vAPI
             // scoped
             services.AddScoped(factory => Configuration);
 
-            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // scoped mappers
             var config = new MapperConfiguration(cfg =>

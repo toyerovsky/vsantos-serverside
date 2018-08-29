@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Misc;
 using VRP.DAL.Repositories.Base;
@@ -20,6 +21,10 @@ namespace VRP.DAL.Repositories
         }
 
         public override ZoneModel Get(Func<ZoneModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<ZoneModel> GetAsync(Func<ZoneModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<ZoneModel> GetAll(Func<ZoneModel, bool> func = null)
         {

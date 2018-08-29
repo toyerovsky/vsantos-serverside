@@ -8,7 +8,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace VRP.Core.Extensions
+namespace VRP.BLL.Extensions
 {
     public static class EnumExtensions
     {

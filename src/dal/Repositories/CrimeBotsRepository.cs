@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.CrimeBot;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public CrimeBotModel JoinAndGet(int id) => JoinAndGetAll(crimeBot => crimeBot.Id == id).SingleOrDefault();
+        public async Task<CrimeBotModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public CrimeBotModel JoinAndGet(Expression<Func<CrimeBotModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<CrimeBotModel> JoinAndGetAsync(Expression<Func<CrimeBotModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<CrimeBotModel> JoinAndGetAll(Expression<Func<CrimeBotModel, bool>> expression = null)
         {
@@ -39,7 +48,16 @@ namespace VRP.DAL.Repositories
                     .ThenInclude(group => group.Workers);
         }
 
+        public async Task<IEnumerable<CrimeBotModel>> JoinAndGetAllAsync(Expression<Func<CrimeBotModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override CrimeBotModel Get(Func<CrimeBotModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<CrimeBotModel> GetAsync(Func<CrimeBotModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<CrimeBotModel> GetAll(Func<CrimeBotModel, bool> func = null)
         {

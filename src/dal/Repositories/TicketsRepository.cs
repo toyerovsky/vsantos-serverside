@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Ticket;
@@ -17,6 +18,10 @@ namespace VRP.DAL.Repositories
        }
 
         public override TicketModel Get(Func<TicketModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<TicketModel> GetAsync(Func<TicketModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
 
         public override IEnumerable<TicketModel> GetAll(Func<TicketModel, bool> func = null)
@@ -25,13 +30,21 @@ namespace VRP.DAL.Repositories
             return tickets;
         }
 
-
         public TicketModel JoinAndGet(int id) => JoinAndGetAll(ticket => ticket.Id == id).SingleOrDefault();
-    
+        public async Task<TicketModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
 
         public TicketModel JoinAndGet(Expression<Func<TicketModel, bool>> expression = null) =>
             JoinAndGetAll(expression).FirstOrDefault();
-        
+
+        public async Task<TicketModel> JoinAndGetAsync(Expression<Func<TicketModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
+
 
         public IEnumerable<TicketModel> JoinAndGetAll(Expression<Func<TicketModel, bool>> expression = null)
         {
@@ -43,6 +56,11 @@ namespace VRP.DAL.Repositories
                     .ThenInclude(ticket => ticket.User)
                 .Include(ticket => ticket.InvolvedAdmins)
                     .ThenInclude(ticket => ticket.Admin);
+        }
+
+        public async Task<IEnumerable<TicketModel>> JoinAndGetAllAsync(Expression<Func<TicketModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
     }
 }

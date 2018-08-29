@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
@@ -24,7 +25,17 @@ namespace VRP.DAL.Repositories
 
         public AccountModel JoinAndGet(int id) => JoinAndGetAll(account => account.Id == id).SingleOrDefault();
 
+        public async Task<AccountModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
         public AccountModel JoinAndGet(Expression<Func<AccountModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
+        public async Task<AccountModel> JoinAndGetAsync(Expression<Func<AccountModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<AccountModel> JoinAndGetAll(Expression<Func<AccountModel, bool>> expression = null)
         {
@@ -57,7 +68,12 @@ namespace VRP.DAL.Repositories
                             .ThenInclude(group => group.Workers)
                 .Include(account => account.Penalties)
                 .Include(account => account.AdminInTickets)
-                .Include(account => account.UserInTickets);
+                .Include(account => account.UserInTickets).ToArray();
+        }
+
+        public async Task<IEnumerable<AccountModel>> JoinAndGetAllAsync(Expression<Func<AccountModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
         public override AccountModel Get(Func<AccountModel, bool> func) => GetAll(func).FirstOrDefault();
@@ -66,7 +82,7 @@ namespace VRP.DAL.Repositories
         {
             IEnumerable<AccountModel> accounts = func != null ?
                 Context.Accounts.Where(func) :
-                Context.Accounts;
+                Context.Accounts.ToArray();
 
             return accounts;
         }

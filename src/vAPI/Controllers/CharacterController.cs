@@ -17,10 +17,10 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using VRP.BLL.UnitOfWork;
 using VRP.DAL.Database.Models.Character;
 using VRP.vAPI.Dto;
 using VRP.vAPI.Extensions;
-using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {

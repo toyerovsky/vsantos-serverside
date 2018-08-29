@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Interfaces;
@@ -56,6 +57,11 @@ namespace VRP.DAL.Repositories.Base
             Context.Update(model);
         }
 
+        public void UpdateAsync(TEntity model)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Begins tracking of given entity in unmodified state. If SaveChanges is called it will update only fields which was updated between calling BeginUpdate() and Save()
         /// </summary>
@@ -71,6 +77,11 @@ namespace VRP.DAL.Repositories.Base
             Context.Remove(model);
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            Context.Remove(await Context.FindAsync<TEntity>(id));
+        }
+
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
@@ -82,10 +93,9 @@ namespace VRP.DAL.Repositories.Base
             return model;
         }
 
-        public Task<TEntity> GetAsync(object key)
+        public async Task<TEntity> GetAsync(int id)
         {
-            Task<TEntity> task = Context.FindAsync<TEntity>(key);
-            return task;
+            return await Context.FindAsync<TEntity>(id);
         }
 
         /// <summary>
@@ -95,12 +105,22 @@ namespace VRP.DAL.Repositories.Base
         /// <returns></returns>
         public abstract TEntity Get(Func<TEntity, bool> func);
 
+        public virtual async Task<TEntity> GetAsync(Func<TEntity, bool> func)
+        {
+            return await GetAll(func).AsQueryable().FirstOrDefaultAsync();
+        }
+
         /// <summary>
         /// Get entities without eager loading navigation properties
         /// </summary>
         /// <param name="func"></param>
         /// <returns></returns>
         public abstract IEnumerable<TEntity> GetAll(Func<TEntity, bool> func = null);
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<TEntity, bool> func = null)
+        {
+            return await GetAll(func).AsQueryable().ToArrayAsync();
+        }
 
         public void Save()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
@@ -12,7 +13,7 @@ using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Interfaces;
 
-namespace VRP.vAPI.UnitOfWork
+namespace VRP.BLL.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
@@ -33,6 +34,7 @@ namespace VRP.vAPI.UnitOfWork
         IJoinableRepository<GroupRankModel> GroupRanksRepository { get; set; }
         IJoinableRepository<TicketModel> TicketsRepository { get; set; }
 
+        Task SaveAsync();
         void Save();
     }
 }

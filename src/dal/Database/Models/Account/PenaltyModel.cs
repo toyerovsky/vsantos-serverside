@@ -20,9 +20,10 @@ namespace VRP.DAL.Database.Models.Account
         public DateTime ExpiryDate { get; set; }
         [StringLength(256)]
         public string Reason { get; set; }
-
         [EnumDataType(typeof(PenaltyType))]
         public PenaltyType PenaltyType { get; set; }
+        public bool Deactivated { get; set; }
+        public DateTime DeactivationDate { get; set; }
 
         // navigation properties
         [ForeignKey("Deactivator")]

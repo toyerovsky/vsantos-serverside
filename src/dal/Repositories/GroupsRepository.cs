@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Group;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public GroupModel JoinAndGet(int id) => JoinAndGetAll(group => group.Id == id).SingleOrDefault();
+        public async Task<GroupModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public GroupModel JoinAndGet(Expression<Func<GroupModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<GroupModel> JoinAndGetAsync(Expression<Func<GroupModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<GroupModel> JoinAndGetAll(Expression<Func<GroupModel, bool>> expression = null)
         {
@@ -41,7 +50,16 @@ namespace VRP.DAL.Repositories
                         .ThenInclude(character => character.Account);
         }
 
+        public async Task<IEnumerable<GroupModel>> JoinAndGetAllAsync(Expression<Func<GroupModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override GroupModel Get(Func<GroupModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<GroupModel> GetAsync(Func<GroupModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<GroupModel> GetAll(Func<GroupModel, bool> func = null)
         {

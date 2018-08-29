@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Warehouse;
@@ -25,8 +26,18 @@ namespace VRP.DAL.Repositories
         public GroupWarehouseItemModel JoinAndGet(int id) =>
             JoinAndGetAll(groupWarehouseItem => groupWarehouseItem.Id == id).SingleOrDefault();
 
+        public async Task<GroupWarehouseItemModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
         public GroupWarehouseItemModel JoinAndGet(Expression<Func<GroupWarehouseItemModel, bool>> expression) =>
             JoinAndGetAll(expression).FirstOrDefault();
+
+        public async Task<GroupWarehouseItemModel> JoinAndGetAsync(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<GroupWarehouseItemModel> JoinAndGetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression)
         {
@@ -39,7 +50,16 @@ namespace VRP.DAL.Repositories
                 .Include(groupWarehouseItem => groupWarehouseItem.ItemTemplateModel);
         }
 
+        public async Task<IEnumerable<GroupWarehouseItemModel>> JoinAndGetAllAsync(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override GroupWarehouseItemModel Get(Func<GroupWarehouseItemModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<GroupWarehouseItemModel> GetAsync(Func<GroupWarehouseItemModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<GroupWarehouseItemModel> GetAll(Func<GroupWarehouseItemModel, bool> func = null)
         {

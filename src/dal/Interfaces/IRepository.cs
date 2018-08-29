@@ -13,11 +13,9 @@ namespace VRP.DAL.Interfaces
     public interface IRepository<T>
     {
         void Insert(T model);
-
         Task InsertAsync(T model);
 
         bool Contains(int id);
-
         Task<bool> ContainsAsync(int id);
 
         /// <summary>
@@ -25,6 +23,7 @@ namespace VRP.DAL.Interfaces
         /// </summary>
         /// <param name="model"></param>
         void Update(T model);
+        void UpdateAsync(T model);
 
         /// <summary>
         /// Begins tracking of given entity in unmodified state. If SaveChanges is called it will update only fields which was updated between calling BeginUpdate() and Save()
@@ -37,6 +36,7 @@ namespace VRP.DAL.Interfaces
         /// </summary>
         /// <param name="id"></param>
         void Delete(int id);
+        Task DeleteAsync(int id);
 
         /// <summary>
         /// Get entity without eager loading navigation properties
@@ -45,8 +45,7 @@ namespace VRP.DAL.Interfaces
         /// <returns></returns>
         T Get(int id);
 
-
-        Task<T> GetAsync(object key);
+        Task<T> GetAsync(int id);
 
         /// <summary>
         /// Get entity without eager loading navigation properties
@@ -54,6 +53,7 @@ namespace VRP.DAL.Interfaces
         /// <param name="func"></param>
         /// <returns></returns>
         T Get(Func<T, bool> func);
+        Task<T> GetAsync(Func<T, bool> func);
 
         /// <summary>
         /// Get entities without eager loading navigation properties
@@ -61,9 +61,9 @@ namespace VRP.DAL.Interfaces
         /// <param name="func"></param>
         /// <returns></returns>
         IEnumerable<T> GetAll(Func<T, bool> func = null);
+        Task<IEnumerable<T>> GetAllAsync(Func<T, bool> func = null);
 
         void Save();
-
         Task<int> SaveAsync();
     }
 }

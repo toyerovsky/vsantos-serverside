@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VRP.vAPI.Dto
+﻿namespace VRP.vAPI.Dto
 {
     public class BuildingDto
     {

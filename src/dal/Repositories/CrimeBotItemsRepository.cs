@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.CrimeBot;
@@ -17,6 +18,10 @@ namespace VRP.DAL.Repositories
         }
 
         public override CrimeBotItemModel Get(Func<CrimeBotItemModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<CrimeBotItemModel> GetAsync(Func<CrimeBotItemModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<CrimeBotItemModel> GetAll(Func<CrimeBotItemModel, bool> func = null)
         {
@@ -30,8 +35,18 @@ namespace VRP.DAL.Repositories
         public CrimeBotItemModel JoinAndGet(int id) =>
             JoinAndGetAll(crimeBotItem => crimeBotItem.Id == id).SingleOrDefault();
 
+        public async Task<CrimeBotItemModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
         public CrimeBotItemModel JoinAndGet(Expression<Func<CrimeBotItemModel, bool>> expression) =>
             JoinAndGetAll(expression).FirstOrDefault();
+
+        public async Task<CrimeBotItemModel> JoinAndGetAsync(Expression<Func<CrimeBotItemModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<CrimeBotItemModel> JoinAndGetAll(Expression<Func<CrimeBotItemModel, bool>> expression)
         {
@@ -41,6 +56,11 @@ namespace VRP.DAL.Repositories
 
             return crimeBotItems
                 .Include(crimeBotItem => crimeBotItem.ItemTemplateModel);
+        }
+
+        public async Task<IEnumerable<CrimeBotItemModel>> JoinAndGetAllAsync(Expression<Func<CrimeBotItemModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
     }
 }

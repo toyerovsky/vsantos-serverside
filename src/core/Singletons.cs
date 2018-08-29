@@ -5,10 +5,10 @@
  */
 
 using Microsoft.Extensions.Configuration;
-using VRP.Core.Tools;
+using VRP.BLL.Tools;
 using VRP.DAL.Database;
 
-namespace VRP.Core
+namespace VRP.BLL
 {
     public static class Singletons
     {

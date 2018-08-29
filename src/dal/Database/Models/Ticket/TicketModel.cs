@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 
 namespace VRP.DAL.Database.Models.Ticket

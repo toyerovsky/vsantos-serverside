@@ -8,10 +8,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using VRP.Core.Enums;
+using VRP.BLL.Enums;
 using VRP.DAL.Database;
 
-namespace VRP.Core.Tools
+namespace VRP.BLL.Tools
 {
     public static class Utils
     {

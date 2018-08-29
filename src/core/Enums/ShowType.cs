@@ -6,7 +6,7 @@
 
 using System.ComponentModel;
 
-namespace VRP.Core.Enums
+namespace VRP.BLL.Enums
 {
     public enum ShowType
     {

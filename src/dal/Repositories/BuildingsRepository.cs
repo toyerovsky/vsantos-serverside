@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Building;
@@ -24,9 +25,24 @@ namespace VRP.DAL.Repositories
 
         public BuildingModel JoinAndGet(int id) => JoinAndGetAll(building => building.Id == id).SingleOrDefault();
 
+        public async Task<BuildingModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(building => building.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
         public BuildingModel JoinAndGet(Expression<Func<BuildingModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
 
+        public async Task<BuildingModel> JoinAndGetAsync(Expression<Func<BuildingModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
+
         public override BuildingModel Get(Func<BuildingModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override async Task<BuildingModel> GetAsync(Func<BuildingModel, bool> func)
+        {
+            return await GetAll(func).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<BuildingModel> JoinAndGetAll(Expression<Func<BuildingModel, bool>> expression = null)
         {
@@ -38,6 +54,11 @@ namespace VRP.DAL.Repositories
                 .Include(building => building.Character)
                 .Include(building => building.Group)
                 .Include(building => building.ItemsInBuilding);
+        }
+
+        public async Task<IEnumerable<BuildingModel>> JoinAndGetAllAsync(Expression<Func<BuildingModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
         public override IEnumerable<BuildingModel> GetAll(Func<BuildingModel, bool> func = null)

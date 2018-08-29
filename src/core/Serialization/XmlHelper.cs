@@ -11,7 +11,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Color = System.Drawing.Color;
 
-namespace VRP.Core.Serialization
+namespace VRP.BLL.Serialization
 {
     public static class XmlHelper
     {

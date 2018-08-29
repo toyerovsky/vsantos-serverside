@@ -1,7 +1,7 @@
-﻿using VRP.Core.Interfaces;
+﻿using VRP.BLL.Interfaces;
 using VRP.DAL.Enums;
 
-namespace VRP.Core.Mappers
+namespace VRP.BLL.Mappers
 {
     public class ServerRankMapper : IMapper<ServerRank, long>
     {

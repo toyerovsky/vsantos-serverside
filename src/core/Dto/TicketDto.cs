@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using VRP.DAL.Database.Models.Ticket;
-using VRP.DAL.Enums;
 
 namespace VRP.vAPI.Dto
 {

@@ -6,9 +6,9 @@
 
 using System.Drawing;
 using Colorful;
-using VRP.Core.Interfaces;
+using VRP.BLL.Interfaces;
 
-namespace VRP.Core.Tools
+namespace VRP.BLL.Tools
 {
     public class ConsoleLogger : ILogger
     {

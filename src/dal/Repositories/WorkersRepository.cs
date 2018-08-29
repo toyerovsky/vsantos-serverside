@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Group;
@@ -23,8 +24,16 @@ namespace VRP.DAL.Repositories
         }
 
         public WorkerModel JoinAndGet(int id) => JoinAndGetAll(worker => worker.Id == id).SingleOrDefault();
+        public async Task<WorkerModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
 
         public WorkerModel JoinAndGet(Expression<Func<WorkerModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+        public async Task<WorkerModel> JoinAndGetAsync(Expression<Func<WorkerModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<WorkerModel> JoinAndGetAll(Expression<Func<WorkerModel, bool>> expression = null)
         {
@@ -42,7 +51,16 @@ namespace VRP.DAL.Repositories
                         .ThenInclude(group => group.Character);
         }
 
+        public async Task<IEnumerable<WorkerModel>> JoinAndGetAllAsync(Expression<Func<WorkerModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override WorkerModel Get(Func<WorkerModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override async Task<WorkerModel> GetAsync(Func<WorkerModel, bool> func)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IEnumerable<WorkerModel> GetAll(Func<WorkerModel, bool> func = null)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Agreement;
@@ -18,7 +19,17 @@ namespace VRP.DAL.Repositories
 
         public AgreementModel JoinAndGet(int id) => JoinAndGetAll(agreement => agreement.Id == id).SingleOrDefault();
 
+        public async Task<AgreementModel> JoinAndGetAsync(int id)
+        {
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+        }
+
         public AgreementModel JoinAndGet(Expression<Func<AgreementModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
+        public async Task<AgreementModel> JoinAndGetAsync(Expression<Func<AgreementModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public IEnumerable<AgreementModel> JoinAndGetAll(Expression<Func<AgreementModel, bool>> expression)
         {
@@ -33,7 +44,17 @@ namespace VRP.DAL.Repositories
                 .Include(agreement => agreement.LeaserGroup);
         }
 
+        public async Task<IEnumerable<AgreementModel>> JoinAndGetAllAsync(Expression<Func<AgreementModel, bool>> expression = null)
+        {
+            return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
+        }
+
         public override AgreementModel Get(Func<AgreementModel, bool> func) => GetAll(func).FirstOrDefault();
+
+        public override async Task<AgreementModel> GetAsync(Func<AgreementModel, bool> func)
+        {
+            return await GetAll(func).AsQueryable().FirstOrDefaultAsync();
+        }
 
         public override IEnumerable<AgreementModel> GetAll(Func<AgreementModel, bool> func = null)
         {

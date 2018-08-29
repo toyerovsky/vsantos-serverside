@@ -1,4 +1,6 @@
-﻿using VRP.DAL.Database;
+﻿using System.Threading.Tasks;
+using VRP.BLL.UnitOfWork;
+using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
@@ -13,7 +15,7 @@ using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Interfaces;
 using VRP.DAL.Repositories;
 
-namespace VRP.vAPI.UnitOfWork
+namespace VRP.DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -55,6 +57,11 @@ namespace VRP.vAPI.UnitOfWork
             ZonesRepository = new ZonesRepository(context);
             GroupRanksRepository = new GroupRankRepository(context);
             TicketsRepository = new TicketsRepository(context);
+        }
+
+        public async Task SaveAsync()
+        {
+            await Context.SaveChangesAsync();
         }
 
         public void Save()

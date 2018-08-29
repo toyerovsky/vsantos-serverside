@@ -3,10 +3,10 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using VRP.Core.Interfaces;
+using VRP.BLL.Interfaces;
+using VRP.BLL.UnitOfWork;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
-using VRP.vAPI.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {

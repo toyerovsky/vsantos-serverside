@@ -5,9 +5,9 @@
  */
 
 using System.Diagnostics;
-using VRP.Core.Interfaces;
+using VRP.BLL.Interfaces;
 
-namespace VRP.Core.Tools
+namespace VRP.BLL.Tools
 {
     public class DebugLogger : ILogger
     {
