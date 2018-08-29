@@ -18,10 +18,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override DescriptionModel Get(Func<DescriptionModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<DescriptionModel> GetAsync(Func<DescriptionModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<DescriptionModel> GetAll(Func<DescriptionModel, bool> func = null)
         {

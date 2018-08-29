@@ -18,10 +18,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override GroupWarehouseModel Get(Func<GroupWarehouseModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<GroupWarehouseModel> GetAsync(Func<GroupWarehouseModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<GroupWarehouseModel> GetAll(Func<GroupWarehouseModel, bool> func = null)
         {

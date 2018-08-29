@@ -61,10 +61,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override CharacterModel Get(Func<CharacterModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<CharacterModel> GetAsync(Func<CharacterModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<CharacterModel> GetAll(Func<CharacterModel, bool> func = null)
         {

@@ -53,10 +53,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override TelephoneMessageModel Get(Func<TelephoneMessageModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<TelephoneMessageModel> GetAsync(Func<TelephoneMessageModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<TelephoneMessageModel> GetAll(Func<TelephoneMessageModel, bool> func = null)
         {

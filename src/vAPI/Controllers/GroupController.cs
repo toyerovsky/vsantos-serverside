@@ -4,10 +4,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using VRP.BLL.UnitOfWork;
+using VRP.BLL.Dto;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
-using VRP.vAPI.Dto;
+using VRP.DAL.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -27,7 +27,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("account/{id}")]
-        public IActionResult GetGoupsByAccountId(int id)
+        public IActionResult GetGroupsByAccountId(int id)
         {
             List<WorkerModel> workers = new List<WorkerModel>();
             foreach (CharacterModel character in _unitOfWork.AccountsRepository.JoinAndGet(id).Characters)

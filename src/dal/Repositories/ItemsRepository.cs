@@ -55,10 +55,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override ItemModel Get(Func<ItemModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<ItemModel> GetAsync(Func<ItemModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<ItemModel> GetAll(Func<ItemModel, bool> func = null)
         {

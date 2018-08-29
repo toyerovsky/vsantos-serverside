@@ -16,11 +16,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using VRP.BLL.Dto;
 using VRP.BLL.Extensions;
 using VRP.BLL.Interfaces;
 using VRP.BLL.Mappers;
 using VRP.BLL.Services;
-using VRP.BLL.UnitOfWork;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Building;
@@ -31,7 +31,6 @@ using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Enums;
 using VRP.DAL.UnitOfWork;
-using VRP.vAPI.Dto;
 
 namespace VRP.vAPI
 {
@@ -57,6 +56,11 @@ namespace VRP.vAPI
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             // services
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IBuildingService, BuildingService>();
+            services.AddScoped<ICharacterService, CharacterService>();
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IPenaltyService, PenaltyService>();
 
             // scoped mappers
@@ -150,7 +154,6 @@ namespace VRP.vAPI
             app.UseMvc();
 
             app.UseCors("dev");
-
         }
     }
 }

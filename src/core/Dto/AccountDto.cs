@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VRP.vAPI.Dto
+namespace VRP.BLL.Dto
 {
     public class AccountDto
     {

@@ -1,4 +1,6 @@
-﻿namespace VRP.vAPI.Dto
+﻿using System;
+
+namespace VRP.BLL.Dto
 {
     public class BuildingDto
     {
@@ -16,5 +18,8 @@
         public int CharacterId { get; set; }
         public GroupDto Group { get; set; }
         public int GroupId { get; set; }
+        public int CreatorId { get; set; }
+        public AccountDto Creator { get; set; }
+        public DateTime CreationTime { get; set; }
     }
 }

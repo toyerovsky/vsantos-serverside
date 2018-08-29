@@ -56,6 +56,8 @@ namespace VRP.DAL.Database.Models.Character
         public float LastRotationZ { get; set; }
         public uint CurrentDimension { get; set; }
         public int MinutesToRespawn { get; set; }
+        public string ImageUrl { get; set; }
+        public DateTime ImageUploadDate { get; set; }
 
         // navigation properties
         [ForeignKey("CharacterLook")]

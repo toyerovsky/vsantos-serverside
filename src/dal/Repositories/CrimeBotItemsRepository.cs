@@ -18,10 +18,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override CrimeBotItemModel Get(Func<CrimeBotItemModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<CrimeBotItemModel> GetAsync(Func<CrimeBotItemModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<CrimeBotItemModel> GetAll(Func<CrimeBotItemModel, bool> func = null)
         {

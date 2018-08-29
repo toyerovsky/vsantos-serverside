@@ -17,9 +17,10 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using VRP.BLL.UnitOfWork;
+using VRP.BLL.Dto;
+using VRP.BLL.Services;
 using VRP.DAL.Database.Models.Character;
-using VRP.vAPI.Dto;
+using VRP.DAL.UnitOfWork;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -31,48 +32,41 @@ namespace VRP.vAPI.Controllers
     public class CharacterController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly ICharacterService _characterService;
+        // inject this to provide compability of old methods
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CharacterController(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper)
+        public CharacterController(IConfiguration configuration, ICharacterService characterService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _configuration = configuration;
+            _characterService = characterService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         [HttpGet("account/{accountId}")]
-        public IActionResult GetByAccountId(int accountId)
+        public async Task<IActionResult> GetByAccountId(int accountId)
         {
-            IEnumerable<CharacterModel> characters = _unitOfWork.CharactersRepository.GetAll(character => character.AccountId == accountId);
+            IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllAsync(character => character.AccountId == accountId);
 
-            var characterModels = characters as CharacterModel[] ?? characters.ToArray();
-
-            if (!characterModels.Any())
+            if (!characterDtos.Any())
             {
                 return NotFound(accountId);
             }
-
-            IEnumerable<CharacterDto> characterDtos =
-                _mapper.Map<CharacterDto[]>(characterModels);
 
             return Json(characterDtos);
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<CharacterModel> characters = _unitOfWork.CharactersRepository.GetAll();
+            IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllAsync();
 
-            var characterModels = characters as CharacterModel[] ?? characters.ToArray();
-
-            if (!characterModels.Any())
+            if (!characterDtos.Any())
             {
                 return NotFound();
             }
-
-            IEnumerable<CharacterDto> characterDtos =
-                _mapper.Map<CharacterDto[]>(characterModels);
 
             return Json(characterDtos);
         }
@@ -107,16 +101,15 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            CharacterModel character = _unitOfWork.CharactersRepository.Get(id);
+            CharacterDto characterDto = await _characterService.GetByIdAsync(id);
 
-            if (character == null)
+            if (characterDto == null)
             {
                 return NotFound(id);
             }
 
-            CharacterDto characterDto = _mapper.Map<CharacterDto>(character);
             return Json(characterDto);
         }
 
@@ -136,11 +129,10 @@ namespace VRP.vAPI.Controllers
                 return BadRequest();
             }
 
-            Task<CharacterModel> charactersTask = _unitOfWork.CharactersRepository.GetAsync(id);
-
+            var characterTask = _characterService.GetByIdAsync(id);
             int accountId = HttpContext.User.GetAccountId();
 
-            if ((await charactersTask).AccountId != accountId)
+            if ((await characterTask).AccountId != accountId)
             {
                 return Forbid();
             }
@@ -154,42 +146,30 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] CharacterDto characterDto)
+        public async Task<IActionResult> Post([FromBody] CharacterDto characterDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            CharacterModel character = _mapper.Map<CharacterModel>(characterDto);
-            character.IsAlive = true;
-
-            _unitOfWork.CharactersRepository.Insert(character);
-            _unitOfWork.CharactersRepository.Save();
-
-            return Created("GET", character);
+            
+            return Created("", await _characterService.CreateAsync(characterDto));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] CharacterDto characterDto)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] CharacterDto characterDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            CharacterModel character = _unitOfWork.CharactersRepository.Get(id);
-
-            if (character == null)
+            if (!await _characterService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
-
-            _unitOfWork.CharactersRepository.BeginUpdate(character);
-            _mapper.Map(characterDto, character);
-            _unitOfWork.CharactersRepository.Save();
-
-            return Json(_mapper.Map<CharacterDto>(character));
+            
+            return Json(await _characterService.UpdateAsync(id, characterDto));
         }
 
         protected override void Dispose(bool disposing)

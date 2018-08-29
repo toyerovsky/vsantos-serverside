@@ -4,8 +4,10 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using VRP.DAL.Database.Models.Agreement;
 using VRP.DAL.Database.Models.Building;
 using VRP.DAL.Database.Models.Character;
@@ -29,13 +31,21 @@ namespace VRP.DAL.Database.Models.Group
         public int MaxPayday { get; set; }
         public decimal Money { get; set; }
         public string Color { get; set; }
-
         [EnumDataType(typeof(GroupType))]
-        public virtual GroupType GroupType { get; set; }
-        
+        public GroupType GroupType { get; set; }
+        public DateTime CreationTime { get; set; }
+        public string ImageUrl { get; set; }
+        public DateTime ImageUploadDate { get; set; }
+
+        // foreign keys
+        [ForeignKey("Creator")]
+        public int CreatorId { get; set; }
+        [ForeignKey("BossCharacter")]
+        public int BossCharacterId { get; set; }
+
         // navigation properties
         /// <summary>
-        /// Pierwotny szef biznesu, który nie moze go opuscic
+        /// Prime business boss which cannot be removed from it
         /// </summary>
         public virtual CharacterModel BossCharacter { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }

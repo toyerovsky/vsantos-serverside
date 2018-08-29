@@ -4,9 +4,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using VRP.BLL.UnitOfWork;
+using VRP.BLL.Dto;
 using VRP.DAL.Database.Models.Group;
-using VRP.vAPI.Dto;
+using VRP.DAL.UnitOfWork;
 
 namespace VRP.vAPI.Controllers
 {
@@ -70,7 +70,7 @@ namespace VRP.vAPI.Controllers
             _unitOfWork.GroupRanksRepository.Insert(groupRankModel);
             _unitOfWork.GroupRanksRepository.Save();
 
-            return Created("GET", groupRankModel);
+            return Created("", groupRankModel);
         }
 
         [HttpPut("{id}")]

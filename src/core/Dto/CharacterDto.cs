@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VRP.vAPI.Dto
+namespace VRP.BLL.Dto
 {
     public class CharacterDto
     {
@@ -23,5 +23,7 @@ namespace VRP.vAPI.Dto
         public decimal? BankMoney { get; set; }
         public AccountDto Account { get; set; }
         public int AccountId { get; set; }
+        public string ImageUploadUrl { get; set; }
+        public DateTime ImageUploadDate { get; set; }
     }
 }

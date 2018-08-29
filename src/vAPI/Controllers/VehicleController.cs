@@ -4,9 +4,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using VRP.BLL.UnitOfWork;
+using VRP.BLL.Dto;
 using VRP.DAL.Database.Models.Vehicle;
-using VRP.vAPI.Dto;
+using VRP.DAL.UnitOfWork;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using VRP.DAL.Database.Models.Ticket;
 
-namespace VRP.vAPI.Dto
+namespace VRP.BLL.Dto
 {
     public class TicketDto
     {

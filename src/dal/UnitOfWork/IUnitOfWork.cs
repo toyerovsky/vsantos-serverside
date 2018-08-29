@@ -13,7 +13,7 @@ using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Interfaces;
 
-namespace VRP.BLL.UnitOfWork
+namespace VRP.DAL.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {

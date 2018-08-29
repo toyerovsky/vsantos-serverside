@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using VRP.BLL.Dto;
 using VRP.DAL.Database.Models.Account;
-using VRP.vAPI.Dto;
 
 namespace VRP.BLL.Services
 {
@@ -12,6 +12,7 @@ namespace VRP.BLL.Services
         Task<IEnumerable<PenaltyDto>> GetAllAsync(Expression<Func<PenaltyModel, bool>> expression);
         Task<IEnumerable<PenaltyDto>> GetAllNoRelatedAsync(Func<PenaltyModel, bool> func);
         Task<PenaltyDto> GetByIdAsync(int id);
+        Task<PenaltyDto> GetAsync(Func<PenaltyModel, bool> func);
         Task<PenaltyDto> CreateAsync(int creatorId, PenaltyDto dto);
         Task<PenaltyDto> UpdateAsync(int id, PenaltyDto dto);
         Task<PenaltyDto> DeactivateAsync(int deactivatorId, int penaltyId);

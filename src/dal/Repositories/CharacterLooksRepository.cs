@@ -18,10 +18,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override CharacterLookModel Get(Func<CharacterLookModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<CharacterLookModel> GetAsync(Func<CharacterLookModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<CharacterLookModel> GetAll(Func<CharacterLookModel, bool> func = null)
         {

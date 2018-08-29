@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using VRP.BLL.UnitOfWork;
+using VRP.BLL.Dto;
 using VRP.DAL.Database.Models.Account;
-using VRP.vAPI.Dto;
+using VRP.DAL.UnitOfWork;
 
 namespace VRP.BLL.Services
 {
@@ -33,6 +33,11 @@ namespace VRP.BLL.Services
         public async Task<PenaltyDto> GetByIdAsync(int id)
         {
             return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.GetAsync(id));
+        }
+
+        public async Task<PenaltyDto> GetAsync(Func<PenaltyModel, bool> func)
+        {
+            return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.GetAsync(func));
         }
 
         public async Task<PenaltyDto> CreateAsync(int creatorId, PenaltyDto dto)
