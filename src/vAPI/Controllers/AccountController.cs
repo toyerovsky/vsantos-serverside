@@ -8,15 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.DAL.Database.Models.Account;
-using VRP.DAL.UnitOfWork;
+using VRP.BLL.Services;
 using VRP.vAPI.Model;
 
 namespace VRP.vAPI.Controllers
@@ -27,13 +25,11 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class AccountController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IUnitOfWork unitOfWork, IMapper mapper)
+        public AccountController(IAccountService accountService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _accountService = accountService;
         }
 
         [HttpPost("login")]
@@ -45,29 +41,18 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            AccountModel account = _unitOfWork.AccountsRepository.Get(a => a.Email == loginModel.Email);
+            IEnumerable<Claim> claims = await _accountService.GetClaimsAsync(loginModel.Email, loginModel.PasswordHash);
 
-            if (account != null && account.PasswordHash == loginModel.PasswordHash)
+            if (claims != null)
             {
-                IEnumerable<Claim> claims = new List<Claim>
-                {
-                    new Claim("AccountId", account.Id.ToString()),
-                    new Claim(ClaimTypes.Email, account.Email),
-                    new Claim("ForumUserName", account.ForumUserName),
-                    new Claim(ClaimTypes.Role, account.ServerRank.ToString())
-                };
-
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 claimsIdentity.AddClaims(claims);
-
-                AuthenticationProperties authenticationProperties = new AuthenticationProperties();
-
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     claimsPrincipal,
-                    authenticationProperties
+                    new AuthenticationProperties()
                 );
 
                 return SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -84,53 +69,50 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<AccountModel> accounts = _unitOfWork.AccountsRepository.GetAll();
+            IEnumerable<AccountDto> accounts = await _accountService.GetAllAsync();
 
             if (!accounts.Any())
             {
                 return NotFound();
             }
 
-            IEnumerable<AccountDto> accountDtos = _mapper.Map<AccountDto[]>(accounts);
-            return Json(accountDtos);
+            return Json(accounts);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            AccountModel account = _unitOfWork.AccountsRepository.Get(id);
+            AccountDto account = await _accountService.GetByIdAsync(id);
 
             if (account == null)
             {
                 return NotFound(id);
             }
 
-            AccountDto accountDto = _mapper.Map<AccountDto>(account);
-            return Json(accountDto);
+            return Json(account);
         }
 
         [AllowAnonymous]
         [HttpGet("email/{email}")]
-        public IActionResult Get(string email)
+        public async Task<IActionResult> Get(string email)
         {
-            AccountModel account = _unitOfWork.AccountsRepository.Get(a => a.Email == email);
+            AccountDto account = await _accountService.GetAsync(a => a.Email == email);
 
             if (account == null)
             {
                 return NotFound(email);
             }
-
-            AccountDto accountDto = _mapper.Map<AccountDto>(account);
-            return Json(accountDto);
+            
+            return Json(account);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _unitOfWork?.Dispose();
+                _accountService?.Dispose();
             }
             base.Dispose(disposing);
         }

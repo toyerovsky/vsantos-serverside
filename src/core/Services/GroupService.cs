@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using VRP.BLL.Dto;
+using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
 using VRP.DAL.UnitOfWork;
 
@@ -24,12 +26,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<GroupDto>> GetAllAsync(Expression<Func<GroupModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<GroupModel>, IEnumerable<GroupDto>>(await _unitOfWork.GroupsRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<GroupModel>, GroupDto[]>(await _unitOfWork.GroupsRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<GroupDto>> GetAllNoRelatedAsync(Func<GroupModel, bool> func)
         {
-            return _mapper.Map<IEnumerable<GroupModel>, IEnumerable<GroupDto>>(await _unitOfWork.GroupsRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<GroupModel>, GroupDto[]>(await _unitOfWork.GroupsRepository.GetAllAsync(func));
         }
 
         public async Task<GroupDto> GetByIdAsync(int id)
@@ -82,6 +84,16 @@ namespace VRP.BLL.Services
             groupModel.ImageUrl = await imageTask;
             await _unitOfWork.SaveAsync();
             return Mapper.Map<GroupModel, GroupDto>(groupModel);
+        }
+
+        public async Task<IEnumerable<GroupDto>> GetByAccountIdAsync(int id)
+        {
+            List<GroupModel> groups = new List<GroupModel>();
+            foreach (CharacterModel character in (await _unitOfWork.AccountsRepository.JoinAndGetAsync(id)).Characters)
+            {
+                groups.AddRange(character.Workers.Select(w => w.Group));
+            }
+            return Mapper.Map<GroupDto[]>(groups);
         }
 
         public void Dispose()

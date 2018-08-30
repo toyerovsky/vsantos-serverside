@@ -31,6 +31,7 @@ using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Enums;
 using VRP.DAL.UnitOfWork;
+using VRP.vAPI.Helpers;
 
 namespace VRP.vAPI
 {
@@ -118,10 +119,14 @@ namespace VRP.vAPI
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Authenticated", policy =>
-                    {
-                        policy.RequireAuthenticatedUser();
-                        policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme);
-                    });
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme);
+                });
+                options.AddPolicy("Support", policy => { policy.RequireRole(RoleHelper.GetFromSupportRoles()); });
+                options.AddPolicy("Admin", policy => { policy.RequireRole(RoleHelper.GetFromAdminRoles()); });
+                options.AddPolicy("Dev", policy => { policy.RequireRole(RoleHelper.GetFromDevRoles()); });
+                options.AddPolicy("Management", policy => { policy.RequireRole(RoleHelper.ManagementRoles); });
             });
 
             services.AddCors(options =>

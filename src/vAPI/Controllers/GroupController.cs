@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.DAL.Database.Models.Character;
-using VRP.DAL.Database.Models.Group;
-using VRP.DAL.UnitOfWork;
+using VRP.BLL.Services;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -17,113 +16,88 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class GroupController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IGroupService _groupService;
 
-        public GroupController(IUnitOfWork unitOfWork, IMapper mapper)
+        public GroupController(IGroupService groupService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _groupService = groupService;
         }
-
+        
         [HttpGet("account/{id}")]
-        public IActionResult GetGroupsByAccountId(int id)
+        public async Task<IActionResult> GetGroupsByAccountId(int id)
         {
-            List<WorkerModel> workers = new List<WorkerModel>();
-            foreach (CharacterModel character in _unitOfWork.AccountsRepository.JoinAndGet(id).Characters)
-            {
-                workers.AddRange(character.Workers.ToArray());
-            }
+            IEnumerable<GroupDto> groups = await _groupService.GetByAccountIdAsync(id);
 
-            if (!workers.Any())
+            if (!groups.Any())
             {
                 return NotFound(id);
             }
 
-            IEnumerable<WorkerDto> workerDtos = _mapper.Map<WorkerDto[]>(workers);
-            return Json(workerDtos);
+            return Json(groups);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            GroupModel group = _unitOfWork.GroupsRepository.JoinAndGet(id);
+            GroupDto group = await _groupService.GetByIdAsync(id);
 
             if (group == null)
             {
                 return NotFound(id);
             }
 
-            GroupDto groupDto = _mapper.Map<GroupDto>(group);
-            return Json(groupDto);
+            return Json(group);
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<GroupModel> groups = _unitOfWork.GroupsRepository.GetAll();
-
-            var groupModels = groups as GroupModel[] ?? groups.ToArray();
-
-            if (!groupModels.Any())
+            IEnumerable<GroupDto> groups = await _groupService.GetAllAsync();
+            
+            if (!groups.Any())
             {
                 return NotFound();
             }
 
-            IEnumerable<GroupDto> groupDtos =
-                _mapper.Map<GroupDto[]>(groupModels);
-
-            return Json(groupDtos);
+            return Json(groups);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] GroupDto groupDto)
+        public async Task<IActionResult> Post([FromBody] GroupDto groupDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            GroupModel group = _mapper.Map<GroupModel>(groupDto);
-
-            _unitOfWork.GroupsRepository.Insert(group);
-            _unitOfWork.GroupsRepository.Save();
-
-            return Created("GET", group);
+            
+            return Created("", await _groupService.CreateAsync(HttpContext.User.GetAccountId(), groupDto));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] GroupDto groupDto)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GroupDto groupDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(groupDto);
             }
 
-            GroupModel group = _unitOfWork.GroupsRepository.JoinAndGet(id);
-
-            if (group == null)
+            if (!await _groupService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.GroupsRepository.BeginUpdate(group);
-            _mapper.Map(groupDto, group);
-            _unitOfWork.GroupsRepository.Save();
-
-            return Json(_mapper.Map<GroupDto>(group));
+            return Json(await _groupService.UpdateAsync(id, groupDto));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!_unitOfWork.GroupsRepository.Contains(id))
+            if (!await _groupService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.GroupsRepository.Delete(id);
-            _unitOfWork.Save();
+            await _groupService.DeleteAsync(id);
 
             return NoContent();
         }
@@ -132,7 +106,7 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _unitOfWork?.Dispose();
+                _groupService?.Dispose();
             }
             base.Dispose(disposing);
         }

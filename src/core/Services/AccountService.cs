@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using VRP.BLL.Dto;
@@ -22,17 +23,36 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<AccountDto>> GetAllAsync(Expression<Func<AccountModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<AccountModel>, IEnumerable<AccountDto>>(await _unitOfWork.AccountsRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>(await _unitOfWork.AccountsRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<AccountDto>> GetAllNoRelatedAsync(Func<AccountModel, bool> func)
         {
-            return _mapper.Map<IEnumerable<AccountModel>, IEnumerable<AccountDto>>(await _unitOfWork.AccountsRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>(await _unitOfWork.AccountsRepository.GetAllAsync(func));
         }
 
         public async Task<AccountDto> GetByIdAsync(int id)
         {
             return _mapper.Map<AccountModel, AccountDto>(await _unitOfWork.AccountsRepository.GetAsync(id));
+        }
+
+        public async Task<IEnumerable<Claim>> GetClaimsAsync(string userEmail, string passwordHash)
+        {
+            AccountModel accountModel = await _unitOfWork.AccountsRepository.GetAsync(account => account.Email == userEmail);
+
+            if (accountModel != null && accountModel.PasswordHash == passwordHash)
+            {
+                IEnumerable<Claim> claims = new List<Claim>
+                {
+                    new Claim("AccountId", accountModel.Id.ToString()),
+                    new Claim(ClaimTypes.Email, accountModel.Email),
+                    new Claim("ForumUserName", accountModel.ForumUserName),
+                    new Claim(ClaimTypes.Role, ((int)accountModel.ServerRank).ToString())
+                };
+                return claims;
+            }
+
+            return null;
         }
 
         public async Task<AccountDto> GetAsync(Func<AccountModel, bool> func)

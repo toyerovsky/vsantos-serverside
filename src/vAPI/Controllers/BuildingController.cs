@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.DAL.Database.Models.Building;
-using VRP.DAL.UnitOfWork;
+using VRP.BLL.Services;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -16,50 +16,85 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class BuildingController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IBuildingService _buildingService;
 
-        public BuildingController(IUnitOfWork unitOfWork, IMapper mapper)
+        public BuildingController(IBuildingService buildingService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _buildingService = buildingService;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<BuildingModel> buildings = _unitOfWork.BuildingsRepository.GetAll();
+            IEnumerable<BuildingDto> buildings = await _buildingService.GetAllAsync();
 
             if (!buildings.Any())
             {
                 return NotFound();
             }
 
-            IEnumerable<BuildingDto> buildingDtos = _mapper.Map<BuildingDto[]>(buildings);
-            return Json(buildingDtos);
+            return Json(buildings);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            BuildingModel building = _unitOfWork.BuildingsRepository.Get(id);
+            BuildingDto building = await _buildingService.GetByIdAsync(id);
 
             if (building == null)
             {
                 return NotFound(id);
             }
 
-            BuildingDto buildingDto = _mapper.Map<BuildingDto>(building);
-            return Json(buildingDto);
+            return Json(building);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] BuildingDto buildingDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Created("", await _buildingService.CreateAsync(HttpContext.User.GetAccountId(), buildingDto));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] BuildingDto buildingDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _buildingService.ContainsAsync(id))
+            {
+                return NotFound(id);
+            }
+
+            return Json(await _buildingService.UpdateAsync(id, buildingDto));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!await _buildingService.ContainsAsync(id))
+            {
+                return NotFound(id);
+            }
+
+            await _buildingService.DeleteAsync(id);
+
+            return NoContent();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _unitOfWork?.Dispose();
+                _buildingService?.Dispose();
             }
-
             base.Dispose(disposing);
         }
     }

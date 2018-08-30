@@ -140,7 +140,7 @@ namespace VRP.vAPI.Controllers
             ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             claimsIdentity.AddClaim(new Claim("CharacterId", id.ToString()));
             HttpContext.User.AddIdentity(claimsIdentity);
-
+            
             await HttpContext.SignInAsync(HttpContext.User);
             return Ok();
         }
@@ -170,6 +170,22 @@ namespace VRP.vAPI.Controllers
             }
             
             return Json(await _characterService.UpdateAsync(id, characterDto));
+        }
+
+        [HttpPut("image/{id}")]
+        public async Task<IActionResult> UploadImage([FromRoute] int id, [FromBody] ImageDto imageDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _characterService.ContainsAsync(id))
+            {
+                return NotFound(id);
+            }
+
+            return Json(await _characterService.UpdateImageAsync(id, imageDto));
         }
 
         protected override void Dispose(bool disposing)

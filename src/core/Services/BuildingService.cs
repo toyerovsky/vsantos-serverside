@@ -22,12 +22,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<BuildingDto>> GetAllAsync(Expression<Func<BuildingModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<BuildingModel>, IEnumerable<BuildingDto>>(await _unitOfWork.BuildingsRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<BuildingModel>, BuildingDto[]>(await _unitOfWork.BuildingsRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<BuildingDto>> GetAllNoRelatedAsync(Func<BuildingModel, bool> func)
         {
-            return _mapper.Map<IEnumerable<BuildingModel>, IEnumerable<BuildingDto>>(await _unitOfWork.BuildingsRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<BuildingModel>, BuildingDto[]>(await _unitOfWork.BuildingsRepository.GetAllAsync(func));
         }
 
         public async Task<BuildingDto> GetByIdAsync(int id)

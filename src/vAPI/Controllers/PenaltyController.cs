@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -18,19 +17,16 @@ namespace VRP.vAPI.Controllers
     public class PenaltyController : Controller
     {
         private readonly IPenaltyService _penaltyService;
-        private readonly IMapper _mapper;
 
-        public PenaltyController(IPenaltyService penaltyService, IMapper mapper)
+        public PenaltyController(IPenaltyService penaltyService)
         {
             _penaltyService = penaltyService;
-            _mapper = mapper;
         }
 
-        // GET: api/Penalty
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Json(await _penaltyService.GetAllAsync(null));
+            return Json(await _penaltyService.GetAllAsync());
         }
 
         [HttpGet("account/{id}")]
@@ -75,7 +71,20 @@ namespace VRP.vAPI.Controllers
             return Json(await _penaltyService.UpdateAsync(id, penaltyDto));
         }
 
+        [HttpPut("deactivate/{id}")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> Put([FromRoute] int id)
+        {
+            if (!await _penaltyService.ContainsAsync(id))
+            {
+                return NotFound(id);
+            }
+
+            return Json(await _penaltyService.DeactivateAsync(User.GetAccountId(), id));
+        }
+
         [HttpDelete("{id}")]
+        [Authorize("Management")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!await _penaltyService.ContainsAsync(id))

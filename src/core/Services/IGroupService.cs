@@ -7,7 +7,7 @@ using VRP.DAL.Database.Models.Group;
 
 namespace VRP.BLL.Services
 {
-    public interface IGroupService
+    public interface IGroupService : IDisposable
     {
         Task<IEnumerable<GroupDto>> GetAllAsync(Expression<Func<GroupModel, bool>> expression = null);
         Task<IEnumerable<GroupDto>> GetAllNoRelatedAsync(Func<GroupModel, bool> func = null);
@@ -18,5 +18,6 @@ namespace VRP.BLL.Services
         Task DeleteAsync(int id);
         Task<bool> ContainsAsync(int id);
         Task<GroupDto> UpdateImageAsync(int characterId, ImageDto imageDto);
+        Task<IEnumerable<GroupDto>> GetByAccountIdAsync(int id);
     }
 }
