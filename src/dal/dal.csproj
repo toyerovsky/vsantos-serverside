@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Database\Models\Market\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,9 +26,9 @@ namespace VRP.BLL.Services.Interfaces
             return _mapper.Map<IEnumerable<ItemModel>, ItemDto[]>(await _unitOfWork.ItemsRepository.JoinAndGetAllAsync(expression));
         }
 
-        public async Task<IEnumerable<ItemDto>> GetAllNoRelatedAsync(Func<ItemModel, bool> func)
+        public async Task<IEnumerable<ItemDto>> GetAllNoRelatedAsync(Expression<Func<ItemModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<ItemModel>, ItemDto[]>(await _unitOfWork.ItemsRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<ItemModel>, ItemDto[]>((await _unitOfWork.ItemsRepository.GetAllAsync(expression)).ToArray());
         }
 
         public async Task<ItemDto> GetByIdAsync(int id)
@@ -35,9 +36,9 @@ namespace VRP.BLL.Services.Interfaces
             return _mapper.Map<ItemModel, ItemDto>(await _unitOfWork.ItemsRepository.GetAsync(id));
         }
 
-        public async Task<ItemDto> GetAsync(Func<ItemModel, bool> func)
+        public async Task<ItemDto> GetAsync(Expression<Func<ItemModel, bool>> expression)
         {
-            return _mapper.Map<ItemModel, ItemDto>(await _unitOfWork.ItemsRepository.GetAsync(func));
+            return _mapper.Map<ItemModel, ItemDto>(await _unitOfWork.ItemsRepository.GetAsync(expression));
         }
 
         public async Task<ItemDto> CreateAsync(int creatorId, ItemDto dto)

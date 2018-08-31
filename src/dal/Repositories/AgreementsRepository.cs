@@ -49,17 +49,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override AgreementModel Get(Func<AgreementModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override AgreementModel Get(Expression<Func<AgreementModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override async Task<AgreementModel> GetAsync(Func<AgreementModel, bool> func)
+        public override IEnumerable<AgreementModel> GetAll(Expression<Func<AgreementModel, bool>> expression = null)
         {
-            return await GetAll(func).AsQueryable().FirstOrDefaultAsync();
-        }
-
-        public override IEnumerable<AgreementModel> GetAll(Func<AgreementModel, bool> func = null)
-        {
-            IEnumerable<AgreementModel> agreements = func != null ?
-                Context.Agreements.Where(func) :
+            IEnumerable<AgreementModel> agreements = expression != null ?
+                Context.Agreements.Where(expression) :
                 Context.Agreements;
 
             return agreements;

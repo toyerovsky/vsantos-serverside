@@ -24,12 +24,14 @@ namespace VRP.DAL.Repositories
         }
 
         public WorkerModel JoinAndGet(int id) => JoinAndGetAll(worker => worker.Id == id).SingleOrDefault();
+
         public async Task<WorkerModel> JoinAndGetAsync(int id)
         {
             return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
         }
 
         public WorkerModel JoinAndGet(Expression<Func<WorkerModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
         public async Task<WorkerModel> JoinAndGetAsync(Expression<Func<WorkerModel, bool>> expression = null)
         {
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
@@ -56,12 +58,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override WorkerModel Get(Func<WorkerModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override WorkerModel Get(Expression<Func<WorkerModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<WorkerModel> GetAll(Func<WorkerModel, bool> func = null)
+        public override IEnumerable<WorkerModel> GetAll(Expression<Func<WorkerModel, bool>> expression = null)
         {
-            IEnumerable<WorkerModel> workers = func != null ?
-                Context.Workers.Where(func) :
+            IEnumerable<WorkerModel> workers = expression != null ?
+                Context.Workers.Where(expression) :
                 Context.Workers;
 
             return workers;

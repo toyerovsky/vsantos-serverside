@@ -17,12 +17,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override VehicleRecordModel Get(Func<VehicleRecordModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override VehicleRecordModel Get(Expression<Func<VehicleRecordModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<VehicleRecordModel> GetAll(Func<VehicleRecordModel, bool> func = null)
+        public override IEnumerable<VehicleRecordModel> GetAll(Expression<Func<VehicleRecordModel, bool>> expression = null)
         {
-            IEnumerable<VehicleRecordModel> vehicleRecords = func != null ?
-                Context.VehicleRecordModels.Where(func) :
+            IEnumerable<VehicleRecordModel> vehicleRecords = expression != null ?
+                Context.VehicleRecordModels.Where(expression) :
                 Context.VehicleRecordModels;
 
             return vehicleRecords;

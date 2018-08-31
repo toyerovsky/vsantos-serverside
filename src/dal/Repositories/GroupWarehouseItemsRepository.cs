@@ -55,12 +55,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override GroupWarehouseItemModel Get(Func<GroupWarehouseItemModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override GroupWarehouseItemModel Get(Expression<Func<GroupWarehouseItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<GroupWarehouseItemModel> GetAll(Func<GroupWarehouseItemModel, bool> func = null)
+        public override IEnumerable<GroupWarehouseItemModel> GetAll(Expression<Func<GroupWarehouseItemModel, bool>> expression = null)
         {
-            IEnumerable<GroupWarehouseItemModel> groupWarehouseItems = func != null ?
-                Context.GroupWarehouseItems.Where(func) :
+            IQueryable<GroupWarehouseItemModel> groupWarehouseItems = expression != null ?
+                Context.GroupWarehouseItems.Where(expression) :
                 Context.GroupWarehouseItems;
 
             return groupWarehouseItems;

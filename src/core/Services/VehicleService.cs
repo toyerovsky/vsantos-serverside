@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,12 +24,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<VehicleDto>> GetAllAsync(Expression<Func<VehicleModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>(await _unitOfWork.VehiclesRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>((await _unitOfWork.VehiclesRepository.JoinAndGetAllAsync(expression)).ToArray());
         }
 
-        public async Task<IEnumerable<VehicleDto>> GetAllNoRelatedAsync(Func<VehicleModel, bool> func)
+        public async Task<IEnumerable<VehicleDto>> GetAllNoRelatedAsync(Expression<Func<VehicleModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>(await _unitOfWork.VehiclesRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>((await _unitOfWork.VehiclesRepository.GetAllAsync(expression)).ToArray());
         }
 
         public async Task<VehicleDto> GetByIdAsync(int id)
@@ -36,9 +37,9 @@ namespace VRP.BLL.Services
             return _mapper.Map<VehicleModel, VehicleDto>(await _unitOfWork.VehiclesRepository.GetAsync(id));
         }
 
-        public async Task<VehicleDto> GetAsync(Func<VehicleModel, bool> func)
+        public async Task<VehicleDto> GetAsync(Expression<Func<VehicleModel, bool>> expression)
         {
-            return _mapper.Map<VehicleModel, VehicleDto>(await _unitOfWork.VehiclesRepository.GetAsync(func));
+            return _mapper.Map<VehicleModel, VehicleDto>(await _unitOfWork.VehiclesRepository.GetAsync(expression));
         }
 
         public async Task<VehicleDto> CreateAsync(int creatorId, VehicleDto dto)

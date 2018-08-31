@@ -10,9 +10,9 @@ namespace VRP.BLL.Services.Interfaces
     public interface IPenaltyService : IDisposable
     {
         Task<IEnumerable<PenaltyDto>> GetAllAsync(Expression<Func<PenaltyModel, bool>> expression = null);
-        Task<IEnumerable<PenaltyDto>> GetAllNoRelatedAsync(Func<PenaltyModel, bool> func = null);
+        Task<IEnumerable<PenaltyDto>> GetAllNoRelatedAsync(Expression<Func<PenaltyModel, bool>> expression = null);
         Task<PenaltyDto> GetByIdAsync(int id);
-        Task<PenaltyDto> GetAsync(Func<PenaltyModel, bool> func = null);
+        Task<PenaltyDto> GetAsync(Expression<Func<PenaltyModel, bool>> expression = null);
         Task<PenaltyDto> CreateAsync(int creatorId, PenaltyDto dto);
         Task<PenaltyDto> UpdateAsync(int id, PenaltyDto dto);
         Task<PenaltyDto> DeactivateAsync(int deactivatorId, int penaltyId);

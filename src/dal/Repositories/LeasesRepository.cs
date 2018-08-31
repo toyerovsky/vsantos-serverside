@@ -48,12 +48,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override LeaseModel Get(Func<LeaseModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override LeaseModel Get(Expression<Func<LeaseModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<LeaseModel> GetAll(Func<LeaseModel, bool> func = null)
+        public override IEnumerable<LeaseModel> GetAll(Expression<Func<LeaseModel, bool>> expression = null)
         {
-            IEnumerable<LeaseModel> leases = func != null ?
-                Context.Leases.Where(func) :
+            IQueryable<LeaseModel> leases = expression != null ?
+                Context.Leases.Where(expression) :
                 Context.Leases;
 
             return leases;

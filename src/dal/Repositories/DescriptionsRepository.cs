@@ -17,12 +17,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override DescriptionModel Get(Func<DescriptionModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override DescriptionModel Get(Expression<Func<DescriptionModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<DescriptionModel> GetAll(Func<DescriptionModel, bool> func = null)
+        public override IEnumerable<DescriptionModel> GetAll(Expression<Func<DescriptionModel, bool>> expression = null)
         {
-            IEnumerable<DescriptionModel> descriptions = func != null ?
-                Context.Descriptions.Where(func) :
+            IEnumerable<DescriptionModel> descriptions = expression != null ?
+                Context.Descriptions.Where(expression) :
                 Context.Descriptions;
 
             return descriptions;

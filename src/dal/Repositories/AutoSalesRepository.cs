@@ -17,17 +17,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override AutoSaleModel Get(Func<AutoSaleModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override AutoSaleModel Get(Expression<Func<AutoSaleModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override async Task<AutoSaleModel> GetAsync(Func<AutoSaleModel, bool> func)
+        public override IEnumerable<AutoSaleModel> GetAll(Expression<Func<AutoSaleModel, bool>> expression = null)
         {
-            return await GetAll(func).AsQueryable().FirstOrDefaultAsync();
-        }
-
-        public override IEnumerable<AutoSaleModel> GetAll(Func<AutoSaleModel, bool> func = null)
-        {
-            IEnumerable<AutoSaleModel> autoSales = func != null ?
-                Context.AutoSales.Where(func) :
+            IEnumerable<AutoSaleModel> autoSales = expression != null ?
+                Context.AutoSales.Where(expression) :
                 Context.AutoSales;
 
             return autoSales;

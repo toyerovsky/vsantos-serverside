@@ -30,9 +30,9 @@ namespace VRP.BLL.Services
             return _mapper.Map<IEnumerable<GroupModel>, GroupDto[]>(await _unitOfWork.GroupsRepository.JoinAndGetAllAsync(expression));
         }
 
-        public async Task<IEnumerable<GroupDto>> GetAllNoRelatedAsync(Func<GroupModel, bool> func)
+        public async Task<IEnumerable<GroupDto>> GetAllNoRelatedAsync(Expression<Func<GroupModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<GroupModel>, GroupDto[]>(await _unitOfWork.GroupsRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<GroupModel>, GroupDto[]>(await _unitOfWork.GroupsRepository.GetAllAsync(expression));
         }
 
         public async Task<GroupDto> GetByIdAsync(int id)
@@ -40,9 +40,9 @@ namespace VRP.BLL.Services
             return _mapper.Map<GroupModel, GroupDto>(await _unitOfWork.GroupsRepository.GetAsync(id));
         }
 
-        public async Task<GroupDto> GetAsync(Func<GroupModel, bool> func)
+        public async Task<GroupDto> GetAsync(Expression<Func<GroupModel, bool>> expression)
         {
-            return _mapper.Map<GroupModel, GroupDto>(await _unitOfWork.GroupsRepository.GetAsync(func));
+            return _mapper.Map<GroupModel, GroupDto>(await _unitOfWork.GroupsRepository.GetAsync(expression));
         }
 
         public async Task<GroupDto> CreateAsync(int creatorId, GroupDto dto)
@@ -89,12 +89,8 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<GroupDto>> GetByAccountIdAsync(int id)
         {
-            List<GroupModel> groups = new List<GroupModel>();
-            foreach (CharacterModel character in (await _unitOfWork.AccountsRepository.JoinAndGetAsync(id)).Characters)
-            {
-                groups.AddRange(character.Workers.Select(w => w.Group));
-            }
-            return Mapper.Map<GroupDto[]>(groups);
+            return _mapper.Map<IEnumerable<GroupModel>, GroupDto[]>(
+                await _unitOfWork.GroupsRepository.JoinAndGetAllAsync(group => group.Workers.Any(worker => worker.Character.AccountId == id)));
         }
 
         public void Dispose()

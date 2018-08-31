@@ -10,9 +10,9 @@ namespace VRP.BLL.Services.Interfaces
     public interface IGroupService : IDisposable
     {
         Task<IEnumerable<GroupDto>> GetAllAsync(Expression<Func<GroupModel, bool>> expression = null);
-        Task<IEnumerable<GroupDto>> GetAllNoRelatedAsync(Func<GroupModel, bool> func = null);
+        Task<IEnumerable<GroupDto>> GetAllNoRelatedAsync(Expression<Func<GroupModel, bool>> expression = null);
         Task<GroupDto> GetByIdAsync(int id);
-        Task<GroupDto> GetAsync(Func<GroupModel, bool> func = null);
+        Task<GroupDto> GetAsync(Expression<Func<GroupModel, bool>> expression = null);
         Task<GroupDto> UpdateAsync(int id, GroupDto dto);
         Task<GroupDto> CreateAsync(int creatorId, GroupDto dto);
         Task DeleteAsync(int id);

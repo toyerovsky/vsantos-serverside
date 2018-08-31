@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,12 +26,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<CharacterDto>> GetAllAsync(Expression<Func<CharacterModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>(await _unitOfWork.CharactersRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>((await _unitOfWork.CharactersRepository.JoinAndGetAllAsync(expression)).ToArray());
         }
 
-        public async Task<IEnumerable<CharacterDto>> GetAllNoRelatedAsync(Func<CharacterModel, bool> func)
+        public async Task<IEnumerable<CharacterDto>> GetAllNoRelatedAsync(Expression<Func<CharacterModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>(await _unitOfWork.CharactersRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>((await _unitOfWork.CharactersRepository.GetAllAsync(expression)).ToArray());
         }
 
         public async Task<CharacterDto> GetByIdAsync(int id)
@@ -38,9 +39,9 @@ namespace VRP.BLL.Services
             return _mapper.Map<CharacterModel, CharacterDto>(await _unitOfWork.CharactersRepository.GetAsync(id));
         }
 
-        public async Task<CharacterDto> GetAsync(Func<CharacterModel, bool> func)
+        public async Task<CharacterDto> GetAsync(Expression<Func<CharacterModel, bool>> expression)
         {
-            return _mapper.Map<CharacterModel, CharacterDto>(await _unitOfWork.CharactersRepository.GetAsync(func));
+            return _mapper.Map<CharacterModel, CharacterDto>(await _unitOfWork.CharactersRepository.GetAsync(expression));
         }
 
         public async Task<CharacterDto> CreateAsync(CharacterDto dto)

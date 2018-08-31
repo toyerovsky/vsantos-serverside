@@ -10,9 +10,9 @@ namespace VRP.BLL.Services.Interfaces
     public interface IVehicleService : IDisposable
     {
         Task<IEnumerable<VehicleDto>> GetAllAsync(Expression<Func<VehicleModel, bool>> expression = null);
-        Task<IEnumerable<VehicleDto>> GetAllNoRelatedAsync(Func<VehicleModel, bool> func = null);
+        Task<IEnumerable<VehicleDto>> GetAllNoRelatedAsync(Expression<Func<VehicleModel, bool>> expression = null);
         Task<VehicleDto> GetByIdAsync(int id);
-        Task<VehicleDto> GetAsync(Func<VehicleModel, bool> func = null);
+        Task<VehicleDto> GetAsync(Expression<Func<VehicleModel, bool>> expression = null);
         Task<VehicleDto> CreateAsync(int creatorId, VehicleDto dto);
         Task<VehicleDto> UpdateAsync(int id, VehicleDto dto);
         Task DeleteAsync(int id);

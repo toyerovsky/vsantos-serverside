@@ -17,12 +17,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override CriminalCaseModel Get(Func<CriminalCaseModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override CriminalCaseModel Get(Expression<Func<CriminalCaseModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<CriminalCaseModel> GetAll(Func<CriminalCaseModel, bool> func = null)
+        public override IEnumerable<CriminalCaseModel> GetAll(Expression<Func<CriminalCaseModel, bool>> expression = null)
         {
-            IEnumerable<CriminalCaseModel> criminalCases = func != null ?
-                Context.CriminalCases.Where(func) :
+            IQueryable<CriminalCaseModel> criminalCases = expression != null ?
+                Context.CriminalCases.Where(expression) :
                 Context.CriminalCases;
 
             return criminalCases;

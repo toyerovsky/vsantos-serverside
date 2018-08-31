@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Misc;
 using VRP.DAL.Repositories.Base;
@@ -19,12 +20,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override ZoneModel Get(Func<ZoneModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override ZoneModel Get(Expression<Func<ZoneModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<ZoneModel> GetAll(Func<ZoneModel, bool> func = null)
+        public override IEnumerable<ZoneModel> GetAll(Expression<Func<ZoneModel, bool>> expression = null)
         {
-            IEnumerable<ZoneModel> zones = func != null ?
-                Context.Zones.Where(func) :
+            IQueryable<ZoneModel> zones = expression != null ?
+                Context.Zones.Where(expression) :
                 Context.Zones;
 
             return zones;

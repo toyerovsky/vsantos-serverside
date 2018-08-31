@@ -17,15 +17,16 @@ namespace VRP.DAL.Repositories
        {
        }
 
-        public override TicketModel Get(Func<TicketModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override TicketModel Get(Expression<Func<TicketModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<TicketModel> GetAll(Func<TicketModel, bool> func = null)
+        public override IEnumerable<TicketModel> GetAll(Expression<Func<TicketModel, bool>> expression = null)
         {
-            IEnumerable<TicketModel> tickets = func != null ? Context.Tickets.Where(func) : Context.Tickets;
+            IEnumerable<TicketModel> tickets = expression != null ? Context.Tickets.Where(expression) : Context.Tickets;
             return tickets;
         }
 
         public TicketModel JoinAndGet(int id) => JoinAndGetAll(ticket => ticket.Id == id).SingleOrDefault();
+
         public async Task<TicketModel> JoinAndGetAsync(int id)
         {
             return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
@@ -39,7 +40,6 @@ namespace VRP.DAL.Repositories
         {
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
         }
-
 
         public IEnumerable<TicketModel> JoinAndGetAll(Expression<Func<TicketModel, bool>> expression = null)
         {

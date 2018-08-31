@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,12 +25,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<AccountDto>> GetAllAsync(Expression<Func<AccountModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>(await _unitOfWork.AccountsRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>((await _unitOfWork.AccountsRepository.JoinAndGetAllAsync(expression)).ToArray());
         }
 
-        public async Task<IEnumerable<AccountDto>> GetAllNoRelatedAsync(Func<AccountModel, bool> func)
+        public async Task<IEnumerable<AccountDto>> GetAllNoRelatedAsync(Expression<Func<AccountModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>(await _unitOfWork.AccountsRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>((await _unitOfWork.AccountsRepository.GetAllAsync(expression)).ToArray());
         }
 
         public async Task<AccountDto> GetByIdAsync(int id)
@@ -56,9 +57,9 @@ namespace VRP.BLL.Services
             return null;
         }
 
-        public async Task<AccountDto> GetAsync(Func<AccountModel, bool> func)
+        public async Task<AccountDto> GetAsync(Expression<Func<AccountModel, bool>> expression)
         {
-            return _mapper.Map<AccountModel, AccountDto>(await _unitOfWork.AccountsRepository.GetAsync(func));
+            return _mapper.Map<AccountModel, AccountDto>(await _unitOfWork.AccountsRepository.GetAsync(expression));
         }
 
         public async Task<AccountDto> UpdateAsync(int id, AccountDto dto)

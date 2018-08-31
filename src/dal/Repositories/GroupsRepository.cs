@@ -24,12 +24,14 @@ namespace VRP.DAL.Repositories
         }
 
         public GroupModel JoinAndGet(int id) => JoinAndGetAll(group => group.Id == id).SingleOrDefault();
+
         public async Task<GroupModel> JoinAndGetAsync(int id)
         {
             return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
         }
 
         public GroupModel JoinAndGet(Expression<Func<GroupModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
         public async Task<GroupModel> JoinAndGetAsync(Expression<Func<GroupModel, bool>> expression = null)
         {
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
@@ -55,12 +57,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override GroupModel Get(Func<GroupModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override GroupModel Get(Expression<Func<GroupModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<GroupModel> GetAll(Func<GroupModel, bool> func = null)
+        public override IEnumerable<GroupModel> GetAll(Expression<Func<GroupModel, bool>> expression = null)
         {
-            IEnumerable<GroupModel> groups = func != null ?
-                Context.Groups.Where(func) :
+            IQueryable<GroupModel> groups = expression != null ?
+                Context.Groups.Where(expression) :
                 Context.Groups;
 
             return groups;

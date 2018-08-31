@@ -17,12 +17,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override CrimeBotItemModel Get(Func<CrimeBotItemModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override CrimeBotItemModel Get(Expression<Func<CrimeBotItemModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<CrimeBotItemModel> GetAll(Func<CrimeBotItemModel, bool> func = null)
+        public override IEnumerable<CrimeBotItemModel> GetAll(Expression<Func<CrimeBotItemModel, bool>> expression = null)
         {
-            IEnumerable<CrimeBotItemModel> crimeBotItems = func != null ?
-                Context.CrimeBotItems.Where(func) :
+            IEnumerable<CrimeBotItemModel> crimeBotItems = expression != null ?
+                Context.CrimeBotItems.Where(expression) :
                 Context.CrimeBotItems;
 
             return crimeBotItems;

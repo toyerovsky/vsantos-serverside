@@ -17,12 +17,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override CharacterLookModel Get(Func<CharacterLookModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override CharacterLookModel Get(Expression<Func<CharacterLookModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<CharacterLookModel> GetAll(Func<CharacterLookModel, bool> func = null)
+        public override IEnumerable<CharacterLookModel> GetAll(Expression<Func<CharacterLookModel, bool>> expression = null)
         {
-            IEnumerable<CharacterLookModel> characterLooks = func != null ?
-                Context.CharacterLooks.Where(func) :
+            IEnumerable<CharacterLookModel> characterLooks = expression != null ?
+                Context.CharacterLooks.Where(expression) :
                 Context.CharacterLooks;
 
             return characterLooks;

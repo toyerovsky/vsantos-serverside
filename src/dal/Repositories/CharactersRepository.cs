@@ -24,12 +24,14 @@ namespace VRP.DAL.Repositories
         }
 
         public CharacterModel JoinAndGet(int id) => JoinAndGetAll(character => character.Id == id).SingleOrDefault();
+
         public async Task<CharacterModel> JoinAndGetAsync(int id)
         {
             return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
         }
 
         public CharacterModel JoinAndGet(Expression<Func<CharacterModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
         public async Task<CharacterModel> JoinAndGetAsync(Expression<Func<CharacterModel, bool>> expression = null)
         {
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
@@ -60,12 +62,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override CharacterModel Get(Func<CharacterModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override CharacterModel Get(Expression<Func<CharacterModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<CharacterModel> GetAll(Func<CharacterModel, bool> func = null)
+        public override IEnumerable<CharacterModel> GetAll(Expression<Func<CharacterModel, bool>> expression = null)
         {
-            IEnumerable<CharacterModel> characters = func != null ?
-                Context.Characters.Where(func) :
+            IEnumerable<CharacterModel> characters = expression != null ?
+                Context.Characters.Where(expression) :
                 Context.Characters;
 
             return characters;

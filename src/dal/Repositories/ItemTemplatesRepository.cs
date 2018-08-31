@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Item;
 using VRP.DAL.Repositories.Base;
@@ -13,12 +14,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override ItemTemplateModel Get(Func<ItemTemplateModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override ItemTemplateModel Get(Expression<Func<ItemTemplateModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<ItemTemplateModel> GetAll(Func<ItemTemplateModel, bool> func = null)
+        public override IEnumerable<ItemTemplateModel> GetAll(Expression<Func<ItemTemplateModel, bool>> expression = null)
         {
-            IEnumerable<ItemTemplateModel> itemTemplates = func != null ?
-                Context.ItemTemplates.Where(func) :
+            IQueryable<ItemTemplateModel> itemTemplates = expression != null ?
+                Context.ItemTemplates.Where(expression) :
                 Context.ItemTemplates;
 
             return itemTemplates;

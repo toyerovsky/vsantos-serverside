@@ -37,12 +37,7 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
         }
 
-        public override BuildingModel Get(Func<BuildingModel, bool> func) => GetAll(func).FirstOrDefault();
-
-        public override async Task<BuildingModel> GetAsync(Func<BuildingModel, bool> func)
-        {
-            return await GetAll(func).AsQueryable().FirstOrDefaultAsync();
-        }
+        public override BuildingModel Get(Expression<Func<BuildingModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
         public IEnumerable<BuildingModel> JoinAndGetAll(Expression<Func<BuildingModel, bool>> expression = null)
         {
@@ -61,10 +56,10 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override IEnumerable<BuildingModel> GetAll(Func<BuildingModel, bool> func = null)
+        public override IEnumerable<BuildingModel> GetAll(Expression<Func<BuildingModel, bool>> expression = null)
         {
-            IEnumerable<BuildingModel> buildings = func != null ?
-                Context.Buildings.Where(func) :
+            IQueryable<BuildingModel> buildings = expression != null ?
+                Context.Buildings.Where(expression) :
                 Context.Buildings;
 
             return buildings;

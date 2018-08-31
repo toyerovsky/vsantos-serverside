@@ -24,12 +24,14 @@ namespace VRP.DAL.Repositories
         }
 
         public PenaltyModel JoinAndGet(int id) => JoinAndGetAll(penalty => penalty.Id == id).SingleOrDefault();
+
         public async Task<PenaltyModel> JoinAndGetAsync(int id)
         {
             return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
         }
 
         public PenaltyModel JoinAndGet(Expression<Func<PenaltyModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
         public async Task<PenaltyModel> JoinAndGetAsync(Expression<Func<PenaltyModel, bool>> expression = null)
         {
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
@@ -37,14 +39,14 @@ namespace VRP.DAL.Repositories
 
         public IEnumerable<PenaltyModel> JoinAndGetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {
-            IQueryable<PenaltyModel> penatlies = expression != null ?
+            IQueryable<PenaltyModel> penalties = expression != null ?
                 Context.Penaltlies.Where(expression) :
                 Context.Penaltlies;
 
-            return penatlies
-                .Include(penatly => penatly.Account)
+            return penalties
+                .Include(penalty => penalty.Account)
                 .Include(penalty => penalty.Creator)
-                .Include(pentaly => pentaly.Character);
+                .Include(penalty => penalty.Character);
         }
 
         public async Task<IEnumerable<PenaltyModel>> JoinAndGetAllAsync(Expression<Func<PenaltyModel, bool>> expression = null)
@@ -52,15 +54,15 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override PenaltyModel Get(Func<PenaltyModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override PenaltyModel Get(Expression<Func<PenaltyModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<PenaltyModel> GetAll(Func<PenaltyModel, bool> func = null)
+        public override IEnumerable<PenaltyModel> GetAll(Expression<Func<PenaltyModel, bool>> expression = null)
         {
-            IEnumerable<PenaltyModel> penatlies = func != null ?
-                Context.Penaltlies.Where(func) :
+            IEnumerable<PenaltyModel> penalties = expression != null ?
+                Context.Penaltlies.Where(expression) :
                 Context.Penaltlies;
 
-            return penatlies;
+            return penalties;
         }
     }
 }

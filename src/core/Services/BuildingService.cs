@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,12 +24,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<BuildingDto>> GetAllAsync(Expression<Func<BuildingModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<BuildingModel>, BuildingDto[]>(await _unitOfWork.BuildingsRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<BuildingModel>, BuildingDto[]>((await _unitOfWork.BuildingsRepository.JoinAndGetAllAsync(expression)).ToArray());
         }
 
-        public async Task<IEnumerable<BuildingDto>> GetAllNoRelatedAsync(Func<BuildingModel, bool> func)
+        public async Task<IEnumerable<BuildingDto>> GetAllNoRelatedAsync(Expression<Func<BuildingModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<BuildingModel>, BuildingDto[]>(await _unitOfWork.BuildingsRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<BuildingModel>, BuildingDto[]>((await _unitOfWork.BuildingsRepository.GetAllAsync(expression)).ToArray());
         }
 
         public async Task<BuildingDto> GetByIdAsync(int id)
@@ -36,9 +37,9 @@ namespace VRP.BLL.Services
             return _mapper.Map<BuildingModel, BuildingDto>(await _unitOfWork.BuildingsRepository.GetAsync(id));
         }
 
-        public async Task<BuildingDto> GetAsync(Func<BuildingModel, bool> func)
+        public async Task<BuildingDto> GetAsync(Expression<Func<BuildingModel, bool>> expression)
         {
-            return _mapper.Map<BuildingModel, BuildingDto>(await _unitOfWork.BuildingsRepository.GetAsync(func));
+            return _mapper.Map<BuildingModel, BuildingDto>(await _unitOfWork.BuildingsRepository.GetAsync(expression));
         }
 
         public async Task<BuildingDto> CreateAsync(int creatorId, BuildingDto dto)

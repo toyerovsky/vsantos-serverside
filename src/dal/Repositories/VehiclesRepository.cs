@@ -53,12 +53,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override VehicleModel Get(Func<VehicleModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override VehicleModel Get(Expression<Func<VehicleModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<VehicleModel> GetAll(Func<VehicleModel, bool> func = null)
+        public override IEnumerable<VehicleModel> GetAll(Expression<Func<VehicleModel, bool>> expression = null)
         {
-            IEnumerable<VehicleModel> vehicles = func != null ?
-                Context.Vehicles.Where(func) :
+            IEnumerable<VehicleModel> vehicles = expression != null ?
+                Context.Vehicles.Where(expression) :
                 Context.Vehicles;
 
             return vehicles;

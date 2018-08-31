@@ -17,12 +17,12 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public override GroupWarehouseModel Get(Func<GroupWarehouseModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override GroupWarehouseModel Get(Expression<Func<GroupWarehouseModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<GroupWarehouseModel> GetAll(Func<GroupWarehouseModel, bool> func = null)
+        public override IEnumerable<GroupWarehouseModel> GetAll(Expression<Func<GroupWarehouseModel, bool>> expression = null)
         {
-            IEnumerable<GroupWarehouseModel> groupWarehouses = func != null ?
-                Context.GroupWarehouses.Where(func) :
+            IEnumerable<GroupWarehouseModel> groupWarehouses = expression != null ?
+                Context.GroupWarehouses.Where(expression) :
                 Context.GroupWarehouses;
 
             return groupWarehouses;

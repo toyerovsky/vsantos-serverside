@@ -24,12 +24,14 @@ namespace VRP.DAL.Repositories
         }
 
         public TelephoneMessageModel JoinAndGet(int id) => JoinAndGetAll(telephoneMessage => telephoneMessage.Id == id).SingleOrDefault();
+
         public async Task<TelephoneMessageModel> JoinAndGetAsync(int id)
         {
             return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
         }
 
         public TelephoneMessageModel JoinAndGet(Expression<Func<TelephoneMessageModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
         public async Task<TelephoneMessageModel> JoinAndGetAsync(Expression<Func<TelephoneMessageModel, bool>> expression = null)
         {
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
@@ -52,12 +54,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override TelephoneMessageModel Get(Func<TelephoneMessageModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override TelephoneMessageModel Get(Expression<Func<TelephoneMessageModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<TelephoneMessageModel> GetAll(Func<TelephoneMessageModel, bool> func = null)
+        public override IEnumerable<TelephoneMessageModel> GetAll(Expression<Func<TelephoneMessageModel, bool>> expression = null)
         {
-            IEnumerable<TelephoneMessageModel> telephoneMessages = func != null ?
-                Context.TelephoneMessages.Where(func) :
+            IEnumerable<TelephoneMessageModel> telephoneMessages = expression != null ?
+                Context.TelephoneMessages.Where(expression) :
                 Context.TelephoneMessages;
 
             return telephoneMessages;

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Interfaces;
@@ -96,25 +97,25 @@ namespace VRP.DAL.Repositories.Base
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
-        /// <param name="func"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        public abstract TEntity Get(Func<TEntity, bool> func);
+        public abstract TEntity Get(Expression<Func<TEntity, bool>> expression);
 
-        public virtual async Task<TEntity> GetAsync(Func<TEntity, bool> func)
+        public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> expression)
         {
-            return await GetAll(func).AsQueryable().FirstOrDefaultAsync();
+            return await GetAll(expression).AsQueryable().FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// Get entities without eager loading navigation properties
         /// </summary>
-        /// <param name="func"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        public abstract IEnumerable<TEntity> GetAll(Func<TEntity, bool> func = null);
+        public abstract IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> expression = null);
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<TEntity, bool> func = null)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> expression = null)
         {
-            return await GetAll(func).AsQueryable().ToArrayAsync();
+            return await GetAll(expression).AsQueryable().ToArrayAsync();
         }
 
         public void Save()

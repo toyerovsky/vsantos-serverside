@@ -52,12 +52,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override TelephoneContactModel Get(Func<TelephoneContactModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override TelephoneContactModel Get(Expression<Func<TelephoneContactModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<TelephoneContactModel> GetAll(Func<TelephoneContactModel, bool> func = null)
+        public override IEnumerable<TelephoneContactModel> GetAll(Expression<Func<TelephoneContactModel, bool>> expression = null)
         {
-            IEnumerable<TelephoneContactModel> telephoneContacts = func != null ?
-                Context.TelephoneContacts.Where(func) :
+            IQueryable<TelephoneContactModel> telephoneContacts = expression != null ?
+                Context.TelephoneContacts.Where(expression) :
                 Context.TelephoneContacts;
 
             return telephoneContacts;

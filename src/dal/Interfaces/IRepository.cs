@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace VRP.DAL.Interfaces
@@ -49,18 +50,18 @@ namespace VRP.DAL.Interfaces
         /// <summary>
         /// Get entity without eager loading navigation properties
         /// </summary>
-        /// <param name="func"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        T Get(Func<T, bool> func);
-        Task<T> GetAsync(Func<T, bool> func);
+        T Get(Expression<Func<T, bool>> expression);
+        Task<T> GetAsync(Expression<Func<T, bool>> expression);
 
         /// <summary>
         /// Get entities without eager loading navigation properties
         /// </summary>
-        /// <param name="func"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        IEnumerable<T> GetAll(Func<T, bool> func = null);
-        Task<IEnumerable<T>> GetAllAsync(Func<T, bool> func = null);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> expression = null);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression = null);
 
         void Save();
         Task<int> SaveAsync();

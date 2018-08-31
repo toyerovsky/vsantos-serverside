@@ -10,9 +10,9 @@ namespace VRP.BLL.Services.Interfaces
     public interface ICharacterService : IDisposable
     {
         Task<IEnumerable<CharacterDto>> GetAllAsync(Expression<Func<CharacterModel, bool>> expression = null);
-        Task<IEnumerable<CharacterDto>> GetAllNoRelatedAsync(Func<CharacterModel, bool> func = null);
+        Task<IEnumerable<CharacterDto>> GetAllNoRelatedAsync(Expression<Func<CharacterModel, bool>> expression = null);
         Task<CharacterDto> GetByIdAsync(int id);
-        Task<CharacterDto> GetAsync(Func<CharacterModel, bool> func = null);
+        Task<CharacterDto> GetAsync(Expression<Func<CharacterModel, bool>> expression = null);
         Task<CharacterDto> UpdateAsync(int id, CharacterDto dto);
         Task<CharacterDto> CreateAsync(CharacterDto dto);
         Task DeleteAsync(int id);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,12 +24,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<PenaltyDto>> GetAllAsync(Expression<Func<PenaltyModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>(await _unitOfWork.PenaltiesRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>((await _unitOfWork.PenaltiesRepository.JoinAndGetAllAsync(expression)).ToArray());
         }
 
-        public async Task<IEnumerable<PenaltyDto>> GetAllNoRelatedAsync(Func<PenaltyModel, bool> func)
+        public async Task<IEnumerable<PenaltyDto>> GetAllNoRelatedAsync(Expression<Func<PenaltyModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>(await _unitOfWork.PenaltiesRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>((await _unitOfWork.PenaltiesRepository.GetAllAsync(expression)).ToArray());
         }
 
         public async Task<PenaltyDto> GetByIdAsync(int id)
@@ -36,9 +37,9 @@ namespace VRP.BLL.Services
             return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.GetAsync(id));
         }
 
-        public async Task<PenaltyDto> GetAsync(Func<PenaltyModel, bool> func)
+        public async Task<PenaltyDto> GetAsync(Expression<Func<PenaltyModel, bool>> expression)
         {
-            return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.GetAsync(func));
+            return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.GetAsync(expression));
         }
 
         public async Task<PenaltyDto> CreateAsync(int creatorId, PenaltyDto dto)

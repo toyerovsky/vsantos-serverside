@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,12 +24,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<GroupRankDto>> GetAllAsync(Expression<Func<GroupRankModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>(await _unitOfWork.GroupRanksRepository.JoinAndGetAllAsync(expression));
+            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>((await _unitOfWork.GroupRanksRepository.JoinAndGetAllAsync(expression)).ToArray());
         }
 
-        public async Task<IEnumerable<GroupRankDto>> GetAllNoRelatedAsync(Func<GroupRankModel, bool> func)
+        public async Task<IEnumerable<GroupRankDto>> GetAllNoRelatedAsync(Expression<Func<GroupRankModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>(await _unitOfWork.GroupRanksRepository.GetAllAsync(func));
+            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>((await _unitOfWork.GroupRanksRepository.GetAllAsync(expression)).ToArray());
         }
 
         public async Task<GroupRankDto> GetByIdAsync(int id)
@@ -36,9 +37,9 @@ namespace VRP.BLL.Services
             return _mapper.Map<GroupRankModel, GroupRankDto>(await _unitOfWork.GroupRanksRepository.GetAsync(id));
         }
 
-        public async Task<GroupRankDto> GetAsync(Func<GroupRankModel, bool> func)
+        public async Task<GroupRankDto> GetAsync(Expression<Func<GroupRankModel, bool>> expression)
         {
-            return _mapper.Map<GroupRankModel, GroupRankDto>(await _unitOfWork.GroupRanksRepository.GetAsync(func));
+            return _mapper.Map<GroupRankModel, GroupRankDto>(await _unitOfWork.GroupRanksRepository.GetAsync(expression));
         }
 
         public async Task<GroupRankDto> CreateAsync(int creatorId, GroupRankDto dto)
@@ -71,7 +72,8 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<GroupRankDto>> GetByGroupIdAsync(int id)
         {
-            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>(await _unitOfWork.GroupRanksRepository.JoinAndGetAllAsync(groupRank => groupRank.GroupId == id));
+            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>((
+                await _unitOfWork.GroupRanksRepository.JoinAndGetAllAsync(groupRank => groupRank.GroupId == id)).ToArray());
         }
 
         public void Dispose()

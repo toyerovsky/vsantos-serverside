@@ -24,12 +24,14 @@ namespace VRP.DAL.Repositories
         }
 
         public CrimeBotModel JoinAndGet(int id) => JoinAndGetAll(crimeBot => crimeBot.Id == id).SingleOrDefault();
+
         public async Task<CrimeBotModel> JoinAndGetAsync(int id)
         {
             return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
         }
 
         public CrimeBotModel JoinAndGet(Expression<Func<CrimeBotModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
+
         public async Task<CrimeBotModel> JoinAndGetAsync(Expression<Func<CrimeBotModel, bool>> expression = null)
         {
             return await JoinAndGetAll(expression).AsQueryable().FirstOrDefaultAsync();
@@ -53,12 +55,12 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override CrimeBotModel Get(Func<CrimeBotModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override CrimeBotModel Get(Expression<Func<CrimeBotModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<CrimeBotModel> GetAll(Func<CrimeBotModel, bool> func = null)
+        public override IEnumerable<CrimeBotModel> GetAll(Expression<Func<CrimeBotModel, bool>> expression = null)
         {
-            IEnumerable<CrimeBotModel> crimeBots = func != null ?
-                Context.CrimeBots.Where(func) :
+            IQueryable<CrimeBotModel> crimeBots = expression != null ?
+                Context.CrimeBots.Where(expression) :
                 Context.CrimeBots;
 
             return crimeBots;

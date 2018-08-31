@@ -68,7 +68,7 @@ namespace VRP.DAL.Repositories
                             .ThenInclude(group => group.Workers)
                 .Include(account => account.Penalties)
                 .Include(account => account.AdminInTickets)
-                .Include(account => account.UserInTickets).ToArray();
+                .Include(account => account.UserInTickets);
         }
 
         public async Task<IEnumerable<AccountModel>> JoinAndGetAllAsync(Expression<Func<AccountModel, bool>> expression = null)
@@ -76,13 +76,13 @@ namespace VRP.DAL.Repositories
             return await JoinAndGetAll(expression).AsQueryable().ToArrayAsync();
         }
 
-        public override AccountModel Get(Func<AccountModel, bool> func) => GetAll(func).FirstOrDefault();
+        public override AccountModel Get(Expression<Func<AccountModel, bool>> expression) => GetAll(expression).FirstOrDefault();
 
-        public override IEnumerable<AccountModel> GetAll(Func<AccountModel, bool> func = null)
+        public override IEnumerable<AccountModel> GetAll(Expression<Func<AccountModel, bool>> expression = null)
         {
-            IEnumerable<AccountModel> accounts = func != null ?
-                Context.Accounts.Where(func) :
-                Context.Accounts.ToArray();
+            IQueryable<AccountModel> accounts = expression != null ?
+                Context.Accounts.Where(expression) :
+                Context.Accounts;
 
             return accounts;
         }
