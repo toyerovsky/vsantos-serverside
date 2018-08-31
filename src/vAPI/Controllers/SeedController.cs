@@ -31,8 +31,8 @@ namespace VRP.vAPI.Controllers
             var query = "SELECT member_id as ForumUserId," +
                         " name as ForumUserName, members_pass_hash as PasswordHash," +
                         " member_group_id as PrimaryForumGroup, members_pass_salt as PasswordSalt, pp_main_photo as AvatarUrl," +
-                        " email as Email, pp_gravatar as GravatarEmail FROM core_members";
-            
+                        " email as Email, pp_gravatar as GravatarEmail, IF(pp_photo_type = 'gravatar', true, false) as UseGravatar FROM core_members";
+                
             using (IDbConnection connection = new MySqlConnection(
                 _configuration.GetConnectionString("forumConnectionString")))
             {
