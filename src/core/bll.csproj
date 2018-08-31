@@ -31,10 +31,5 @@
   <ItemGroup>
     <ProjectReference Include="..\dal\dal.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="coresettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 
 </Project>

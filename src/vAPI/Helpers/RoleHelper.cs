@@ -5,10 +5,10 @@ namespace VRP.vAPI.Helpers
 {
     public static class RoleHelper
     {
-        public static string[] SupportRanks = Startup.Configuration.GetValue<string[]>("SupportRanks");
-        public static string[] AdminRoles = Startup.Configuration.GetValue<string[]>("AdminRoles");
-        public static string[] DevRoles = Startup.Configuration.GetValue<string[]>("DevRoles");
-        public static string[] ManagementRoles = Startup.Configuration.GetValue<string[]>("ManagementRoles");
+        public static string[] SupportRanks = Startup.Configuration.GetSection("Ranks:Support").Get<string[]>();
+        public static string[] AdminRoles = Startup.Configuration.GetSection("Ranks:Admin").Get<string[]>();
+        public static string[] DevRoles = Startup.Configuration.GetSection("Ranks:Dev").Get<string[]>();
+        public static string[] ManagementRoles = Startup.Configuration.GetSection("Ranks:Management").Get<string[]>();
 
         public static string[] GetFromSupportRoles()
         {

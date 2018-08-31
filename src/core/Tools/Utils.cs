@@ -19,18 +19,18 @@ namespace VRP.BLL.Tools
         /// Metoda zwraca następny wymiar który nie jest zajmowany przez budynek lub serwer
         /// </summary>
         /// <returns></returns>
-        public static uint GetNextFreeDimension()
-        {
-            using (RoleplayContext ctx = Singletons.RoleplayContextFactory.Create())
-            {
-                //Do pierwszego budynku tak trzeba zrobić
-                if (!ctx.Buildings.Any()) return 1;
-                uint last = ctx.Buildings.Max(x => x.InternalDimension);
-                do
-                    ++last; while (Enum.GetValues(typeof(Dimension)).Cast<uint>().Any(x => x == last));
-                return last;
-            }
-        }
+        //public static uint GetNextFreeDimension()
+        //{
+        //    using (RoleplayContext ctx = Singletons.RoleplayContextFactory.Create())
+        //    {
+        //        //Do pierwszego budynku tak trzeba zrobić
+        //        if (!ctx.Buildings.Any()) return 1;
+        //        uint last = ctx.Buildings.Max(x => x.InternalDimension);
+        //        do
+        //            ++last; while (Enum.GetValues(typeof(Dimension)).Cast<uint>().Any(x => x == last));
+        //        return last;
+        //    }
+        //}
 
         private static Random _random = new Random();
         public static int RandomRange() => _random.Next();
@@ -46,9 +46,5 @@ namespace VRP.BLL.Tools
         }
 
         public static readonly string WorkingDirectory = GetWorkingDirectory();
-
-        public static string XmlDirectory => Path.Combine(WorkingDirectory, "Xml");
-
-        public static string JsonDirectory => Path.Combine(WorkingDirectory, "Json");
     }
 }

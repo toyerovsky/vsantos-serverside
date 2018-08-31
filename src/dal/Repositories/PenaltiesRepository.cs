@@ -53,10 +53,6 @@ namespace VRP.DAL.Repositories
         }
 
         public override PenaltyModel Get(Func<PenaltyModel, bool> func) => GetAll(func).FirstOrDefault();
-        public override async Task<PenaltyModel> GetAsync(Func<PenaltyModel, bool> func)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<PenaltyModel> GetAll(Func<PenaltyModel, bool> func = null)
         {
