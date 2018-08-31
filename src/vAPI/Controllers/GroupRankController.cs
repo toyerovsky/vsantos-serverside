@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
+using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Group;
 using VRP.DAL.UnitOfWork;
+using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
@@ -16,95 +19,73 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class GroupRankController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IGroupRankService _groupRankService;
 
-        public GroupRankController(IUnitOfWork unitOfWork, IMapper mapper)
+        public GroupRankController(IGroupRankService groupRankService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _groupRankService = groupRankService;
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            GroupRankModel groupRank = _unitOfWork.GroupRanksRepository.Get(id);
-
-            if (groupRank == null)
+            if (!await _groupRankService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            GroupRankDto groupRankDto = _mapper.Map<GroupRankDto>(groupRank);
-            return Json(groupRankDto);
+            return Json(await _groupRankService.GetByIdAsync(id));
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<GroupRankModel> groupRanks = _unitOfWork.GroupRanksRepository.GetAll();
+            IEnumerable<GroupRankDto> groupRanks = await _groupRankService.GetAllAsync();
 
-            var groupRankModels = groupRanks as GroupRankModel[] ?? groupRanks.ToArray();
-
-            if (!groupRankModels.Any())
+            if (!groupRanks.Any())
             {
                 return NotFound();
             }
 
-            IEnumerable<GroupRankDto> groupRankDtos =
-                _mapper.Map<GroupRankDto[]>(groupRankModels);
-
-            return Json(groupRankDtos);
+            return Json(groupRanks);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] GroupRankDto groupRankDto)
+        public async Task<IActionResult> Post([FromBody] GroupRankDto groupRankDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            GroupRankModel groupRankModel = _mapper.Map<GroupRankModel>(groupRankDto);
-
-            _unitOfWork.GroupRanksRepository.Insert(groupRankModel);
-            _unitOfWork.GroupRanksRepository.Save();
-
-            return Created("", groupRankModel);
+            return Created("", await _groupRankService.CreateAsync(HttpContext.User.GetAccountId(), groupRankDto));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] GroupRankDto groupRankDto)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GroupRankDto groupRankDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(groupRankDto);
             }
 
-            GroupRankModel groupRank = _unitOfWork.GroupRanksRepository.JoinAndGet(id);
-
-            if (groupRank == null)
+            if (!await _groupRankService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.GroupRanksRepository.BeginUpdate(groupRank);
-            _mapper.Map(groupRankDto, groupRank);
-            _unitOfWork.GroupRanksRepository.Save();
-
-            return Json(_mapper.Map<GroupRankDto>(groupRank));
+            return Json(await _groupRankService.UpdateAsync(id, groupRankDto));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!_unitOfWork.GroupRanksRepository.Contains(id))
+            if (!await _groupRankService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.GroupRanksRepository.Delete(id);
-            _unitOfWork.Save();
+            await _groupRankService.DeleteAsync(id);
 
             return NoContent();
         }
@@ -113,7 +94,7 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _unitOfWork?.Dispose();
+                _groupRankService?.Dispose();
             }
             base.Dispose(disposing);
         }

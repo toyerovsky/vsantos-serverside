@@ -16,6 +16,5 @@ namespace VRP.BLL.Dto
         public int AccountId { get; set; }
         public AccountDto Account { get; set; }
         public int DeactivatorId { get; set; }
-        public AccountDto Deactivator { get; set; }
     }
 }

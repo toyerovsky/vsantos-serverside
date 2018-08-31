@@ -25,7 +25,7 @@ namespace VRP.DAL.Repositories.Base
         }
 
         /// <summary>
-        /// Method doensn't include saving added entities
+        /// Method doesn't include saving added entities
         /// </summary>
         /// <param name="model"></param>
         public virtual void Insert(TEntity model)
@@ -55,11 +55,6 @@ namespace VRP.DAL.Repositories.Base
         public virtual void Update(TEntity model)
         {
             Context.Update(model);
-        }
-
-        public void UpdateAsync(TEntity model)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

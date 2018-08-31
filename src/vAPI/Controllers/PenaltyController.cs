@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.BLL.Services;
+using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -43,6 +43,17 @@ namespace VRP.vAPI.Controllers
             return Json(penalties);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            if (!await _penaltyService.ContainsAsync(id))
+            {
+                return NotFound(id);
+            }
+
+            return Json(await _penaltyService.GetByIdAsync(id));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PenaltyDto penaltyDto)
         {
@@ -51,8 +62,7 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(penaltyDto);
             }
 
-            PenaltyDto dto = await _penaltyService.CreateAsync(HttpContext.User.GetAccountId(), penaltyDto);
-            return Created("", dto);
+            return Created("", await _penaltyService.CreateAsync(HttpContext.User.GetAccountId(), penaltyDto));
         }
 
         [HttpPut("{id}")]

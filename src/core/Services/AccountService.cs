@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using VRP.BLL.Dto;
+using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.UnitOfWork;
 

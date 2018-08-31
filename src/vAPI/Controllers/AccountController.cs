@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.BLL.Services;
+using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Model;
 
 namespace VRP.vAPI.Controllers
@@ -84,14 +84,12 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            AccountDto account = await _accountService.GetByIdAsync(id);
-
-            if (account == null)
+            if (!await _accountService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            return Json(account);
+            return Json(await _accountService.GetByIdAsync(id));
         }
 
         [AllowAnonymous]

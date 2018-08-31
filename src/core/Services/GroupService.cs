@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using VRP.BLL.Dto;
+using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
 using VRP.DAL.UnitOfWork;

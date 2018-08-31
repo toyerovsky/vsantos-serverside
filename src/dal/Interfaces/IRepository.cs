@@ -23,7 +23,6 @@ namespace VRP.DAL.Interfaces
         /// </summary>
         /// <param name="model"></param>
         void Update(T model);
-        void UpdateAsync(T model);
 
         /// <summary>
         /// Begins tracking of given entity in unmodified state. If SaveChanges is called it will update only fields which was updated between calling BeginUpdate() and Save()

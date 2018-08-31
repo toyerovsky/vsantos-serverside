@@ -4,9 +4,11 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
 using VRP.DAL.Database.Models.Item;
@@ -23,7 +25,6 @@ namespace VRP.DAL.Database.Models.Vehicle
         }
 
         public int Id { get; set; }
-        public int? CreatorId { get; set; }
 
         public string NumberPlate { get; set; }
         public int NumberPlateStyle { get; set; }
@@ -66,6 +67,7 @@ namespace VRP.DAL.Database.Models.Vehicle
         public string SecondaryColor { get; set; }
         public int WheelType { get; set; }
         public int WheelColor { get; set; }
+        public DateTime CreationTime { get; set; }
 
         // foreign keys
         [ForeignKey("AutoSaleModel")]
@@ -74,11 +76,14 @@ namespace VRP.DAL.Database.Models.Vehicle
         public int CharacterId { get; set; }
         [ForeignKey("Group")]
         public int GroupId { get; set; }
+        [ForeignKey("Creator")]
+        public int CreatorId { get; set; }
 
         // navigation properties
         public virtual AutoSaleModel AutoSaleModel { get; set; }
         public virtual CharacterModel Character { get; set; }
         public virtual GroupModel Group { get; set; }
+        public virtual AccountModel Creator { get; set; }
         [InverseProperty("Vehicle")]
         public virtual ICollection<ItemModel> ItemsInVehicle { get; set; }
         [InverseProperty("TuningInVehicle")]

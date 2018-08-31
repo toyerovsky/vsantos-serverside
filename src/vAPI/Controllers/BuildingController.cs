@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.BLL.Services;
+using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -39,14 +39,12 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            BuildingDto building = await _buildingService.GetByIdAsync(id);
-
-            if (building == null)
+            if (!await _buildingService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            return Json(building);
+            return Json(await _buildingService.GetByIdAsync(id));
         }
 
         [HttpPost]

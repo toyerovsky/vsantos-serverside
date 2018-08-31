@@ -1,4 +1,6 @@
-﻿namespace VRP.BLL.Dto
+﻿using System;
+
+namespace VRP.BLL.Dto
 {
     public class VehicleDto
     {
@@ -16,5 +18,7 @@
         public int CharacterId { get; set; }
         public GroupDto Group { get; set; }
         public int GroupId { get; set; }
+        public int CreatorId { get; set; }
+        public DateTime CreationTime { get; set; }
     }
 }

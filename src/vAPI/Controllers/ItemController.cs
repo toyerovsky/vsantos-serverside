@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.DAL.Database.Models.Item;
-using VRP.DAL.UnitOfWork;
+using VRP.BLL.Services;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -17,110 +17,89 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class ItemController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IItemService _itemService;
         private readonly IMapper _mapper;
 
-        public ItemController(IUnitOfWork unitOfWork, IMapper mapper)
+        public ItemController(IItemService itemService, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _itemService = itemService;
             _mapper = mapper;
         }
 
         [HttpGet("characteritems")]
-        public IActionResult GetItemsByCurrentCharacterId()
+        public async Task<IActionResult> GetItemsByCurrentCharacterId()
         {
             int characterId = HttpContext.User.GetCharacterId();
-            IEnumerable<ItemModel> items = _unitOfWork.ItemsRepository.GetAll(item => item.CharacterId == characterId);
+            IEnumerable<ItemDto> items = await _itemService.GetAllAsync(item => item.CharacterId == characterId);
 
             if (!items.Any())
             {
                 return NotFound(characterId);
             }
 
-            IEnumerable<ItemDto> itemDtos = _mapper.Map<ItemDto[]>(items);
-            return Json(itemDtos);
+            return Json(items);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            ItemModel item = _unitOfWork.ItemsRepository.Get(id);
-
-            if (item == null)
+            if (!await _itemService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            ItemDto itemDto = _mapper.Map<ItemDto>(item);
-            return Json(itemDto);
+            return Json(await _itemService.GetByIdAsync(id));
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<ItemModel> items = _unitOfWork.ItemsRepository.GetAll();
+            IEnumerable<ItemDto> items = await _itemService.GetAllAsync();
 
-            var itemModels = items as ItemModel[] ?? items.ToArray();
-
-            if (!itemModels.Any())
+            if (!items.Any())
             {
                 return NotFound();
             }
 
-            IEnumerable<ItemDto> itemDtos =
-                _mapper.Map<ItemDto[]>(itemModels);
-
-            return Json(itemDtos);
+            return Json(items);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] ItemDto itemDto)
+        public async Task<IActionResult> Post([FromBody] ItemDto itemDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            ItemModel item = _mapper.Map<ItemModel>(itemDto);
-
-            _unitOfWork.ItemsRepository.Insert(item);
-            _unitOfWork.ItemsRepository.Save();
-
-            return Created("GET", item);
+            return Created("", await _itemService.CreateAsync(HttpContext.User.GetAccountId(), itemDto));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] ItemDto itemDto)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] ItemDto itemDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(itemDto);
             }
 
-            ItemModel item = _unitOfWork.ItemsRepository.JoinAndGet(id);
-
-            if (item == null)
+            if (!await _itemService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.ItemsRepository.BeginUpdate(item);
-            _mapper.Map(itemDto, item);
-            _unitOfWork.ItemsRepository.Save();
-
-            return Json(_mapper.Map<ItemDto>(item));
+            return Json(await _itemService.UpdateAsync(id, itemDto));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!_unitOfWork.ItemsRepository.Contains(id))
+            if (!await _itemService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.ItemsRepository.Delete(id);
-            _unitOfWork.Save();
+            await _itemService.DeleteAsync(id);
 
             return NoContent();
         }
@@ -129,7 +108,7 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _unitOfWork?.Dispose();
+                _itemService?.Dispose();
             }
             base.Dispose(disposing);
         }

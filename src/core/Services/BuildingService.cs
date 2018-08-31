@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using VRP.BLL.Dto;
+using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Building;
 using VRP.DAL.UnitOfWork;
 

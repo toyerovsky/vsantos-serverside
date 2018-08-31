@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using VRP.BLL.Dto;
-using VRP.BLL.Services;
+using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.UnitOfWork;
 using VRP.vAPI.Extensions;
@@ -103,14 +103,12 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            CharacterDto characterDto = await _characterService.GetByIdAsync(id);
-
-            if (characterDto == null)
+            if (!await _characterService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            return Json(characterDto);
+            return Json(await _characterService.GetByIdAsync(id));
         }
 
         [HttpGet("selectedcharacter")]

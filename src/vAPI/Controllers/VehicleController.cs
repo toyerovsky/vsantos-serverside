@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.DAL.Database.Models.Vehicle;
-using VRP.DAL.UnitOfWork;
+using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -17,124 +17,102 @@ namespace VRP.vAPI.Controllers
     [Authorize("Authenticated")]
     public class VehicleController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVehicleService _vehicleService;
         private readonly IMapper _mapper;
 
-        public VehicleController(IUnitOfWork unitOfWork, IMapper mapper)
+        public VehicleController(IVehicleService vehicleService, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _vehicleService = vehicleService;
             _mapper = mapper;
         }
 
         [HttpGet("charactervehicles")]
-        public IActionResult GetVehiclesByCharacterId()
+        public async Task<IActionResult> GetVehiclesByCharacterId()
         {
             int characterId = HttpContext.User.GetCharacterId();
-            IEnumerable<VehicleModel> vehicles = _unitOfWork.VehiclesRepository.GetAll(vehicle => vehicle.CharacterId == characterId);
+            IEnumerable<VehicleDto> vehicles = await _vehicleService.GetAllAsync(vehicle => vehicle.CharacterId == characterId);
 
             if (!vehicles.Any())
             {
                 return NotFound(characterId);
             }
 
-            IEnumerable<VehicleDto> vehicleDtos = _mapper.Map<VehicleDto[]>(vehicles);
-            return Json(vehicleDtos);
+            return Json(vehicles);
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            VehicleModel vehicle = _unitOfWork.VehiclesRepository.Get(id);
-
-            if (vehicle == null)
+            if (!await _vehicleService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            VehicleDto vehicleDto = _mapper.Map<VehicleDto>(vehicle);
-            return Json(vehicleDto);
+            return Json(await _vehicleService.GetByIdAsync(id));
         }
 
         [HttpGet("{numberPlate}")]
-        public IActionResult Get(string numberPlate)
+        public async Task<IActionResult> Get(string numberPlate)
         {
-            VehicleModel vehicle = _unitOfWork.VehiclesRepository.Get(veh => veh.NumberPlate == numberPlate);
+            VehicleDto vehicle = await _vehicleService.GetAsync(veh => veh.NumberPlate == numberPlate);
 
             if (vehicle == null)
             {
                 return NotFound(numberPlate);
             }
 
-            VehicleDto vehicleDto = _mapper.Map<VehicleDto>(vehicle);
-            return Json(vehicleDto);
+            return Json(vehicle);
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<VehicleModel> vehicles = _unitOfWork.VehiclesRepository.GetAll();
+            IEnumerable<VehicleDto> vehicles = await _vehicleService.GetAllAsync();
 
-            var vehicleModels = vehicles as VehicleModel[] ?? vehicles.ToArray();
-
-            if (!vehicleModels.Any())
+            if (!vehicles.Any())
             {
                 return NotFound();
             }
 
-            IEnumerable<VehicleDto> vehicleDtos =
-                _mapper.Map<VehicleDto[]>(vehicleModels);
-
-            return Json(vehicleDtos);
+            return Json(vehicles);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] VehicleDto vehicleDto)
+        public async Task<IActionResult> Post([FromBody] VehicleDto vehicleDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            VehicleModel vehicle = _mapper.Map<VehicleModel>(vehicleDto);
-
-            _unitOfWork.VehiclesRepository.Insert(vehicle);
-            _unitOfWork.VehiclesRepository.Save();
-
-            return Created("GET", vehicle);
+            return Created("", await _vehicleService.CreateAsync(HttpContext.User.GetAccountId(), vehicleDto));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] int id, [FromBody] VehicleDto vehicleDto)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] VehicleDto vehicleDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(vehicleDto);
             }
 
-            VehicleModel vehicle = _unitOfWork.VehiclesRepository.JoinAndGet(id);
-
-            if (vehicle == null)
+            if (!await _vehicleService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.VehiclesRepository.BeginUpdate(vehicle);
-            _mapper.Map(vehicleDto, vehicle);
-            _unitOfWork.VehiclesRepository.Save();
-
-            return Json(_mapper.Map<VehicleDto>(vehicle));
+            return Json(await _vehicleService.UpdateAsync(id, vehicleDto));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!_unitOfWork.VehiclesRepository.Contains(id))
+            if (!await _vehicleService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            _unitOfWork.VehiclesRepository.Delete(id);
-            _unitOfWork.Save();
+            await _vehicleService.DeleteAsync(id);
 
             return NoContent();
         }
@@ -143,7 +121,7 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _unitOfWork?.Dispose();
+                _vehicleService?.Dispose();
             }
             base.Dispose(disposing);
         }

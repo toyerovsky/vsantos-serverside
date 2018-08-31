@@ -16,7 +16,6 @@ namespace VRP.BLL.Dto
         public string ImageUploadUrl { get; set; }
         public DateTime ImageUploadDate { get; set; }
         public int CreatorId { get; set; }
-        public AccountDto Creator { get; set; }
         public DateTime CreationTime { get; set; }
         public IEnumerable<WorkerDto> Workers { get; set; }
         public IEnumerable<VehicleDto> Vehicles { get; set; }

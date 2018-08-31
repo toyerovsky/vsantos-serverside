@@ -19,7 +19,6 @@ namespace VRP.BLL.Dto
         public GroupDto Group { get; set; }
         public int GroupId { get; set; }
         public int CreatorId { get; set; }
-        public AccountDto Creator { get; set; }
         public DateTime CreationTime { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using VRP.BLL.Dto;
 using VRP.DAL.Database.Models.Character;
 
-namespace VRP.BLL.Services
+namespace VRP.BLL.Services.Interfaces
 {
     public interface ICharacterService : IDisposable
     {
