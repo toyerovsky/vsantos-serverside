@@ -14,7 +14,7 @@ namespace VRP.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.2-rtm-30932")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Account.AccountModel", b =>
@@ -1102,7 +1102,7 @@ namespace VRP.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Deactivator")
-                        .WithMany()
+                        .WithMany("DeactivatorInPenalties")
                         .HasForeignKey("DeactivatorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

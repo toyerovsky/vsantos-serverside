@@ -55,5 +55,7 @@ namespace VRP.DAL.Database.Models.Account
         public virtual ICollection<TicketUserRelation> UserInTickets { get; set; }
         public virtual ICollection<TicketAdminRelation> AdminInTickets { get; set; }
         public virtual ICollection<TicketMessageModel> TicketsMessages { get; set; }
+        [InverseProperty("Deactivator")]
+        public virtual ICollection<PenaltyModel> DeactivatorInPenalties { get; set; }
     }
 }

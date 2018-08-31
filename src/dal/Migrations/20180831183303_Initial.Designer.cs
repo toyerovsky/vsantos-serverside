@@ -9,14 +9,14 @@ using VRP.DAL.Database;
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    [Migration("20180723145547_Initial")]
+    [Migration("20180831183303_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.2-rtm-30932")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Account.AccountModel", b =>
@@ -40,8 +40,6 @@ namespace VRP.DAL.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("PasswordSalt");
-
                     b.Property<long>("PrimaryForumGroup");
 
                     b.Property<string>("SecondaryForumGroups");
@@ -50,6 +48,8 @@ namespace VRP.DAL.Migrations
 
                     b.Property<string>("SocialClub")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("UseGravatar");
 
                     b.HasKey("Id");
 
@@ -67,9 +67,15 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int>("CharacterId");
 
-                    b.Property<int?>("CreatorId");
+                    b.Property<int>("CreatorId");
 
                     b.Property<DateTime>("Date");
+
+                    b.Property<bool>("Deactivated");
+
+                    b.Property<DateTime>("DeactivationDate");
+
+                    b.Property<int>("DeactivatorId");
 
                     b.Property<DateTime>("ExpiryDate");
 
@@ -85,6 +91,8 @@ namespace VRP.DAL.Migrations
                     b.HasIndex("CharacterId");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("DeactivatorId");
 
                     b.ToTable("Penaltlies");
                 });
@@ -181,7 +189,9 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int?>("CharacterId");
 
-                    b.Property<int?>("CreatorId");
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("CreatorId");
 
                     b.Property<short>("CurrentObjectCount");
 
@@ -221,6 +231,8 @@ namespace VRP.DAL.Migrations
                         .IsUnique();
 
                     b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("GroupId");
 
@@ -335,6 +347,10 @@ namespace VRP.DAL.Migrations
 
                     b.Property<byte>("Health");
 
+                    b.Property<DateTime>("ImageUploadDate");
+
+                    b.Property<string>("ImageUrl");
+
                     b.Property<bool>("IsAlive");
 
                     b.Property<DateTime>("LastLoginTime");
@@ -427,13 +443,21 @@ namespace VRP.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BossCharacterId");
+                    b.Property<int>("BossCharacterId");
 
                     b.Property<string>("Color");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("CreatorId");
 
                     b.Property<int>("Dotation");
 
                     b.Property<int>("GroupType");
+
+                    b.Property<DateTime>("ImageUploadDate");
+
+                    b.Property<string>("ImageUrl");
 
                     b.Property<int>("MaxPayday");
 
@@ -450,6 +474,24 @@ namespace VRP.DAL.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("VRP.DAL.Database.Models.Group.GroupRankModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Rights");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupRanks");
+                });
+
             modelBuilder.Entity("VRP.DAL.Database.Models.Group.WorkerModel", b =>
                 {
                     b.Property<int>("Id")
@@ -461,6 +503,8 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int?>("GroupId");
 
+                    b.Property<int?>("GroupRankId");
+
                     b.Property<int>("Rights");
 
                     b.Property<decimal>("Salary");
@@ -470,6 +514,8 @@ namespace VRP.DAL.Migrations
                     b.HasIndex("CharacterId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("GroupRankId");
 
                     b.ToTable("Workers");
                 });
@@ -812,6 +858,80 @@ namespace VRP.DAL.Migrations
                     b.ToTable("TelephoneMessages");
                 });
 
+            modelBuilder.Entity("VRP.DAL.Database.Models.Ticket.TicketAdminRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("AdminId");
+
+                    b.Property<int?>("TicketId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TicketAdminRecordRelations");
+                });
+
+            modelBuilder.Entity("VRP.DAL.Database.Models.Ticket.TicketMessageModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AuthorId");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("MessageContent");
+
+                    b.Property<int>("TicketId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TicketMessages");
+                });
+
+            modelBuilder.Entity("VRP.DAL.Database.Models.Ticket.TicketModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Status");
+
+                    b.Property<string>("Title");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("VRP.DAL.Database.Models.Ticket.TicketUserRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("TicketId");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TicketUserRecordRelations");
+                });
+
             modelBuilder.Entity("VRP.DAL.Database.Models.Vehicle.VehicleModel", b =>
                 {
                     b.Property<int>("Id")
@@ -819,9 +939,11 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int>("AutoSaleId");
 
-                    b.Property<int?>("CharacterId");
+                    b.Property<int>("CharacterId");
 
-                    b.Property<int?>("CreatorId");
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("CreatorId");
 
                     b.Property<bool>("Door1Damage");
 
@@ -841,15 +963,14 @@ namespace VRP.DAL.Migrations
 
                     b.Property<float>("FuelTank");
 
-                    b.Property<int?>("GroupId");
+                    b.Property<int>("GroupId");
 
                     b.Property<float>("Health");
 
-                    b.Property<bool>("IsSpawned");
-
                     b.Property<float>("Milage");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<string>("NumberPlate");
 
@@ -893,6 +1014,8 @@ namespace VRP.DAL.Migrations
                         .IsUnique();
 
                     b.HasIndex("CharacterId");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("GroupId");
 
@@ -977,7 +1100,13 @@ namespace VRP.DAL.Migrations
 
                     b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Deactivator")
+                        .WithMany("DeactivatorInPenalties")
+                        .HasForeignKey("DeactivatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Account.SerialModel", b =>
@@ -1028,8 +1157,13 @@ namespace VRP.DAL.Migrations
                         .WithMany("Buildings")
                         .HasForeignKey("CharacterId");
 
-                    b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "Group")
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Creator")
                         .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "Group")
+                        .WithMany("Buildings")
                         .HasForeignKey("GroupId");
                 });
 
@@ -1037,7 +1171,8 @@ namespace VRP.DAL.Migrations
                 {
                     b.HasOne("VRP.DAL.Database.Models.Character.CharacterModel", "Character")
                         .WithOne("CharacterLook")
-                        .HasForeignKey("VRP.DAL.Database.Models.Character.CharacterLookModel", "CharacterId");
+                        .HasForeignKey("VRP.DAL.Database.Models.Character.CharacterLookModel", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Character.CharacterModel", b =>
@@ -1074,7 +1209,16 @@ namespace VRP.DAL.Migrations
                 {
                     b.HasOne("VRP.DAL.Database.Models.Character.CharacterModel", "BossCharacter")
                         .WithMany()
-                        .HasForeignKey("BossCharacterId");
+                        .HasForeignKey("BossCharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("VRP.DAL.Database.Models.Group.GroupRankModel", b =>
+                {
+                    b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Group.WorkerModel", b =>
@@ -1086,6 +1230,10 @@ namespace VRP.DAL.Migrations
                     b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "Group")
                         .WithMany("Workers")
                         .HasForeignKey("GroupId");
+
+                    b.HasOne("VRP.DAL.Database.Models.Group.GroupRankModel", "GroupRank")
+                        .WithMany("Workers")
+                        .HasForeignKey("GroupRankId");
                 });
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Item.ItemModel", b =>
@@ -1184,6 +1332,41 @@ namespace VRP.DAL.Migrations
                         .HasForeignKey("CellphoneId");
                 });
 
+            modelBuilder.Entity("VRP.DAL.Database.Models.Ticket.TicketAdminRelation", b =>
+                {
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Admin")
+                        .WithMany("AdminInTickets")
+                        .HasForeignKey("AdminId");
+
+                    b.HasOne("VRP.DAL.Database.Models.Ticket.TicketModel", "Ticket")
+                        .WithMany("InvolvedAdmins")
+                        .HasForeignKey("TicketId");
+                });
+
+            modelBuilder.Entity("VRP.DAL.Database.Models.Ticket.TicketMessageModel", b =>
+                {
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Author")
+                        .WithMany("TicketsMessages")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Ticket.TicketModel", "Ticket")
+                        .WithMany("MessageContent")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("VRP.DAL.Database.Models.Ticket.TicketUserRelation", b =>
+                {
+                    b.HasOne("VRP.DAL.Database.Models.Ticket.TicketModel", "Ticket")
+                        .WithMany("InvolvedAccounts")
+                        .HasForeignKey("TicketId");
+
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "User")
+                        .WithMany("UserInTickets")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("VRP.DAL.Database.Models.Vehicle.VehicleModel", b =>
                 {
                     b.HasOne("VRP.DAL.Database.Models.Misc.AutoSaleModel", "AutoSaleModel")
@@ -1193,11 +1376,18 @@ namespace VRP.DAL.Migrations
 
                     b.HasOne("VRP.DAL.Database.Models.Character.CharacterModel", "Character")
                         .WithMany("Vehicles")
-                        .HasForeignKey("CharacterId");
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("VRP.DAL.Database.Models.Account.AccountModel", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId");
+                        .WithMany("Vehicles")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("VRP.DAL.Database.Models.PartTimeJob.PartTimeJobModel")
                         .WithMany("Vehicles")
