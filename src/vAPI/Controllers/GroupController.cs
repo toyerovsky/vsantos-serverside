@@ -11,7 +11,7 @@ using VRP.vAPI.Extensions;
 namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [EnableCors("dev")]
     [Authorize("Authenticated")]
     public class GroupController : Controller

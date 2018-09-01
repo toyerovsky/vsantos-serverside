@@ -20,7 +20,7 @@ using VRP.vAPI.Model;
 namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [EnableCors("dev")]
     [Authorize("Authenticated")]
     public class AccountController : Controller

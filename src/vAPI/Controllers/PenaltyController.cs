@@ -11,7 +11,7 @@ using VRP.vAPI.Extensions;
 namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Penalty")]
+    [Route("Penalty")]
     [EnableCors("dev")]
     [Authorize("Authenticated")]
     public class PenaltyController : Controller

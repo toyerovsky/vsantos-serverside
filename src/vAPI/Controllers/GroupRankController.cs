@@ -1,20 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
-using VRP.DAL.Database.Models.Group;
-using VRP.DAL.UnitOfWork;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [EnableCors("dev")]
     [Authorize("Authenticated")]
     public class GroupRankController : Controller

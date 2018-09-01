@@ -11,7 +11,7 @@ using VRP.DAL.UnitOfWork;
 namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class SeedController : Controller
     {
         private readonly IConfiguration _configuration;
