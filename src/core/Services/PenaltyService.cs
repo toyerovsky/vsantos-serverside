@@ -34,12 +34,12 @@ namespace VRP.BLL.Services
 
         public async Task<PenaltyDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.GetAsync(id));
+            return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.JoinAndGetAsync(id));
         }
 
         public async Task<PenaltyDto> GetAsync(Expression<Func<PenaltyModel, bool>> expression)
         {
-            return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.GetAsync(expression));
+            return _mapper.Map<PenaltyModel, PenaltyDto>(await _unitOfWork.PenaltiesRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<PenaltyDto> CreateAsync(int creatorId, PenaltyDto dto)

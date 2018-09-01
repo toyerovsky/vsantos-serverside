@@ -26,7 +26,7 @@ namespace VRP.vAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<BuildingDto> buildings = await _buildingService.GetAllAsync();
+            IEnumerable<BuildingDto> buildings = await _buildingService.GetAllNoRelatedAsync();
 
             if (!buildings.Any())
             {
@@ -39,12 +39,14 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _buildingService.ContainsAsync(id))
+            BuildingDto building = await _buildingService.GetByIdAsync(id);
+
+            if (building == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _buildingService.GetByIdAsync(id));
+            return Json(building);
         }
 
         [HttpPost]

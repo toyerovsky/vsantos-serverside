@@ -26,7 +26,14 @@ namespace VRP.vAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Json(await _penaltyService.GetAllAsync());
+            IEnumerable<PenaltyDto> penalties = await _penaltyService.GetAllNoRelatedAsync();
+
+            if (!penalties.Any())
+            {
+                return NotFound();
+            }
+
+            return Json(penalties);
         }
 
         [HttpGet("account/{id}")]
@@ -46,12 +53,14 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _penaltyService.ContainsAsync(id))
+            PenaltyDto penalty = await _penaltyService.GetByIdAsync(id);
+
+            if (penalty == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _penaltyService.GetByIdAsync(id));
+            return Json(penalty);
         }
 
         [HttpPost]

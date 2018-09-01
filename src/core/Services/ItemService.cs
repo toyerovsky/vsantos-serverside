@@ -5,10 +5,11 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using VRP.BLL.Dto;
+using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Item;
 using VRP.DAL.UnitOfWork;
 
-namespace VRP.BLL.Services.Interfaces
+namespace VRP.BLL.Services
 {
     public class ItemService : IItemService
     {
@@ -33,12 +34,12 @@ namespace VRP.BLL.Services.Interfaces
 
         public async Task<ItemDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<ItemModel, ItemDto>(await _unitOfWork.ItemsRepository.GetAsync(id));
+            return _mapper.Map<ItemModel, ItemDto>(await _unitOfWork.ItemsRepository.JoinAndGetAsync(id));
         }
 
         public async Task<ItemDto> GetAsync(Expression<Func<ItemModel, bool>> expression)
         {
-            return _mapper.Map<ItemModel, ItemDto>(await _unitOfWork.ItemsRepository.GetAsync(expression));
+            return _mapper.Map<ItemModel, ItemDto>(await _unitOfWork.ItemsRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<ItemDto> CreateAsync(int creatorId, ItemDto dto)

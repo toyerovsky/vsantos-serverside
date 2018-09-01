@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
+using VRP.DAL.Database.Models.Account;
+using VRP.DAL.UnitOfWork;
 using VRP.vAPI.Model;
 
 namespace VRP.vAPI.Controllers
@@ -71,7 +73,7 @@ namespace VRP.vAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<AccountDto> accounts = await _accountService.GetAllAsync();
+            IEnumerable<AccountDto> accounts = await _accountService.GetAllNoRelatedAsync();
 
             if (!accounts.Any())
             {
@@ -84,12 +86,14 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _accountService.ContainsAsync(id))
+            AccountDto account = await _accountService.GetByIdAsync(id);
+
+            if (account == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _accountService.GetByIdAsync(id));
+            return Json(account);
         }
 
         [AllowAnonymous]

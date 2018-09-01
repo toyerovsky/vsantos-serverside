@@ -34,6 +34,7 @@ namespace VRP.DAL.UnitOfWork
         public IRepository<ZoneModel> ZonesRepository { get; set; }
         public IJoinableRepository<GroupRankModel> GroupRanksRepository { get; set; }
         public IJoinableRepository<TicketModel> TicketsRepository { get; set; }
+        public IRepository<ItemTemplateModel> ItemTemplatesRepository { get; set; }
 
         private RoleplayContext Context { get; }
 
@@ -56,6 +57,7 @@ namespace VRP.DAL.UnitOfWork
             ZonesRepository = new ZonesRepository(context);
             GroupRanksRepository = new GroupRankRepository(context);
             TicketsRepository = new TicketsRepository(context);
+            ItemTemplatesRepository = new ItemTemplatesRepository(context);
         }
 
         public async Task SaveAsync()

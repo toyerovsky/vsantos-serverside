@@ -30,19 +30,15 @@ namespace VRP.vAPI.Controllers
     [EnableCors("dev")]
     [Authorize("Authenticated")]
     public class CharacterController : Controller
-    {
-        private readonly IConfiguration _configuration;
+    { 
         private readonly ICharacterService _characterService;
         // inject this to provide compability of old methods
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public CharacterController(IConfiguration configuration, ICharacterService characterService, IUnitOfWork unitOfWork, IMapper mapper)
+        public CharacterController(ICharacterService characterService, IUnitOfWork unitOfWork)
         {
-            _configuration = configuration;
             _characterService = characterService;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         [HttpGet("account/{accountId}")]
@@ -61,7 +57,7 @@ namespace VRP.vAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllAsync();
+            IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllNoRelatedAsync();
 
             if (!characterDtos.Any())
             {
@@ -72,43 +68,29 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("account")]
-        public IActionResult GetByCurrentUserCredentials()
+        public async Task<IActionResult> GetByCurrentUserCredentials()
         {
-            var query = "SELECT Id, Name, Surname, Money, Model FROM vrpsrv.Characters WHERE AccountId = @accountId AND IsAlive = true";
+            IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllNoRelatedAsync(
+                character => character.AccountId == HttpContext.User.GetAccountId());
 
-            using (IDbConnection connection = new MySqlConnection(
-                _configuration.GetConnectionString("gameConnectionString")))
+            if (!characterDtos.Any())
             {
-                int accountId = HttpContext.User.GetAccountId();
-
-                using (var multiple = connection.QueryMultiple(query, new { accountId }))
-                {
-                    IEnumerable<CharacterModel> characters = multiple.Read<CharacterModel>();
-
-                    var characterModels = characters as CharacterModel[] ?? characters.ToArray();
-
-                    if (!characterModels.Any())
-                    {
-                        return NotFound(accountId);
-                    }
-
-                    IEnumerable<CharacterDto> characterDtos =
-                        _mapper.Map<CharacterDto[]>(characterModels);
-
-                    return Json(characterDtos);
-                }
+                return NotFound();
             }
+
+            return Json(characterDtos);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _characterService.ContainsAsync(id))
+            CharacterDto character = await _characterService.GetByIdAsync(id);
+            if (character == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _characterService.GetByIdAsync(id));
+            return Json(character);
         }
 
         [HttpGet("selectedcharacter")]
@@ -138,7 +120,7 @@ namespace VRP.vAPI.Controllers
             ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             claimsIdentity.AddClaim(new Claim("CharacterId", id.ToString()));
             HttpContext.User.AddIdentity(claimsIdentity);
-            
+
             await HttpContext.SignInAsync(HttpContext.User);
             return Ok();
         }
@@ -150,7 +132,7 @@ namespace VRP.vAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             return Created("", await _characterService.CreateAsync(characterDto));
         }
 
@@ -166,7 +148,7 @@ namespace VRP.vAPI.Controllers
             {
                 return NotFound(id);
             }
-            
+
             return Json(await _characterService.UpdateAsync(id, characterDto));
         }
 

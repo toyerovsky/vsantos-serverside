@@ -34,12 +34,12 @@ namespace VRP.BLL.Services
 
         public async Task<VehicleDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<VehicleModel, VehicleDto>(await _unitOfWork.VehiclesRepository.GetAsync(id));
+            return _mapper.Map<VehicleModel, VehicleDto>(await _unitOfWork.VehiclesRepository.JoinAndGetAsync(id));
         }
 
         public async Task<VehicleDto> GetAsync(Expression<Func<VehicleModel, bool>> expression)
         {
-            return _mapper.Map<VehicleModel, VehicleDto>(await _unitOfWork.VehiclesRepository.GetAsync(expression));
+            return _mapper.Map<VehicleModel, VehicleDto>(await _unitOfWork.VehiclesRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<VehicleDto> CreateAsync(int creatorId, VehicleDto dto)

@@ -18,6 +18,7 @@ namespace VRP.vAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+
         public TicketController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -36,7 +37,6 @@ namespace VRP.vAPI.Controllers
                 return NotFound(id);
             }
 
-
             IEnumerable<TicketDto> ticketDtos = _mapper.Map<TicketDto[]>(tickets);
             return Json(ticketDtos);
         }
@@ -53,9 +53,6 @@ namespace VRP.vAPI.Controllers
             TicketDto ticketDto = _mapper.Map<TicketDto>(ticket);   
             return Json(ticketDto);
         }
-
-
-
 
         protected override void Dispose(bool disposing)
         {

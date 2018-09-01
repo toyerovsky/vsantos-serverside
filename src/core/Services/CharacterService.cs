@@ -36,12 +36,12 @@ namespace VRP.BLL.Services
 
         public async Task<CharacterDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<CharacterModel, CharacterDto>(await _unitOfWork.CharactersRepository.GetAsync(id));
+            return _mapper.Map<CharacterModel, CharacterDto>(await _unitOfWork.CharactersRepository.JoinAndGetAsync(id));
         }
 
         public async Task<CharacterDto> GetAsync(Expression<Func<CharacterModel, bool>> expression)
         {
-            return _mapper.Map<CharacterModel, CharacterDto>(await _unitOfWork.CharactersRepository.GetAsync(expression));
+            return _mapper.Map<CharacterModel, CharacterDto>(await _unitOfWork.CharactersRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<CharacterDto> CreateAsync(CharacterDto dto)

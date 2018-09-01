@@ -12,6 +12,7 @@ using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Interfaces;
+using VRP.DAL.Repositories;
 
 namespace VRP.DAL.UnitOfWork
 {
@@ -33,6 +34,7 @@ namespace VRP.DAL.UnitOfWork
         IRepository<ZoneModel> ZonesRepository { get; set; }
         IJoinableRepository<GroupRankModel> GroupRanksRepository { get; set; }
         IJoinableRepository<TicketModel> TicketsRepository { get; set; }
+        IRepository<ItemTemplateModel> ItemTemplatesRepository { get; set; }
 
         Task SaveAsync();
         void Save();

@@ -26,18 +26,20 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _groupRankService.ContainsAsync(id))
+            GroupRankDto groupRank = await _groupRankService.GetByIdAsync(id);
+
+            if (groupRank == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _groupRankService.GetByIdAsync(id));
+            return Json(groupRank);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<GroupRankDto> groupRanks = await _groupRankService.GetAllAsync();
+            IEnumerable<GroupRankDto> groupRanks = await _groupRankService.GetAllNoRelatedAsync();
 
             if (!groupRanks.Any())
             {

@@ -35,7 +35,7 @@ namespace VRP.BLL.Services
 
         public async Task<AccountDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<AccountModel, AccountDto>(await _unitOfWork.AccountsRepository.GetAsync(id));
+            return _mapper.Map<AccountModel, AccountDto>(await _unitOfWork.AccountsRepository.JoinAndGetAsync(id));
         }
 
         public async Task<IEnumerable<Claim>> GetClaimsAsync(string userEmail, string passwordHash)
@@ -59,7 +59,7 @@ namespace VRP.BLL.Services
 
         public async Task<AccountDto> GetAsync(Expression<Func<AccountModel, bool>> expression)
         {
-            return _mapper.Map<AccountModel, AccountDto>(await _unitOfWork.AccountsRepository.GetAsync(expression));
+            return _mapper.Map<AccountModel, AccountDto>(await _unitOfWork.AccountsRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<AccountDto> UpdateAsync(int id, AccountDto dto)

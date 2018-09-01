@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Extensions;
@@ -39,19 +40,21 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _groupService.ContainsAsync(id))
+            GroupDto group = await _groupService.GetByIdAsync(id);
+
+            if (group == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _groupService.GetByIdAsync(id));
+            return Json(group);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<GroupDto> groups = await _groupService.GetAllAsync();
-            
+            IEnumerable<GroupDto> groups = await _groupService.GetAllNoRelatedAsync();
+
             if (!groups.Any())
             {
                 return NotFound();

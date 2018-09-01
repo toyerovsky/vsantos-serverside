@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
 using VRP.BLL.Services;
+using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Extensions;
 
 namespace VRP.vAPI.Controllers
@@ -43,18 +44,20 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _itemService.ContainsAsync(id))
+            ItemDto item = await _itemService.GetByIdAsync(id);
+
+            if (item == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _itemService.GetByIdAsync(id));
+            return Json(item);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<ItemDto> items = await _itemService.GetAllAsync();
+            IEnumerable<ItemDto> items = await _itemService.GetAllNoRelatedAsync();
 
             if (!items.Any())
             {

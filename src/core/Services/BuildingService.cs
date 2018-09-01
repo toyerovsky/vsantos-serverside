@@ -34,12 +34,12 @@ namespace VRP.BLL.Services
 
         public async Task<BuildingDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<BuildingModel, BuildingDto>(await _unitOfWork.BuildingsRepository.GetAsync(id));
+            return _mapper.Map<BuildingModel, BuildingDto>(await _unitOfWork.BuildingsRepository.JoinAndGetAsync(id));
         }
 
         public async Task<BuildingDto> GetAsync(Expression<Func<BuildingModel, bool>> expression)
         {
-            return _mapper.Map<BuildingModel, BuildingDto>(await _unitOfWork.BuildingsRepository.GetAsync(expression));
+            return _mapper.Map<BuildingModel, BuildingDto>(await _unitOfWork.BuildingsRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<BuildingDto> CreateAsync(int creatorId, BuildingDto dto)

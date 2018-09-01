@@ -4,7 +4,10 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Enums;
 
 namespace VRP.DAL.Database.Models.Item
@@ -24,5 +27,12 @@ namespace VRP.DAL.Database.Models.Item
 
         [EnumDataType(typeof(ItemEntityType))]
         public ItemEntityType ItemEntityType { get; set; }
+        public DateTime CreationTime { get; set; }
+
+        // foreign keys 
+        [ForeignKey("Creator")]
+        public int CreatorId { get; set; }
+        // navigation properties
+        public virtual AccountModel Creator { get; set; }
     }
 }

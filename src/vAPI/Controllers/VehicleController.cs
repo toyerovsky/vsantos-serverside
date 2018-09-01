@@ -18,12 +18,10 @@ namespace VRP.vAPI.Controllers
     public class VehicleController : Controller
     {
         private readonly IVehicleService _vehicleService;
-        private readonly IMapper _mapper;
 
-        public VehicleController(IVehicleService vehicleService, IMapper mapper)
+        public VehicleController(IVehicleService vehicleService)
         {
             _vehicleService = vehicleService;
-            _mapper = mapper;
         }
 
         [HttpGet("charactervehicles")]
@@ -43,12 +41,14 @@ namespace VRP.vAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            if (!await _vehicleService.ContainsAsync(id))
+            VehicleDto vehicle = await _vehicleService.GetByIdAsync(id);
+
+            if (vehicle == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _vehicleService.GetByIdAsync(id));
+            return Json(vehicle);
         }
 
         [HttpGet("{numberPlate}")]

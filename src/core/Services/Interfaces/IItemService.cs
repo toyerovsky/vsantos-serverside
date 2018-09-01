@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using VRP.BLL.Dto;
 using VRP.DAL.Database.Models.Item;
 
-namespace VRP.BLL.Services
+namespace VRP.BLL.Services.Interfaces
 {
     public interface IItemService : IDisposable
     {

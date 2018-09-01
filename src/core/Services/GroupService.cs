@@ -37,12 +37,12 @@ namespace VRP.BLL.Services
 
         public async Task<GroupDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<GroupModel, GroupDto>(await _unitOfWork.GroupsRepository.GetAsync(id));
+            return _mapper.Map<GroupModel, GroupDto>(await _unitOfWork.GroupsRepository.JoinAndGetAsync(id));
         }
 
         public async Task<GroupDto> GetAsync(Expression<Func<GroupModel, bool>> expression)
         {
-            return _mapper.Map<GroupModel, GroupDto>(await _unitOfWork.GroupsRepository.GetAsync(expression));
+            return _mapper.Map<GroupModel, GroupDto>(await _unitOfWork.GroupsRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<GroupDto> CreateAsync(int creatorId, GroupDto dto)

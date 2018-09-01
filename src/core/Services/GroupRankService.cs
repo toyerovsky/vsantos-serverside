@@ -34,12 +34,12 @@ namespace VRP.BLL.Services
 
         public async Task<GroupRankDto> GetByIdAsync(int id)
         {
-            return _mapper.Map<GroupRankModel, GroupRankDto>(await _unitOfWork.GroupRanksRepository.GetAsync(id));
+            return _mapper.Map<GroupRankModel, GroupRankDto>(await _unitOfWork.GroupRanksRepository.JoinAndGetAsync(id));
         }
 
         public async Task<GroupRankDto> GetAsync(Expression<Func<GroupRankModel, bool>> expression)
         {
-            return _mapper.Map<GroupRankModel, GroupRankDto>(await _unitOfWork.GroupRanksRepository.GetAsync(expression));
+            return _mapper.Map<GroupRankModel, GroupRankDto>(await _unitOfWork.GroupRanksRepository.JoinAndGetAsync(expression));
         }
 
         public async Task<GroupRankDto> CreateAsync(int creatorId, GroupRankDto dto)
