@@ -5,6 +5,8 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Database.Models.Agreement;
 using VRP.DAL.Database.Models.Building;
@@ -23,8 +25,18 @@ namespace VRP.DAL.Database
 {
     public class RoleplayContext : DbContext
     {
+        private static readonly LoggerFactory RpLoggerFactory
+            = new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
+
         public RoleplayContext(DbContextOptions options) : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLoggerFactory(RpLoggerFactory);
+            optionsBuilder.EnableSensitiveDataLogging();
+            base.OnConfiguring(optionsBuilder);
         }
 
         #region Account
@@ -96,9 +108,9 @@ namespace VRP.DAL.Database
         public virtual DbSet<TicketMessageModel> TicketMessages { get; set; }
         public virtual DbSet<TicketAdminRelation> TicketAdminRecordRelations { get; set; }
         public virtual DbSet<TicketUserRelation> TicketUserRecordRelations { get; set; }
-        
 
-        
+
+
 
         #endregion
 
@@ -126,8 +138,6 @@ namespace VRP.DAL.Database
 
             modelBuilder.Entity<AccountModel>()
                 .HasKey(account => account.Id);
-
-          
         }
     }
 }

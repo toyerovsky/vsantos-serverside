@@ -25,12 +25,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<AccountDto>> GetAllAsync(Expression<Func<AccountModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>((await _unitOfWork.AccountsRepository.JoinAndGetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>(await _unitOfWork.AccountsRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<AccountDto>> GetAllNoRelatedAsync(Expression<Func<AccountModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>((await _unitOfWork.AccountsRepository.GetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<AccountModel>, AccountDto[]>(await _unitOfWork.AccountsRepository.GetAllAsync(expression));
         }
 
         public async Task<AccountDto> GetByIdAsync(int id)

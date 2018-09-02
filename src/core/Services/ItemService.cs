@@ -29,7 +29,7 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<ItemDto>> GetAllNoRelatedAsync(Expression<Func<ItemModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<ItemModel>, ItemDto[]>((await _unitOfWork.ItemsRepository.GetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<ItemModel>, ItemDto[]>(await _unitOfWork.ItemsRepository.GetAllAsync(expression));
         }
 
         public async Task<ItemDto> GetByIdAsync(int id)

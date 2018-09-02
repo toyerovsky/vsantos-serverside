@@ -26,12 +26,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<CharacterDto>> GetAllAsync(Expression<Func<CharacterModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>((await _unitOfWork.CharactersRepository.JoinAndGetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>(await _unitOfWork.CharactersRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<CharacterDto>> GetAllNoRelatedAsync(Expression<Func<CharacterModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>((await _unitOfWork.CharactersRepository.GetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<CharacterModel>, CharacterDto[]>(await _unitOfWork.CharactersRepository.GetAllAsync(expression));
         }
 
         public async Task<CharacterDto> GetByIdAsync(int id)

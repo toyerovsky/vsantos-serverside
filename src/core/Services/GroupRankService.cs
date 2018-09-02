@@ -24,12 +24,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<GroupRankDto>> GetAllAsync(Expression<Func<GroupRankModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>((await _unitOfWork.GroupRanksRepository.JoinAndGetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>(await _unitOfWork.GroupRanksRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<GroupRankDto>> GetAllNoRelatedAsync(Expression<Func<GroupRankModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>((await _unitOfWork.GroupRanksRepository.GetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<GroupRankModel>, GroupRankDto[]>(await _unitOfWork.GroupRanksRepository.GetAllAsync(expression));
         }
 
         public async Task<GroupRankDto> GetByIdAsync(int id)

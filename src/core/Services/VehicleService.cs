@@ -24,12 +24,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<VehicleDto>> GetAllAsync(Expression<Func<VehicleModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>((await _unitOfWork.VehiclesRepository.JoinAndGetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>(await _unitOfWork.VehiclesRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<VehicleDto>> GetAllNoRelatedAsync(Expression<Func<VehicleModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>((await _unitOfWork.VehiclesRepository.GetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<VehicleModel>, VehicleDto[]>(await _unitOfWork.VehiclesRepository.GetAllAsync(expression));
         }
 
         public async Task<VehicleDto> GetByIdAsync(int id)

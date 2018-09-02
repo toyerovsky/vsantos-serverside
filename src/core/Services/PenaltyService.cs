@@ -24,12 +24,12 @@ namespace VRP.BLL.Services
 
         public async Task<IEnumerable<PenaltyDto>> GetAllAsync(Expression<Func<PenaltyModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>((await _unitOfWork.PenaltiesRepository.JoinAndGetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>(await _unitOfWork.PenaltiesRepository.JoinAndGetAllAsync(expression));
         }
 
         public async Task<IEnumerable<PenaltyDto>> GetAllNoRelatedAsync(Expression<Func<PenaltyModel, bool>> expression)
         {
-            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>((await _unitOfWork.PenaltiesRepository.GetAllAsync(expression)).ToArray());
+            return _mapper.Map<IEnumerable<PenaltyModel>, PenaltyDto[]>(await _unitOfWork.PenaltiesRepository.GetAllAsync(expression));
         }
 
         public async Task<PenaltyDto> GetByIdAsync(int id)
