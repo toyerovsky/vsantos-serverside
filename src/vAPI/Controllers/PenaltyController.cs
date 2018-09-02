@@ -11,7 +11,7 @@ using VRP.vAPI.Extensions;
 namespace VRP.vAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("Penalty")]
+    [Route("[controller]")]
     [EnableCors("dev")]
     [Authorize("Authenticated")]
     public class PenaltyController : Controller
@@ -82,12 +82,14 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(penaltyDto);
             }
 
-            if (!await _penaltyService.ContainsAsync(id))
+            PenaltyDto penalty = await _penaltyService.UpdateAsync(id, penaltyDto);
+
+            if (penalty == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _penaltyService.UpdateAsync(id, penaltyDto));
+            return Json(penalty);
         }
 
         [HttpPut("deactivate/{id}")]

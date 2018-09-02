@@ -58,9 +58,12 @@ namespace VRP.BLL.Services
         public async Task<CharacterDto> UpdateAsync(int id, CharacterDto dto)
         {
             CharacterModel model = await _unitOfWork.CharactersRepository.JoinAndGetAsync(id);
-            _unitOfWork.CharactersRepository.BeginUpdate(model);
-            _mapper.Map(dto, model);
-            await _unitOfWork.SaveAsync();
+            if (model != null)
+            {
+                _unitOfWork.CharactersRepository.BeginUpdate(model);
+                _mapper.Map(dto, model);
+                await _unitOfWork.SaveAsync();
+            }
             return dto;
         }
 

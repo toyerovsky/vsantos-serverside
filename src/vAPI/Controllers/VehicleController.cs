@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -96,12 +95,14 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(vehicleDto);
             }
 
-            if (!await _vehicleService.ContainsAsync(id))
+            VehicleDto vehicle = await _vehicleService.UpdateAsync(id, vehicleDto);
+
+            if (vehicle == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _vehicleService.UpdateAsync(id, vehicleDto));
+            return Json(vehicle);
         }
 
         [HttpDelete("{id}")]

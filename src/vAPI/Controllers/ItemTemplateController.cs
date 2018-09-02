@@ -14,79 +14,80 @@ namespace VRP.vAPI.Controllers
     [Route("[controller]")]
     [EnableCors("dev")]
     [Authorize("Authenticated")]
-    public class GroupRankController : Controller
+    public class ItemTemplateController : Controller
     {
-        private readonly IGroupRankService _groupRankService;
+        private readonly IItemTemplateService _itemTemplateService;
 
-        public GroupRankController(IGroupRankService groupRankService)
+        public ItemTemplateController(IItemTemplateService itemTemplateService)
         {
-            _groupRankService = groupRankService;
+            _itemTemplateService = itemTemplateService;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            GroupRankDto groupRank = await _groupRankService.GetByIdAsync(id);
+            ItemTemplateDto itemTemplate = await _itemTemplateService.GetByIdAsync(id);
 
-            if (groupRank == null)
+            if (itemTemplate == null)
             {
                 return NotFound(id);
             }
 
-            return Json(groupRank);
+            return Json(itemTemplate);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<GroupRankDto> groupRanks = await _groupRankService.GetAllNoRelatedAsync();
+            IEnumerable<ItemTemplateDto> itemTemplates = await _itemTemplateService.GetAllNoRelatedAsync();
 
-            if (!groupRanks.Any())
+            if (!itemTemplates.Any())
             {
                 return NotFound();
             }
 
-            return Json(groupRanks);
+            return Json(itemTemplates);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] GroupRankDto groupRankDto)
+        public async Task<IActionResult> Post([FromBody] ItemTemplateDto itemTemplateDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            return Created("", await _groupRankService.CreateAsync(HttpContext.User.GetAccountId(), groupRankDto));
+            return Created("", await _itemTemplateService.CreateAsync(HttpContext.User.GetAccountId(), itemTemplateDto));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GroupRankDto groupRankDto)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] ItemTemplateDto itemTemplateDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(groupRankDto);
+                return BadRequest(itemTemplateDto);
             }
 
-            GroupRankDto groupRank = await _groupRankService.UpdateAsync(id, groupRankDto);
+            ItemTemplateDto itemTemplate = await _itemTemplateService.UpdateAsync(id, itemTemplateDto);
 
-            if (groupRank == null)
+            if (itemTemplate == null)
             {
                 return NotFound(id);
             }
 
-            return Json(groupRank);
+            return Json(itemTemplate);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!await _groupRankService.ContainsAsync(id))
+            if (!await _itemTemplateService.ContainsAsync(id))
             {
                 return NotFound(id);
             }
 
-            await _groupRankService.DeleteAsync(id);
+            await _itemTemplateService.DeleteAsync(id);
 
             return NoContent();
         }
@@ -95,9 +96,10 @@ namespace VRP.vAPI.Controllers
         {
             if (disposing)
             {
-                _groupRankService?.Dispose();
+                _itemTemplateService?.Dispose();
             }
             base.Dispose(disposing);
         }
+
     }
 }

@@ -53,9 +53,12 @@ namespace VRP.BLL.Services
         public async Task<GroupRankDto> UpdateAsync(int id, GroupRankDto dto)
         {
             GroupRankModel model = await _unitOfWork.GroupRanksRepository.JoinAndGetAsync(id);
-            _unitOfWork.GroupRanksRepository.BeginUpdate(model);
-            _mapper.Map(dto, model);
-            await _unitOfWork.SaveAsync();
+            if (model != null)
+            {
+                _unitOfWork.GroupRanksRepository.BeginUpdate(model);
+                _mapper.Map(dto, model);
+                await _unitOfWork.SaveAsync();
+            }
             return dto;
         }
 

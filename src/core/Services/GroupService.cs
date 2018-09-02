@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
-using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Database.Models.Group;
 using VRP.DAL.UnitOfWork;
 
@@ -59,9 +58,12 @@ namespace VRP.BLL.Services
         public async Task<GroupDto> UpdateAsync(int id, GroupDto dto)
         {
             GroupModel model = await _unitOfWork.GroupsRepository.JoinAndGetAsync(id);
-            _unitOfWork.GroupsRepository.BeginUpdate(model);
-            _mapper.Map(dto, model);
-            await _unitOfWork.SaveAsync();
+            if (model != null)
+            {
+                _unitOfWork.GroupsRepository.BeginUpdate(model);
+                _mapper.Map(dto, model);
+                await _unitOfWork.SaveAsync();
+            }
             return dto;
         }
 

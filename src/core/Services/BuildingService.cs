@@ -55,9 +55,12 @@ namespace VRP.BLL.Services
         public async Task<BuildingDto> UpdateAsync(int id, BuildingDto dto)
         {
             BuildingModel model = await _unitOfWork.BuildingsRepository.JoinAndGetAsync(id);
-            _unitOfWork.BuildingsRepository.BeginUpdate(model);
-            _mapper.Map(dto, model);
-            await _unitOfWork.SaveAsync();
+            if (model != null)
+            {
+                _unitOfWork.BuildingsRepository.BeginUpdate(model);
+                _mapper.Map(dto, model);
+                await _unitOfWork.SaveAsync();
+            }
             return dto;
         }
 

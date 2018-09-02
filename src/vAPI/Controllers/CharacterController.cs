@@ -5,18 +5,13 @@
  */
 
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
-using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Character;
@@ -144,12 +139,14 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!await _characterService.ContainsAsync(id))
+            CharacterDto character = await _characterService.UpdateAsync(id, characterDto);
+
+            if (character == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _characterService.UpdateAsync(id, characterDto));
+            return Json(character);
         }
 
         [HttpPut("image/{id}")]

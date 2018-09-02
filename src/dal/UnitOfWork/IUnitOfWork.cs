@@ -12,7 +12,6 @@ using VRP.DAL.Database.Models.Ticket;
 using VRP.DAL.Database.Models.Vehicle;
 using VRP.DAL.Database.Models.Warehouse;
 using VRP.DAL.Interfaces;
-using VRP.DAL.Repositories;
 
 namespace VRP.DAL.UnitOfWork
 {

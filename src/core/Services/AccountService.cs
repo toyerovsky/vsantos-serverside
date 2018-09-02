@@ -65,9 +65,12 @@ namespace VRP.BLL.Services
         public async Task<AccountDto> UpdateAsync(int id, AccountDto dto)
         {
             AccountModel model = await _unitOfWork.AccountsRepository.JoinAndGetAsync(id);
-            _unitOfWork.AccountsRepository.BeginUpdate(model);
-            _mapper.Map(dto, model);
-            await _unitOfWork.SaveAsync();
+            if (model != null)
+            {
+                _unitOfWork.AccountsRepository.BeginUpdate(model);
+                _mapper.Map(dto, model);
+                await _unitOfWork.SaveAsync();
+            }
             return dto;
         }
 

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
-using VRP.BLL.Services;
 using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Extensions;
 
@@ -86,12 +85,14 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(itemDto);
             }
 
-            if (!await _itemService.ContainsAsync(id))
+            ItemDto item = await _itemService.UpdateAsync(id, itemDto);
+
+            if (item == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _itemService.UpdateAsync(id, itemDto));
+            return Json(item);
         }
 
         [HttpDelete("{id}")]

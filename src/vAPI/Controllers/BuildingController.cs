@@ -68,12 +68,14 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!await _buildingService.ContainsAsync(id))
+            BuildingDto building = await _buildingService.UpdateAsync(id, buildingDto);
+
+            if (building == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _buildingService.UpdateAsync(id, buildingDto));
+            return Json(building);
         }
 
         [HttpDelete("{id}")]

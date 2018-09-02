@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.vAPI.Extensions;
@@ -82,12 +81,14 @@ namespace VRP.vAPI.Controllers
                 return BadRequest(groupDto);
             }
 
-            if (!await _groupService.ContainsAsync(id))
+            GroupDto group = await _groupService.UpdateAsync(id, groupDto);
+
+            if (group == null)
             {
                 return NotFound(id);
             }
 
-            return Json(await _groupService.UpdateAsync(id, groupDto));
+            return Json(group);
         }
 
         [HttpDelete("{id}")]

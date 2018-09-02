@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
-using VRP.DAL.Database.Models.Account;
-using VRP.DAL.UnitOfWork;
 using VRP.vAPI.Model;
 
 namespace VRP.vAPI.Controllers

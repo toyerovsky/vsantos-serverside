@@ -7,7 +7,7 @@ using VRP.DAL.Database.Models.Item;
 
 namespace VRP.BLL.Services.Interfaces
 {
-    public interface IItemTemplateService
+    public interface IItemTemplateService : IDisposable
     {
         Task<IEnumerable<ItemTemplateDto>> GetAllNoRelatedAsync(Expression<Func<ItemTemplateModel, bool>> expression = null);
         Task<ItemTemplateDto> GetByIdAsync(int id);

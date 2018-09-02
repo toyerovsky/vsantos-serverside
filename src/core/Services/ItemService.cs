@@ -55,9 +55,12 @@ namespace VRP.BLL.Services
         public async Task<ItemDto> UpdateAsync(int id, ItemDto dto)
         {
             ItemModel model = await _unitOfWork.ItemsRepository.JoinAndGetAsync(id);
-            _unitOfWork.ItemsRepository.BeginUpdate(model);
-            _mapper.Map(dto, model);
-            await _unitOfWork.SaveAsync();
+            if (model != null)
+            {
+                _unitOfWork.ItemsRepository.BeginUpdate(model);
+                _mapper.Map(dto, model);
+                await _unitOfWork.SaveAsync();
+            }
             return dto;
         }
 
