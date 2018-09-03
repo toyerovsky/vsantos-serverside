@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VRP.BLL.Dto
 {
@@ -13,5 +14,6 @@ namespace VRP.BLL.Dto
         public string GravatarEmail { get; set; }
         public bool UseGravatar { get; set; }
         public string PasswordSalt { get; set; }
+        public IEnumerable<CharacterDto> Characters { get; set; }
     }
 }

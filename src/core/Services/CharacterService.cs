@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -49,6 +48,7 @@ namespace VRP.BLL.Services
             dto.IsAlive = true;
             dto.CreateTime = DateTime.Now;
             dto.Money = 2000;
+            dto.Account = null;
             CharacterModel model = _mapper.Map<CharacterDto, CharacterModel>(dto);
             await _unitOfWork.CharactersRepository.InsertAsync(model);
             await _unitOfWork.SaveAsync();

@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -48,8 +49,6 @@ namespace VRP.vAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var t = Configuration.GetSection("Ranks:SupportRanks").Get<string[]>();
-
             services.AddDbContext<RoleplayContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("gameConnectionString"));
@@ -79,7 +78,10 @@ namespace VRP.vAPI
                         opt => opt.ResolveUsing((model, dto) => model.ServerRank.GetDescription()))
                     .ForMember(accountDto => accountDto.PasswordSalt,
                         opt => opt.ResolveUsing((model, dto) => model.PasswordHash.Substring(0, 29)))
-                    .ReverseMap();
+                    .ReverseMap()
+                    .ForPath(
+                        accountModel => accountModel.ServerRank,
+                        opt => opt.MapFrom(dto => dto.ServerRank.FromDescription<ServerRank>()));
                 cfg.CreateMap<CharacterModel, CharacterDto>().ReverseMap();
                 cfg.CreateMap<BuildingModel, BuildingDto>().ReverseMap();
                 cfg.CreateMap<GroupModel, GroupDto>().ReverseMap();
@@ -105,18 +107,24 @@ namespace VRP.vAPI
 
             services.AddScoped<IMapper<ServerRank, long>, ServerRankMapper>();
 
-            services.AddMvc().AddJsonOptions(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+            services.AddMvc()
+                .AddJsonOptions(options =>
+                {
+
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/login";
+                    options.Events.OnRedirectToLogin = ctx =>
+                    {
+                        ctx.Response.StatusCode = 401;
+                        return Task.CompletedTask;
+                    };
                     options.LogoutPath = "/logout";
                     options.Cookie.Name = ".AspNet.VRP";
                     options.Cookie.Expiration = TimeSpan.FromDays(1);

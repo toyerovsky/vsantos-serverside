@@ -43,7 +43,7 @@ namespace VRP.DAL.Database.Models.Character
         public int? BankAccountNumber { get; set; }
         public decimal? BankMoney { get; set; }
         public bool Gender { get; set; }
-        public DateTime? BornDate { get; set; }
+        public DateTime BornDate { get; set; }
         public bool HasIdCard { get; set; }
         public bool HasDrivingLicense { get; set; }
         public bool IsAlive { get; set; }

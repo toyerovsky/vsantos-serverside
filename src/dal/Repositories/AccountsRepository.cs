@@ -64,7 +64,7 @@ namespace VRP.DAL.Repositories
                             .ThenInclude(group => group.BossCharacter)
                 .Include(account => account.Characters)
                     .ThenInclude(character => character.Workers)
-                        .ThenInclude(group => group.Group)
+                        .ThenInclude(worker => worker.Group)
                             .ThenInclude(group => group.Workers)
                 .Include(account => account.Penalties)
                 .Include(account => account.AdminInTickets)

@@ -30,5 +30,20 @@ namespace VRP.BLL.Extensions
             }
             return null;
         }
+
+        public static T FromDescription<T>(this string text) where T : struct, IConvertible
+        {
+            if (!typeof(T).IsEnum) throw new ArgumentException("Provided generic type must be an enum.");
+
+            foreach (T value in Enum.GetValues(typeof(T)))
+            {
+                object[] array = null;
+                if ((string)typeof(T).GetMethod("GetDescription").Invoke(value, array) == text)
+                {
+                    return value;
+                }
+            }
+            return default(T);
+        }
     }
 }
