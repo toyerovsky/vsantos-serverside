@@ -12,6 +12,7 @@ namespace VRP.BLL.Dto
         public int? ThirdParameter { get; set; }
         public int? FourthParameter { get; set; }
         public int CreatorId { get; set; }
+        public AccountDto Creator { get; set; }
         public DateTime CreationTime { get; set; }
     }
 }

@@ -71,7 +71,6 @@ namespace VRP.vAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return StatusCode(403);
             IEnumerable<AccountDto> accounts = await _accountService.GetAllNoRelatedAsync();
 
             if (!accounts.Any())
