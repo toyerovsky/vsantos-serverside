@@ -68,6 +68,7 @@ namespace VRP.vAPI
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IPenaltyService, PenaltyService>();
             services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IWorkerService, WorkerService>();
 
             // scoped mappers
             var config = new MapperConfiguration(cfg =>
