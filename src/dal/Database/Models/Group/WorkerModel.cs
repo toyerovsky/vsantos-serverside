@@ -5,6 +5,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using VRP.DAL.Database.Models.Character;
 using VRP.DAL.Enums;
 
@@ -19,7 +20,8 @@ namespace VRP.DAL.Database.Models.Group
 
         [EnumDataType(typeof(GroupRights))]
         public GroupRights Rights { get; set; }
-
+        [ForeignKey("Group")]
+        public int GroupId { get; set; }
         // navigation properties
         public virtual GroupModel Group { get; set; }
         public virtual CharacterModel Character { get; set; }
