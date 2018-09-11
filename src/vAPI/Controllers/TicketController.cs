@@ -26,7 +26,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("account/{id}")]
-        public IActionResult GetTicketsByAccountId(int id)
+        public IActionResult GetTicketsByAccountIdAsync(int id)
         {
             
             IEnumerable<TicketModel> tickets = _unitOfWork.TicketsRepository
@@ -42,7 +42,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetAsync(int id)
         {
             TicketModel ticket = _unitOfWork.TicketsRepository.JoinAndGet(id);
             if (ticket == null)

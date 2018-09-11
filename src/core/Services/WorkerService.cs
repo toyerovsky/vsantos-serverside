@@ -1,12 +1,11 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Group;
-using AutoMapper;
 using VRP.DAL.UnitOfWork;
 
 namespace VRP.BLL.Services
@@ -58,13 +57,12 @@ namespace VRP.BLL.Services
 
         public async Task<WorkerDto> UpdateAsync(int id, WorkerDto dto)
         {
+            dto.Character = null;
+            dto.Group = null;
+            dto.GroupRank = null;
             WorkerModel model = await _unitOfWork.WorkersRepository.JoinAndGetAsync(id);
-            if (model != null)
-            {
-                _unitOfWork.WorkersRepository.BeginUpdate(model);
-                _mapper.Map(dto, model);
-                await _unitOfWork.SaveAsync();
-            }
+            _mapper.Map(dto, model);
+            await _unitOfWork.SaveAsync();
             return dto;
         }
 

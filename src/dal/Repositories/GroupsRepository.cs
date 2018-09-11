@@ -4,12 +4,12 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Group;
 using VRP.DAL.Interfaces;
@@ -23,11 +23,11 @@ namespace VRP.DAL.Repositories
         {
         }
 
-        public GroupModel JoinAndGet(int id) => JoinAndGetAll(group => group.Id == id).SingleOrDefault();
+        public GroupModel JoinAndGet(int id) => JoinAndGetAll(group => group.Id == id).FirstOrDefault();
 
         public async Task<GroupModel> JoinAndGetAsync(int id)
         {
-            return await JoinAndGetAll(account => account.Id == id).AsQueryable().SingleOrDefaultAsync();
+            return await JoinAndGetAll(account => account.Id == id).AsQueryable().FirstOrDefaultAsync();
         }
 
         public GroupModel JoinAndGet(Expression<Func<GroupModel, bool>> expression) => JoinAndGetAll(expression).FirstOrDefault();
@@ -49,7 +49,7 @@ namespace VRP.DAL.Repositories
                     .ThenInclude(worker => worker.Character)
                 .Include(group => group.Workers)
                     .ThenInclude(worker => worker.Character)
-                        .ThenInclude(character => character.Account);
+                .Include(group => group.GroupRanks);
         }
 
         public async Task<IEnumerable<GroupModel>> JoinAndGetAllAsync(Expression<Func<GroupModel, bool>> expression = null)

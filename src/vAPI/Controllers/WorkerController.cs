@@ -19,13 +19,13 @@ namespace VRP.vAPI.Controllers
     {
         private readonly IWorkerService _workerService;
 
-        WorkerController(IWorkerService workerService)
+        public WorkerController(IWorkerService workerService)
         {
             _workerService = workerService;
         }
 
         [HttpGet("group/{id}")]
-        public async Task<IActionResult> GetWorkersByGroupId(int id)
+        public async Task<IActionResult> GetWorkersByGroupIdAsync(int id)
         {
             IEnumerable<WorkerDto> workers = await _workerService.GetByGroupIdAsync(id);
 
@@ -38,7 +38,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             WorkerDto worker = await _workerService.GetByIdAsync(id);
 
@@ -51,7 +51,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<WorkerDto> workers = await _workerService.GetAllNoRelatedAsync();
 
@@ -64,7 +64,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] WorkerDto workerDto)
+        public async Task<IActionResult> PostAsync([FromBody] WorkerDto workerDto)
         {
             if (!ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] WorkerDto workerDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] WorkerDto workerDto)
         {
             if (!ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (!await _workerService.ContainsAsync(id))
             {

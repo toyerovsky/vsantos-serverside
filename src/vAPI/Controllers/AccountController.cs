@@ -34,7 +34,7 @@ namespace VRP.vAPI.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
             {
@@ -62,14 +62,14 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> LogOutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return SignOut(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<AccountDto> accounts = await _accountService.GetAllNoRelatedAsync();
 
@@ -82,7 +82,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             AccountDto account = await _accountService.GetByIdAsync(id);
 
@@ -96,7 +96,7 @@ namespace VRP.vAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet("email/{email}")]
-        public async Task<IActionResult> Get(string email)
+        public async Task<IActionResult> GetAsync(string email)
         {
             AccountDto account = await _accountService.GetAsync(a => a.Email == email);
 

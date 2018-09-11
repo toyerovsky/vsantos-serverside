@@ -24,7 +24,7 @@ namespace VRP.vAPI.Controllers
         }
         
         [HttpGet("account/{id}")]
-        public async Task<IActionResult> GetGroupsByAccountId(int id)
+        public async Task<IActionResult> GetGroupsByAccountIdAsync(int id)
         {
             IEnumerable<GroupDto> groups = await _groupService.GetByAccountIdAsync(id);
 
@@ -37,7 +37,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             GroupDto group = await _groupService.GetByIdAsync(id);
 
@@ -50,7 +50,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<GroupDto> groups = await _groupService.GetAllNoRelatedAsync();
 
@@ -63,7 +63,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] GroupDto groupDto)
+        public async Task<IActionResult> PostAsync([FromBody] GroupDto groupDto)
         {
             if (!ModelState.IsValid)
             {
@@ -74,7 +74,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GroupDto groupDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] GroupDto groupDto)
         {
             if (!ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (!await _groupService.ContainsAsync(id))
             {

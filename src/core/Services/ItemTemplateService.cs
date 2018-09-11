@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Item;
@@ -54,12 +54,8 @@ namespace VRP.BLL.Services
         public async Task<ItemTemplateDto> UpdateAsync(int id, ItemTemplateDto dto)
         {
             ItemTemplateModel model = await _unitOfWork.ItemTemplatesRepository.GetAsync(id);
-            if (model != null)
-            {
-                _unitOfWork.ItemTemplatesRepository.BeginUpdate(model);
-                _mapper.Map(dto, model);
-                await _unitOfWork.SaveAsync();
-            }
+            _mapper.Map(dto, model);
+            await _unitOfWork.SaveAsync();
             return dto;
         }
 

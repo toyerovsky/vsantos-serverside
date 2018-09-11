@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Account;
@@ -63,13 +63,9 @@ namespace VRP.BLL.Services
 
         public async Task<AccountDto> UpdateAsync(int id, AccountDto dto)
         {
-            AccountModel model = await _unitOfWork.AccountsRepository.JoinAndGetAsync(id);
-            if (model != null)
-            {
-                _unitOfWork.AccountsRepository.BeginUpdate(model);
-                _mapper.Map(dto, model);
-                await _unitOfWork.SaveAsync();
-            }
+            AccountModel model = await _unitOfWork.AccountsRepository.GetAsync(id);
+            _mapper.Map(dto, model);
+            await _unitOfWork.SaveAsync();
             return dto;
         }
 

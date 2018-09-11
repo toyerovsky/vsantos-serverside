@@ -27,7 +27,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("characteritems")]
-        public async Task<IActionResult> GetItemsByCurrentCharacterId()
+        public async Task<IActionResult> GetItemsByCurrentCharacterIdAsync()
         {
             int characterId = HttpContext.User.GetCharacterId();
             IEnumerable<ItemDto> items = await _itemService.GetAllAsync(item => item.CharacterId == characterId);
@@ -41,7 +41,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             ItemDto item = await _itemService.GetByIdAsync(id);
 
@@ -54,7 +54,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<ItemDto> items = await _itemService.GetAllNoRelatedAsync();
 
@@ -67,7 +67,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ItemDto itemDto)
+        public async Task<IActionResult> PostAsync([FromBody] ItemDto itemDto)
         {
             if (!ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] ItemDto itemDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] ItemDto itemDto)
         {
             if (!ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (!await _itemService.ContainsAsync(id))
             {

@@ -53,8 +53,10 @@ namespace VRP.BLL.Services
 
         public async Task<PenaltyDto> UpdateAsync(int id, PenaltyDto dto)
         {
-            PenaltyModel model = await _unitOfWork.PenaltiesRepository.JoinAndGetAsync(id);
-            _unitOfWork.PenaltiesRepository.BeginUpdate(model);
+            dto.Account = null;
+            dto.Character = null;
+            dto.Creator = null;
+            PenaltyModel model = await _unitOfWork.PenaltiesRepository.GetAsync(id);
             _mapper.Map(dto, model);
             await _unitOfWork.SaveAsync();
             return dto;

@@ -37,7 +37,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("account/{accountId}")]
-        public async Task<IActionResult> GetByAccountId(int accountId)
+        public async Task<IActionResult> GetByAccountIdAsync(int accountId)
         {
             IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllAsync(character => character.AccountId == accountId);
 
@@ -50,7 +50,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllNoRelatedAsync();
 
@@ -63,7 +63,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("account")]
-        public async Task<IActionResult> GetByCurrentUserCredentials()
+        public async Task<IActionResult> GetByCurrentUserCredentialsAsync()
         {
             IEnumerable<CharacterDto> characterDtos = await _characterService.GetAllNoRelatedAsync(
                 character => character.AccountId == HttpContext.User.GetAccountId());
@@ -77,7 +77,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             CharacterDto character = await _characterService.GetByIdAsync(id);
             if (character == null)
@@ -97,7 +97,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost("select")]
-        public async Task<IActionResult> SelectCharacter([FromBody] int id)
+        public async Task<IActionResult> SelectCharacterAsync([FromBody] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -121,7 +121,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CharacterDto characterDto)
+        public async Task<IActionResult> PostAsync([FromBody] CharacterDto characterDto)
         {
             if (!ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] CharacterDto characterDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] CharacterDto characterDto)
         {
             if (!ModelState.IsValid)
             {
@@ -150,7 +150,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("image/{id}")]
-        public async Task<IActionResult> UploadImage([FromRoute] int id, [FromBody] ImageDto imageDto)
+        public async Task<IActionResult> UploadImageAsync([FromRoute] int id, [FromBody] ImageDto imageDto)
         {
             if (!ModelState.IsValid)
             {

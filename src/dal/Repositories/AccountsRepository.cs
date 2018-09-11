@@ -4,12 +4,12 @@
  * Written by V Role Play team <contact@v-rp.pl> December 2017
  */
 
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using VRP.DAL.Database;
 using VRP.DAL.Database.Models.Account;
 using VRP.DAL.Interfaces;

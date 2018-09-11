@@ -22,12 +22,15 @@ namespace VRP.DAL.Database.Models.Group
         {
             Workers = new HashSet<WorkerModel>();
             Agreements = new HashSet<AgreementModel>();
+            Vehicles = new HashSet<VehicleModel>();
+            Buildings = new HashSet<BuildingModel>();
+            GroupRanks = new HashSet<GroupRankModel>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string Tag { get; set; }
-        public int Dotation { get; set; }
+        public int Grant { get; set; }
         public int MaxPayday { get; set; }
         public decimal Money { get; set; }
         public string Color { get; set; }
@@ -42,15 +45,19 @@ namespace VRP.DAL.Database.Models.Group
         public int CreatorId { get; set; }
         [ForeignKey("BossCharacter")]
         public int BossCharacterId { get; set; }
+        [ForeignKey("DefaultRank")]
+        public int DefaultRankId { get; set; }
 
         // navigation properties
         /// <summary>
         /// Prime business boss which cannot be removed from it
         /// </summary>
         public virtual CharacterModel BossCharacter { get; set; }
+        public virtual GroupRankModel DefaultRank { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
         public virtual ICollection<AgreementModel> Agreements { get; set; }
         public virtual ICollection<VehicleModel> Vehicles { get; set; }
         public virtual ICollection<BuildingModel> Buildings { get; set; }
+        public virtual ICollection<GroupRankModel> GroupRanks { get; set; }
     }
 }

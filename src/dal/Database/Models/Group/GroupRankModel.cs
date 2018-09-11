@@ -16,13 +16,17 @@ namespace VRP.DAL.Database.Models.Group
         public string Name { get; set; }
         [EnumDataType(typeof(GroupRights))]
         public GroupRights Rights { get; set; }
+        public decimal Salary { get; set; }
 
         // foreign keys
         [ForeignKey("Group")]
         public int GroupId { get; set; }
+        [ForeignKey("DefaultForGroup")]
+        public int DefaultForGroupId { get; set; }
 
         // navigation properties
         public virtual GroupModel Group { get; set; }
+        public virtual GroupModel DefaultForGroup { get; set; }
         public virtual ICollection<WorkerModel> Workers { get; set; }
     }
 }

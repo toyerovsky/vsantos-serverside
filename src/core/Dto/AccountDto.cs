@@ -14,6 +14,6 @@ namespace VRP.BLL.Dto
         public string GravatarEmail { get; set; }
         public bool UseGravatar { get; set; }
         public string PasswordSalt { get; set; }
-        public IEnumerable<CharacterDto> Characters { get; set; }
+        public ICollection<CharacterDto> Characters { get; set; }
     }
 }

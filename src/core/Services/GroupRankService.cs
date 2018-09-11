@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Group;
@@ -44,6 +44,7 @@ namespace VRP.BLL.Services
 
         public async Task<GroupRankDto> CreateAsync(int creatorId, GroupRankDto dto)
         {
+            dto.Group = null;
             GroupRankModel model = _mapper.Map<GroupRankDto, GroupRankModel>(dto);
             await _unitOfWork.GroupRanksRepository.InsertAsync(model);
             await _unitOfWork.SaveAsync();
@@ -52,13 +53,17 @@ namespace VRP.BLL.Services
 
         public async Task<GroupRankDto> UpdateAsync(int id, GroupRankDto dto)
         {
-            GroupRankModel model = await _unitOfWork.GroupRanksRepository.JoinAndGetAsync(id);
-            if (model != null)
+            dto.Group = null;
+
+            foreach (var worker in dto.Workers)
             {
-                _unitOfWork.GroupRanksRepository.BeginUpdate(model);
-                _mapper.Map(dto, model);
-                await _unitOfWork.SaveAsync();
+                worker.Character = null;
+                worker.Group = null;
             }
+
+            GroupRankModel model = await _unitOfWork.GroupRanksRepository.JoinAndGetAsync(id);
+            _mapper.Map(dto, model);
+            await _unitOfWork.SaveAsync();
             return dto;
         }
 

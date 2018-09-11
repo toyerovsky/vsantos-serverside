@@ -24,7 +24,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<BuildingDto> buildings = await _buildingService.GetAllNoRelatedAsync();
 
@@ -37,7 +37,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             BuildingDto building = await _buildingService.GetByIdAsync(id);
 
@@ -50,7 +50,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] BuildingDto buildingDto)
+        public async Task<IActionResult> PostAsync([FromBody] BuildingDto buildingDto)
         {
             if (!ModelState.IsValid)
             {
@@ -61,7 +61,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] BuildingDto buildingDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] BuildingDto buildingDto)
         {
             if (!ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (!await _buildingService.ContainsAsync(id))
             {

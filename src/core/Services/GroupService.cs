@@ -1,12 +1,13 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Group;
+using VRP.DAL.Enums;
 using VRP.DAL.UnitOfWork;
 
 namespace VRP.BLL.Services
@@ -49,21 +50,38 @@ namespace VRP.BLL.Services
             dto.Money = 0;
             dto.CreatorId = creatorId;
             dto.CreationTime = DateTime.Now;
-            GroupModel model = _mapper.Map<GroupDto, GroupModel>(dto);
-            await _unitOfWork.GroupsRepository.InsertAsync(model);
+            dto.BossCharacter = null;
+
+            GroupModel group = _mapper.Map<GroupDto, GroupModel>(dto);
+            
+            GroupRankModel groupRank = new GroupRankModel
+            {
+                Name = "Lider",
+                Rights = GroupRights.AllBasic,
+            };
+
+            group.DefaultRank = groupRank;
+
+            WorkerModel worker = new WorkerModel
+            {
+                CharacterId = group.BossCharacterId,
+                Group = group,
+            };
+
+            groupRank.Workers.Add(worker);
+            group.GroupRanks.Add(groupRank);
+
+            await _unitOfWork.GroupsRepository.InsertAsync(group);
             await _unitOfWork.SaveAsync();
             return dto;
         }
 
         public async Task<GroupDto> UpdateAsync(int id, GroupDto dto)
         {
-            GroupModel model = await _unitOfWork.GroupsRepository.JoinAndGetAsync(id);
-            if (model != null)
-            {
-                _unitOfWork.GroupsRepository.BeginUpdate(model);
-                _mapper.Map(dto, model);
-                await _unitOfWork.SaveAsync();
-            }
+            dto.BossCharacter = null;
+            GroupModel model = await _unitOfWork.GroupsRepository.GetAsync(id);
+            _mapper.Map(dto, model);
+            await _unitOfWork.SaveAsync();
             return dto;
         }
 
@@ -81,12 +99,11 @@ namespace VRP.BLL.Services
         public async Task<GroupDto> UpdateImageAsync(int characterId, ImageDto imageDto)
         {
             var imageTask = _imageService.UploadImageAsync(imageDto);
-            GroupModel groupModel = _unitOfWork.GroupsRepository.Get(characterId);
-            _unitOfWork.GroupsRepository.BeginUpdate(groupModel);
+            GroupModel groupModel = await _unitOfWork.GroupsRepository.GetAsync(characterId);
             groupModel.ImageUploadDate = DateTime.Now;
             groupModel.ImageUrl = await imageTask;
             await _unitOfWork.SaveAsync();
-            return Mapper.Map<GroupModel, GroupDto>(groupModel);
+            return _mapper.Map<GroupModel, GroupDto>(groupModel);
         }
 
         public async Task<IEnumerable<GroupDto>> GetByAccountIdAsync(int id)

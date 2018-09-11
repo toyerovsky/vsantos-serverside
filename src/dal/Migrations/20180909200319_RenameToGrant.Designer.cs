@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VRP.DAL.Database;
 
 namespace VRP.DAL.Migrations
 {
     [DbContext(typeof(RoleplayContext))]
-    partial class RoleplayContextModelSnapshot : ModelSnapshot
+    [Migration("20180909200319_RenameToGrant")]
+    partial class RenameToGrant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -449,8 +451,6 @@ namespace VRP.DAL.Migrations
 
                     b.Property<int>("CreatorId");
 
-                    b.Property<int>("DefaultRankId");
-
                     b.Property<int>("Grant");
 
                     b.Property<int>("GroupType");
@@ -479,20 +479,13 @@ namespace VRP.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("DefaultForGroupId");
-
                     b.Property<int>("GroupId");
 
                     b.Property<string>("Name");
 
                     b.Property<int>("Rights");
 
-                    b.Property<decimal>("Salary");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DefaultForGroupId")
-                        .IsUnique();
 
                     b.HasIndex("GroupId");
 
@@ -1228,10 +1221,6 @@ namespace VRP.DAL.Migrations
 
             modelBuilder.Entity("VRP.DAL.Database.Models.Group.GroupRankModel", b =>
                 {
-                    b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "DefaultForGroup")
-                        .WithOne("DefaultRank")
-                        .HasForeignKey("VRP.DAL.Database.Models.Group.GroupRankModel", "DefaultForGroupId");
-
                     b.HasOne("VRP.DAL.Database.Models.Group.GroupModel", "Group")
                         .WithMany("GroupRanks")
                         .HasForeignKey("GroupId")

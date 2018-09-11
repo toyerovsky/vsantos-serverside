@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Character;
@@ -57,13 +57,10 @@ namespace VRP.BLL.Services
 
         public async Task<CharacterDto> UpdateAsync(int id, CharacterDto dto)
         {
-            CharacterModel model = await _unitOfWork.CharactersRepository.JoinAndGetAsync(id);
-            if (model != null)
-            {
-                _unitOfWork.CharactersRepository.BeginUpdate(model);
-                _mapper.Map(dto, model);
-                await _unitOfWork.SaveAsync();
-            }
+            dto.Account = null;
+            CharacterModel model = await _unitOfWork.CharactersRepository.GetAsync(id);
+            _mapper.Map(dto, model);
+            await _unitOfWork.SaveAsync();
             return dto;
         }
 
@@ -81,12 +78,11 @@ namespace VRP.BLL.Services
         public async Task<CharacterDto> UpdateImageAsync(int characterId, ImageDto imageDto)
         {
             var imageTask = _imageService.UploadImageAsync(imageDto);
-            CharacterModel characterModel = _unitOfWork.CharactersRepository.Get(characterId);
-            _unitOfWork.CharactersRepository.BeginUpdate(characterModel);
+            CharacterModel characterModel = await _unitOfWork.CharactersRepository.GetAsync(characterId);
             characterModel.ImageUploadDate = DateTime.Now;
             characterModel.ImageUrl = await imageTask;
             await _unitOfWork.SaveAsync();
-            return Mapper.Map<CharacterModel, CharacterDto>(characterModel);
+            return _mapper.Map<CharacterModel, CharacterDto>(characterModel);
         }
 
         public void Dispose()

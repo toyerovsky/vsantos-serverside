@@ -12,8 +12,8 @@ namespace VRP.BLL.Dto
         
         public string Status { get; set; }
 
-        public virtual IEnumerable<TicketMessageDto> MessageContent { get; set; }
-        public virtual IEnumerable<TicketUserRelation> InvolvedAccounts { get; set; }
-        public virtual IEnumerable<TicketAdminRelation> InvolvedAdmins { get; set; }
+        public virtual ICollection<TicketMessageDto> MessageContent { get; set; }
+        public virtual ICollection<TicketUserRelation> InvolvedAccounts { get; set; }
+        public virtual ICollection<TicketAdminRelation> InvolvedAdmins { get; set; }
     }
 }

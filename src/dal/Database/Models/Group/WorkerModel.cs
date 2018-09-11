@@ -20,8 +20,15 @@ namespace VRP.DAL.Database.Models.Group
 
         [EnumDataType(typeof(GroupRights))]
         public GroupRights Rights { get; set; }
+
+        // foreign keys
         [ForeignKey("Group")]
         public int GroupId { get; set; }
+        [ForeignKey("Character")]
+        public int CharacterId { get; set; }
+        [ForeignKey("GroupRank")]
+        public int GroupRankId { get; set; }
+
         // navigation properties
         public virtual GroupModel Group { get; set; }
         public virtual CharacterModel Character { get; set; }

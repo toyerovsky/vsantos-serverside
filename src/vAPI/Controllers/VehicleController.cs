@@ -24,7 +24,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("charactervehicles")]
-        public async Task<IActionResult> GetVehiclesByCharacterId()
+        public async Task<IActionResult> GetVehiclesByCharacterIdAsync()
         {
             int characterId = HttpContext.User.GetCharacterId();
             IEnumerable<VehicleDto> vehicles = await _vehicleService.GetAllAsync(vehicle => vehicle.CharacterId == characterId);
@@ -38,7 +38,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             VehicleDto vehicle = await _vehicleService.GetByIdAsync(id);
 
@@ -51,7 +51,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{numberPlate}")]
-        public async Task<IActionResult> Get(string numberPlate)
+        public async Task<IActionResult> GetAsync(string numberPlate)
         {
             VehicleDto vehicle = await _vehicleService.GetAsync(veh => veh.NumberPlate == numberPlate);
 
@@ -64,7 +64,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<VehicleDto> vehicles = await _vehicleService.GetAllAsync();
 
@@ -77,7 +77,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] VehicleDto vehicleDto)
+        public async Task<IActionResult> PostAsync([FromBody] VehicleDto vehicleDto)
         {
             if (!ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] VehicleDto vehicleDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] VehicleDto vehicleDto)
         {
             if (!ModelState.IsValid)
             {
@@ -106,7 +106,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (!await _vehicleService.ContainsAsync(id))
             {

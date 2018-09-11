@@ -24,7 +24,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<PenaltyDto> penalties = await _penaltyService.GetAllNoRelatedAsync();
 
@@ -37,7 +37,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("account/{id}")]
-        public async Task<IActionResult> GetByAccountId(int id)
+        public async Task<IActionResult> GetByAccountIdAsync(int id)
         {
             IEnumerable<PenaltyDto> penalties =
                 await _penaltyService.GetAllAsync(penalty => penalty.AccountId == id);
@@ -51,7 +51,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             PenaltyDto penalty = await _penaltyService.GetByIdAsync(id);
 
@@ -64,7 +64,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] PenaltyDto penaltyDto)
+        public async Task<IActionResult> PostAsync([FromBody] PenaltyDto penaltyDto)
         {
             if (!ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PenaltyDto penaltyDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] PenaltyDto penaltyDto)
         {
             if (!ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace VRP.vAPI.Controllers
 
         [HttpPut("deactivate/{id}")]
         [Authorize("Admin")]
-        public async Task<IActionResult> Put([FromRoute] int id)
+        public async Task<IActionResult> DeactivateAsync([FromRoute] int id)
         {
             if (!await _penaltyService.ContainsAsync(id))
             {

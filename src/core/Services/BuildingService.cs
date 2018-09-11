@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper;
 using VRP.BLL.Dto;
 using VRP.BLL.Services.Interfaces;
 using VRP.DAL.Database.Models.Building;
@@ -53,13 +53,11 @@ namespace VRP.BLL.Services
 
         public async Task<BuildingDto> UpdateAsync(int id, BuildingDto dto)
         {
-            BuildingModel model = await _unitOfWork.BuildingsRepository.JoinAndGetAsync(id);
-            if (model != null)
-            {
-                _unitOfWork.BuildingsRepository.BeginUpdate(model);
-                _mapper.Map(dto, model);
-                await _unitOfWork.SaveAsync();
-            }
+            dto.Character = null;
+            dto.Group = null;
+            BuildingModel model = await _unitOfWork.BuildingsRepository.GetAsync(id);
+            _mapper.Map(dto, model);
+            await _unitOfWork.SaveAsync();
             return dto;
         }
 

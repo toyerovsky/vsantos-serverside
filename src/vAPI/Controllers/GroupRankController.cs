@@ -24,7 +24,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             GroupRankDto groupRank = await _groupRankService.GetByIdAsync(id);
 
@@ -36,8 +36,21 @@ namespace VRP.vAPI.Controllers
             return Json(groupRank);
         }
 
+        [HttpGet("group/{id}")]
+        public async Task<IActionResult> GetByGroupIdAsync(int id)
+        {
+            IEnumerable<GroupRankDto> groupRanks = await _groupRankService.GetByGroupIdAsync(id);
+
+            if (!groupRanks.Any())
+            {
+                return NotFound(id);
+            }
+
+            return Json(groupRanks);
+        }
+
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             IEnumerable<GroupRankDto> groupRanks = await _groupRankService.GetAllNoRelatedAsync();
 
@@ -50,7 +63,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] GroupRankDto groupRankDto)
+        public async Task<IActionResult> PostAsync([FromBody] GroupRankDto groupRankDto)
         {
             if (!ModelState.IsValid)
             {
@@ -61,7 +74,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GroupRankDto groupRankDto)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] GroupRankDto groupRankDto)
         {
             if (!ModelState.IsValid)
             {
@@ -79,7 +92,7 @@ namespace VRP.vAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (!await _groupRankService.ContainsAsync(id))
             {

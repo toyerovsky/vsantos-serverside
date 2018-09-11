@@ -31,12 +31,12 @@ namespace VRP.DAL.Repositories.Base
         /// <param name="model"></param>
         public virtual void Insert(TEntity model)
         {
-            Context.Add(model);
+            Context.Set<TEntity>().Add(model);
         }
 
         public virtual async Task InsertAsync(TEntity model)
         {
-            await Context.AddAsync(model);
+            await Context.Set<TEntity>().AddAsync(model);
         }
 
         public virtual bool Contains(int id)

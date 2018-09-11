@@ -37,8 +37,7 @@ namespace VRP.BLL.Extensions
 
             foreach (T value in Enum.GetValues(typeof(T)))
             {
-                object[] array = null;
-                if ((string)typeof(T).GetMethod("GetDescription").Invoke(value, array) == text)
+                if ((string)typeof(T).GetMethod("GetDescription").Invoke(value, new object[0]) == text)
                 {
                     return value;
                 }

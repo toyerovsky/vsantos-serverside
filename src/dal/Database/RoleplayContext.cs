@@ -121,6 +121,8 @@ namespace VRP.DAL.Database
                 .WithOne(characterLook => characterLook.Character)
                 .HasForeignKey<CharacterLookModel>(characterLook => characterLook.CharacterId);
 
+            #region AutoSaleModel
+
             modelBuilder.Entity<AutoSaleModel>()
                 .HasOne(autoSale => autoSale.BuildingModel)
                 .WithOne(building => building.AutoSaleModel)
@@ -131,6 +133,8 @@ namespace VRP.DAL.Database
                 .WithOne(vehicle => vehicle.AutoSaleModel)
                 .HasForeignKey<VehicleModel>(vehicle => vehicle.AutoSaleId);
 
+            #endregion
+
             modelBuilder.Entity<AgreementModel>()
                 .HasOne(agreement => agreement.LeaseModel)
                 .WithOne(lease => lease.Agreement)
@@ -138,6 +142,20 @@ namespace VRP.DAL.Database
 
             modelBuilder.Entity<AccountModel>()
                 .HasKey(account => account.Id);
+
+            #region GroupModel
+
+            modelBuilder.Entity<GroupModel>()
+                .HasOne(group => group.DefaultRank)
+                .WithOne(rank => rank.DefaultForGroup)
+                .HasForeignKey<GroupRankModel>(groupRank => groupRank.DefaultForGroupId);
+
+            modelBuilder.Entity<GroupModel>()
+                .HasMany(group => group.GroupRanks)
+                .WithOne(rank => rank.Group)
+                .HasForeignKey(rank => rank.GroupId);
+
+            #endregion
         }
     }
 }
