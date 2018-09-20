@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -41,6 +42,19 @@ namespace VRP.API.Controllers
             }
 
             return Json(vehicle);
+        }
+
+        [HttpGet("group/{id}")]
+        public async Task<IActionResult> GetAllByGroupIdAsync(int id)
+        {
+            IEnumerable<VehicleDto> vehicles = await _vehicleService.GetAllAsync(v => v.GroupId == id);
+
+            if (!vehicles.Any())
+            {
+                return NotFound(id);
+            }
+
+            return Json(vehicles);
         }
 
         [HttpGet("{numberPlate}")]

@@ -27,6 +27,7 @@ namespace VRP.DAL.Enums
         Seventh = 1 << 12,
         Eight = 1 << 13,
         Ninth = 1 << 14,
-        AllBasic = DepositWithdrawMoney | Doors | Recruitment | Chat | Offers | Orders,
+        Panel = 1 << 15,
+        AllBasic = DepositWithdrawMoney | Doors | Recruitment | Chat | Offers | Orders | Panel,
     }
 }

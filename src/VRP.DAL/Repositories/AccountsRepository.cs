@@ -54,6 +54,10 @@ namespace VRP.DAL.Repositories
                     .ThenInclude(character => character.Vehicles)
                 .Include(account => account.Characters)
                     .ThenInclude(character => character.Workers)
+                        .ThenInclude(worker => worker.Group)
+                .Include(account => account.Characters)
+                    .ThenInclude(character => character.Workers)
+                        .ThenInclude(worker => worker.GroupRank)
                 .Include(account => account.Penalties)
                 .Include(account => account.AdminInTickets)
                 .Include(account => account.UserInTickets);
